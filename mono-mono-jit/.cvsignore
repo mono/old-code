@@ -1,0 +1,12 @@
+Makefile
+Makefile.in
+*.o
+*.exe
+*.lo
+*.la
+.libs
+.deps
+testjit
+mono
+codegen-x86.c
+codegen.h
