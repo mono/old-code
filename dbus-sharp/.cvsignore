@@ -1,0 +1,11 @@
+Makefile
+Makefile.in
+config.*
+*.m4
+libtool
+ltconfig
+ltmain.sh
+stamp*
+configure
+*.cache
+*.pc

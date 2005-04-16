@@ -1,0 +1,31 @@
+DBus# is a .NET language binding for glib interface to DBus.
+DBus# is free software, licensed under the GNU GPL.
+
+Building & Installing DBus#:
+---------------------------
+
+    The build is the traditional:
+
+        ./configure
+        make
+        make install
+
+    You may want to consider using configure's prefix option to install
+    DBus# using the same prefix as Mono.  That way all of your .NET assemblies
+    get placed in the same place, and you don't need to do any extra "configuring"
+    to make it so mono (and mint) can find your assemblies.  In other words,
+    doing something like:
+
+        ./configure --prefix=/your/mono/prefix
+        make
+        make install
+
+    If you are compiling from CVS, you will need libtool and the auto* tools
+    and will need to replace the configure above with autogen.sh.
+
+
+Discussion & Support:
+---------------------
+
+    There is no support for using these.  You're on your own.  ;-)
+
