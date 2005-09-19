@@ -1,0 +1,86 @@
+<?xml version="1.0" encoding="utf-8"?>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:monodoc="http://www.go-mono.org/xml/monodoc">
+<head>
+	<title>Programming with ASP.NET</title>
+
+	<meta name = "DC.Description" content = "" />
+	<meta name = "DC.Contributor" content = "Johannes Roith" />
+
+	<link rel="stylesheet" type="text/css" href="../style.css" />
+</head>
+<body>
+
+<h3>A small guestbook</h3>
+We will now build a small program, that is part of many private
+homepages: a guestbook. We will first start, writing it without
+"ASP.NET WebForms" (explained later), and without a Database.
+Instead the data will be put in a text file. 
+<pre class="code">
+&lt;%@ Page Language="C#" %&gt;
+
+&lt;html&gt;
+&lt;body&gt;
+&lt;h2&gt;Guestbook&lt;/h2&gt;
+
+&lt;form action="guestbook.aspx" method="post"&gt;
+
+Name: &lt;input type="text" name="name"&gt;
+Mail: &lt;input type="text" name="mail"&gt;
+Comment: &lt;textarea name="comment"&gt;&lt;/textarea&gt;
+
+&lt;/form&gt;
+
+<span style="color: #0000FF">&lt;%
+// Eventually add new comment
+
+if (name != "" &amp;&amp; test != "" &amp;&amp; comment !="") 
+{
+        string html_string;
+
+        // Get strings from form
+
+        html_string =   "&lt;b&gt;" + name    + "&lt;/b&gt;&lt;br&gt;\n" +
+                        "&lt;b&gt;" + mail    + "&lt;/b&gt;&lt;br&gt;\n" +
+                        "&lt;b&gt;" + comment + "&lt;/b&gt;&lt;br&gt;\n" +
+                        "&lt;hr&gt;\n";
+
+        // Append html_string to file
+
+        StreamReader writefile;
+
+        writefile = File.AppendText("guestbook.dat");
+        
+        writefile.Close();
+        
+}
+
+// Open and print guestbook data
+
+StreamReader file;
+
+file = File.OpenText("guestbook.dat");
+
+while (file.Peek() != -1)
+{
+        guestbook_data = guestbook_data + "\n" + file.ReadLine();
+}
+
+file.Close();
+
+Response.Write(guestbook_data);
+
+%&gt;
+</span>
+&lt;/body&gt;
+&lt;/html&gt;
+
+</pre>
+This file contains a HTML form, that points to itself. When
+executed it checks if data has been added by the user, eventually
+adds it, and prints the output. The guestbook is designed to keep
+it simple, of course it's bad to save the data as HTML, but we will
+fix that later. 
+
+</body>
+</html>

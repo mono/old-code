@@ -1,0 +1,137 @@
+<?xml version="1.0" encoding="utf-8"?>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:monodoc="http://www.go-mono.org/xml/monodoc">
+<head>
+	<title>XPath tutorial - star *</title>
+
+	<meta name = "DC.Description" content = "" />
+	<meta name = "DC.Contributor" content = "Johannes Roith" />
+
+	<link rel="stylesheet" type="text/css" href="../style.css" />
+
+	<meta name = "CVS.English.Version" content = "1.5" />
+</head>
+<body>
+The star * selects all elements located by preceeding path 
+<h3>Example 1</h3>
+<b>XPath Expression:</b> Select all elements enclosed by elements
+/AAA/CCC/DDD 
+<pre class="code">
+/AAA/CCC/DDD/*
+</pre>
+<b>XML:</b> 
+<pre class="code">
+&lt;?xml version="1.0"&gt;
+     &lt;<span class="element">AAA</span>&gt;
+          &lt;<span class="element">XXX</span>&gt;
+               &lt;<span class="element">DDD</span>&gt;
+                    &lt;<span class="element">BBB</span>/&gt;
+                    &lt;<span class="element">BBB</span>/&gt;
+                    &lt;<span class="element">EEE</span>/&gt;
+                    &lt;<span class="element">FFF</span>/&gt;
+               &lt;/<span class="element">DDD</span>&gt;
+          &lt;/<span class="element">XXX</span>&gt;
+          &lt;<span class="element">CCC</span>&gt;
+               &lt;<span class="element">DDD</span>&gt;
+                    &lt;<span class="elementOn">BBB</span>/&gt;
+                    &lt;<span class="elementOn">BBB</span>/&gt;
+                    &lt;<span class="elementOn">EEE</span>/&gt;
+                    &lt;<span class="elementOn">FFF</span>/&gt;
+               &lt;/<span class="element">DDD</span>&gt;
+          &lt;/<span class="element">CCC</span>&gt;
+          &lt;<span class="element">CCC</span>&gt;
+               &lt;<span class="element">BBB</span>&gt;
+                    &lt;<span class="element">BBB</span>&gt;
+                         &lt;<span class="element">BBB</span>/&gt;
+                    &lt;/<span class="element">BBB</span>&gt;
+               &lt;/<span class="element">BBB</span>&gt;
+          &lt;/<span class="element">CCC</span>&gt;
+     &lt;/<span class="element">AAA</span>&gt;
+</pre>
+<h3>Example 2</h3>
+<p><b>XPath Expression:</b> Select all elements BBB which have 3
+ancestors</p>
+<pre class="code">
+/*/*/*/BBB
+</pre>
+<b>XML:</b> 
+<pre class="code">
+&lt;?xml version="1.0"&gt;
+     &lt;<span class="element">AAA</span>&gt;
+          &lt;<span class="element">XXX</span>&gt;
+               &lt;<span class="element">DDD</span>&gt;
+                    &lt;<span class="elementOn">BBB</span>/&gt;
+                    &lt;<span class="elementOn">BBB</span>/&gt;
+                    &lt;<span class="element">EEE</span>/&gt;
+                    &lt;<span class="element">FFF</span>/&gt;
+               &lt;/<span class="element">DDD</span>&gt;
+          &lt;/<span class="element">XXX</span>&gt;
+          &lt;<span class="element">CCC</span>&gt;
+               &lt;<span class="element">DDD</span>&gt;
+                    &lt;<span class="elementOn">BBB</span>/&gt;
+                    &lt;<span class="elementOn">BBB</span>/&gt;
+                    &lt;<span class="element">EEE</span>/&gt;
+                    &lt;<span class="element">FFF</span>/&gt;
+               &lt;/<span class="element">DDD</span>&gt;
+          &lt;/<span class="element">CCC</span>&gt;
+          &lt;<span class="element">CCC</span>&gt;
+               &lt;<span class="element">BBB</span>&gt;
+                    &lt;<span class="elementOn">BBB</span>&gt;
+                         &lt;<span class="element">BBB</span>/&gt;
+                    &lt;/<span class="elementOn">BBB</span>&gt;
+               &lt;/<span class="element">BBB</span>&gt;
+          &lt;/<span class="element">CCC</span>&gt;
+     &lt;/<span class="element">AAA</span>&gt;
+</pre>
+<h3>Example 3</h3>
+<p><b>XPath Expression:</b> Select all elements</p>
+<pre class="code">
+//*
+</pre>
+<b>XML:</b> 
+<pre class="code">
+&lt;?xml version="1.0"&gt;
+     &lt;<span class="elementOn">AAA</span>&gt;
+          &lt;<span class="elementOn">XXX</span>&gt;
+               &lt;<span class="elementOn">DDD</span>&gt;
+                    &lt;<span class="elementOn">BBB</span>/&gt;
+                    &lt;<span class="elementOn">BBB</span>/&gt;
+                    &lt;<span class="elementOn">EEE</span>/&gt;
+                    &lt;<span class="elementOn">FFF</span>/&gt;
+               &lt;/<span class="elementOn">DDD</span>&gt;
+          &lt;/<span class="elementOn">XXX</span>&gt;
+          &lt;<span class="elementOn">CCC</span>&gt;
+               &lt;<span class="elementOn">DDD</span>&gt;
+                    &lt;<span class="elementOn">BBB</span>/&gt;
+                    &lt;<span class="elementOn">BBB</span>/&gt;
+                    &lt;<span class="elementOn">EEE</span>/&gt;
+                    &lt;<span class="elementOn">FFF</span>/&gt;
+               &lt;/<span class="elementOn">DDD</span>&gt;
+          &lt;/<span class="elementOn">CCC</span>&gt;
+          &lt;<span class="elementOn">CCC</span>&gt;
+               &lt;<span class="elementOn">BBB</span>&gt;
+                    &lt;<span class="elementOn">BBB</span>&gt;
+                         &lt;<span class="elementOn">BBB</span>/&gt;
+                    &lt;/<span class="elementOn">BBB</span>&gt;
+               &lt;/<span class="elementOn">BBB</span>&gt;
+          &lt;/<span class="elementOn">CCC</span>&gt;
+     &lt;/<span class="elementOn">AAA</span>&gt;
+</pre>
+<b>C# code:</b> 
+<pre class="code">
+<b>// BasicSyntax - /xpath/basicsyntax.cs
+// Copyright 2003 by Johannes Roith</b>
+
+using System;
+using System.Xml.XPath;
+
+class BasicSyntax {
+        static void Main() {
+                
+        }
+
+}
+</pre>
+
+</body>
+</html>

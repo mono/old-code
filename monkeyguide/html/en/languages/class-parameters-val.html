@@ -1,0 +1,76 @@
+<?xml version="1.0" encoding="utf-8"?>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:monodoc="http://www.go-mono.org/xml/monodoc">
+<head>
+	<title>Classes - Parameters - Value Parameters</title>
+
+	<meta name ="DC.Description" content ="" />
+	<meta name ="DC.Contributor" content ="Johannes Roith" />
+
+	<link rel="stylesheet" type="text/css" href="../style.css" />
+</head>
+<body>
+<p>
+When you pass some arguments as value parameters, the method will create a copy of them.
+So, since the method is not working with the real values, any changes made won't take effect
+on the original fields/variables.
+</p>
+<p>
+Let's write the <b>Swap</b> method, which will receive two <b>int</b> parameters.
+Then it will try to change their values.
+<pre class="code">
+ //
+ // parameters-value.cs
+ // A first implementation of the Swap method
+ //
+
+using System;
+ 
+ public class Tester {
+
+ 	// Interchange the values of a and b
+ 	public void Swap ( int a, int b )
+ 	{
+
+		int temp = a;
+		a = b;
+		b = a;
+	
+	}
+
+	public static void Main ()
+	{
+
+		Tester t = new Tester();
+		int a = 56;
+		int b = 45;
+
+		Console.WriteLine("a = {0} | b = {1}", a, b);
+		t.Swap(a, b);
+		Console.WriteLine("After Swap()");
+		Console.WriteLine("a = {0} | b = {1}", a, b);
+
+	}
+		
+		
+
+ }
+</pre>
+</p>
+<p>
+Compile it and run it. You should see:
+<pre class="console">
+a = 56 | b = 45
+After Swap()
+a = 56 | b = 45
+</pre>
+The values of a and b were not interchanged.This is caused because you passed the parameters as value parameters; 
+this mean that the method that received them create a copy and not worked directly with them. This is useful when 
+the paramaters must not be changed.
+</p>
+
+<p>
+</p>
+
+</body>
+</html>

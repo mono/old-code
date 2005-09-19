@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="utf-8"?>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:monodoc="http://www.go-mono.org/xml/monodoc">
+<head>
+	<title>XPath tutorial - Expresion in square brackets</title>
+
+	<meta name = "DC.Description" content = "" />
+	<meta name = "DC.Contributor" content = "Johannes Roith" />
+
+	<link rel="stylesheet" type="text/css" href="../style.css" />
+</head>
+<body>
+Expresion in square brackets can further specify an element. A
+number in the brackets gives the position of the element in the
+selected set. The function last() selects the last element in the
+selection. 
+<h3>Example 1</h3>
+<b>XPath Expression:</b> Select the first BBB child of element AAA 
+<pre class="code">
+/AAA/BBB[1]
+</pre>
+<b>XML:</b> 
+<pre class="code">
+&lt;?xml version="1.0"&gt;
+     &lt;<span class="element">AAA</span>&gt;
+          &lt;<span class="elementOn">BBB</span>/&gt;
+          &lt;<span class="element">BBB</span>/&gt;
+          &lt;<span class="element">BBB</span>/&gt;
+          &lt;<span class="element">BBB</span>/&gt;
+     &lt;/<span class="element">AAA</span>&gt;
+</pre>
+<h3>Example 2</h3>
+<p><b>XPath Expression:</b> Select the last BBB child of element
+AAA</p>
+<pre class="code">
+/AAA/BBB[last()]
+</pre>
+<b>XML:</b> 
+<pre class="code">
+&lt;?xml version="1.0"&gt;
+     &lt;<span class="element">AAA</span>&gt;
+          &lt;<span class="element">BBB</span>/&gt;
+          &lt;<span class="element">BBB</span>/&gt;
+          &lt;<span class="element">BBB</span>/&gt;
+          &lt;<span class="elementOn">BBB</span>/&gt;
+     &lt;/<span class="element">AAA</span>&gt;
+</pre>
+<b>C# code:</b> 
+<pre class="code">
+<b>// BasicSyntax - /xpath/basicsyntax.cs
+// Copyright 2003 by Johannes Roith</b>
+
+using System;
+using System.Xml.XPath;
+
+class BasicSyntax {
+        static void Main() {
+                
+        }
+
+}
+</pre>
+
+</body>
+</html>

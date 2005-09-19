@@ -1,0 +1,145 @@
+<?xml version="1.0" encoding="utf-8"?>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:monodoc="http://www.go-mono.org/xml/monodoc">
+<head>
+	<title>Programming mobile devices</title>
+
+	<meta name = "DC.Description" content = "" />
+	<meta name = "DC.Contributor" content = "Johannes Roith" />
+
+	<link rel="stylesheet" type="text/css" href="../style.css" />
+</head>
+<body>
+<h2>Maintaining a Blog while not at home</h2>
+Today many people write some kind of public diary on the web - a
+blog or web log. This is very often not much more than a simple
+HTML page, maybe with an interface. However the problem is, that
+life is often most exciting, when you're not at home, for example
+on holiday. 
+<p>What to do? Well, ASP.NET mobile let's you maintain such a
+WebLog with your mobile phone or PDA from any place of the world.
+Just for the two lines you'd like to write.</p>
+<p>The example is trivial, so let's start! :-P</p>
+<h3>Short planning</h3>
+We will ... 
+<ul>
+<li>... store all data in a DB.</li>
+<li>... Write an ASP.NET Web Page to display the content</li>
+<li>... Write a mobile ASP.NET Page, so we can maintain the
+blog.</li>
+<li>... OPTIONAL: If you think you are very important, we can also
+add an RSS new feed, so other people can see your blog in
+evolution, for example. :-P</li></ul>
+<h3>First, the Database</h3>
+<pre class="code">
+&lt;%--
+// CNN Schlagzeilen f&#252;rs Handy
+// (C) Copyright 2003 by Johannes Roith
+--%&gt;
+
+&lt;%@ Page Language="C#" Inherits="System.Web.UI.MobileControls.MobilePage" %&gt;
+
+&lt;%@ Register TagPrefix="mobile" Namespace="System.Web.UI.MobileControls" 
+Assembly="System.Web.Mobile" %&gt;
+
+&lt;%@ import Namespace="System.Xml" %&gt;
+&lt;%@ import Namespace="System.Net" %&gt;
+&lt;%@ import Namespace="System.IO" %&gt;
+
+
+&lt;script runat="server"&gt;
+
+        void Page_Load(Object Sender, EventArgs e)
+        {
+                heading.Text = "+++ CNN News +++ \n(Service by Johannes Roith) +++\n";
+                content.Text = GetRssFeed("http://www.newsisfree.com/HPE/xml/feeds/15/2315.xml");
+        }
+
+        string GetRssFeed(string url)
+        {
+
+                // This method can recieve RSS news documents from the Internet and display links.
+
+
+                string returnstring = "";
+
+                WebRequest wrGETURL;
+                wrGETURL = WebRequest.Create(url);
+                                
+                Stream objStream;
+                objStream = wrGETURL.GetResponse().GetResponseStream();
+        
+                XmlDocument doconn = new XmlDocument();
+                doconn.Load(objStream);
+
+                int i = 0;
+                XmlNodeList elemList = doconn.GetElementsByTagName("item");
+                    foreach (XmlNode me in elemList)
+                    {    
+
+                        string ItemTitle = null;
+                        string ItemLink = null;
+    
+                        XmlNodeList elemList2 = me.ChildNodes;
+    
+                        foreach (XmlNode me2 in elemList2)
+                        {
+                            if (me2.Name == "title") {
+                            ItemTitle = me2.InnerText;
+                            }
+    
+
+    
+                        }
+                        if (i &lt; 5)
+                        {
+                                returnstring += ItemTitle + " +++ \n";
+                        }
+                        i++;
+                   }
+    
+                return returnstring;
+
+        }
+&lt;/script&gt;
+
+&lt;mobile:Form runat="server"&gt;
+&lt;mobile:label id="heading"  font-bold="true" runat="server" /&gt;
+&lt;mobile:label id="content" runat="server" /&gt;
+&lt;/mobile:Form&gt;
+</pre>
+As you can see except the Different namespace, there is <b>no</b>
+difference to plain ASP.NET, except that never HTML is used
+(ASP.NET can use it). The interesting bit is yet to come.
+<p>Take a look in what this results on a PDA/Desktop:</p>
+<pre class="code">
+&lt;html&gt;&lt;body&gt;
+&lt;form id="_ctl0" name="_ctl0" method="post" action="mobile.aspx?__ufps=915485"&gt;
+&lt;input type="hidden" name="__VIEWSTATE" value="aDxfX1A7QDw75q2U6q6065+r4KOFLDA7Pjs+"&gt;
+&lt;input type="hidden" name="__EVENTTARGET" value=""&gt;
+&lt;input type="hidden" name="__EVENTARGUMENT" value=""&gt;
+&lt;script language=javascript&gt;&lt;!--
+function __doPostBack(target, argument){
+  var theform = document._ctl0
+  theform.__EVENTTARGET.value = target
+  theform.__EVENTARGUMENT.value = argument
+  theform.submit()
+}
+// --&gt;
+&lt;/script&gt;
+&lt;b&gt;+++ CNN News +++ 
+(Service by Johannes Roith) +++
+&lt;/b&gt;<br />U.S. watches and waits +++ 
+Source: NBA goes to best-of-seven in 1st round +++ 
+Argentina tops U.S. in battle of home-based youth +++ 
+Leafs to retire Sittler's jersey before playing Habs +++ 
+Chess man vs machine stalemate +++ 
+&lt;/form&gt;&lt;/body&gt;&lt;/html&gt;
+</pre>
+<p>Now, the result on my Nokia mobile phone:</p>
+<pre class="code">
+&lt;?xml &gt;
+</pre>
+
+</body>
+</html>

@@ -1,0 +1,94 @@
+<?xml version="1.0" encoding="utf-8"?>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:monodoc="http://www.go-mono.org/xml/monodoc">
+<head>
+	<title>GNOME.NET</title>
+
+	<meta name = "DC.Description" content = "" />
+	<meta name = "DC.Contributor" content = "Johannes Roith" />
+
+	<link rel="stylesheet" type="text/css" href="../../../style.css" />
+</head>
+<body> 
+<p>In the previous GNOME.NET tutorial, we leaned how to make a
+GNOME application window. However, other than being a good example
+to teach us GNOME.NET, that window was pretty useless, considering
+it did not really do anything.</p>
+<p>Any real application will have stuff inside the window. In this
+tutorial, we will show you how to give your window some
+contents.</p>
+<h2>Adding Contents</h2>
+<p><code>button.cs</code>:</p>
+<pre class="code">
+    class MainClass
+    {
+            static void Main(string[] args)
+            {
+                    Gnome.Program program =
+                    new Gnome.Program("Hello World", "1.0", Gnome.Modules.UI, args);
+
+                    MyMainWindow app = new MyMainWindow(program);
+                    app.ShowAll();
+ 
+                    program.Run();
+            }
+    }
+
+
+
+    class MyMainWindow
+            : Gnome.App
+    {
+            Gnome.Program program;
+
+            public MyMainWindow(Gnome.Program gnome_program)
+                    : base("Hello World", "Hello World")
+            {
+                    this.program = gnome_program;
+
+                    this.DeleteEvent += delete_event;
+
+                    this.Contents = new Gtk.Button("Hello World");
+            }
+
+            private void delete_event(object obj, Gtk.DeleteEventArgs args)
+            {
+                    this.program.Quit();
+            }
+    }
+</pre>
+<p>compile:</p>
+<pre class="console">
+mcs button.cs -r gnome-sharp.dll
+</pre>
+<p>run:</p>
+<pre class="console">
+mono button.exe
+</pre>
+<p>Except for one line, this code is almost exactly like the
+<code>helloworld2.cs</code> source code from the previous tutorial.
+The line that adds the button is:</p>
+<pre class="code">
+                    this.Contents = new Gtk.Button("Hello World");
+</pre>
+<p>The magic comes from the <code>Contents</code> property of
+<code>Gnome.App</code> (and all of <code>Gnome.App</code>'s
+subclasses, like <code>MyMainWindow</code>).</p>
+<p>What you assign to this goes inside the window. For example, I
+could put an image in there with:</p>
+<pre class="code">
+                    Gtk.Image image = new Gtk.Image();
+
+                    // put something in the image here.
+
+                    this.Contents = image;
+</pre>
+<p>I could put in a <code>Gnome.Canvas</code> with.</p>
+<pre class="code">
+                    this.Contents = new Gnome.Canvas();
+</pre>
+<p>(Hopefully you get the idea.) If you want to put something
+inside of a <code>Gnome.App</code> (or one of its subclasses), then
+assign it to its <code>Contents</code> property.</p>
+</body>
+</html>

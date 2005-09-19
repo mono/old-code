@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="utf-8"?>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:monodoc="http://www.go-mono.org/xml/monodoc">
+<head>
+	<title>Gtk# - Creating Adjustments </title>
+
+	<meta name ="DC.Description" content ="" />
+	<meta name ="DC.Contributor" content ="Johannes Roith" />
+
+	<link rel="stylesheet" type="text/css" href="../../../style.css" />
+</head>
+<body>
+<p>Many of the widgets which use adjustment objects do so
+automatically, but some cases will be shown in later examples where
+you may need to create one yourself. You create an adjustment
+using:</p>
+<pre class="code">
+Gtk.Object adjustment = new Adjustment( double value,
+                               double lower,
+                               double upper,
+                               double step_increment,
+                               double page_increment,
+                               double page_size );
+</pre>
+The value argument is the initial value you want to give to the
+adjustment, usually corresponding to the topmost or leftmost
+position of an adjustable widget. The lower argument specifies the
+lowest value which the adjustment can hold. The step_increment
+argument specifies the "smaller" of the two increments by which the
+user can change the value, while the page_increment is the "larger"
+one. The page_size argument usually corresponds somehow to the
+visible area of a panning widget. The upper argument is used to
+represent the bottom most or right most coordinate in a panning
+widget's child. Therefore it is not always the largest number that
+value can take, since the page_size of such widgets is usually
+non-zero. 
+
+</body>
+</html>

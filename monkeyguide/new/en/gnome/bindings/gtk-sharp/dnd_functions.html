@@ -1,0 +1,109 @@
+<?xml version="1.0" encoding="utf-8"?>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:monodoc="http://www.go-mono.org/xml/monodoc">
+<head>
+	<title>Gtk# - Drag-and-drop (DND) - Functions</title>
+
+	<meta name ="DC.Description" content ="" />
+	<meta name ="DC.Contributor" content ="Shane Landrum" />
+
+	<link rel="stylesheet" type="text/css" href="../../../style.css" />
+</head>
+<body>
+
+<h2>Setting up the source widget</h2>
+
+<p>The first part of setting up DND operations is enabling some
+widget to be a source for data. You can do this by calling
+<a href="M:Gtk.Drag.SourceSet">Gtk.Drag.SourceSet</a>:
+
+<pre class="code">
+	button = new Button ("Drag Here\n");
+	Gtk.Drag.SourceSet (button, Gdk.ModifierType.Button1Mask | Gdk.ModifierType.Button3Mask,
+				    target_table, DragAction.Copy | DragAction.Move);
+</pre>
+
+This sets up <i>button</i> so that when someone clicks Button 1 or Button 3 on the mouse,
+<i>button</i> can be the source widget for any information specified in <i>target_table</i>.
+The data can be copied or moved.
+</p>
+
+<p>
+The target table is an array of <a href="T:Gtk.TargetEntry">Gtk.TargetEntry</a>
+objects. Here's an example of how to set up <i>target_table</i>:
+<pre class="code">
+	private static TargetEntry [] target_table = new TargetEntry [] {
+		new TargetEntry ("STRING", 0, (uint) TargetType.String ),
+		new TargetEntry ("text/plain", 0, (uint) TargetType.String),
+		new TargetEntry ("application/x-rootwindow-drop", 0, (uint) TargetType.RootWindow)
+	};
+</pre>
+
+This says that the <i>button</i> widget can act as a source for strings, plain text, or drops
+to the root window.
+</p>
+
+
+<h2>Setting up the destination widget</h2>
+
+<p>Once you've specified a source widget, you need to tell some other widget
+that it can receive drags from that source. Here's an example:
+
+<pre class="code">
+  label = new Label ("Drop Here\n");
+  Gtk.Drag.DestSet (label, DestDefaults.All, target_table, DragAction.Copy | DragAction.Move);
+</pre>
+
+<a href="T:Gtk.DestDefaults">Gtk.DestDefaults</a> gives a set of possible options for
+what the destination widget should do with the data; <i>target_table</i>, as above, lists
+the kinds of data that can be dragged and dropped, and the final argument, a combination of 
+<a href="T:Gtk.DragAction">Gtk.DragAction</a> flags, sets how the data is to be treated.</p>
+
+
+<h2>Signal setup for source and destination widgets</h2>
+
+<p>
+The examples above just cover the basic mechanics. To have the DND
+operation actually <i>do</i> anything, you'll need to set up some
+signal handlers like this:
+</p>
+
+<pre class="code">
+	private static void HandleLabelDragDataReceived (object sender, DragDataReceivedArgs args)
+	{
+		if (args.SelectionData.Length >=0 &amp;&amp; args.SelectionData.Format == 8) {
+			Console.WriteLine ("Received {0} in label", args.SelectionData);
+			Gtk.Drag.Finish (args.Context, true, false, args.Time);
+		}
+
+		Gtk.Drag.Finish (args.Context, false, false, args.Time);
+	}
+
+        // later in the code
+	label.DragDataReceived += new DragDataReceivedHandler (HandleLabelDragDataReceived);
+</pre>
+
+<p><!--TODO enumerate the signals?-->
+For a full list of the signals that are exchanged during a DND operation, see
+<a href="T:Gtk.Widget">Gtk.Widget</a>; all the events beginning with "Drag" apply to
+DND operations.
+</p>
+
+<h2>Unsetting the source and destination widgets</h2>
+
+<p>If a widget becomes no longer needed as a drag source, here's how to remove it
+as a possible drag source:
+
+<pre class="code">
+	Gtk.Drag.SourceUnset (some_widget);
+</pre>
+
+ the similar code for a no-longer-wanted destination widget:
+
+<pre class="code">
+	Gtk.Drag.DestUnset (former_target);
+</pre>
+
+</p>
+</body>
+</html>

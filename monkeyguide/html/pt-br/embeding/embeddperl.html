@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="utf-8"?>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:monodoc="http://www.go-mono.org/xml/monodoc">
+<head>
+	<title>Embedding in Perl</title>
+
+	<meta name ="DC.Description" content ="Monos Database Framework" />
+	<meta name ="DC.Contributor" content ="Paolo Molaro" />
+
+	<link rel="stylesheet" type="text/css" href="../style.css" />
+
+	<meta name = "CVS.English.Version" content = "1.10" />
+</head>
+
+<body>
+
+<h2>Contents</h2>
+<ul>
+	<li><a href="#helloworld">I. Introduction</a></li>
+	<li><a href="#helloworld">II. Embedding the runtime</a></li></ul>
+
+<h2>Introduction</h2>
+<p>This document describes how to embed the Mono runtime in your
+Perl application. You can also get Paolo Molars's
+<a href="http://primates.ximian.com/~lupus/slides/embed/Mono-0.01.tar.gz">
+sample Mono module for Perl</a>.</p>
+<p>Mono can be embedded in every language, that allow C
+extensions/plugins, or is written in C. Unlike a CIL Perl compiler,
+such Perl code doesn't have all the advantages, that C# or Mbas
+code has. It doesn't run with the .NET Runtime and is not
+necessarily portable. The application is not executes by mono, but
+with the Perl interpreter.</p>
+<p>Because of that, this is especially used to use the powerful
+class library, Gtk# or other C# classes of mono. For example with
+Paolos Perl binding, you don't need Gnome Perl bindings anymore.
+Perl can make use of Gtk#. It can also access Databases through
+ADO.NET, make use of the XML classes, etc. It can't do ASP.NET for
+example, because it's not a cil application.</p>
+<pre class="code">
+<b>// Example Perl script, making use of 
+// the mono class library.
+
+// &#169; Copyright 2002 by Paolo Molaro</b>
+
+use blib;
+use Mono qw(System::Console System::Environment);
+
+System::Console::WriteLine ("from perl");
+System::Console::WriteLine (10);
+
+$user = System::Environment::get_UserName ();
+
+print "the current user is $user\n";
+
+</pre>
+<h2>Embedding the runtime</h2>
+Now let's see how it is done. 
+
+</body>
+</html>

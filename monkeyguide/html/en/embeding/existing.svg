@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.0//EN"
+"http://www.w3.org/TR/2001/REC-SVG-20010904/DTD/svg10.dtd">
+<!-- Created with Inkscape (http://www.inkscape.org/) -->
+<svg
+   id="svg1"
+   sodipodi:version="0.32"
+   inkscape:version="0.37"
+   xmlns="http://www.w3.org/2000/svg"
+   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
+   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
+   xmlns:xlink="http://www.w3.org/1999/xlink"
+   width="210mm"
+   height="297mm"
+   sodipodi:docbase="/cvs/monkeyguide/html/en/embeding"
+   sodipodi:docname="exising.svg">
+  <defs
+     id="defs3" />
+  <sodipodi:namedview
+     id="base"
+     pagecolor="#ffffff"
+     bordercolor="#666666"
+     borderopacity="1.0"
+     inkscape:pageopacity="0.0"
+     inkscape:pageshadow="2"
+     inkscape:zoom="0.86831672"
+     inkscape:cx="305.259597"
+     inkscape:cy="417.849473"
+     inkscape:window-width="1388"
+     inkscape:window-height="990"
+     inkscape:window-x="0"
+     inkscape:window-y="27" />
+  <rect
+     style="font-size:12;fill:#edd332;fill-opacity:0.75;fill-rule:evenodd;stroke:#000000;stroke-width:0.477161pt;"
+     id="rect574"
+     width="200.09981887"
+     height="69.09920826"
+     x="97.89054871"
+     y="146.87459740" />
+  <text
+     xml:space="preserve"
+     style="fill:black;fill-opacity:1;stroke:none;font-family:Arial;font-style:normal;font-weight:normal;font-size:20;stroke-opacity:1;stroke-width:1pt;stroke-linejoin:miter;stroke-linecap:butt;text-anchor:start;writing-mode:lr;"
+     x="120.92361881"
+     y="188.62204826"
+     id="text578"
+     sodipodi:linespacing="100%"><tspan
+       x="120.923622"
+       y="188.622055"
+       sodipodi:role="line"
+       id="tspan583">Existing C code.</tspan></text>
+</svg>

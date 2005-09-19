@@ -1,0 +1,101 @@
+<?xml version="1.0" encoding="utf-8"?>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:monodoc="http://www.go-mono.org/xml/monodoc">
+<head>
+	<title>Control Structs - If</title>
+
+	<meta name ="DC.Description" content ="" />
+	<meta name ="DC.Contributor" content ="Johannes Roith" />
+
+	<link rel="stylesheet" type="text/css" href="../style.css" />
+</head>
+<body>
+<p>
+<b>If</b> is a conditional struct. It means that it must control the behavior
+of some actions based on some condition. For example: you have a variable
+with the value of 5. You want to print a certain message if the value changes.
+</p>
+<p>
+The <b>if</b> statement/struct looks like this:
+<pre class="code">
+	if ( condition ) 
+		action to be taken
+</pre>
+The condition can take two values: true or false, and only if it is
+true, the actions to be taken will proceed. If false, nothing is done.
+Note that when you want more than one action to be taken, you must
+put brackets, like this:
+<pre class="code">
+	if ( condition )
+	{
+		actions to be taken
+	}
+</pre>
+</p>
+<p>
+Let's write a small sample: this application ask the user for a name, and if
+the name is Mono, it will print a welcome message; if not, it will print
+a different welcome message.
+</p>
+<p>
+<pre class="code">
+//
+// A *if* sample - if-test.cs
+//
+using System;
+
+ public class MonoTutorial {
+
+	public static void Main ()
+	{
+		// The string containing the name
+		string name;
+
+		// Ask for the user name
+		Console.WriteLine("Hello, user. Write your name: ");
+
+		// Capture the user input
+		name = Console.ReadLine();
+
+		// If the name was "Mono", write a welcome message
+		<b>if ( name == "Mono" )
+			Console.WriteLine("Welcome, Mono Man !");
+		</b>
+
+	}
+
+ }
+
+</pre>
+</p>
+<p>
+Save it as if-test.cs, and compile:
+<pre class="console">
+ mcs if-test.cs
+</pre>
+And run it:
+<pre class="console">
+ mono if-test.exe
+</pre>
+</p>
+<p>
+Now let's appreciate two behaviors of our application ( the words in italics are the user input) :
+<pre class="console">
+ $ mono if-test.exe
+ Hello, user. Write your name:
+ <i>Carlos</i>
+
+ $ mono if-test.exe
+ Hello, user. Write your name:
+ <i>Mono</i>
+ Welcome, Mono Man !
+
+
+</pre>
+</p>
+<p>
+Note that only if the user writes "Mono" when asked for a name, it shows a welcome message; if not, it
+does nothing.
+</p>
+</body>
+</html>

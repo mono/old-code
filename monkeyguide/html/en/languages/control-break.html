@@ -1,0 +1,216 @@
+<?xml version="1.0" encoding="utf-8"?>
+<html xmlns="http://www.w3.org/1999/xhtml"
+	      xmlns:monodoc="http://www.go-mono.org/xml/monodoc">
+<head>
+        <title>Control Structurs - Break</title>
+
+        <meta name ="DC.Description" content ="" />
+        <meta name ="DC.Contributor" content ="Carlos Alberto Cortez" />
+
+        <link rel="stylesheet" type="text/css" href="../style.css" />
+</head>
+<body>
+<h2>Break</h2>
+<p>
+<b>Break</b> is a statement used for stopping a loop. Just as its name, it
+<i>breaks</i> a loop in a certain point adn then continues to the next
+statement. It has the form:
+</p>
+<pre class="code">
+ <i>loop</i> {
+	<i>statements</i>
+	break;
+	<i>statements not executed</i>
+ }
+</pre>
+<p>
+A small example of its use is the next program:
+</p>
+<pre class="code">
+//
+// BreakExample.cs
+//
+// Description:
+//      A first example of the use of break
+//
+
+using System;
+
+ public class BreakExample {
+
+         public static void Main ()
+         {
+
+                 //
+                 // Break in a for loop
+                 //
+		 <b>for (int i = 1; i &#60; 10; i++) {
+                         // Statements
+                         Console.WriteLine (i);
+
+			 break;
+                         
+                         //Statements not executed
+                         Console.WriteLine ("This message should not appear !");
+		 }</b>
+
+         }
+         
+ }
+
+
+</pre>
+<pre class="console">
+1
+</pre>
+<p>
+It only prints the number 1. This behavior of the loop is caused by the <b>break</b>
+statement in the middle of the body of the for loop. Thus the next instruction is not
+executed never.
+</p>
+<p>
+However, most of the times it is used when you want to add a special condition in your loop;
+for example, when an anormal situation appears and then it is necccessary to stop
+the loop. The next example will make clear this situation: squares of the integer from 1 to 20
+must be printed, and in a second loop, the squares of the integer from 11 to 20.
+</p>
+
+<pre class="code">
+//
+// BreakExample2.cs
+//
+// Description:
+//      An example of the use of the break statement
+//
+
+using System;
+
+ public class BreakExample {
+
+         public static void Main (string [] args)
+         {
+
+                 int i;
+
+                 //
+                 // Break with FOR
+                 //
+                 <b>for (i = 1; i &#60;= 20; i++) {
+                         if (i &#62; 10)
+                                 break;
+                         Console.WriteLine ("{0} = {1}", i, i*i);
+                 }</b>
+
+                 Console.WriteLine ();
+
+                 //
+                 // Break with WHILE
+                 //
+                 i = 11;
+                 <b>while (i &#60;= 20) {
+                         if (i &#62; 15)
+                                 break;
+                         Console.WriteLine ("{0} = {1}", i, i*i);
+                         i++;
+                 }</b>
+
+                 Console.WriteLine ();
+
+         }
+
+ }
+
+</pre>
+<pre class="console">
+1 = 1
+2 = 4
+3 = 9
+4 = 16
+5 = 25
+6 = 36
+7 = 49
+8 = 64
+9 = 81
+10 = 100
+
+11 = 121
+12 = 144
+13 = 169
+14 = 196
+15 = 225
+</pre>
+
+<p>
+What happened? The <b>break</b> statement in the for loop stopped the normal execution when found a value in
+<i>i</i> bigger than 10. And in the while loop, a similar situation appears: the loop was stopped when a 
+value bigger than 15 was found.
+</p>
+
+<p>
+A last example will clarify the things even more. Let's imagine that a user shell must be implemented
+with C#. So we are going to read every thing the user types (using a loop). And <u>only</u> if the user types
+the <b>exit</b> keyword (keyword in our shell, not in C#), the program will finish its execution. Then,
+a <b>break</b> statement will stop the loop when this condition becames true.
+</p>
+
+<pre class="code">
+//
+// Break3.cs
+//
+// Description:
+//      A third example of the use of break
+//
+
+using System;
+
+ public class BreakExample {
+
+         public static void Main ()
+         {
+
+                 string input;
+
+                 <b>do {
+                         Console.Write ("[Mono Shell]$ ");
+                         input = Console.ReadLine ();
+
+			 //
+			 // Erase the spaces at the end/begin
+			 // and convert to lower case
+			 //
+			 input = input.Trim ().ToLower ();
+
+                         //
+                         // If the user typed 'exit', 
+                         // then finish the do/while loop
+                         //
+                         if (input == "exit")
+                                 break;
+                         
+                 } while (true);</b>
+
+         }
+         
+ }
+
+</pre>
+
+<pre class="console">
+[Mono Shell]$  hola
+[Mono Shell]$  e X it
+[Mono Shell]$ EXIt^[[D^[[D^[[D
+[Mono Shell]$     ExiT 
+</pre>
+
+<p>
+The do/while loop will continue working if the user never types exit.
+That condition, <b>input == "exit"</b> could have been in the 
+condition of the loop (and not only <i>true</i>), but this is en example
+that showed that, since we wanted to work with the user input directly, it was more
+convenient to check for the conditions inside.
+</p>
+
+
+</body>
+</html>
+

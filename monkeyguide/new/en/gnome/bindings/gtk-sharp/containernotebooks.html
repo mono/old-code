@@ -1,0 +1,312 @@
+<?xml version="1.0" encoding="utf-8"?>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:monodoc="http://www.go-mono.org/xml/monodoc">
+<head>
+	<title>Gtk# -Container Widgets - Notebooks</title>
+
+	<meta name ="DC.Description" content ="" />
+	<meta name ="DC.Contributor" content ="Johannes Roith" />
+
+	<link rel="stylesheet" type="text/css" href="../../../style.css" />
+</head>
+<body>
+
+The NoteBook Widget is a collection of "pages"
+that overlap each other, each page contains different information
+with only one page visible at a time. This widget has become more
+common lately in GUI programming, and it is a good way to show
+blocks of similar information that warrant separation in their
+display.
+<p>The first function call you will need to know, as you can
+probably guess by now, is used to create a new notebook widget.</p>
+<pre class="code">
+Notebook notebook1 = new Notebook();
+</pre>Once the notebook has been created, there are a number of
+functions that operate on the notebook widget. Let's look at them
+individually.
+<p>The first one we will look at is how to position the page
+indicators. These page indicators or "tabs" as they are referred
+to, can be positioned in four ways: top, bottom, left, or
+right.</p>
+<pre class="code">
+notebook1.TabPos = PositionType pos;
+</pre>PositionType will be one of the following, which are pretty
+self explanatory:
+<pre class="code">
+  Gtk.PosLeft
+  Gtk.PosRight
+  Gtk.PosTop
+  Gtk.PosBottom
+</pre>Gtk.PosTop is the default.
+<p>Next we will look at how to add pages to the notebook. There are
+three ways to add pages to the NoteBook. Let's look at the first
+two together as they are quite similar.</p>
+<pre class="code">
+notebook1.AppendPage(          GtkWidget   child,
+                               GtkWidget   tab_label );
+
+notebook1.PrependPage(         GtkWidget   child,
+                               GtkWidget   tab_label );
+</pre>These functions add pages to the notebook by inserting them
+from the back of the notebook (append), or the front of the
+notebook (prepend). child is the widget that is placed within the
+notebook page, and tab_label is the label for the page being added.
+The child widget must be created separately, and is typically a set
+of options setup witin one of the other container widgets, such as
+a table.
+<p>The final function for adding a page to the notebook contains
+all of the properties of the previous two, but it allows you to
+specify what position you want the page to be in the notebook.</p>
+<pre class="code">
+notebook1.InsertPage(          GtkWidget   child,
+                               GtkWidget   tab_label,
+                               gint         position );
+</pre>The parameters are the same as _append_ and _prepend_ except
+it contains an extra parameter, position. This parameter is used to
+specify what place this page will be inserted into the first page
+having position zero.
+<p>Now that we know how to add a page, lets see how we can remove a
+page from the notebook.</p>
+<pre class="code">
+notebook1.RemovePage(int         page_num );
+</pre>This function takes the page specified by page_num and
+removes it from the widget pointed to by notebook.
+<p>To find out what the current page is in a notebook use the
+function:</p>
+<pre class="code">
+int notebook1.CurrentPage();
+</pre>These next two functions are simple calls to move the
+notebook page forward or backward. Simply provide the respective
+function call with the notebook widget you wish to operate on.
+Note: When the NoteBook is currently on the last page, and
+NextPage() is called, the notebook will wrap back to the first
+page. Likewise, if the NoteBook is on the first page, and
+PrevPage() is called, the notebook will wrap to the last page.
+<pre class="code">
+notebook1.NextPage();
+notebook1.PrevPage();
+</pre>This next function sets the "active" page. If you wish the
+notebook to be opened to page 5 for example, you would use this
+function. Without using this function, the notebook defaults to the
+first page.
+<pre class="code">
+notebook1.CurrentPage(int         page_num);
+</pre>The next two functions add or remove the notebook page tabs
+and the notebook border respectively.
+<pre class="code">
+notebook1.ShowTabs = bool  show_tabs;
+</pre>
+<pre class="code">
+notebook1.ShowBorder = boolean     show_border;
+</pre>The next function is useful when the you have a large number
+of pages, and the tabs don't fit on the page. It allows the tabs to
+be scrolled through using two arrow buttons.
+<pre class="code">
+notebook1.Scrollable = bool     scrollable;
+</pre>show_tabs, show_border and scrollable can be either true or
+false.
+<p>Now let's look at an example, it is expanded from the testgtk.cs
+code that comes with the Gtk# distribution. This small program
+creates a window with a notebook and six buttons. The notebook
+contains 11 pages, added in three different ways, appended,
+inserted, and prepended. The buttons allow you rotate the tab
+positions, add/remove the tabs and border, remove a page, change
+pages in both a forward and backward manner, and exit the
+program.</p>
+<pre class="code">
+// notebook.cs - Gtk# Tutorial example
+// 
+//
+// Author: Alejandro S&#195;&#161;nchez Acosta
+&gt;raciel@es.gnu.org&lt;
+//         Cesar Octavio Lopez Nataren
+&gt;cesar@ciencias.unam.mx&lt;
+//
+// (c) 2002 Alejandro S&#195;&#161;nchez Acosta
+//          Cesar Octavio Lopez Nataren
+
+namespace GtkSharpTutorial {
+
+        using Gtk;
+        using Gdk;
+        using Glib;
+        using System;
+        using System.Drawing;
+
+        public class notebook
+        {
+
+                static void delete_event (object obj,
+DeleteEventArgs args)
+                {
+                        Application.Quit();
+                }
+
+                static void exitbutton_event (object obj, EventArgs
+args)
+                {
+                        Application.Quit();
+                }
+
+                static void nextPage (object obj, EventArgs args)
+                {
+                        notebook1.NextPage ();
+                }
+
+                static void prevPage (object obj, EventArgs args)
+                {
+                        notebook1.PrevPage ();
+                }
+
+                // FIXME
+                static void rotate_book (object obj, EventArgs
+args)
+                {
+                        // notebook1.TabPos = ((notebook1.TabPos +
+1)% 4);
+                }
+
+                static void tabsborder_book (object obj, EventArgs
+args)
+                {
+                        bool tval = false;
+                        bool bval = false;
+                        if (notebook1.ShowTabs == false)
+                                tval = true;
+                        if (notebook1.ShowBorder == false)
+                                bval = true;
+                        notebook1.ShowTabs = tval;
+                        notebook1.ShowBorder = bval;
+                }
+
+                static void remove_book (object obj, EventArgs
+args)
+                {
+                        int page;
+                        page = notebook1.CurrentPage;
+                        notebook1.RemovePage (page);
+                        notebook1.QueueDraw();
+                }
+
+                static Gtk.Window window;
+                static Button button;
+                static Table table;
+                static Notebook notebook1;
+                static Frame frame;
+                static Label label;
+                static CheckButton checkbutton;                 
+
+                public static void Main (string[] args)
+                {
+
+                        int i;
+                        string bufferf;
+                        string bufferl;
+
+
+                        Application.Init();
+
+                        window = new Gtk.Window ("Notebook");
+                        window.DeleteEvent += delete_event;
+
+                        window.BorderWidth = 10;
+
+                        table = new Table (3, 6, false);
+                        window.Add (table);
+
+                        notebook1 = new Notebook();
+                        notebook1.TabPos = PositionType.Top;
+                        table.Attach (notebook1, 0, 6, 0 ,1);
+                        notebook1.Show();
+
+                        for (i=0; i&lt;5; i++){
+                                bufferf = "Append Frame" +
+(i+1).ToString();
+                                bufferl = "Page " +
+(i+1).ToString();
+
+                                frame = new Frame (bufferf);
+                                frame.BorderWidth = 10;
+                                frame.SetSizeRequest (100, 75);
+                                frame.Show();
+
+                                label = new Label (bufferf);
+                                frame.Add (label);                 
+                   label.Show();
+
+                                label = new Label (bufferl);
+                                notebook1.AppendPage (frame,
+label);
+                        }
+
+                        checkbutton = new CheckButton ("Check me
+please!");
+                        checkbutton.SetSizeRequest (100, 75);
+                        checkbutton.Show();
+
+                        label = new Label ("Add page");
+                        notebook1.InsertPage (checkbutton, label,
+2);
+
+                        for (i=0; i&lt;5; i++) {
+                                bufferf = "Append Frame" +
+(i+1).ToString();
+                                bufferl = "Page " +
+(i+1).ToString();
+                                frame = new Frame (bufferf);
+                                frame.BorderWidth = 10;
+                                frame.SetSizeRequest (100, 75);
+                                frame.Show();
+
+                                label = new Label (bufferf);
+                                frame.Add (label);
+                                label.Show();            
+                                label = new Label (bufferl);
+                                notebook1.PrependPage (frame,
+label);
+                        }
+                        notebook1.CurrentPage = 3;
+                        button = new Button ("close");
+                        button.Clicked += exitbutton_event;
+                        table.Attach (button, 0, 1, 1, 2);
+                        button.Show();
+
+                        button = new Button ("next page");
+                        button.Clicked += nextPage;
+                        table.Attach (button, 1, 2, 1, 2);
+                        button.Show();
+
+                        button = new Button ("prev page");
+                        button.Clicked += prevPage;
+
+                        table.Attach (button, 2, 3, 1, 2);
+                        button.Show();
+
+                        button = new Button ("tab position");
+                        button.Clicked += rotate_book;
+                        table.Attach (button, 3, 4, 1, 2);
+                        button.Show();
+
+                        button = new Button ("tables/border
+on/off");
+                        button.Clicked += tabsborder_book;
+                        table.Attach (button, 4, 5, 1, 2);
+                        button.Show();
+
+                        button = new Button ("remove page");
+                        button.Clicked += remove_book;
+                        table.Attach (button, 5, 6, 1, 2);
+                        button.Show();
+                        table.Show();
+                        window.Show();
+
+                        Application.Run();
+                }
+        }
+}
+
+</pre>I hope this helps you on your way with creating notebooks for
+your Gtk# applications.
+
+</body>
+</html>

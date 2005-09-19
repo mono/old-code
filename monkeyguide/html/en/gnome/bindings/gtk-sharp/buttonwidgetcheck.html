@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="utf-8"?>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:monodoc="http://www.go-mono.org/xml/monodoc">
+<head>
+	<title>Gtk# - A closer look at buttons</title>
+
+	<meta name ="DC.Description" content ="" />
+	<meta name ="DC.Contributor" content ="Johannes Roith" />
+
+	<link rel="stylesheet" type="text/css" href="../../../style.css" />
+</head>
+<body>
+Check buttons inherit many properties and functions from the the
+toggle buttons above, but look a little different. Rather than
+being buttons with text inside them, they are small squares with
+the text to the right of them. These are often used for toggling
+options on and off in applications. 
+<p>The creation functions are similar to those of the normal
+button.</p>
+<pre class="code">
+GtkWidget CheckButton1 = new CheckButton();
+GtkWidget CheckButton1 = new CheckButtonWithLabel(string label);
+GtkWidget CheckButton1 = new CheckButtonWithMnemonic(string label);
+</pre>
+The CheckButtonWithLabel() function creates a check button with a
+label beside it. 
+<p>Checking the state of the check button is identical to that of
+the toggle button.</p>
+
+</body>
+</html>

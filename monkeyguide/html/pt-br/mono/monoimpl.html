@@ -1,0 +1,169 @@
+<?xml version="1.0" encoding="utf-8"?>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:monodoc="http://www.go-mono.org/xml/monodoc">
+<head>
+	<title>Mono Implementation</title>
+
+	<meta name = "DC.Description" content = "Details about the Mono implementation of the CLI" />
+	<meta name = "DC.Contributor" content = "Johannes Roith" />
+
+	<link rel="stylesheet" type="text/css" href="../style.css" />
+
+	<meta name = "CVS.English.Version" content = "1.16" />
+</head>
+<body>
+
+Besides the core .NET features, there are many under the hood, in
+the class library. This chapter will take a look at what work the
+mono project has done, and with what technologies you can work.
+<h2><a name="implemented" id="implemented">Technologies
+implemented</a></h2>
+<table cellpadding="10">
+<tr>
+<td valign="top">
+<h3>C# language</h3>
+<p>Mono includes an implementation of the C# language, a language
+originally developed by Microsoft and that has now been standarized
+by the ECMA and ISO groups.</p>
+<p>The C# language takes various elements from the Java, C++ and
+Smalltalk systems.</p>
+</td>
+<td valign="top">
+<pre class="code">
+using System;
+
+class HelloWorld {
+    public static void Main() {
+        Console.WriteLine("Hello, World!");
+    }
+}
+</pre></td>
+</tr>
+</table>
+<table cellpadding="10">
+<tr>
+<td valign="top">
+<h3>VB language</h3>
+The Basic language hasn't really changed over the years.
+VisualBasic.NET however fixes many issues, Basic is now as
+powerful, as C# or other languages. Mono ships with a CIL compiler,
+making the language just as worthy as C#. Thanks to
+language-independence classes written in MonoBasic can be used in
+C# as well. The lack of a good supported Basic implementation on
+Unix has finally be fixed.</td>
+<td valign="top">
+<pre class="code">
+Imports System
+
+Module Test
+        Sub Main()
+                Console.WriteLine ("Hello World!")
+        End Sub
+End Module
+</pre></td>
+</tr>
+</table>
+<table cellpadding="10">
+<tr>
+<td valign="top">
+<h3>LOGO language</h3>
+Mono brings the LOGO language to the Gnome desktop (but also to
+Windows, MacOS, KDE). Like all mono languages it can make use of
+the class library, thus supporting Database and XML
+applications.</td>
+<td valign="top">
+<pre class="code">
+Print "|Hello world!|
+
+</pre></td>
+</tr>
+</table>
+<h3>ADO.NET</h3>
+Mono provides a common interface to Databases, so chnaging will be
+very easy. The mono hackers put much work into this. You will
+hardly find a database not supported, either directly, or through
+ODBC or libgda. Very portable, works on all platforms.
+<h3>ASP.NET</h3>
+ASP.NET is the best Framework I've seen so far, for developing
+WebSites and -Services. It's language independent, too. Imagine a
+webpage written in pascal, LOGO, basic, C#, C++, ... . You can
+access all the class library features and it's very fast, because
+all libraries are compiled. ASP.NET also features WebForms, that
+make HTML elements accessible as objects and removes the lack of
+state in HTTP.
+<table cellpadding="10">
+<tr>
+<td valign="top">
+<h3>Gtk#</h3>
+With Ximian comming from a Gnome background, Mono has first class
+Gnome bindings. GTK+, but also Glade, gnome-db and GStreamer are
+supported. Those libraries are ported to most (if not all) Unixes,
+MacOS X and Windows and nicely integrate with the Gnome desktop.
+There is also on-going work to use native widgets on windows and
+MacOS X. Cross-platform is possible!</td>
+<td valign="top"><img src="/html/en/images/empty.png" /></td>
+</tr>
+</table>
+<table cellpadding="10">
+<tr>
+<td valign="top">
+<h3>QT#</h3>
+QT# has been started by the KDE community and provides a binding to
+the KDE developer libraries. The underlying libraries are available
+on Windows and MacOS X as well, but are only free on Unix.</td>
+<td valign="top"><img src="/html/en/images/empty.png" /></td>
+</tr>
+</table>
+<h3>XML</h3>
+Mono has perfect support for Xml, with many parsers and processing
+libraries.
+<h3>Tools</h3>
+Mono offers a C and .NET debugger, with the ability to use console
+or GUI frontends, IL assembler and disassemblers. There are also
+several productivity applications, like a build tool and Unit
+testing from third--party projects.
+<p>Also there is to mention the mono documentation browser.</p>
+<h2><a name="notimplemented" id="notimplemented">2. Classes
+implemented</a></h2>
+<h2><a name="notimplemented" id="notimplemented">3. Classes not
+implemented</a></h2>
+While mono tries to implement all classes, those are either not
+started or have not progressed enough.
+<ul>
+<li>Microsoft.Win32</li>
+<li>System.Windows.Forms</li>
+<li>System.Messaging</li>
+</ul>
+<h2><a name="additional" id="additional">4. Mono's additional
+classes</a></h2>
+While with about 3000 classes the .NET Framework is quite feature
+rich, there are serveral bits that are missing.
+<ul>
+<li>Platform independend GUI</li>
+<li>More Databases</li>
+<li>Mailer API</li>
+<li>Many others</li>
+</ul>
+Mono tries to solve this, by introducing a new namespace, and
+offering the multiplatform GUI GTK+. Compatiblity is kept, all
+classes are known to run with the MS implementation.
+<h3>I. Extended .NET: The Mono.* namespace</h3>
+<h3>II. Extended .NET: Multiplatform GUI through Gtk#</h3>
+<h3>II. Differences on Unix/Windows/MacOS X</h3>
+The mono classes don't need to be ported. However if the underlying
+library isn't available for a certain platform, some classes might
+not work there.
+<ul>
+<li><b>System.Xml.Xsl</b> depends on libxml2 (very portable)</li>
+<li><b>System.Data.Odbc</b> depends on unixodbc or odbc32 (not very
+portable, but available for windows, unix)</li>
+<li><b>Mono.Data.Sqlite</b> depends on sqlite (extremly small and
+portable)</li>
+<li><b>Mono.Data.MySQL</b> depends on libmysql (available for unix,
+windows; maybe 100% C# implementation in the future)</li>
+<li><b>Mono.Data.PostgreSQL</b> depends on libpostgres (available
+for unix, windows; maybe 100% C# implementation in the future)</li>
+</ul>
+
+</body>
+</html>

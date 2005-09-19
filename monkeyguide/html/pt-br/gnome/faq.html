@@ -1,0 +1,110 @@
+<?xml version="1.0" encoding="utf-8"?>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:monodoc="http://www.go-mono.org/xml/monodoc">
+<head>
+	<title>Gtk# Frequently Asked Questions</title>
+
+	<meta name = "DC.Description" content = "" />
+	<meta name = "DC.Contributor" content = "Johannes Roith" />
+
+	<link rel="stylesheet" type="text/css" href="../style.css" />
+
+	<meta name = "CVS.English.Version" content = "1.9" />
+</head>
+<body>
+
+<hr style="width: 100%; height: 2px;" />
+<ol>
+<li>General</li>
+<li style="list-style: none">
+<ol>
+<li><a href="#1.1">What is Gtk#?</a></li>
+<li><a href="#1.2">Why isn't it called Gnome# or
+Gnome.Net?</a><br /></li></ol></li>
+<li>Compiling Gtk#</li>
+<li style="list-style: none">
+<ol>
+<li><a href="#2.1">What are the Dependencies to build Gtk# on X11
+platforms?</a></li>
+<li><a href="#2.2">What about building on Win32
+platforms?</a><br /></li></ol></li>
+<li>Developing with Gtk#</li>
+<li style="list-style: none">
+<ol>
+<li><a href="#3.1">Why can't mono find gtk-sharp.dll?</a></li>
+<li><a href="#3.2">Why can't my compiler find Gtk#
+classes?</a><br /></li></ol></li></ol>
+<hr style="width: 100%; height: 2px;" />
+<h3><a name="1.1" id="1.1"></a>1.1 &#160;What is Gtk#?</h3>
+Gtk# brings the power and ease of .Net development paradigms to the
+free software GUI application development community. &#160;Gtk#
+provides a C source parser and C# code generator which can be used
+to produce .Net assemblies that bind to GObject based libraries.
+&#160;Among the libraries currently wrapped are gtk, gdk, atk,
+pango, gda, gnomedb, gconf, libgnomecanvas, libgnomeui, and
+libglade.<br />
+<br />
+<h3><a name="1.2" id="1.2"></a>1.2 &#160;Why isn't it called Gnome#
+or Gnome.Net?</h3>
+When the project was started, the idea was to wrap the Gtk+
+libraries with a set of C# classes. &#160;It quickly became
+apparent that the source parser and C# code generator could be used
+to wrap any GObject based API. &#160;Contributors started wrapping
+their favorite GNOME libraries. &#160;Mailing lists and a
+sourceforge project were already open under the gtk-sharp
+nomenclature and no compelling technical reasons for renaming
+presented themselves.&#160; The decision was made to continue under
+the Gtk# name, even though the binding encompasses more than just
+Gtk, and more than just C#.<br />
+<br />
+<h3><a name="2.1" id="2.1"></a>2.1 &#160;What are the Dependencies
+to build Gtk# on X11 platforms?</h3>
+You'll need a .Net framework installed. Gtk# has been successfully
+used with both the <a href="http://www.go-mono.org">mono</a> and
+<a href="http://www.southern-storm.com.au/portable_net.html">Portable.Net</a>
+frameworks. The bare minimum requirement is a complete installation
+of the Gtk+-2.0 libraries. &#160;Keep in mind that if your Gtk+
+installation is provided by binary packages, you will also need to
+install the *-devel packages. &#160;If you have additional
+GNOME-2.0 libraries installed, the configure script will detect
+their presence and the associated wrappers will be built. &#160;A
+summary of the libraries which will be built is printed at the end
+of the configure step.<br />
+<br />
+<h3><a name="2.2" id="2.2"></a>2.2 &#160;What about building on
+Win32 platforms?</h3>
+To build Gtk# on win32, you will need a working
+<a href="http://www.cygwin.com">cygwin</a> installation. &#160;Keep
+in mind that the default cygwin installation may not have all the
+tools you need. &#160;Cygwin provides the gnu make tool which
+builds the Gtk# library. &#160;You will also need the mingw-gcc
+compiler installed in order to build the Gtk# glue library.
+&#160;There are binary packages of the Gtk+-2.0 libs and
+dependencies available from the
+<a href="http://www.gimp.org/%7Etml/gimp/win32/">Gtk+ for Win32
+project page</a>. &#160;You will also need these libraries
+installed, along with their devel packages in order to build the
+glue library. &#160;Once you have this environment set up, expand
+the gtk-sharp source into a directory and in a Cygwin shell window,
+cd to the gtk-sharp directory and execute the command "make -f
+makefile.win32". <br />
+<br />
+<h3><a name="3.1" id="3.1"></a>3.1 &#160;Why can't mono find
+gtk-sharp.dll?</h3>
+You most likely have installed Gtk# into a prefix other than where
+mono is installed. &#160;In order for the runtime to locate the
+Gtk# assemblies, you will need to add their location to the
+MONO_PATH environment variable. For the default installation
+prefix, this will mean executing the following command:<br />
+<pre>
+export MONO_PATH=/usr/local/lib:$MONO_PATH
+</pre>
+<br />
+<h3><a name="3.2" id="3.2"></a>3.2 &#160;Why can't my compiler find
+the Gtk# classes?</h3>
+You need to provide an assembly reference in your compilation
+command. This will look like "mcs /ref:gtk-sharp foo.cs" if you are
+referencing classes in the Gtk or GtkSharp namespaces.<br />
+
+</body>
+</html>

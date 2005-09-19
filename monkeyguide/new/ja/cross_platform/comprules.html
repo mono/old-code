@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="utf-8"?>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:monodoc="http://www.go-mono.org/xml/monodoc">
+<head>
+	<meta http-equiv="content-type" content="text/html;charset=utf-8" />
+	<title>クロスプラットフォーム互換性の確保</title>
+
+	<meta name ="DC.Description" content ="Monos Database Framework" />
+	<meta name ="DC.Contributor" content ="Johannes Roith" />
+	<meta name ="DC.Contributor" content ="Hiroyuki Ishimine" />
+
+	<link rel="stylesheet" type="text/css" href="../style.css" />
+</head>
+<body>
+
+<h1>クロスプラットフォーム互換性の確保</h1>
+
+<p>
+  もしあなたが自身のアプリケーションを構築する際、クロスプラットフォームでの実行を念頭に置けば
+  おそらくうまくいくでしょう。もしあなたの開発ツールがプラットフォームに中立である場合でも、
+  対象となる各々のプラットフォームの類似点と相違点を確かめておく必要があります。
+</p>
+
+<p>以下は、クロスプラットフォームアプリケーションを構築する際、あなたが従うべきルールです：
+Here are several rules you can follow to build cross-platform applications:</p>
+
+<ul>
+
+  <li>ファイル名の指定には相対パスを使う。C:\Program Files\(あなたのアプリケーション名)
+   はLinuxには存在しないし、Windowsでは /usr/lib/ ディレクトリは利用できない。</li>
+
+  <li>同様に、Windowsレジストリ(Microsft.Win32.Registry)のような
+  プラットフォーム特有のリソースの使用は避ける。</li>
+  
+  <li>Gtk#とSystem.Windows.Formsのどちらかを選択できる場合はGtk#を使う。
+  Linux用System.Windows.FormsよりWindows用Gtk#の方が良い。</li>
+  
+  <li>Platform Invoke(P/Invoke)は本当に必要な時だけ使う。可能であれば、
+  UNIXとWindows両方で利用できるライブラリを使用する。</li>
+
+  <li>
+    もし、P/Invokeやその他プラットフォーム特有のリソースを使用する場合は、
+    その存在を前提としない。その代わり（そのようなリソースの）存在をチェックし、失敗した場合は
+    明確なエラーメッセージを表示する。
+  </li>
+</ul>
+
+</body>
+</html>

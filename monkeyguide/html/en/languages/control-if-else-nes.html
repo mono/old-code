@@ -1,0 +1,111 @@
+<?xml version="1.0" encoding="utf-8"?>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:monodoc="http://www.go-mono.org/xml/monodoc">
+<head>
+	<title>Control Structs - Nested If/Else</title>
+
+	<meta name ="DC.Description" content ="" />
+	<meta name ="DC.Contributor" content ="Johannes Roith" />
+
+	<link rel="stylesheet" type="text/css" href="../style.css" />
+</head>
+<body>
+<p>
+Sometimes it is neccesary to take an action to more than one alternative.
+For this purpose we have the nested If/else statement. You can combine as you want,
+but a sample could be:
+<pre class="code">
+ if ( condition ) 
+	if ( condition2 )
+		action to be taken if condition1 and condition2 are true
+	else
+		alternative to condition2, but condition1 true
+ else
+	if ( condition3 )
+		alternative to false values to condition1 and condition2,
+		but condition3 true
+</pre>
+As you can see, it is only that, as part of the actions to be taken, we apply again
+a <b>if</b> statement. it is even possible to avoid the else part, like the sample shows.
+Only be careful with the <b>else</b> statements: each one correspond to the previous one <b>if</b>
+( observe carefully the sample ). By the way, there is another way to "position" the nested if/else
+statements:
+<pre class="code">
+ if ( condition1 )
+ 	action to taken for condition1
+ else if ( condition2 )
+	action to be taken for condition2
+ else if ( condition3 )
+	action to be taken for condition3
+
+</pre>
+Note that this last way is a "recursive" one ( try to indent it as the first, and you will see it ).
+</p>
+<p>
+Coding is better than talking; let's write a small sample about the nested if/else statement: 
+we want to receive a student note, ina range from 0 to 10, from bad to good ( a 0 would be a bad
+note, and a 10 would be an excellent one ).
+</p>
+<p>
+<pre class="code">
+//
+// A nested if/else sample
+//
+
+using System;
+
+ public class IfElseSample {
+
+	public static void Main ()
+	{
+
+		double note;
+
+		// Read and convert the user input to a double,
+		// using the public static Convert.ToDouble method
+		Console.Write(" Enter the note ( from 0 to 10 ) : ");
+		note = Convert.ToDouble( Console.ReadLine() );
+
+		// Take an action:
+		// 1) 11 or bigger, or -1 or minor, out of range
+		// 2) 8 to 10 - Excellent
+		// 3) 5 to 7 - Regular
+		// 4) 4 or minor - Bad
+
+		if ( note &#62; 10 || note &#60; 0 )
+			Console.WriteLine("Note out of range ::");
+		else
+			if ( note &#62; 7 )
+				Console.WriteLine("Excellent note ::");
+			else
+				if ( note &#62; 4 )
+					Console.WriteLine("Regular note ::");
+				else
+					// Here we don't need more
+					// data validation
+					Console.WriteLine("Bad note ::");
+
+	}
+
+ }
+
+</pre>
+Save, compile and run it. Note that I used the "common" indentation way, for learning purposes.
+You should get something like this ( user input in italics ):
+<pre class="console">
+$ mono if-else-nested.exe
+Enter the note ( from 0 to 10 ) : <i>11</i>
+Note out of range ::
+
+$ mono if-else-nested.exe
+Enter the note ( from 0 to 10 ) : <i>8</i>
+Excellent note ::
+
+$  mono if-else-nested.exe
+Enter the note ( from 0 to 10 ) : <i>5</i>
+Regular note ::
+
+</pre>
+</p>
+</body>
+</html>

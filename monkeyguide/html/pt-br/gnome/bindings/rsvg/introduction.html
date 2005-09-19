@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="utf-8"?>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:monodoc="http://www.go-mono.org/xml/monodoc">
+<head>
+	<title>Introduction</title>
+
+	<meta name = "DC.Description" content = "" />
+	<meta name = "DC.Contributor" content = "Charles Iliya Krempeaux" />
+
+	<link rel="stylesheet" type="text/css" href="../../../style.css" />
+
+	<meta name = "CVS.English.Version" content = "1.4" />
+</head>
+<body> 
+
+<p>Rsvg# is a .NET binding to the librsvg library.
+(<em>librsvg</em> is sometimes also call <em>rsvg</em>.) Rsvg# lets
+you make use of SVG files in your applications.</p>
+<p>SVG is vector graphics format which looks similar to HTML. More
+specifically, SVG is a W3C vector graphics format and language for
+describing two-dimensional graphics in XML.</p>
+<p>One of the important things to understand about Rsvg# is that it
+is a <em>rendering</em> library for SVG files. (In fact, the
+"<em>R</em>" in <em>Rsvg</em> stands for <em>render</em>.) What
+this means is that Rsvg does not automatically do any scaling or
+resizing for you. If you want to resize or rescale, then you must
+re-render. (When SVG files are rendered, they are turned into
+Pixmap images, and stores in a <code>Gtk.Pixbuf</code>.)</p>
+<p>This section describes how to build applications which use
+Rsvg#.</p>
+
+</body>
+</html>

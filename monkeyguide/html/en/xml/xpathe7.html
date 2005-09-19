@@ -1,0 +1,107 @@
+<?xml version="1.0" encoding="utf-8"?>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:monodoc="http://www.go-mono.org/xml/monodoc">
+<head>
+	<title>XPath tutorial - count() function</title>
+
+	<meta name = "DC.Description" content = "" />
+	<meta name = "DC.Contributor" content = "Johannes Roith" />
+
+	<link rel="stylesheet" type="text/css" href="../style.css" />
+</head>
+<body>
+Function count() counts the number of selected elements 
+<h3>Example 1</h3>
+<b>XPath Expression:</b> Select elements which have two children
+BBB 
+<pre class="code">
+//*[count(BBB)=2]
+</pre>
+<b>XML:</b> 
+<pre class="code">
+&lt;?xml version="1.0"&gt;
+     &lt;<span class="element">AAA</span>&gt;
+          &lt;<span class="element">CCC</span>&gt;
+               &lt;<span class="element">BBB</span>/&gt;
+               &lt;<span class="element">BBB</span>/&gt;
+               &lt;<span class="element">BBB</span>/&gt;
+          &lt;/<span class="element">CCC</span>&gt;
+          &lt;<span class="elementOn">DDD</span>&gt;
+               &lt;<span class="element">BBB</span>/&gt;
+               &lt;<span class="element">BBB</span>/&gt;
+          &lt;/<span class="elementOn">DDD</span>&gt;
+          &lt;<span class="element">EEE</span>&gt;
+               &lt;<span class="element">CCC</span>/&gt;
+               &lt;<span class="element">DDD</span>/&gt;
+          &lt;/<span class="element">EEE</span>&gt;
+     &lt;/<span class="element">AAA</span>&gt;
+
+</pre>
+<h3>Example 2</h3>
+<p><b>XPath Expression:</b> Select elements which have 2
+children</p>
+<pre class="code">
+//*[count(*)=2]
+</pre>
+<b>XML:</b> 
+<pre class="code">
+&lt;?xml version="1.0"&gt;
+     &lt;<span class="element">AAA</span>&gt;
+          &lt;<span class="element">CCC</span>&gt;
+               &lt;<span class="element">BBB</span>/&gt;
+               &lt;<span class="element">BBB</span>/&gt;
+               &lt;<span class="element">BBB</span>/&gt;
+          &lt;/<span class="element">CCC</span>&gt;
+          &lt;<span class="elementOn">DDD</span>&gt;
+               &lt;<span class="element">BBB</span>/&gt;
+               &lt;<span class="element">BBB</span>/&gt;
+          &lt;/<span class="elementOn">DDD</span>&gt;
+          &lt;<span class="elementOn">EEE</span>&gt;
+               &lt;<span class="element">CCC</span>/&gt;
+               &lt;<span class="element">DDD</span>/&gt;
+          &lt;/<span class="elementOn">EEE</span>&gt;
+     &lt;/<span class="element">AAA</span>&gt;
+</pre>
+<h3>Example 3</h3>
+<p><b>XPath Expression:</b> Select elements which have 3
+children</p>
+<pre class="code">
+//*[count(*)=3]
+</pre>
+<b>XML:</b> 
+<pre class="code">
+&lt;?xml version="1.0"&gt;
+     &lt;<span class="elementOn">AAA</span>&gt;
+          &lt;<span class="elementOn">CCC</span>&gt;
+               &lt;<span class="element">BBB</span>/&gt;
+               &lt;<span class="element">BBB</span>/&gt;
+               &lt;<span class="element">BBB</span>/&gt;
+          &lt;/<span class="elementOn">CCC</span>&gt;
+          &lt;<span class="element">DDD</span>&gt;
+               &lt;<span class="element">BBB</span>/&gt;
+               &lt;<span class="element">BBB</span>/&gt;
+          &lt;/<span class="element">DDD</span>&gt;
+          &lt;<span class="element">EEE</span>&gt;
+               &lt;<span class="element">CCC</span>/&gt;
+               &lt;<span class="element">DDD</span>/&gt;
+          &lt;/<span class="element">EEE</span>&gt;
+     &lt;/<span class="elementOn">AAA</span>&gt;
+</pre>
+<b>C# code:</b> 
+<pre class="code">
+<b>// BasicSyntax - /xpath/basicsyntax.cs
+// Copyright 2003 by Johannes Roith</b>
+
+using System;
+using System.Xml.XPath;
+
+class BasicSyntax {
+        static void Main() {
+                
+        }
+
+}
+</pre>
+
+</body>
+</html>

@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="utf-8"?>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:monodoc="http://www.go-mono.org/xml/monodoc">
+<head>
+	<title>Gtk# - Packing Widgets Sample</title>
+
+	<meta name ="DC.Description" content ="" />
+	<meta name ="DC.Contributor" content ="Johannes Roith" />
+
+	<link rel="stylesheet" type="text/css" href="../../../style.css" />
+</head>
+<body>
+
+Because of this flexibility, packing boxes in GTK can be confusing
+at first. There are a lot of options, and it's not immediately
+obvious how they all fit together. In the end, however, there are
+basically five different styles. 
+<p><img src="packbox.png" border="0" /></p>
+<p>Each line contains one horizontal box (hbox) with several
+buttons. The call to Pack() is shorthand for the call to pack each
+of the buttons into the hbox. Each of the buttons is packed into
+the hbox the same way (i.e., same arguments to the PackStart()
+method).</p>
+<p>This is the declaration of the PackStart() method.</p>
+<pre class="code">
+box1.PackStart(     Widget child,
+                    bool   expand,
+                    bool   fill,
+                    int    padding);
+</pre>
+The first argument is object you want to pack into the box. The
+objects will all be buttons for now, so we'll be packing buttons
+into boxes. 
+<p>The expand argument to PackStart() and PackEnd() controls
+whether the widgets are laid out in the box to fill in all the
+extra space in the box so the box is expanded to fill the area
+allotted to it (true); or the box is shrunk to just fit the widgets
+(false). Setting expand to false will allow you to do right and
+left justification of your widgets. Otherwise, they will all expand
+to fit into the box, and the same effect could be achieved by using
+only one of PackStart() or PackEnd().</p>
+<p>The fill argument to the Pack() functions control whether the
+extra space is allocated to the objects themselves (true), or as
+extra padding in the box around these objects (false). It only has
+an effect if the expand argument is also true.</p>
+<p>When creating a new box, the function looks like this:</p>
+<pre class="code">
+Widget hbox1 = new HBox(     bool homogeneous,
+                             int  spacing );
+</pre>
+The homogeneous argument to HBox() (and the same for VBox())
+controls whether each object in the box has the same size (i.e.,
+the same width in an hbox, or the same height in a vbox). If it is
+set, the Pack() routines function essentially as if the expand
+argument was always turned on. 
+<p>What's the difference between spacing (set when the box is
+created) and padding (set when elements are packed)? Spacing is
+added between objects, and padding is added on either side of an
+object. The following figure should make it clearer:</p>
+
+</body>
+</html>

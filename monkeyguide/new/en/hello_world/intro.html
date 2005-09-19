@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="utf-8"?>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:monodoc="http://www.go-mono.org/xml/monodoc">
+<head>
+	<title>Hello World: a GTK# introduction</title>
+
+	<meta name = "DC.Description" content = "" />
+	<meta name = "DC.Contributor" content = "Shane Landrum" />
+
+	<link rel="stylesheet" type="text/css" href="../style.css" />
+</head>
+<body>
+
+<p>If you've worked with C# before, most of this chapter will be familiar
+to you. This is not intended to be an exhaustive tutorial, merely a place
+to start.</p>
+
+<h2>A trivial example</h2>
+<pre class="code">
+<b>// Hello World! : hello.cs</b>
+
+using System;
+
+class Hello {
+    static void Main() {
+        Console.WriteLine ("Hello, World!");
+    }
+}
+
+</pre>
+To compile, type 
+<pre class="console">
+mcs hello.cs
+</pre>
+
+This results in a file hello.exe, that you can execute with mono:
+<pre class="console">
+mono hello.exe
+</pre>
+
+<p>For more information on the mcs compiler and mono runtime, see the
+manpages.</p>
+
+
+</body>
+</html>

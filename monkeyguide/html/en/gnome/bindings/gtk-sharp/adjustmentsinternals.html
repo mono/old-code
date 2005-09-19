@@ -1,0 +1,85 @@
+<?xml version="1.0" encoding="utf-8"?>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:monodoc="http://www.go-mono.org/xml/monodoc">
+<head>
+	<title>Gtk# - Adjustments Internals</title>
+
+	<meta name ="DC.Description" content ="" />
+	<meta name ="DC.Contributor" content ="Johannes Roith" />
+
+	<link rel="stylesheet" type="text/css" href="../../../style.css" />
+</head>
+<body>
+
+<p>OK, you say, that's nice, but what if I want to create my own
+handlers to respond when the user adjusts a range widget or a spin
+button, and how do I get at the value of the adjustment in these
+handlers? To answer these questions and more, let's start by taking
+a look at struct _GtkAdjustment itself:</p>
+<pre class="code">
+class GtkAdjustment
+{
+  Gtk.Object parent_instance;
+  
+  double lower;
+  double upper;
+  double value;
+  double step_increment;
+  double page_increment;
+  double page_size;
+};
+</pre>
+You can use the following accessor to inspect the value of an
+adjustment: 
+<pre class="code">
+double value = adjustment1.Value;
+</pre>
+Since, when you set the value of an Adjustment, you generally want
+the change to be reflected by every widget that uses this
+adjustment, GTK provides this convenience function to do this: 
+<pre class="code">
+adjustment1.Value = double value;
+</pre>
+As mentioned earlier, Adjustment is a subclass of Object just like
+all the various widgets, and thus it is able to emit signals. This
+is, of course, why updates happen automagically when you share an
+adjustment object between a scrollbar and another adjustable
+widget; all adjustable widgets connect signal handlers to their
+adjustment's value_changed signal, as can your program. Here's the
+definition of this signal in struct _GtkAdjustmentClass: 
+<pre class="code">
+  void (* value_changed) (GtkAdjustment *adjustment);
+</pre>
+The various widgets that use the Adjustment object will emit this
+signal on an adjustment whenever they change its value. This
+happens both when user input causes the slider to move on a range
+widget, as well as when the program explicitly changes the value
+with gtk_adjustment_set_value(). So, for example, if you have a
+scale widget, and you want to change the rotation of a picture
+whenever its value changes, you would create a callback like this: 
+<pre class="code">
+void CbRotatePicture (Adjustment adj, Widget picture)
+{
+  SetPictureRotation (picture, adj.Value);
+...
+</pre>
+and connect it to the scale widget's adjustment like this: 
+<pre class="code">
+adj.ValueChanged = new EventHandler(RotatePicture);
+</pre>
+What about when a widget reconfigures the upper or lower fields of
+its adjustment, such as when a user adds more text to a text
+widget? In this case, it emits the changed event, which looks like
+this: 
+<pre class="code">
+  void (* changed) (GtkAdjustment *adjustment);
+</pre>
+Range widgets typically connect a handler to this signal, which
+changes their appearance to reflect the change - for example, the
+size of the slider in a scrollbar will grow or shrink in inverse
+proportion to the difference between the lower and upper values of
+its adjustment. 
+<p>Now go forth and adjust!</p>
+
+</body>
+</html>

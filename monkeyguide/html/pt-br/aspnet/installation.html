@@ -1,0 +1,110 @@
+<?xml version="1.0" encoding="utf-8"?>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:monodoc="http://www.go-mono.org/xml/monodoc">
+<head>
+	<title>Installation</title>
+
+	<meta name = "DC.Description" content = "" />
+	<meta name = "DC.Contributor" content = "Johannes Roith" />
+
+	<link rel="stylesheet" type="text/css" href="../style.css" />
+
+	<meta name = "CVS.English.Version" content = "1.8" />
+</head>
+<body>
+
+<h2>Contents</h2>
+
+<ul>
+	<li><a href="#introduction">Choose a WebServer</a></li>
+	<li><a href="#introduction">XSP</a></li>
+	<li><a href="#introduction">Apache Web Server</a></li>
+</ul>
+
+<h2>Choose a WebServer</h2>
+
+The first step is to setup a webserver. Currently, there are two
+options. 
+<ul>
+<li>XSP, a webserver, written in C#, that can make use of the
+ASP.NET classes.</li>
+<li>Apache with mod_mono</li></ul>
+While XSP is faster to setup, it requires no configuration, for
+production environments Apache is strongly recommended, because it
+offers smooth integration with existing web technologies, like PHP,
+and is much wider deployed. 
+<h2>II. XSP</h2>
+<b>1.</b> Get XSP 
+<p>Get XSP from CVS or untar a release (go-mono.org).</p>
+<p><b>2.</b> Installing XSP</p>
+<p>Eventually untar, then "make" in /path/to/xsp/</p>
+<p><b>3.</b> Configuration is not needed, but possible.</p>
+<p>Currently you can set the port value in server.config</p>
+<p>It can easily be run, by typing "mono server.exe" in
+path/to/xsp/server/test.<br />
+You should put all your aspx files in path/to/xsp/server/test,
+too.</p>
+<h2>III. mod_mono</h2>
+If not already done, you need to compile Apache2: 
+<p><b>0.</b> Install Apache 2, with loadable module support<br />
+<br />
+Go to http://www.apache.org and download Apache 2,<br />
+the filename will be something like httpd-2.0.43.tar.gz<br />
+<br />
+Unpack it :<br />
+<br />
+tar xvfz httpd-2.0.43.tar.gz<br />
+cd httpd-2.0.43<br />
+./configure --prefix=/home/username/apache2 --enable-so<br />
+make<br />
+make install<br />
+<br />
+<b>1.</b> Building and installing mod_mono<br />
+<br />
+Go to http://www.apacheworld.org/modmono/ and download mod_mono or
+get it from CVS.<br />
+Untar, then run:<br />
+<br />
+./configure --with-apache2=/home/username/apache2<br />
+make<br />
+make install<br />
+<br />
+If everything goes well, you will have the following library:<br />
+/home/user/mono/mod_mono/src/.libs/libmod_mono.so<br />
+<br />
+<b>2.</b> Building ModMono.dll<br />
+<br />
+The ModMono.cs file is located in the src/ directory<br />
+This is the command I use to build ModMono.dll:<br />
+<br />
+mcs ModMono.cs -target:library
+-reference:/home/user/mono/install/lib/System.Web.dll<br />
+<br />
+<b>3.</b> Configuring Apache<br />
+<br />
+Copy the file /home/user/mono/mod_mono/src/.libs/libmod_mono.so to
+/home/user/mono/install/apache2/lib/<br />
+Copy ModMono.dll to
+/home/user/mono/xsp/server/test/ModMono.dll<br />
+<br />
+Edit /home/user/mono/install/apache2/conf/httpd.conf :<br />
+<br />
+Listen 8080<br />
+LoadModule mono_module
+/home/user/mono/install/apache2/lib/libmod_mono.so<br />
+LoadModMonoDll /home/user/mono/xsp/server/test/ModMono.dll<br />
+<br />
+Alias /mono /home/user/mono/xsp/server/test<br />
+<br />
+&lt;location /mono/*.aspx&gt;<br />
+ SetHandler application/x-httpd-mono<br />
+&lt;/location&gt;<br />
+<br />
+You can now start Apache with<br />
+/home/user/mono/install/apache2/bin/apachectl start</p>
+<h3>First ASP.NET page</h3>
+After successful installation, point your browser to
+http://localhost:8080/index.aspx . There is a wide range of
+examples available, to test your server. 
+</body>
+</html>

@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="utf-8"?>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:monodoc="http://www.go-mono.org/xml/monodoc">
+<head>
+	<title>10 rules to be cross-platform and .NET compatible</title>
+
+	<meta name ="DC.Description" content ="Monos Database Framework" />
+	<meta name ="DC.Contributor" content ="Johannes Roith" />
+
+	<link rel="stylesheet" type="text/css" href="../style.css" />
+
+	<meta name = "CVS.English.Version" content = "1.12" />
+</head>
+<body>
+
+<ul>
+	<li>Do not use absolute paths (e.g. c:\program
+	files\yourapplication)</li>
+	<li>It's better to use Gtk# than System.Windows.Forms.</li>
+	<li>Do only p/invoke against native libraries if really needed. Make
+	sure, the library is available for Unix and Windows.</li>
+	<li>Do not read Registry keys, trough Microsft.Win32.Registry, that
+	are maintained by Windows. (Run, RunServices, get system
+	information, etc.)</li>
+</ul>
+
+</body>
+</html>

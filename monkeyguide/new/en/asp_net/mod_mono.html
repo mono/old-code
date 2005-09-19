@@ -1,0 +1,379 @@
+<?xml version="1.0" encoding="utf-8"?>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:monodoc="http://www.go-mono.org/xml/monodoc">
+<head>
+	<title>Configuring mod_mono</title>
+
+	<meta name = "DC.Description" content = "mod_mono installation guide" />
+	<meta name = "DC.Contributor" content = "Gonzalo Paniagua Javier" />
+
+	<link rel="stylesheet" type="text/css" href="style.css" />
+</head>
+<body>
+<h1>Introduction</h1>
+<p>
+mod_mono is an Apache 1.3/2.0 module that aims to provide ASP.NET support for
+the web's favorite browser.
+</p>
+<p>
+The module relays on an external program, <b>mod-mono-server</b>, to actually
+handle the requests. The communication between both is established using a unix
+socket or a TCP socket.
+</p>
+<p>
+In the early days of mod_mono, you had to start mod-mono-server by yourself,
+ensuring that it had all the parameters needed to understand the requests
+forwarded by the module. This is still an option for those who want
+mod-mono-server to have a separate life cycle from apache, but you will probably
+prefer to use mod_mono built-in ability to start and stop mod-mono-server for
+you.
+</p>
+<h1>Requisites</h1>
+<p>
+You will need <a href="http://httpd.apache.org">apache</a>, the web server,
+installed.
+</p>
+<p>
+From the <a href="http://www.mono-project.com/downloads/">Mono project</a>
+'Downloads' page you can get <b>mono</b>, <b>XSP</b> and <b>mod_mono</b>.
+XSP is the module where mod-mono-server resides.
+</p>
+<h1>Compiling mod_mono</h1>
+<p>
+If you already have installed mod_mono as a package, <a
+href="#configuration">skip</a> this section.
+</p>
+<p>
+Before compiling mod_mono, you need the development packages for apache
+installed (apache-dev...). You should have a file called mod_mono-X.Y.Z.tar.gz
+at this stage. Follow these steps:
+</p>
+<pre class="console">
+    $ tar xzf mod_mono-X.Y.Z.tar.gz
+    $ cd mod_mono-X.Y.Z
+(1) $ ./configure
+    $ make
+(2) $ make install
+</pre>
+<p>
+May be you need to run 'su' before (2).
+<br/>
+There are a few interesting options for (1) that you might want/need to use:
+<ul>
+<li><b>--prefix=</b>/xxx/yyy<br/>
+This will set the base path for installing mod_mono files.
+</li>
+<li><b>--with-mono-prefix=</b>/aaa/bbb<br/>
+If the prefix for mod_mono is different from the one used for mono, you should
+set this to the prefix used for mono in order to make the default paths to mono
+executable and mod-mono-server.exe be correct. It is not mandatory, but useful.
+</li>
+<li><b>--with-apxs=</b>/xxx/yyy/apxs<br/>
+If your system has different apache development files installed (ie, 1.3 and
+2.0) you might need this to choose the target version for mod_mono. Provide the
+full path to the apxs executable of the version that you want.
+</li>
+<li><b>--with-apr-config=</b>/xxx/yyy<br/>
+If you get errors when compiling for apache 2 because some headers files are not
+found, use this option. It takes the full path to apache 2 apr-config tool.
+</li>
+<li><b>--enable-debug</b><br/>
+You will get more output in the apache error_log file. Useful when
+debugging.
+</li>
+</ul>
+</p>
+<a name="configuration" />
+<h1>Configuration examples explained</h1>
+<p>
+Now that you have mono, XSP and mod_mono installed, you want some action.
+</p>
+<h3>Your first time</h3>
+<p>
+When you installed XSP, a bunch of sample ASP.NET pages and web services were
+installed too. If the prefix used to configure XSP was /usr, the sample files
+are located in /usr/share/doc/xsp/test.
+</p>
+<p>
+Let's say you want those file to be available under the virtual path /test. Edit
+your httpd.conf file (hint: /etc/httpd, /etc/apache2) and append the following
+lines (remove the numbers ;-):
+</p>
+<pre class="code">
+1   LoadModule mono_module modules/mod_mono.so
+2   Alias /test "/usr/share/doc/xsp/test"
+3   AddMonoApplications default "/test:/usr/share/doc/xsp/test"
+4   &lt;Location /test&gt;
+5       SetHandler mono
+6   &lt;/Location&gt;
+</pre>
+<p>
+In line 1, you might need to use the full path to mod_mono.so.
+</p>
+<p>
+Ok. Now start/restart apache and browse http://127.0.0.1/test/index.aspx. If you
+cannot see the test page, go to the <a href="#trouble">troubleshooting
+section</a>, otherwise, welcome to ASP.NET!
+</p>
+<p>
+Now for the explanation of what the lines you added to httpd.conf do. Line 1
+tells apache to load mod_mono module. I use line 2 always so that apache can
+check files and directories and appends a trailing slash if someone requests
+/test.
+</p>
+<p>
+The first argument to <i>AddMonoApplications</i> in line 3 will be discussed in
+next section. The second one is passed to mod-mono-server so that it knows that
+the /test virtual path corresponds to the physical path /usr/share/doc/xsp/test.
+Then in line 5, inside our chosen location, we tell apache that mod_mono will
+handle all requests down /test/.
+</p>
+<p>
+Okay, it worked. But, what happened? When you started apache, mod_mono launched
+mod-mono-server. Later, when you requested any page under /test, mod_mono
+connected to mod-mono-server, forwarded the request data and retrieved the
+response that is sent to your browser. Finally, if you stop apache, mod_mono
+will tell mod-mono-server to die.
+</p>
+<h3>More on applications</h3>
+<p>
+How do you go about making mod_mono handle several applications? Let's try the
+easiest option. You will need this in your httpd.conf:
+</p>
+<pre class="code">
+1   LoadModule mono_module modules/mod_mono.so
+2   Alias /test "/usr/share/doc/xsp/test"
+3   Alias /personal "/home/user/mypages"
+4   AddMonoApplications default "/test:/usr/share/doc/xsp/test,/personal:/home/user/mypages"
+5   &lt;Location /test&gt;
+6       SetHandler mono
+7   &lt;/Location&gt;
+8   &lt;Location /personal&gt;
+9       SetHandler mono
+10  &lt;/Location&gt;
+</pre>
+<p>
+As you can see, it's just a matter of adding the line 3 (like line 2) and lines
+8, 9, 10 (similar to 5, 6, 7). The other change is in AddMonoApplications (4),
+whose value got the new application virtual and physical paths appended.
+</p>
+<p>
+Now let's focus on that line 4. Earlier in this document we said that mod_mono
+can run one or more instances of mod-mono-server and connects to it/them in
+order to dispatch ASP.NET requests. The first argument to
+<i>AddMonoApplications</i> and most of the other directives supported is an
+alias for a running mod-mono-server. Other directives allow omitting the first
+argument. In that case, 'default' is assumed. As you probably guessed:
+</p>
+<pre class="code">
+AddMonoApplications default "/test:/usr/share/doc/xsp/test,/personal:/home/user/mypages"
+
+	...is equivalent to...
+
+AddMonoApplications default "/test:/usr/share/doc/xsp/test"
+AddMonoApplications default "/personal:/home/user/mypages"
+</pre>
+<p>
+This way you can keep all the configuration related to an application in a
+separate file (Alias, AddMonoApplications, Location,...).
+</p>
+<h3>2 applications, 2 mod-mono-server</h3>
+<p>
+You might want to run different applications in different instances of
+mod-mono-server. The rationale for this can be that you don't want Session or
+Application level objects to be shared among applications or that you want to
+set certain memory or CPU usage restrictions for an application or...
+</p>
+<p>
+Let's see the configuration needed to achieve this separation for the two
+applications in the previous example:
+</p>
+<pre class="code">
+1   LoadModule mono_module modules/mod_mono.so
+2   Alias /test "/usr/share/doc/xsp/test"
+3   AddMonoApplications default "/test:/usr/share/doc/xsp/test"
+4   &lt;Location /test&gt;
+5       SetHandler mono
+6   &lt;/Location&gt;
+7
+8   Alias /personal "/home/user/mypages"
+9   AddMonoApplications personal "/personal:/home/user/mypages"
+11  &lt;Location /personal&gt;
+12      MonoSetServerAlias personal
+13      SetHandler mono
+14  &lt;/Location&gt;
+</pre>
+<p>
+With this configuration mod_mono will start two instances of mod-mono-server
+whose aliases are 'default' and 'personal'. The 'default' instance will handle
+/test and the 'personal' instance will handle /personal.  Every time mod_mono
+finds a new alias name in one of its directives, it will assign all the
+parameters for that alias to a new mod-mono-server instance.
+</p>
+<p>
+As you can see there are two differences, apart from some lines shuffled. One is that
+<i>AddMonoApplications</i> in line 9 changed its first argument to be
+'personal'. The other is line 12, that introduces <i>MonoSetServerAlias</i>.
+This directive tells mod_mono which instance of mod-mono-server will be used to
+process the requests for this &lt;Location&gt;. It can be used with apache
+&lt;Directory&gt; too. Inside <i>&lt;Location /test&gt;</i> we didn't need to use
+<i>MonoSetServerAlias</i> as the absence of this directive means that we want
+the 'default' instance to be used.
+</p>
+<h3>Setting limits</h3>
+<p>
+You know how to make mod_mono start one or more mod-mono-server instances.
+Here's an example on how to set memory and CPU limits for a given server:
+</p>
+<pre class="code">
+1   LoadModule mono_module modules/mod_mono.so
+2   Alias /jeanette "/home/jeanette/web"
+3   AddMonoApplications jeanette "/jeanette:/home/jeanette/web"
+4   MonoMaxMemory jeanette 200000000
+5   MonoMaxCPUTime jeanette 3600
+6   &lt;Location /jeanette&gt;
+7       MonoSetServerAlias jeanette
+8       SetHandler mono
+9   &lt;/Location&gt;
+</pre>
+<p>
+Lines 4 and 5 set the maximum memory to be used (bytes) and the maximum CPU time
+consumed (seconds) by the 'jeanette' mod-mono-server instance. After reaching
+the limit, the OS will kill mod-mono-server. Upon next request mod-mono-server will
+be restarted by mod_mono with the same limits.
+</p>
+<h3>Unix and TCP sockets</h3>
+<p>
+We said that mod_mono and mod-mono-server can use a unix or a TCP socket to sent
+data back and forth. Use of unix sockets is the default, but you can use a TCP
+socket in case you have several computers running apache and one single machine
+providing mod-mono-server services.
+</p>
+<p>
+The only parameter that you can control when using a unix socket is the file
+name. The directive is <i>MonoUnixSocket</i>:
+</p>
+<pre class="code">
+    LoadModule mono_module modules/mod_mono.so
+
+    Alias /julia "/home/julia/web"
+    AddMonoApplications default "/julia:/home/julia/web"
+    # When no MonoUnixSocket is provided, the default
+    # is /tmp/mod_mono_server[_alias]
+    # In this case, for the 'default' alias: /tmp/mod_mono_server
+    &lt;Location /julia&gt;
+        SetHandler mono
+    &lt;/Location&gt;
+
+    Alias /jennie "/home/jennie/web"
+    AddMonoApplications jennie "/jennie:/home/jennie/web"
+    # In this case, alias 'jennie': /tmp/mod_mono_server_jennie
+    &lt;Location /jennie&gt;
+        MonoSetServerAlias jennie
+        SetHandler mono
+    &lt;/Location&gt;
+
+    Alias /juno "/home/juno/web"
+    AddMonoApplications juno "/juno:/home/juno/web"
+    # Uses a file under juno's home directory
+-   MonoUnixSocket juno /home/juno/tmp/juno_server
+    &lt;Location /juno&gt;
+        MonoSetServerAlias juno
+        SetHandler mono
+    &lt;/Location&gt;
+</pre>
+<p>
+You can set the file name to whatever you want as long as the user running
+apache has the necessary permissions to create and remove that file.
+</p>
+<p>
+In order to run an instance of mod-mono-server that listens on a TCP socket,
+there's a mandatory <i>MonoListenPort</i> directive and an optional
+<i>MonoListenAddress</i>. See them in action:
+</p>
+<pre class="code">
+    LoadModule mono_module modules/mod_mono.so
+
+    Alias /jazmin "/home/jazmin/web"
+    AddMonoApplications jazmin "/jazmin:/home/jazmin/web"
+    # 'jazmin' mod-mono-server will be listening on
+    # port 9000, address 127.0.0.1
+-   MonoListenPort jazmin 9000
+    &lt;Location /jazmin&gt;
+        MonoSetServerAlias jazmin
+        SetHandler mono
+    &lt;/Location&gt;
+
+    Alias /joan "/home/joan/web"
+    AddMonoApplications joan "/joan:/home/joan/web"
+    # 'joan' mod-mono-server will be listening on
+    # port 7000, any address (0.0.0.0)
+-   MonoListenPort joan 7000
+-   MonoListenAddress joan 0.0.0.0
+    &lt;Location /joan&gt;
+        MonoSetServerAlias joan
+        SetHandler mono
+    &lt;/Location&gt;
+</pre>
+<p>
+<i>MonoUnixSocket</i> and <i>MonoListenPort</i> are mutually exclusive.
+</p>
+<h3>Paths</h3>
+<p>
+In case it is needed, you can provide alternative locations for mono executable
+and mod-mono-server.exe. Other directories containing assemblies that mono could
+not find in the default search paths can also be specified. Mono needs a
+writable directory used by the windows I/O emulation layer that is usually in
+the user's home .wapi directory ($HOME/.wapi). In mod_mono, the directory where
+.wapi is created is set to /tmp, but you can change that too.
+</p>
+<pre class="code">
+    LoadModule mono_module modules/mod_mono.so
+
+    Alias /jane "/home/jane/web"
+    AddMonoApplications jane "/jane:/home/jane/web"
+    # This uses mono 1.1.4 and ASP.NET 1.1 mod-mono-server
+    MonoExecutablePath jane /nfs/mono-1.1.4/bin/mono
+    MonoServerPath jane /nfs/mono-1.1.4/lib/mono/1.0/mod-mono-server.exe
+    &lt;Location /jane&gt;
+        MonoSetServerAlias jane
+        SetHandler mono
+    &lt;/Location&gt;
+
+    Alias /jackie "/home/jackie/web"
+    AddMonoApplications jackie "/jane:/home/jackie/web"
+    # This uses mono from SVN and the alpha ASP.NET 2.0 mod-mono-server
+    MonoExecutablePath jackie /svn/install/bin/mono
+    MonoServerPath jackie /svn/install/lib/mono/2.0/mod-mono-server2.exe
+    # Add this directories to the default paths searched by mono
+    # when looking for assemlies
+    MonoPath jackie "/home/jackie/NET/assemblies:/usr/local/assemblies"
+    # The .wapi directory will be created in /home/jackie
+    MonoWapidir jackie "/home/jackie"
+    &lt;Location /jackie&gt;
+        MonoSetServerAlias jackie
+        SetHandler mono
+    &lt;/Location&gt;
+
+</pre>
+
+<a name="trouble" />
+<h1>Troubleshooting</h1>
+<h3>Access forbidden</h3>
+<p>
+If you're getting a 403 response from apache that probably means that the user
+running apache does not have proper permissions to read the physical directory.
+Check the permissions on all the directories and the files and make then
+readable by the user running apache.
+</p>
+<h3>mod-mono-server does not start</h3>
+<p>
+Check the apache error_log file (/var/log/apache2/error_log ...). It might
+contain some hints on what's happening. Possible causes are that mono or
+mod-mono-server are not found in the path, that a file with the same name as the
+unix socket mod-mono-server tries to create already exists and mod-mono-server
+can't remove it or a stale .wapi directory.
+</p>
+</body>
+</html>
+

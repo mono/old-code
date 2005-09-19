@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="utf-8"?>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:monodoc="http://www.go-mono.org/xml/monodoc">
+<head>
+	<title>Gtk# - Drag-and-drop (DND) - Properties</title>
+
+	<meta name ="DC.Description" content ="" />
+	<meta name ="DC.Contributor" content ="Johannes Roith" />
+
+	<link rel="stylesheet" type="text/css" href="../../../style.css" />
+</head>
+<body>
+<p>Drag data has the following properties:</p>
+<p>Drag action type (ie GDK_ACTION_COPY, GDK_ACTION_MOVE).</p>
+<p>Client specified arbitrary drag-and-drop type (a name and number
+pair).</p>
+<p>Sent and received data format type.</p>
+<p>Drag actions are quite obvious, they specify if the widget can
+drag with the specified action(s), e.g. GDK_ACTION_COPY and/or
+GDK_ACTION_MOVE. A GDK_ACTION_COPY would be a typical drag-and-drop
+without the source data being deleted while GDK_ACTION_MOVE would
+be just like GDK_ACTION_COPY but the source data will be
+'suggested' to be deleted after the received signal handler is
+called. There are additional drag actions including GDK_ACTION_LINK
+which you may want to look into when you get to more advanced
+levels of drag-and-drop.</p>
+<p>The client specified arbitrary drag-and-drop type is much more
+flexible, because your application will be defining and checking
+for that specifically. You will need to set up your destination
+widgets to receive certain drag-and-drop types by specifying a name
+and/or number. It would be more reliable to use a name since
+another application may just happen to use the same number for an
+entirely different meaning.</p>
+<p>Sent and received data format types (selection target) come into
+play only in your request and received data handler functions. The
+term selection target is somewhat misleading. It is a term adapted
+from GTK+ selection (cut/copy and paste). What selection target
+actually means is the data's format type (i.e. GdkAtom, integer, or
+string) that being sent or received. Your request data handler
+function needs to specify the type (selection target) of data that
+it sends out and your received data handler needs to handle the
+type (selection target) of data received.</p>
+
+</body>
+</html>

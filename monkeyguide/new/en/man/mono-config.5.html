@@ -1,0 +1,108 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta name="generator" content=
+"HTML Tidy for Linux/x86 (vers 1st October 2003), see www.w3.org" />
+<title>Manpage of Mono</title>
+</head>
+<body>
+
+<h1>Mono</h1>
+
+
+
+<hr />
+<a name="lbAB" id="lbAB"></a>
+<h2>NAME</h2>
+mono-config - Mono runtime file format configuration <a name="lbAC"
+id="lbAC"></a>
+<h2>DESCRIPTION</h2>
+The Mono runtime will load configuration data from the installation
+prefix /etc/mono/config file, the ~/.mono/config or from the file
+pointed by the MONO_CONFIG environment variable.
+<p>For each assembly loaded a config file with the name:
+/path/to/the/assembly.exe.config is loaded, too.</p>
+<p>This file controls the behavior of the runtime.</p>
+<p>The file contains an XML-like file with various sections, all of
+them contained inside a section (It actually uses GMarkup to parse
+the file). <a name="lbAD" id="lbAD"></a></p>
+<h2>&lt;dllmap&gt; directive</h2>
+You use the dllmap directive to map shared libraries referenced by
+P/Invoke in your assemblies to a different shared library.
+<p>This is typically used to map Windows libraries to Unix library
+names. The <b>dllmap</b> element takes two attributes:</p>
+<dl compact="compact">
+<dt><i>dll</i></dt>
+<dd>This should be the same string used in the DllImport
+attribute</dd>
+<dt><i>target</i></dt>
+<dd>This should be the name of the library where the function can
+be found: this name should be suitable for use with the platform
+native shared library loading routines (dlopen etc.), so you may
+want to check the manpages for that, too.</dd>
+</dl>
+<a name="lbAE" id="lbAE"></a>
+<h2>&lt;dllentry&gt; directive</h2>
+This directive can be used to map a specific dll/function pair to a
+different library and also a different function name. It should
+appear inside a <b>dllmap</b> element with only the dll attribute
+specified.
+<p>The <b>dllentry</b> element takes 3 attributes:</p>
+<dl compact="compact">
+<dt><i>dll</i></dt>
+<dd>This is the target library, where the function can be
+found.</dd>
+<dt><i>name</i></dt>
+<dd>This is the name of the fuction as it appears in the metadata:
+it is the name of the P/Invoke method.</dd>
+<dt><i>target</i></dt>
+<dd>This is the name of the function to lookup instead of the name
+specified in the P/Invoke method.</dd>
+</dl>
+<a name="lbAF" id="lbAF"></a>
+<h2>EXAMPLES</h2>
+The following example maps references to the `cygwin1.dll' shared
+library to the `libc.so.6' file.
+<pre>
+&lt;configuration&gt;
+        &lt;dllmap dll="cygwin1.dll" target="libc.so.6"/&gt;
+&lt;/configuration&gt;
+</pre>
+<p>This one maps the following C# method:</p>
+<pre>
+        [DllImport ("libc")]
+        static extern void somefunction ();
+</pre>
+to <b>differentfunction</b> in <b>libdifferent.so.</b>
+<pre>
+&lt;configuration&gt;
+        &lt;dllmap dll="libc"&gt;
+                &lt;dllentry dll="libdifferent.so" name="somefunction" target="differentfunction" /&gt;
+        &lt;/dllmap&gt;
+&lt;/configuration&gt;
+</pre>
+<p><a name="lbAG" id="lbAG"></a></p>
+<h2>SEE ALSO</h2>
+<b><a href=
+"mono.1.html">mono</a>(1),</b><a href="monodis.1.html">
+monodis</a>(1),<b><a href=
+"mint.1.html">mint</a>(1)</b>
+<hr />
+<a name="index" id="index"></a>
+<h2>Index</h2>
+<dl>
+<dt><a href="#lbAB">NAME</a></dt>
+<dt><a href="#lbAC">DESCRIPTION</a></dt>
+<dt><a href="#lbAD">&lt;dllmap&gt; directive</a></dt>
+<dt><a href="#lbAE">&lt;dllentry&gt; directive</a></dt>
+<dt><a href="#lbAF">EXAMPLES</a></dt>
+<dt><a href="#lbAG">SEE ALSO</a></dt>
+</dl>
+<hr />
+This document was created by <a href=
+"http://localhost/cgi-bin/man/man2html">man2html</a>, using the
+manual pages.<br />
+Time: 15:17:20 GMT, June 25, 2004
+</body>
+</html>

@@ -1,0 +1,81 @@
+<?xml version="1.0" encoding="utf-8"?>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:monodoc="http://www.go-mono.org/xml/monodoc">
+<head>
+	<title>XPath tutorial - </title>
+
+	<meta name = "DC.Description" content = "" />
+	<meta name = "DC.Contributor" content = "Johannes Roith" />
+
+	<link rel="stylesheet" type="text/css" href="../style.css" />
+</head>
+<body>
+<h2>Values of attributes as selection criteria</h2>
+Values of attributes can be used as selection criteria. Function
+normalize-space removes leading and trailing spaces and replaces
+sequences of whitespace characters by a single space. 
+<h3>Example 1</h3>
+<b>XPath Expression:</b> Select BBB elements which have attribute
+id with value b1 
+<pre class="code">
+//BBB[@id='b1']
+</pre>
+<b>XML:</b> 
+<pre class="code">
+&lt;?xml version="1.0"&gt;
+     &lt;<span class="element">AAA</span>&gt;
+          &lt;<span class="elementOn">BBB</span> <span class="element">id="b1"</span>/&gt;
+          &lt;<span class="element">BBB</span> <span class="element">name="bbb"</span>/&gt;
+          &lt;<span class="element">BBB</span> <span class="element">name="bbb"</span>/&gt;
+     &lt;/<span class="element">AAA</span>&gt;
+</pre>
+<h3>Example 2</h3>
+<p><b>XPath Expression:</b> Select BBB elements which have
+attribute name with value 'bbb'</p>
+<pre class="code">
+//BBB[@name='bbb']
+</pre>
+<b>XML:</b> 
+<pre class="code">
+&lt;?xml version="1.0"&gt;
+     &lt;<span class="element">AAA</span>&gt;
+          &lt;<span class="element">BBB</span> <span class="element">id="b1"</span>/&gt;
+          &lt;<span class="element">BBB</span> <span class="element">name="bbb"</span>/&gt;
+          &lt;<span class="elementOn">BBB</span> <span class="element">name="bbb"</span>/&gt;
+     &lt;/<span class="element">AAA</span>&gt;
+
+</pre>
+<h3>Example 3</h3>
+<p><b>XPath Expression:</b> Select BBB elements which have
+attribute name with value bbb, leading and trailing spaces are
+removed before comparison</p>
+<pre class="code">
+//BBB[normalize-space(@name)='bbb']
+</pre>
+<b>XML:</b> 
+<pre class="code">
+&lt;?xml version="1.0"&gt;
+     &lt;<span class="element">AAA</span>&gt;
+          &lt;<span class="element">BBB</span> <span class="element">id="b1"</span>/&gt;
+          &lt;<span class="elementOn">BBB</span> <span class="element">name="bbb"</span>/&gt;
+          &lt;<span class="elementOn">BBB</span> <span class="element">name="bbb"</span>/&gt;
+     &lt;/<span class="element">AAA</span>&gt;
+</pre>
+<b>C# code:</b> 
+<pre class="code">
+<b>// BasicSyntax - /xpath/basicsyntax.cs
+// Copyright 2003 by Johannes Roith</b>
+
+using System;
+using System.Xml.XPath;
+
+class BasicSyntax {
+        static void Main() {
+                
+        }
+
+}
+</pre>
+
+</body>
+</html>

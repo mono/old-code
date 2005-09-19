@@ -1,0 +1,7 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 20010904//EN" "http://www.w3.org/TR/2001/REC-SVG-20010904/DTD/svg10.dtd" []>
+
+<svg width="150" height="100" xmlns="http://www.w3.org/2000/svg">
+   <path d="M128.65,66.79 C134.15,63.56 137,57.79 137,53.77 V26.98 C137,19.81 127.97,14 116.84,14 H30.16 C19.03,14 10,19.81 10,26.98 V53.77 C10,60.94 19.03,66.75 30.16,66.75 H102.14 L94.23,87 Z" stroke="#000000" fill="#FFFFFF"/>
+   <text x="39" y="34" font-family="Tahoma" font-size="8pt" fill="#000000">Mono is cool!</text>
+</svg>

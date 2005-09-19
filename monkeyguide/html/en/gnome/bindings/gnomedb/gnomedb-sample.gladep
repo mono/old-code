@@ -1,0 +1,8 @@
+<?xml version="1.0" standalone="no"?> <!--*- mode: xml -*-->
+<!DOCTYPE glade-project SYSTEM "http://glade.gnome.org/glade-project-2.0.dtd">
+
+<glade-project>
+  <name>Gnomedb-sample</name>
+  <program_name>gnomedb-sample</program_name>
+  <gnome_db_support>TRUE</gnome_db_support>
+</glade-project>

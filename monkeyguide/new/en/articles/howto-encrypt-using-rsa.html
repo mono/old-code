@@ -1,0 +1,196 @@
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta name="generator" content=
+"HTML Tidy for Linux/x86 (vers 1st September 2004), see www.w3.org" />
+<title>Poupou on "Common question: How to encrypt using RSA"
+(11/1/2003)</title>
+<link href="blogx.css" type="text/css" rel="stylesheet" />
+<script language="javascript" type="text/javascript" src=
+"http://pages.infinit.net/ctech/prettyprint.js">
+</script>
+</head>
+<body onload="paintColors();">
+<div id="header">
+<h1 id="title">Poupou's Blog</h1>
+<p id="byline">Looking for perfect security? Try a wireless
+brick.<br />
+Otherwise you may find some unperfect stuff here...</p>
+</div>
+<table>
+<tr>
+<td valign="top">
+<div id="content">
+<div class="entry">
+<h3 class="entryTitle">Common question: How to encrypt using
+RSA</h3>
+<div class="entryBody">
+<p>This is very popular question in the <a href=
+"news://msnews.microsoft.com/microsoft.public.platformsdk.security"
+target="_blank">newsgroups</a>. Many people answers it without a
+full comprehension of the (non) problem. So it seems to stay a
+mysterious subject for many people.</p>
+<p><b>Problem:</b> People try to encrypt using RSA and face a limit
+of 117 bytes.</p>
+<p><b>Why ?</b> Here's a simple explaination...</p>
+<p>RSA is all about mathematics - it's a simple equation with
+<b>big</b> numbers (as opposed to a complex equation with small
+numbers ;-). What you are encrypting is only a value in the
+equation. Because, by default the framework, RSA uses 1024 bits
+keypair your value must have 128 bytes (1024 bits / 8
+bits/byte).</p>
+<p>Next comes the padding. Raw encryption, without padding, is not
+secure because your (128 bytes) number could be very small. Raw
+encryption isn't possible using the Microsoft .NET framework -
+EncryptValue and DecryptValue thrown an UnsupportedException (but
+is supported with <a href="http://www.go-mono.com/">Mono::</a>).
+This is a restriction of CryptoAPI used in <a href=
+"http://msdn.microsoft.com/library/en-us/cpref/html/frlrfsystemsecuritycryptographyrsacryptoserviceproviderclasstopic.asp?frame=true"
+target="_blank">RSACryptoServiceProvider</a>.</p>
+<p>The most common padding mechanism (for asymmetric keys) is
+<a href="http://www.rsasecurity.com/rsalabs/pkcs/pkcs-1/index.html"
+target="_blank">PKCS#1 version 1.5</a>. Without describing the
+padding, look at PKCS#1 specification or Mono's source code if you
+want the details, let's say that the PKCS#1 padding length is 11
+bytes. So the theoratical maximum of 128 bytes minus the 11 bytes
+of padding gives you a maximum of 117 bytes for encryption.</p>
+<p>A newer padding mechanism is OAEP. It's not much used in
+standards right now but the padding algorithm has been <a href=
+"http://citeseer.nj.nec.com/fujisaki01rsaoaep.html" target=
+"_blank">proven secure</a> (<font color="#FF0000">warning:</font>
+this may not means to you the same thing that it does to a
+cryptographer ;-). CryptoAPI supports OAEP only for Windows XP and
+later operating systems - the documentation talks about Windows
+2000 with the high encryption pack but I was unable to make it
+work. As Mono doesn't use CryptoAPI it doesn't have this
+restriction, so OAEP is available anywhere Mono works :-).</p>
+<p><b>Next question:</b> Could someone iterate the encryption
+process for every 117 bytes (PKCS#1) ? The anwser is yes but that
+would be <b>a very slow</b> process - and I wouldn't recommand it
+as there is a much better alternative.</p>
+<p>Now the implied question - which is, much of the time,
+unanwsered on the newsgroups: Knowing the limitation about
+encrypting with RSA, what should I do ?</p>
+<p><b>A key exchange.</b> Why ?</p>
+<p>First, RSA is slow and symmetric algorithms, like AES, are fast.
+So encrypting all the data using a symmetric algorithm make sense -
+performance wise. It also make sense "security wise" because a 128
+bits symmetric key is more secure than a 1024 bits asymmetric
+keypair (at least for RSA) - so we aren't weakening the total
+security of the encryption.</p>
+<p>Second, symmetric key size are much smaller (e.g. AES 256 bits
+== 32 bytes) than the 117 bytes limits of PKCS#1. So it's easy to
+encrypt a symmetric key using the RSA public key.</p>
+<p>Third, symmetric key management is complex so we don't want to
+do that. Using password to derive keys is possible (but that's
+another <i>often misundertood</i> subject) but less secure. Anyway
+we already have a solution because we can concatenate the results
+of 1 (encrypted data) and 2 (encrypted key).</p>
+<p>This means that the receiver must first decrypt the symmetric
+key using it's private key. Once he have the symmetric key he can
+decrypt the whole document. This is <b>much</b> faster than using
+only RSA, less complex than handling secret keys between many
+people, and more secure than using password to derive keys. PKCS#7
+describes a, ASN.1 based, data format that support encryption (and
+signature). The new v2 framework will include a namespace, <a href=
+"http://longhorn.msdn.microsoft.com/?//longhorn.msdn.microsoft.com/lhsdk/ref/system.security.cryptography.pkcs.aspx"
+target="_blank">System.Security.Cryptography.Pkcs</a> to handle
+such structures.</p>
+<p>I like to think that I'm better at C# than in english so here a
+little code to illustrate the concept:</p>
+<pre class="code-csharp">
+static byte[] Encrypt (RSA rsa, byte[] input) 
+{
+        // by default this will create a 128 bits AES (Rijndael) object
+        SymmetricAlgorithm sa = SymmetricAlgorithm.Create ();
+        ICryptoTransform ct = sa.CreateEncryptor ();
+        byte[] encrypt = ct.TransformFinalBlock (input, 0, input.Length);
+
+        RSAPKCS1KeyExchangeFormatter fmt = new RSAPKCS1KeyExchangeFormatter (rsa);
+        byte[] keyex = fmt.CreateKeyExchange (sa.Key);
+
+        // return the key exchange, the IV (public) and encrypted data
+        byte[] result = new byte [keyex.Length + sa.IV.Length + encrypt.Length];
+        Buffer.BlockCopy (keyex, 0, result, 0, keyex.Length);
+        Buffer.BlockCopy (sa.IV, 0, result, keyex.Length, sa.IV.Length);
+        Buffer.BlockCopy (encrypt, 0, result, keyex.Length + sa.IV.Length, encrypt.Length);
+        return result;
+}
+
+static byte[] Decrypt (RSA rsa, byte[] input) 
+{
+        // by default this will create a 128 bits AES (Rijndael) object
+        SymmetricAlgorithm sa = SymmetricAlgorithm.Create ();
+
+        byte[] keyex = new byte [rsa.KeySize &gt;&gt; 3];
+        Buffer.BlockCopy (input, 0, keyex, 0, keyex.Length);
+
+        RSAPKCS1KeyExchangeDeformatter def = new RSAPKCS1KeyExchangeDeformatter (rsa);
+        byte[] key = def.DecryptKeyExchange (keyex);
+
+        byte[] iv = new byte [sa.IV.Length];
+        Buffer.BlockCopy (input, keyex.Length, iv, 0, iv.Length);
+
+        ICryptoTransform ct = sa.CreateDecryptor (key, iv);
+        byte[] decrypt = ct.TransformFinalBlock (input, keyex.Length + iv.Length, input.Length - (keyex.Length + iv.Length));
+        return decrypt;
+}
+</pre>
+<p>I also wrote a little and very simple <a href=
+"http://pages.infinit.net/ctech/crypt.cs" target="_blank">tool</a>
+using the same source code (i.e. it's not meant for production, or
+even personnal, use). Here is how to use the tool:</p>
+<dl>
+<dt><code>crypt /k "keypair"</code></dt>
+<dd>Create a new keypair. The file "keypair".key contains both the
+private and public keys and you should it really private (it's not
+encrypted). The file "keypair".pub only contains the public key and
+can be shared with your friends.</dd>
+<dt><code>crypt /e "file" "keypair"</code></dt>
+<dd>This will encrypt the file "file" using the <b>public</b> key
+contained in the file "keypair".</dd>
+<dt><code>crypt /d "file" "keypair"</code></dt>
+<dd>This will decrypt the file "file" using the <b>private</b> key
+contained in the file "keypair".</dd>
+</dl>
+<p>Here's how to test the tool:</p>
+<div class="console">&gt; crypt &gt; crypt.txt<br />
+<br />
+&gt; crypt /k poupou<br />
+CRYPT sample CRYPT sample for educational use only<br />
+Copyright 2003 Motus Technologies. All rights reserved. Released
+under MIT X.11<br />
+<br />
+Created private file poupou.key<br />
+Created public file poupou.pub<br />
+<br />
+&gt; crypt /e crypt.txt poupou<br />
+<br />
+&gt; crypt /d crypt.txt.enc poupou<br /></div>
+<p>You could use this tool to exchange documents with friends -
+assuming you have their public key. (Oh no, not again) But how
+would they send their public key to you ? by email ? how would you
+<i>trust</i> that this is really their public key or even their
+email ? hmmm... you had better sent a wireless brick - if you had
+one ;-).</p>
+<p><b>Note:</b> Yeah yeah I know this is exactly what we do with
+Mono's CVS using SSH.</p>
+<p class="entryFooter"><br />
+11/1/2003 13:51:19 | <a href=
+"mailto:spouliot@videotron.ca?subject=Common%20question:%20How%20to%20encrypt%20using%20RSA">
+Comments</a></p>
+</div>
+</div>
+</div>
+</td>
+</tr>
+<tr>
+<td>The views expressed on this website/weblog are mine alone and
+do not necessarily reflect the views of my employer.</td>
+</tr>
+<tr>
+<td>Subscribe to my <a class="standardsButton" href=
+"/ctech/poupou.rss">RSS</a> feed.</td>
+</tr>
+</table>
+</body>
+</html>

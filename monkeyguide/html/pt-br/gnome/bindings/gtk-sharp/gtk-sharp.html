@@ -1,0 +1,285 @@
+<?xml version="1.0" encoding="utf-8"?>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:monodoc="http://www.go-mono.org/xml/monodoc">
+<head>
+	<title>Gtk#</title>
+
+	<meta name ="DC.Description" content ="" />
+	<meta name ="DC.Contributor" content ="Johannes Roith" />
+
+	<link rel="stylesheet" type="text/css" href="../../../style.css" />
+
+	<meta name = "CVS.English.Version" content = "1.23" />
+</head>
+<body>
+<h2>Contents</h2>
+<div class="TOC">
+<ul>
+<li>1. <a href="introduction.html">Introduction</a></li>
+<li>2. Getting Started
+<ul>
+<li>2.1. <a href="getstart.html">Hello World in GTK</a></li>
+<li>2.2. Events</li>
+<li>2.3. Stepping Through Hello World</li>
+</ul>
+</li>
+<li>3. <a href="packingwidgets.html">Packing Widgets</a>
+<ul>
+<li>3.1. <a href="packingwidgetstheory.html">Theory of Packing
+Widgets</a></li>
+<li>3.2. <a href="packingdetails.html">Details of Boxes</a></li>
+<li>3.3. <a href="packingdemonstrationprogram.html">Packing
+Demonstration Program</a></li>
+<li>3.4. <a href="packingtables.html">Packing Using Tables</a></li>
+<li>3.5. <a href="packingtablessample.html">Table Packing
+Example</a></li>
+</ul>
+</li>
+<li>4. <a href="widgetoverview.html">Widget Overview</a>
+<ul>
+<li>4.1. <a href="widgetoverviewcasting.html">Casting</a> (!)</li>
+<li>4.2. <a href="widgetoverviewhierarchy.html">Widget
+Hierarchy</a></li>
+<li>4.3. <a href="widgetoverviewwithoutwindows.html">Widgets
+Without Windows</a></li>
+</ul>
+</li>
+<li>7. <a href="buttonwidget.html">The Button Widget</a>
+<ul>
+<li>7.1. <a href="buttonwidgetnormal.html">Normal Buttons</a></li>
+<li>7.2. <a href="buttonwidgettoggle.html">Toggle Buttons</a></li>
+<li>7.3. <a href="buttonwidgetcheck.html">Check Buttons</a></li>
+<li>7.4. <a href="buttonwidgetradio.html">Radio Buttons</a></li>
+</ul>
+</li>
+<li>8. <a href="adjustments.html">Adjustments</a>
+<ul>
+<li>8.1. <a href="adjustmentscreating.html">Creating an
+Adjustment</a></li>
+<li>8.2. <a href="adjustmentsusing.html">Using Adjustments the Easy
+Way</a></li>
+<li>8.3. <a href="adjustmentsinternals.html">Adjustment
+Internals</a></li>
+</ul>
+</li>
+<li>9. <a href="rangewidgets.html">Range Widgets</a>
+<ul>
+<li>9.1. <a href="rangescrollbars.html">Scrollbar Widgets</a></li>
+<li>9.2. <a href="rangescale.html">Scale Widgets</a></li>
+<li>9.2.1. <a href="rangescale.html">Creating a Scale
+Widget</a></li>
+<li>9.2.2. <a href="rangescale.html">Functions and Signals (well,
+functions, at least)</a></li>
+<li>9.3. <a href="rangecommon.html">Common Range Functions</a></li>
+<li>9.3.1. <a href="rangecommon.html">Setting the Update
+Policy</a></li>
+<li>9.3.2. <a href="rangecommon.html">Getting and Setting
+Adjustments</a></li>
+<li>9.4. <a href="rangemouseandkey.html">Key and Mouse
+bindings</a></li>
+<li>9.5. <a href="rangeexample.html">Example</a></li>
+</ul>
+</li>
+<li>10. <a href="miscwidgets.html">Miscellaneous Widgets</a>
+<ul>
+<li>10.1. <a href="misclabels.html">Labels</a></li>
+<li>10.2. <a href="miscarrows.html">Arrows</a></li>
+<li>10.3. <a href="misctooltips.html">The Tooltips Object</a></li>
+<li>10.4. <a href="miscprogress.html">Progress Bars</a></li>
+<li>10.5. <a href="miscdialogs.html">Dialogs</a></li>
+<li>10.6. <a href="miscmessagedialogs.html">MessageDialogs</a></li>
+<li>10.7. <a href="miscrulers.html">Rulers</a></li>
+<li>10.8. <a href="miscstatusbars.html">Statusbars</a></li>
+<li>10.9. <a href="misctextentries.html">Text Entries</a></li>
+<li>10.10. <a href="miscspinbuttons.html">Spin Buttons</a></li>
+<li>10.11. <a href="misccombobox.html">Combo Box</a>(!)</li>
+<li>10.12. <a href="misccalendar.html">Calendar</a></li>
+<li>10.13. <a href="misccolorselection.html">Color
+Selection</a>(!)</li>
+<li>10.14. <a href="miscfileselection.html">File
+Selections</a></li>
+<li>10.15. <a href="treeview.html">Tree/list control</a></li>
+</ul>
+</li>
+<li>11. <a href="miscwidgets.html">Container Widgets</a>
+<ul>
+<li>11.1. <a href="containereventbox.html">The EventBox</a></li>
+<li>11.2. <a href="containeralignment.html">The Alignment
+widget</a></li>
+<li>11.3. <a href="containerfixed.html">Fixed Container</a></li>
+<li>11.4. <a href="containerlayout.html">Layout Container</a></li>
+<li>11.5. <a href="containerframes.html">Frames</a></li>
+<li>11.6. <a href="containeraspectframes.html">Aspect
+Frames</a></li>
+<li>11.7. <a href="containerpaned.html">Paned Window
+Widgets</a></li>
+<li>11.8. <a href="containerviewports.html">Viewports</a></li>
+<li>11.9. <a href="containerscrolledwindows.html">Scrolled
+Windows</a></li>
+<li>11.10. <a href="containerbuttonboxes.html">Button
+Boxes</a></li>
+<li>11.11. <a href="containertoolbar.html">Toolbar</a> (!)</li>
+<li>11.12. <a href="containernotebooks.html">Notebooks</a></li>
+</ul>
+<h4>The stuff above is done. Any C code or C-ish descriptions are
+bugs and should be reported to johannes@jroith.de, except the long
+C example at the end and the chapters marked with (!) . The same
+applies to typos.</h4>
+</li>
+<li>12. <a href="menu.html">Menu Widget</a>
+<ul>
+<li>12.1. <a href="menu_manual_creation.html">Manual Menu
+Creation</a></li>
+<li>12.2. <a href="menu_manual_example.html">Manual Menu
+Example</a></li>
+<li>12.3. Using ItemFactory</li>
+<li>12.3.1. ItemFactory entries</li>
+<li>12.3.2. Creating an ItemFactory</li>
+<li>12.3.3. Making use of the menu and its menu items</li>
+<li>12.4. Item Factory Example</li>
+</ul>
+</li>
+<li>13. Undocumented Widgets <b>(-- Removed temporary --)</b>
+<ul><!--
+<li>13.1. Accel Label
+<li>13.2. Option Menu
+<li>13.3. Menu Items
+<li>13.3.1. Check Menu Item
+<li>13.3.2. Radio Menu Item
+<li>13.3.3. Separator Menu Item
+<li>13.3.4. Tearoff Menu Item
+<li>13.4. Curves
+<li>13.5. Drawing Area
+<li>13.6. Font Selection Dialog
+<li>13.7. Message Dialog
+<li>13.8. Gamma Curve
+<li>13.9. Image
+<li>13.10. Plugs and Sockets
+<li>13.11. Tree View
+<li>13.12. Text View
+//--></ul>
+</li>
+<li>14. <a href="setting_widget_attributes.html">Setting Widget
+Attributes</a></li>
+<li>15. Timeouts, IO and Idle Functions
+<ul>
+<li>15.1. <a href="timeouts.html">Timeouts</a></li>
+<li>15.2. <a href="monitoring_io.html">Monitoring IO</a></li>
+<li>15.3. <a href="idle.html">Idle Functions</a></li>
+</ul>
+</li>
+<li>16. Advanced Event and Signal Handling
+<ul>
+<li>16.1. Signal Functions</li>
+<li>16.1.1. Connecting and Disconnecting Signal Handlers</li>
+<li>16.1.2. Blocking and Unblocking Signal Handlers</li>
+<li>16.1.3. Emitting and Stopping Signals</li>
+<li>16.2. Signal Emission and Propagation</li>
+</ul>
+</li>
+<li>17. Managing Selections
+<ul>
+<li>17.1. Overview</li>
+<li>17.2. Retrieving the selection</li>
+<li>17.3. Supplying the selection</li>
+</ul>
+</li>
+<li>18. <a href="dnd.html">Drag-and-drop (DND)</a>
+<ul>
+<li>18.1. <a href="dnd_overview.html">Overview</a></li>
+<li>18.2. <a href="dnd_properties.html">Properties</a></li>
+<li>18.3. Functions</li>
+<li>18.3.1. Setting up the source widget</li>
+<li>18.3.2. Signals on the source widget:</li>
+<li>18.3.3. Setting up a destination widget:</li>
+<li>18.3.4. Signals on the destination widget:</li>
+</ul>
+</li>
+<li>19. GLib
+<ul>
+<li>19.1. Definitions</li>
+<li>19.2. Doubly Linked Lists</li>
+<li>19.3. Singly Linked Lists</li>
+<li>19.4. Memory Management</li>
+<li>19.5. Timers</li>
+<li>19.6. String Handling</li>
+<li>19.7. Utility and Error Functions</li>
+</ul>
+</li>
+<li>20. GTK's rc Files
+<ul>
+<li>20.1. Functions For rc Files</li>
+<li>20.2. <a href="rcformat.html">GTK's rc File Format</a></li>
+<li>20.3. <a href="rcexample.html">Example rc file</a></li>
+</ul>
+</li>
+<li>21. Writing Your Own Widgets <b>(-- Removed temporary --)</b>
+<ul><!--
+<li>21.1. Overview
+<li>21.2. The Anatomy Of A Widget
+<li>21.3. Creating a Composite widget
+<li>21.3.1. Introduction
+<li>21.3.2. Choosing a parent class
+<li>21.3.3. The header file
+<li>21.3.4. The _get_type() function
+<li>21.3.5. The _class_init() function
+<li>21.3.6. The _init() function
+<li>21.3.7. And the rest...
+<li>21.4. Creating a widget from scratch
+<li>21.4.1. Introduction
+<li>21.4.2. Displaying a widget on the screen
+<li>21.4.3. The origins of the Dial Widget
+<li>21.4.4. The Basics
+<li>21.4.5. gtk_dial_realize()
+<li>21.4.6. Size negotiation
+<li>21.4.7. gtk_dial_expose()
+<li>21.4.8. Event handling
+<li>21.4.9. Possible Enhancements
+<li>21.5. Learning More
+//--></ul>
+</li>
+<li>22. Scribble, A Simple Example Drawing Program
+<ul>
+<li>22.1. <a href="scribble_overview.html">Overview</a></li>
+<li>22.2. Event Handling</li>
+<li>22.3. The DrawingArea Widget, And Drawing</li>
+<li>22.4. Adding XInput support</li>
+<li>22.4.1. Enabling extended device information</li>
+<li>22.4.2. Using extended device information</li>
+<li>22.4.3. Finding out more about a device</li>
+<li>22.4.4. Further sophistications</li>
+</ul>
+</li>
+<li><a href="#credits">Credits</a></li>
+<li>A. GTK Signals</li>
+<li>A.1. <a href="signalsobject.html">Gtk.Object</a></li>
+<li>A.2. <a href="signalsobject.html">Gtk.Widget</a></li>
+<li>A.3. <a href="signalsobject.html">Gtk.Data</a></li>
+<li>A.4. <a href="signalsobject.html">Gtk.Container</a></li>
+<li>A.5. <a href="signalsobject.html">Gtk.Calendar</a></li>
+<li>A.6. <a href="signalsobject.html">Gtk.Editable</a></li>
+<li>A.7. <a href="signalsobject.html">Gtk.Notebook</a></li>
+<li>A.8. <a href="signalsobject.html">Gtk.List</a></li>
+<li>A.9. <a href="signalsobject.html">Gtk.MenuShell</a></li>
+<li>A.10. <a href="signalsobject.html">Gtk.Toolbar</a></li>
+<li>A.11. <a href="signalsobject.html">Gtk.Button</a></li>
+<li>A.12. <a href="signalsobject.html">Gtk.Item</a></li>
+<li>A.13. <a href="signalsobject.html">Gtk.Window</a></li>
+<li>A.14. <a href="signalsobject.html">Gtk.HandleBox</a></li>
+<li>A.15. <a href="signalsobject.html">Gtk.ToggleButton</a></li>
+<li>A.16. <a href="signalsobject.html">Gtk.MenuItem</a></li>
+<li>A.17. <a href="signalsobject.html">Gtk.CheckMenuItem</a></li>
+<li>A.18. <a href="signalsobject.html">Gtk.InputDialog</a></li>
+<li>A.19. <a href="signalsobject.html">Gtk.ColorSelection</a></li>
+<li>A.20. <a href="signalsobject.html">Gtk.StatusBar</a></li>
+<li>A.21. <a href="signalsobject.html">Gtk.Curve</a></li>
+<li>A.22. <a href="signalsobject.html">Gtk.Adjustment</a></li>
+<li>B. GDK Event Types</li>
+<li>C. Code Examples</li>
+</ul>
+
+<p>Misc: This chapter does use some content from the GTK+ Tutorial by
+Tony Gale, Ian Main, &amp; the GTK team</p>
+
+</body>
+</html>

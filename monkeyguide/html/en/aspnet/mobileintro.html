@@ -1,0 +1,167 @@
+<?xml version="1.0" encoding="utf-8"?>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:monodoc="http://www.go-mono.org/xml/monodoc">
+<head>
+	<title>Programming mobile devices</title>
+
+	<meta name = "DC.Description" content = "" />
+	<meta name = "DC.Contributor" content = "Johannes Roith" />
+
+	<link rel="stylesheet" type="text/css" href="../style.css" />
+</head>
+<body>
+<h2>"Anytime, anywhere, and on any device"</h2>
+"Anytime, anywhere, and on any device", that was the Microsoft
+advertising term for .NET. It's clearly a marketing term and
+confused many people about what .NET actually is. Though it reduces
+the whole thing to an small part of it, it's a great description of
+the "ASP.NET Mobile Internet Toolkit". 
+<p>The Toolkit is a separate software package shipped by MS, but it
+will be included in future versions. In fact it's nothing more than
+a new assembly: System.Web.Mobile.dll. However it's a very powerful
+one.</p>
+<h2>Current situation</h2>
+Starting in 2000, mobile devices, especially mobile phones were
+enhanced with "Mobile Internet" solutions, often a small HTTP
+channel, that could retrieve Web Pages. This made them programmable
+and information available anywhere - in theory. However the formats
+differ quite much.
+<h3>WML</h3>
+WML is a XML language, included in most mobile phones around today.
+It is very different from HTML, though, so normal web sites can't
+run and it's not easy to target those devices, without learning
+about WML. 
+<h3>cHTML</h3>
+NTT DoCoMo went a different way, resulting in imode, which uses
+cHTML as it's technical base. cHTML is a stripped down version of
+HTML 3.2 (which is the HTML version used on most websites) and very
+easy to write, but lacks important features like tables. 
+<h3>HTML 3.2</h3>
+Html 3.2 is not the newest, but very common. It's utilized mainly
+by PDAs, namely MS Pocket Internet Explorer. 
+<h2>Fixing the problems</h2>
+The problem becomes clear. It's not only annoying to learn 4 XML
+based languages, but even more to maintain 4 versions of a Web
+Application. ASP.NET Mobile has a very elegant solution, that
+becomes possible because of Web Server Controls.
+<p>You don't write in WML, cHTML, HTML anymore. Instead abstract
+ASP.NET controls are used, that can be rendered completely
+different on any device. When a mobile phone request a page ASP.NET
+recognizes the browser type and sends an WML page. iMode phones get
+cHTML, while mono will serve HTML 3.2 to PDAs. As most Desktop
+Browsers can displas HTML 3.2, you can view the pages with any
+ordinary Browser, too.</p>
+<p>Hello World!</p>
+<pre class="code">
+&lt;%--
+// CNN Schlagzeilen f&#252;rs Handy
+// (C) Copyright 2003 by Johannes Roith
+--%&gt;
+
+&lt;%@ Page Language="C#" Inherits="System.Web.UI.MobileControls.MobilePage" %&gt;
+
+&lt;%@ Register TagPrefix="mobile" Namespace="System.Web.UI.MobileControls" 
+Assembly="System.Web.Mobile" %&gt;
+
+&lt;%@ import Namespace="System.Xml" %&gt;
+&lt;%@ import Namespace="System.Net" %&gt;
+&lt;%@ import Namespace="System.IO" %&gt;
+
+
+&lt;script runat="server"&gt;
+
+        void Page_Load(Object Sender, EventArgs e)
+        {
+                heading.Text = "+++ CNN News +++ \n(Service by Johannes Roith) +++\n";
+                content.Text = GetRssFeed("http://www.newsisfree.com/HPE/xml/feeds/15/2315.xml");
+        }
+
+        string GetRssFeed(string url)
+        {
+
+                // This method can receive RSS news documents from the Internet and display links.
+
+
+                string returnstring = "";
+
+                WebRequest wrGETURL;
+                wrGETURL = WebRequest.Create(url);
+                                
+                Stream objStream;
+                objStream = wrGETURL.GetResponse().GetResponseStream();
+        
+                XmlDocument doconn = new XmlDocument();
+                doconn.Load(objStream);
+
+                int i = 0;
+                XmlNodeList elemList = doconn.GetElementsByTagName("item");
+                    foreach (XmlNode me in elemList)
+                    {    
+
+                        string ItemTitle = null;
+                        string ItemLink = null;
+    
+                        XmlNodeList elemList2 = me.ChildNodes;
+    
+                        foreach (XmlNode me2 in elemList2)
+                        {
+                            if (me2.Name == "title") {
+                            ItemTitle = me2.InnerText;
+                            }
+    
+
+    
+                        }
+                        if (i &lt; 5)
+                        {
+                                returnstring += ItemTitle + " +++ \n";
+                        }
+                        i++;
+                   }
+    
+                return returnstring;
+
+        }
+&lt;/script&gt;
+
+&lt;mobile:Form runat="server"&gt;
+&lt;mobile:label id="heading"  font-bold="true" runat="server" /&gt;
+&lt;mobile:label id="content" runat="server" /&gt;
+&lt;/mobile:Form&gt;
+</pre>
+As you can see except the Different namespace, there is <b>no</b>
+difference to plain ASP.NET, except that never HTML is used
+(ASP.NET can use it). The interesting bit is yet to come.
+<p>Take a look in what this results on a PDA/Desktop:</p>
+<pre class="code">
+&lt;html&gt;&lt;body&gt;
+&lt;form id="_ctl0" name="_ctl0" method="post" action="mobile.aspx?__ufps=915485"&gt;
+&lt;input type="hidden" name="__VIEWSTATE" value="aDxfX1A7QDw75q2U6q6065+r4KOFLDA7Pjs+"&gt;
+&lt;input type="hidden" name="__EVENTTARGET" value=""&gt;
+&lt;input type="hidden" name="__EVENTARGUMENT" value=""&gt;
+&lt;script language=javascript&gt;&lt;!--
+function __doPostBack(target, argument){
+  var theform = document._ctl0
+  theform.__EVENTTARGET.value = target
+  theform.__EVENTARGUMENT.value = argument
+  theform.submit()
+}
+// --&gt;
+&lt;/script&gt;
+&lt;b&gt;+++ CNN News +++ 
+(Service by Johannes Roith) +++
+&lt;/b&gt;<br />U.S. watches and waits +++ 
+Source: NBA goes to best-of-seven in 1st round +++ 
+Argentina tops U.S. in battle of home-based youth +++ 
+Leafs to retire Sittler's jersey before playing Habs +++ 
+Chess man vs machine stalemate +++ 
+&lt;/form&gt;&lt;/body&gt;&lt;/html&gt;
+</pre>
+<p>Now, the result on my Nokia mobile phone:</p>
+<pre class="code">
+&lt;?xml &gt;
+</pre>
+<p>Now, read on and actually make your phone <b>useful</b>.</p>
+
+</body>
+</html>

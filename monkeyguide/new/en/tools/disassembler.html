@@ -1,0 +1,88 @@
+<?xml version="1.0" encoding="utf-8"?>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:monodoc="http://www.go-mono.org/xml/monodoc">
+<head>
+	<title>The Mono Disassembler</title>
+
+	<meta name = "DC.Description" content = "" />
+	<meta name = "DC.Contributor" content = "Johannes Roith" />
+
+	<link rel="stylesheet" type="text/css" href="../style.css" />
+</head>
+<body>
+
+<h2>Contents</h2>
+<ol>
+	<li><a href="#intro">Introduction</a></li>
+	<li><a href="#simple">Simple use</a></li>
+	<li><a href="#options">Options</a></li>
+	<li><a href="#credits">Credits</a></li>
+</ol>
+
+<a id="intro"><h2>Introduction</h2></a>
+
+<p>The monodis program is used to dump the contents of a ECMA CIL<br
+/> image.</p>
+
+<a id="simple"><h2>Simple use</h2></a>
+<p>It can you can execute it by typing:</p>
+<pre class="console">
+
+    $ monodis FILE.exe
+
+</pre>
+
+<a id="options"><h2>Options</h2></a>
+The following Generic options are supported: 
+<h4>--help , -h</h4>
+Displays usage instructions. 
+<h4>--output=FILENAME</h4>
+Write output into FILENAME. 
+<h4>--mscorlib</h4>
+For non-corlib assemblies, use "mscorlib" as the assembly name.
+This is useful for round-tripping the IL with ilasm. 
+<h4>--assembly</h4>
+Dumps the contents of the assembly table 
+<h4>--assemblyref</h4>
+Dumps the contents of the assemblyref table 
+<h4>--classlayout</h4>
+Dumps the contents of the classlayout table 
+<h4>--constant</h4>
+Dumps the contents of the constant table 
+<h4>--event</h4>
+Dumps the contents of the event table 
+<h4>--exported</h4>
+Dumps the contents of the ExportedTypes table 
+<h4>--fields</h4>
+Dumps the contents of the fields table 
+<h4>--file</h4>
+Dumps the contents of the file table 
+<h4>--interface</h4>
+Dumps the contents of the interface table 
+<h4>--manifest</h4>
+Dumps the contents of the manifest table. 
+<h4>--memberref</h4>
+Dumps the contents of the memberref table 
+<h4>--method</h4>
+Dumps the contents of the method table 
+<h4>--methodsem</h4>
+Dumps the contents of the methodsem table 
+<h4>--module</h4>
+Dumps the contents of the module table 
+<h4>--moduleref</h4>
+Dumps the contents of the moduleref table 
+<h4>--param</h4>
+Dumps the contents of the param table 
+<h4>--property</h4>
+Dumps the contents of the property table 
+<h4>--propertymap</h4>
+Dumps the contents of the propertymap table 
+<h4>--typedef</h4>
+Dumps the contents of the typedef table 
+<h4>--typeref</h4>
+Dumps the contents of the typeref table If no flags are specified
+the program dumps the content of the image in a format that can be
+used to rountrip the code. 
+
+</body>
+</html>

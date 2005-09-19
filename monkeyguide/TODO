@@ -1,0 +1,624 @@
+* New TODO list
+
+        NOTE: Please edit only the docs in new/, as that's the 
+	version of Monkeyguide which will go forward.
+
+	Embedding guide is missing.
+		Add makefile/something to integrate it.
+
+	See the porting-old-monkeyguide notes below for an itemized
+	list of what content's been moved from the old monkeyguide into
+	the new one. (Shane Landrum, epicene@pobox.com)
+
+	Roll in contents of monodoc tutorial at
+	http://people.mosaix.net/chris/tutorials/monodoc/monodoc-tutorial.html  
+	(mostly done)
+
+	
+* Monkey Guide TODO List
+
+	The Monkey Guide is a tutorial about the Mono platform.
+	It focuses in the main routines and its basical use:
+
+	* Installation guide
+	* Mono commands
+	* Languages tutorial (C#/MonoBASIC/etc)
+	* Corlib API tutorial
+
+	However, this guide needs to be updated and needs to be
+	completed. The main tasks about it are:
+
+	* Remove all the empty sections - A lot of empty sections can
+	confuse new mono users, so it is neccesary to delete the
+	empty sections from the guide .
+
+	* Remove the useless nested structure - It is hard for the new users
+	to find a section inside the guide, this caused by the fact that
+	are too much nested section. Find a *good* structure to make it easy to
+	read/search.
+
+	* Write introductions to the chapters - An introduction to the
+	chapter will clarify the things to new users.
+	
+	* Separate Gnome.NET tutorial - Separate it from the Monkey guide since
+	it trends to confuse the users and it is good enough to be
+	separated from the rest of the guide.
+
+	Contact the list to check for users working on the same section (it is useless
+	to write documentation already written).
+	
+	For more info, reach the list at 
+	
+	* Mono Docs List: mono-docs-list@ximian.com.
+	* Mono Site:
+		http://www.go-mono.com/documentation.html
+	
+
+NOTES ON PORTING:
+
+html/en is the contents of the old Monkeyguide; this is a list of the full
+contents, along with notes about how things have been ported 
+(or not ported, as the case may be.)
+
+Symbols key:
+  - Files preceded by * have been ported properly into the contents of
+    new/en. (This occasionally means that their information has been
+    rolled into other files.)
+  - Files preceded by W are "won't-port" files. 
+  - Files preceded by ? are "might-port" files.
+  - Files preceded by T are "to-be-ported" files.
+
+This list is under construction.
+
+* html/en/about.html (new/en/preface.html)
+  * html/en/adonet (new/en/databases)
+  * html/en/adonet/ado-net.html
+  * html/en/adonet/firebird.html
+  * html/en/adonet/ibmdb2.html
+  * html/en/adonet/mysql.html
+  * html/en/adonet/odbc.html
+  * html/en/adonet/oledb.html
+  * html/en/adonet/oracle.html
+  * html/en/adonet/postgresql.html
+  * html/en/adonet/sqlclient.html
+  * html/en/adonet/sqlite.html
+  * html/en/adonet/sybase.html
+  * html/en/adonet/tds-providers.html
+  * html/en/adonet/tdsclient.html
+  
+[See new/en/appendices]
+* html/en/appendencies
+* html/en/appendencies/credits.html
+* html/en/appendencies/ecma.html
+* html/en/appendencies/license.html
+
+[Ported to new/en/presentations.]
+* html/en/appendencies/presentations
+* html/en/appendencies/presentations/brainshare-2004
+* html/en/appendencies/presentations/brainshare-2004/DHO101.ppt
+* html/en/appendencies/presentations/brainshare-2004/DHO202.ppt
+* html/en/appendencies/presentations/brainshare-2004/DL206.ppt
+* html/en/appendencies/presentations/brainshare-2004/DL208.ppt
+* html/en/appendencies/presentations/brainshare-2004/DL301.ppt
+* html/en/appendencies/presentations/debugger.sxi
+* html/en/appendencies/presentations/gtk-sharp-guadec.ppt
+* html/en/appendencies/presentations/mono-guadec.ppt
+* html/en/appendencies/presentations.html
+
+* html/en/appendencies/resources.html
+html/en/appendencies/sampleapps.html
+html/en/appendencies/samples.html
+
+[This became part of some introductory material]
+* html/en/architecture
+* html/en/architecture/architecture.html [new/en/mono/]
+* html/en/architecture/context.png [new/en/mono/]
+
+[This all will get its own chapter]
+html/en/aspnet
+* html/en/aspnet/google.PNG
+html/en/aspnet/GoogleSearch.wsdl
+? html/en/aspnet/guestbook.html
+? html/en/aspnet/helloworld.html
+
+[ASP.NET basic controls; can be looked up in a standard
+reference]
+W html/en/aspnet/htmlanchor.html
+W html/en/aspnet/htmlbutton.html
+W html/en/aspnet/htmlcontrols.html
+W html/en/aspnet/htmlform.html
+W html/en/aspnet/htmlgeneric.html
+W html/en/aspnet/htmlimage.html
+W html/en/aspnet/htmlinputbutton.html
+W html/en/aspnet/htmlinputcheckbox.html
+W html/en/aspnet/htmlinputfile.html
+W html/en/aspnet/htmlinputhidden.html
+W html/en/aspnet/htmlinputimage.html
+W html/en/aspnet/htmlinputradiobutton.html
+W html/en/aspnet/htmlinputtext.html
+W html/en/aspnet/htmlselect.html
+W html/en/aspnet/htmltable.html
+W html/en/aspnet/htmltablecell.html
+W html/en/aspnet/htmltablerow.html
+W html/en/aspnet/htmltextarea.html
+
+* html/en/aspnet/introduction.html [new/en/web_services/intro.html
+
+[ASP.NET mobile command set; see any ASP.NET book for details]
+W html/en/aspnet/mobile.html
+W html/en/aspnet/mobileblog.html
+W html/en/aspnet/mobilecommand.html
+W html/en/aspnet/mobiledevices.html
+W html/en/aspnet/mobilediff.html
+W html/en/aspnet/mobileform.html
+W html/en/aspnet/mobileimage.html
+W html/en/aspnet/mobileintro.html
+W html/en/aspnet/mobilelabel.html
+W html/en/aspnet/mobilelink.html
+W html/en/aspnet/mobilelist.html
+W html/en/aspnet/mobilemobilepage.html
+W html/en/aspnet/mobileobjectlist.html
+W html/en/aspnet/mobilepanel.html
+W html/en/aspnet/mobileselectionlist.html
+W html/en/aspnet/mobilestylesheet.html
+W html/en/aspnet/mobiletextbox.html
+W html/en/aspnet/mobiletextview.html
+
+[a webmail app]
+html/en/aspnet/monowebmail.html
+? html/en/aspnet/monowlplanning.html
+
+[an RSS-to-HTML script]
+? html/en/aspnet/news.html
+? html/en/aspnet/newsdisplay.html
+
+W html/en/aspnet/programming.html [just an index]
+T html/en/aspnet/webforms.html
+* html/en/aspnet/webservicesgoogle.html
+T html/en/aspnet/webservicesintroduction.html
+
+[These are general C# docs, and we can assume here that
+developers have read a C# reference and don't need them.
+WONTFIX.]
+W html/en/base_classes
+W html/en/base_classes/arraylist.html
+W html/en/base_classes/bitarray.html
+W html/en/base_classes/ienumerable.html
+W html/en/base_classes/ienumerator.html
+W html/en/base_classes/introduction.html
+W html/en/base_classes/namespaces.html
+W html/en/base_classes/sftextfiles.html
+W html/en/base_classes/system.html
+W html/en/base_classes/systemcollections.html
+W html/en/base_classes/systemio.html
+W html/en/base_classes/systemsecuritycryptography.html
+W html/en/base_classes/systemtext.html
+W html/en/base_classes/systemtextregularexpressions.html
+W html/en/base_classes/systemthreading.html
+
+[since this was all "doesn't exist yet" and apparently
+still doesn't exist, it's not being ported.]
+W html/en/compinterop
+W html/en/compinterop/bonobo.html
+W html/en/compinterop/com.html
+
+* html/en/contributing.html [new/en/tools/monodoc/contributing.html]
+* html/en/contributors.html [new/en/credits.html]
+
+[Still has its own chapter in the new version.]
+* html/en/cross_platform [new/en/cross_platform]
+* html/en/cross_platform/comprules.html
+* html/en/cross_platform/gui.html
+* html/en/cross_platform/introduction.html
+
+[Advanced Topics, embedding: moved to "mono and other languages"]
+* html/en/embeding
+* html/en/embeding/basics.html
+* html/en/embeding/callback.png
+* html/en/embeding/callback.svg
+* html/en/embeding/embeddc.html
+* html/en/embeding/embeddperl.html
+* html/en/embeding/existing.png
+* html/en/embeding/existing.svg
+* html/en/embeding/exposing.png
+* html/en/embeding/linked.png
+* html/en/embeding/linked.svg
+* html/en/embeding/loaded.png
+* html/en/embeding/loaded.svg
+* html/en/embeding/philosophy.html
+
+W html/en/empty.html
+
+[Ported to new/en/deploy]
+* html/en/GAC
+* html/en/GAC/advanced.html
+* html/en/GAC/basics.html
+
+html/en/gnome
+html/en/gnome/bindings
+
+[Ported to new/en/gnome/..., could use an edit]
+* html/en/gnome/bindings/diacanvas
+* html/en/gnome/bindings/diacanvas/index.html
+* html/en/gnome/bindings/diacanvas/screendump.png
+
+[Ported to new/en/gnome/..., could use an edit]
+* html/en/gnome/bindings/gconf
+* html/en/gnome/bindings/gconf/gconf.html
+
+[Ported to new/en/gnome/..., could use an edit]
+* html/en/gnome/bindings/glade
+* html/en/gnome/bindings/glade/glade-m.png
+* html/en/gnome/bindings/glade/glade-palette.png
+* html/en/gnome/bindings/glade/glade-properties.png
+* html/en/gnome/bindings/glade/glade.html
+* html/en/gnome/bindings/glade/glade2.html
+* html/en/gnome/bindings/glade/glade2_img
+* html/en/gnome/bindings/glade/glade2_img/AddReference.png
+* html/en/gnome/bindings/glade/glade2_img/FileAssociation.png
+* html/en/gnome/bindings/glade/glade2_img/french.png
+* html/en/gnome/bindings/glade/glade2_img/Glade1.png
+* html/en/gnome/bindings/glade/glade2_img/Glade2.png
+* html/en/gnome/bindings/glade/glade2_img/Glade3.png
+* html/en/gnome/bindings/glade/glade2_img/Glade4.png
+* html/en/gnome/bindings/glade/glade2_img/Glade5.png
+* html/en/gnome/bindings/glade/glade2_img/hbox.png
+* html/en/gnome/bindings/glade/glade2_img/hebrew.png
+* html/en/gnome/bindings/glade/glade2_img/MonoD_1.png
+* html/en/gnome/bindings/glade/glade2_img/Reference.png
+* html/en/gnome/bindings/glade/glade2_img/vbox.png
+* html/en/gnome/bindings/glade/icon.png
+* html/en/gnome/bindings/glade/sample1.png
+
+
+html/en/gnome/bindings/gnome
+
+[How to make an about dialog]
+html/en/gnome/bindings/gnome/about_dialog
+html/en/gnome/bindings/gnome/about_dialog/about.html
+html/en/gnome/bindings/gnome/about_dialog/documented_by.png
+html/en/gnome/bindings/gnome/about_dialog/main.png
+html/en/gnome/bindings/gnome/about_dialog/translated.png
+html/en/gnome/bindings/gnome/about_dialog/written_by.png
+
+[part of the gnome building applications tutorial]
+html/en/gnome/bindings/gnome/adding_contents.html
+
+[TODO: needs an editing/rewrite pass]
+* html/en/gnome/bindings/gnome/canvas
+* html/en/gnome/bindings/gnome/canvas/canvas2.png
+* html/en/gnome/bindings/gnome/canvas/canvas3.png
+* html/en/gnome/bindings/gnome/canvas/canvasfun.cs
+* html/en/gnome/bindings/gnome/canvas/canvasline.html
+* html/en/gnome/bindings/gnome/canvas/canvastext.html
+* html/en/gnome/bindings/gnome/canvas/hello.html
+* html/en/gnome/bindings/gnome/canvas/introduction.html
+
+html/en/gnome/bindings/gnome/gnome.html
+html/en/gnome/bindings/gnome/hello_world.html
+html/en/gnome/bindings/gnome/introduction.html
+
+[TODO: needs an editing/rewrite pass]
+* html/en/gnome/bindings/gnomedb
+* html/en/gnome/bindings/gnomedb/glade_gnomedb_palette.png
+* html/en/gnome/bindings/gnomedb/gnomedb-sample-project.png
+* html/en/gnome/bindings/gnomedb/gnomedb-sample-runtime.png
+* html/en/gnome/bindings/gnomedb/gnomedb-sample.cs
+* html/en/gnome/bindings/gnomedb/gnomedb-sample.glade
+* html/en/gnome/bindings/gnomedb/gnomedb-sample.gladep
+* html/en/gnome/bindings/gnomedb/gnomedb-sample.Makefile
+* html/en/gnome/bindings/gnomedb/gnomedb.html
+
+[TODO: This needs some work.]
+* html/en/gnome/bindings/gstreamer
+W html/en/gnome/bindings/gstreamer/basic.html [duplicate of introduction.html]
+* html/en/gnome/bindings/gstreamer/gstelement.html
+W html/en/gnome/bindings/gstreamer/gstpad.html [no content]
+* html/en/gnome/bindings/gstreamer/gstreamer.html
+W html/en/gnome/bindings/gstreamer/init.html [no content]
+* html/en/gnome/bindings/gstreamer/introduction.html
+* html/en/gnome/bindings/gstreamer/plugins.html
+
+[TODO: check ToC, work on this]
+* html/en/gnome/bindings/gtk-sharp
+* html/en/gnome/bindings/gtk-sharp/adjustments.html
+* html/en/gnome/bindings/gtk-sharp/adjustmentscreating.html
+* html/en/gnome/bindings/gtk-sharp/adjustmentsinternals.html
+* html/en/gnome/bindings/gtk-sharp/adjustmentsusing.html
+* html/en/gnome/bindings/gtk-sharp/arrows.png
+* html/en/gnome/bindings/gtk-sharp/aspectframe.png
+* html/en/gnome/bindings/gtk-sharp/base.png
+* html/en/gnome/bindings/gtk-sharp/buttonbox.png
+* html/en/gnome/bindings/gtk-sharp/buttons.png
+* html/en/gnome/bindings/gtk-sharp/buttonwidget.html
+* html/en/gnome/bindings/gtk-sharp/buttonwidgetcheck.html
+* html/en/gnome/bindings/gtk-sharp/buttonwidgetnormal.html
+* html/en/gnome/bindings/gtk-sharp/buttonwidgetradio.html
+* html/en/gnome/bindings/gtk-sharp/buttonwidgetstock.html
+* html/en/gnome/bindings/gtk-sharp/buttonwidgettoggle.html
+* html/en/gnome/bindings/gtk-sharp/colorsel.png
+* html/en/gnome/bindings/gtk-sharp/containeralignment.html
+* html/en/gnome/bindings/gtk-sharp/containeraspectframes.html
+* html/en/gnome/bindings/gtk-sharp/containerbuttonboxes.html
+* html/en/gnome/bindings/gtk-sharp/containereventbox.html
+* html/en/gnome/bindings/gtk-sharp/containerfixed.html
+* html/en/gnome/bindings/gtk-sharp/containerframes.html
+* html/en/gnome/bindings/gtk-sharp/containerlayout.html
+* html/en/gnome/bindings/gtk-sharp/containernotebooks.html
+* html/en/gnome/bindings/gtk-sharp/containerpaned.html
+* html/en/gnome/bindings/gtk-sharp/containerscrolledwindows.html
+* html/en/gnome/bindings/gtk-sharp/containertoolbar.html
+* html/en/gnome/bindings/gtk-sharp/containerviewports.html
+* html/en/gnome/bindings/gtk-sharp/dnd.html
+* html/en/gnome/bindings/gtk-sharp/dnd_overview.html
+* html/en/gnome/bindings/gtk-sharp/dnd_properties.html
+* html/en/gnome/bindings/gtk-sharp/entry.png
+* html/en/gnome/bindings/gtk-sharp/eventbox.png
+* html/en/gnome/bindings/gtk-sharp/filesel.png
+* html/en/gnome/bindings/gtk-sharp/fixed.png
+* html/en/gnome/bindings/gtk-sharp/frame.png
+* html/en/gnome/bindings/gtk-sharp/getstart.html
+* html/en/gnome/bindings/gtk-sharp/gtk-sharp.html
+* html/en/gnome/bindings/gtk-sharp/idle.html
+* html/en/gnome/bindings/gtk-sharp/introduction.html
+* html/en/gnome/bindings/gtk-sharp/labels.png
+* html/en/gnome/bindings/gtk-sharp/menu.html
+* html/en/gnome/bindings/gtk-sharp/menu.png
+* html/en/gnome/bindings/gtk-sharp/menu_manual_creation.html
+* html/en/gnome/bindings/gtk-sharp/menu_manual_example.html
+* html/en/gnome/bindings/gtk-sharp/MessageDialog.png
+* html/en/gnome/bindings/gtk-sharp/miscarrows.html
+* html/en/gnome/bindings/gtk-sharp/misccalendar.html
+* html/en/gnome/bindings/gtk-sharp/misccolorselection.html
+* html/en/gnome/bindings/gtk-sharp/misccombobox.html
+* html/en/gnome/bindings/gtk-sharp/miscdialogs.html
+* html/en/gnome/bindings/gtk-sharp/miscfileselection.html
+* html/en/gnome/bindings/gtk-sharp/misclabels.html
+* html/en/gnome/bindings/gtk-sharp/miscmessagedialogs.html
+* html/en/gnome/bindings/gtk-sharp/miscprogress.html
+* html/en/gnome/bindings/gtk-sharp/miscrulers.html
+* html/en/gnome/bindings/gtk-sharp/miscspinbuttons.html
+* html/en/gnome/bindings/gtk-sharp/miscstatusbars.html
+* html/en/gnome/bindings/gtk-sharp/misctextentries.html
+* html/en/gnome/bindings/gtk-sharp/misctooltips.html
+* html/en/gnome/bindings/gtk-sharp/miscwidgets.html
+* html/en/gnome/bindings/gtk-sharp/monitoring_io.html
+* html/en/gnome/bindings/gtk-sharp/notebook.png
+* html/en/gnome/bindings/gtk-sharp/packbox.png
+* html/en/gnome/bindings/gtk-sharp/packingdemonstrationprogram.html
+* html/en/gnome/bindings/gtk-sharp/packingdetails.html
+* html/en/gnome/bindings/gtk-sharp/packingtables.html
+* html/en/gnome/bindings/gtk-sharp/packingtablessample.html
+* html/en/gnome/bindings/gtk-sharp/packingwidgets.html
+* html/en/gnome/bindings/gtk-sharp/packingwidgetstheory.html
+* html/en/gnome/bindings/gtk-sharp/paned.png
+* html/en/gnome/bindings/gtk-sharp/progress.png
+* html/en/gnome/bindings/gtk-sharp/range.png
+* html/en/gnome/bindings/gtk-sharp/rangecommon.html
+* html/en/gnome/bindings/gtk-sharp/rangeexample.html
+* html/en/gnome/bindings/gtk-sharp/rangemouseandkey.html
+* html/en/gnome/bindings/gtk-sharp/rangescale.html
+* html/en/gnome/bindings/gtk-sharp/rangescrollbars.html
+* html/en/gnome/bindings/gtk-sharp/rangewidgets.html
+* html/en/gnome/bindings/gtk-sharp/rcexample.html
+* html/en/gnome/bindings/gtk-sharp/rcformat.html
+* html/en/gnome/bindings/gtk-sharp/rulers.png
+* html/en/gnome/bindings/gtk-sharp/scribble.png
+* html/en/gnome/bindings/gtk-sharp/scribble_overview.html
+* html/en/gnome/bindings/gtk-sharp/scrolledwin.png
+* html/en/gnome/bindings/gtk-sharp/setting_widget_attributes.html
+* html/en/gnome/bindings/gtk-sharp/signalsobject.html
+* html/en/gnome/bindings/gtk-sharp/spinbutton.png
+* html/en/gnome/bindings/gtk-sharp/statusbar.png
+* html/en/gnome/bindings/gtk-sharp/stockicons.png
+* html/en/gnome/bindings/gtk-sharp/tables.png
+* html/en/gnome/bindings/gtk-sharp/timeouts.html
+* html/en/gnome/bindings/gtk-sharp/treeview.html
+* html/en/gnome/bindings/gtk-sharp/widgetoverview.html
+* html/en/gnome/bindings/gtk-sharp/widgetoverviewcasting.html
+* html/en/gnome/bindings/gtk-sharp/widgetoverviewhierarchy.html
+* html/en/gnome/bindings/gtk-sharp/widgetoverviewwithoutwindows.html
+
+[Ported to new/en/gnome/bindings/rsvg, Linux Client Programming/
+Extra components]
+* html/en/gnome/bindings/rsvg
+* html/en/gnome/bindings/rsvg/cool.svg
+* html/en/gnome/bindings/rsvg/rsvg.html
+
+html/en/gnome/faq.html
+html/en/gnome/gn.png
+html/en/gnome/introduction.html
+html/en/gnome/README
+
+[This is currently in "Mono for Linux Developers"]
+* html/en/ide
+* html/en/ide/emacs.html [new/en/for_linux_developers/ide.html]
+* html/en/ide/monodevelop.html
+
+html/en/images
+html/en/images/back.png
+html/en/images/backbig.png
+html/en/images/backgray.png
+html/en/images/empty.png
+html/en/images/mg.png
+
+[done.]
+* html/en/installation
+* html/en/installation/linux.html
+W html/en/installation/other.html [it's minimal at best]
+W html/en/installation/overview.html
+W html/en/installation/wsetup.png [old, not used anywhere except in pt-br]
+
+[This is an introductory programming tutorial. Mostly not
+very relevant.]
+html/en/languages
+W html/en/languages/aboutoo.html
+W html/en/languages/attributes-basics.html
+W html/en/languages/class-access.html
+W html/en/languages/class-basics.html
+W html/en/languages/class-constructors.html
+W html/en/languages/class-int-indexers.html
+W html/en/languages/class-intro.html
+W html/en/languages/class-parameters-out.html
+W html/en/languages/class-parameters-ref.html
+W html/en/languages/class-parameters-val.html
+W html/en/languages/class-parameters.html
+W html/en/languages/class-prop.html
+W html/en/languages/class-properties.html
+W html/en/languages/class-static.html
+W html/en/languages/control-break.html
+W html/en/languages/control-do-while.html
+W html/en/languages/control-for.html
+W html/en/languages/control-if-else-nes.html
+W html/en/languages/control-if-else.html
+W html/en/languages/control-if.html
+W html/en/languages/control-switch.html
+W html/en/languages/control.html
+W html/en/languages/csharp.html
+W html/en/languages/csiorc.html
+W html/en/languages/csvsvb.html
+html/en/languages/firstapp_classdef.html
+html/en/languages/firstapp_comments.html
+html/en/languages/firstapp_compilerun.html
+html/en/languages/firstapp_hello.html
+html/en/languages/firstapp_main.html
+html/en/languages/firstapp_namespaces.html
+W html/en/languages/howarepc.html
+W html/en/languages/introduction.html
+* html/en/languages/java.html [new/en/other_languages/]
+* html/en/languages/Java.png [new/en/other_languages/]
+* html/en/languages/languages.html [new/en/other_languages/]
+* html/en/languages/mbas.html [new/en/other_languages/]
+W html/en/languages/mbasic.html
+W html/en/languages/types_intro.html
+W html/en/languages/whatisap.html
+W html/en/languages/whatiscs.html
+
+
+[Manpages, retained by Miguel's request for use on
+systems like Win32 which lack man(1) as a standard tool.]
+* html/en/man
+* html/en/man/cert2spc.1.html
+* html/en/man/certmgr.1.html
+* html/en/man/chktrust.1.html
+* html/en/man/cilc.1.html
+* html/en/man/disco.1.html
+* html/en/man/gacutil.1.html
+* html/en/man/genxs.1.html
+* html/en/man/ilasm.1.html
+* html/en/man/makecert.1.html
+* html/en/man/mcs.1.html
+* html/en/man/mono-config.5.html
+* html/en/man/mono.1.html
+* html/en/man/monop.1.html
+* html/en/man/monostyle.1.html
+* html/en/man/oldmono.1.html
+* html/en/man/secutil.1.html
+* html/en/man/setreg.1.html
+* html/en/man/signcode.1.html
+* html/en/man/sn.1.html
+* html/en/man/soapsuds.1.html
+* html/en/man/sqlsharp.1.html
+* html/en/man/wsdl.1.html
+* html/en/man/xsd.1.html
+
+[Some of this is ported.]
+html/en/mono
+? html/en/mono/dotnet.html 
+html/en/mono/history.html  [ unsure whether it needs porting]
+* html/en/mono/mono.html [new/en/mono/mono.html]
+W html/en/mono/monoenabled.html [ platform list; now rolled into install directions]
+W html/en/mono/monoimpl.html
+* html/en/mono/why-mono.html [new/en/mono/why-mono.html]
+
+[This was all a networking tutorial for C#, not Mono-specific
+and not anything you couldn't find in a standard C# book]
+W html/en/networking
+W html/en/networking/introduction.html
+W html/en/networking/pop3.html
+W html/en/networking/tcpserver.html
+
+* html/en/preface.html
+
+[This isn't linked in toc.xml anywhere.]
+html/en/remoting
+html/en/remoting/introduction.html
+
+* html/en/style.css
+
+[System.Windows.Forms stuff, covered elsewhere]
+W html/en/swf
+W html/en/swf/introduction.html
+
+* html/en/target.html
+
+[We may need threading docs, but this isn't it.]
+W html/en/threading
+W html/en/threading/introduction.html
+
+html/en/tools
+* html/en/tools/assembler-intro.html
+* html/en/tools/assembler.html
+* html/en/tools/compiling.png
+* html/en/tools/cscomp-cmdlo.html
+* html/en/tools/cscomp-intro.html
+* html/en/tools/debugger.html
+* html/en/tools/debugger.png
+* html/en/tools/gdb.html
+W html/en/tools/gnunit-thumb.png
+W html/en/tools/gnunit.png
+html/en/tools/mbascomp-cmdlo.html
+html/en/tools/mint-cmdlo.html
+html/en/tools/mono-cmdlo.html
+* html/en/tools/monodis.html [new/en/tools/disassembler.html]
+* html/en/tools/monodocbrowser.html
+html/en/tools/nant.html
+html/en/tools/ngen.html
+html/en/tools/nunit.html
+html/en/tools/others.html
+html/en/tools/runtime-intro.html
+html/en/tools/tracing.html
+
+[Advanced Topics]
+html/en/wrapping
+html/en/wrapping/clibs.html
+html/en/wrapping/interop.html
+
+[Porting only the parts that are specific to coding with
+C#/Mono; if you want info about XPath/XSLT, you know where
+to find it]
+html/en/xml
+W html/en/xml/dom.html {was empty}
+* html/en/xml/xml.html
+* html/en/xml/xmlreader.html
+* html/en/xml/xmlschema.html
+* html/en/xml/xmlwriter.html
+W html/en/xml/xpathbasic.html
+W html/en/xml/xpathe1.html
+W html/en/xml/xpathe10.html
+W html/en/xml/xpathe11.html
+W html/en/xml/xpathe12.html
+W html/en/xml/xpathe13.html
+W html/en/xml/xpathe14.html
+W html/en/xml/xpathe15.html
+W html/en/xml/xpathe16.html
+W html/en/xml/xpathe17.html
+W html/en/xml/xpathe18.html
+W html/en/xml/xpathe19.html
+W html/en/xml/xpathe2.html
+W html/en/xml/xpathe20.html
+W html/en/xml/xpathe21.html
+W html/en/xml/xpathe22.html
+W html/en/xml/xpathe3.html
+W html/en/xml/xpathe4.html
+W html/en/xml/xpathe5.html
+W html/en/xml/xpathe6.html
+W html/en/xml/xpathe7.html
+W html/en/xml/xpathe8.html
+W html/en/xml/xpathe9.html
+W html/en/xml/xpathintro.html
+* html/en/xml/xpathnavigator.html
+W html/en/xml/xpathtutorial.html
+W html/en/xml/xslt.html
+W html/en/xml/xsltclass.html
+W html/en/xml/xsltintro.html

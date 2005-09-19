@@ -1,0 +1,119 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta name="generator" content=
+"HTML Tidy for Linux/x86 (vers 1st October 2003), see www.w3.org" />
+<title></title>
+</head>
+<body>
+<h1>Compilers for other languages</h1>
+<p>Here are some other free compilers for other languages that
+target .NET and should work with Mono with no problem:</p>
+<ul>
+<li><a href="#ComponentPascal">Component Pascal</a></li>
+<li><a href="#MonoLogo">MonoLogo</a></li>
+<li><a href="#Oberon">Oberon</a></li>
+<li><a href="#Forth">Forth</a></li>
+<li><a href="#mbas">Mono Basic</a> (Mono's VB.NET compiler)</li>
+<li><a href="#dotlist">dotLisp</a> * <a href=
+"#nemerle">Nemerle</a></li>
+<li><a href="#python">Python</a></li>
+</ul>
+<p>Languages which are known to run, but we have not done a
+complete ran of all their regression tests to validate it:</p>
+<ul>
+<li>Kylix.NET.</li>
+</ul>
+<p>Languages we would like to have supported, with links to
+resources:</p>
+<ul>
+<li><a href="#JavaScript">Java Script</a></li>
+<li><a href="#java.html">Java</a></li>
+<li><a href="#c">C</a></li>
+</ul>
+<p>Some experimental bindings:</p>
+<ul>
+<li><a href="#Tachy">Tachy</a> (scheme-like)</li>
+</ul>
+<p><a name="Java" id="Java"></a></p>
+<h3>Java</h3>
+<p>Java is supported through the <a href=
+"http://www.ikvm.net">IKVM</a> virtual machine.</p>
+<p>Zoltan worked with Jeroen to get IKVM to work with Mono.</p>
+<h1><a name="nemerle" id="nemerle">Nemerle</a></h1>
+<p>Nemerle is a new hybrid (functional, object-oriented and
+imperative) programming language for the .NET platform. It is
+available from <a href=
+"http://www.nemerle.org/">http://www.nemerle.org</a>.</p>
+<h3><a name="PHP" id="PHP">PHP</a></h3>
+<p>Sterling has code to allow PHP developers to use Mono code, in
+his <a href="http://www.php.net/~sterling/mono/">site</a></p>
+<h3><a name="MonoLogo" id="MonoLogo">MonoLogo</a></h3>
+<p>An implementation of Logo for Mono (and .NET)</p>
+<p>The <a href="http://monologo.sf.net">Mono Logo</a> compiler is
+hosted in the <a href="ccvs.html">Mono CVS</a> repository and also
+available on the <a href="anoncvs.html">AnonCVS</a> mirrors.</p>
+<h3><a name="mbas" id="mbas">Mono Basic (Mono's VB.NET
+compiler)</a></h3>
+<p>Work has resumed on the Mono Visual Basic compiler (currently
+called mbas). It is part of the standard Mono distribution, but its
+still an early compiler.</p>
+<h3><a name="Oberon" id="Oberon">Oberon</a></h3>
+<p>This Oberon compiler is written in Oberon.NET (another self
+hosting compiler).</p>
+<p>The main site <a href=
+"http://www.oberon.ethz.ch/oberon.net/">http://www.oberon.ethz.ch/oberon.net/</a></p>
+<p>Download: <a href=
+"http://www.oberon.ethz.ch/oberon.net/download/">http://www.oberon.ethz.ch/oberon.net/download/</a></p>
+<p>Examples: <a href=
+"http://www.oberon.ethz.ch/oberon.net/examples/">http://www.oberon.ethz.ch/oberon.net/examples/</a></p>
+<h3><a name="ComponentPascal" id="ComponentPascal">Component
+Pascal</a></h3>
+<p>The Component Pascal compiler: <a href=
+"http://www.citi.qut.edu.au/research/plas/projects/cp_files/cpnet.html">
+Home Page</a>, you can <a href=
+"http://www.citi.qut.edu.au/research/plas/projects/cp_files/cpdownload.html">
+download it</a></p>
+<h3><a name="Forth" id="Forth">Delta Forth</a></h3>
+<p>The Delta Forth.NET project: <a href=
+"http://www.dataman.ro/dforth">Home Page</a> and <a href=
+"http://www.dataman.ro/dforth">more details here</a>.</p>
+<h3><a name="Tachy" id="Tachy">Tachy</a></h3>
+<p>A subset of Scheme language called <a href=
+"http://radio.weblogs.com/0101156/stories/2002/03/19/tachy.html">Tachy</a></p>
+<p><a name="Python" id="Python"></a></p>
+<h3>Python</h3>
+<p><a href="mailto:brian@No.Spam.zope.com">Brian Lloyd</a> is
+working on linking the Python runtime with the .NET runtime. More
+information on the PS.NET project can be found <a href=
+"http://www.zope.org/Members/Brian/PythonNet">here</a>.</p>
+<p><a name="dotlisp" id="dotlisp"></a></p>
+<h3>dotLisp</h3>
+<p>DotLisp is available from: <a href=
+"http://sourceforge.net/projects/dotlisp/">http://sourceforge.net/projects/dotlisp/</a></p>
+<h1><a name="JavaScript" id="JavaScript">Java Script</a></h1>
+<p>Cesar is working on Mono's implementation of JScript, the code
+is available on CVS on module `mcs'.</p>
+<h1>Missing languages</h1>
+<p>Here is a list of a few languages that we would like to see
+supported. We will try to maintain a set of links here with
+technical information for those interested in porting, implementing
+or adapting a compiler for any of these languages:</p>
+<h1><a name="c" id="c">C</a></h1>
+<p>Ideally GCC could be modified to generate CIL, but it is a big
+task. That would give us various compilers in one pass.</p>
+<p><a href="http://www.cs.princeton.edu/software/lcc">LCC</a> 4.2
+has been recently released. This release adds support for compiling
+ANSI C programs to CIL. Note that the CIL support only works on
+Win32 right now, but should be easy to convert to Mono/other
+architectures.</p>
+<p>LCC is not an open source compiler, but it is free as long as
+you do not profit from selling it.</p>
+<p><a name="ada" id="ada"></a></p>
+<h1>ADA</h1>
+<p>A# is an ADA compiler for the CIL platform, it can be downloaded
+from: <a href=
+"http://www.usafa.af.mil/dfcs/bios/mcc_html/a_sharp.html">http://www.usafa.af.mil/dfcs/bios/mcc_html/a_sharp.html</a></p>
+</body>
+</html>

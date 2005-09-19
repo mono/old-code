@@ -1,0 +1,78 @@
+<?xml version="1.0" encoding="utf-8"?>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:monodoc="http://www.go-mono.org/xml/monodoc">
+<head>
+	<meta http-equiv="content-type" content="text/html;charset=utf-8" />
+	<title>Mono</title>
+	<meta name = "DC.Contributor" content = "Miguel de Icaza" />
+	<meta name = "DC.Contributor" content = "Shane Landrum" />
+	<meta name = "DC.Contributor" content = "Atsushi Enomoto" />
+	<link rel="stylesheet" type="text/css" href="../style.css" />
+</head>
+<body>
+
+<h1>Monoとは何か?</h1> 
+
+<p>Monoは、コミュニティによって作られた、さまざまなオペレーティング システムとCPUアーキテクチャ上で動作する、.NET Framework実装です。実際には、Microsoftの.NET Frameworkは、プログラムがあらゆるプラットフォーム上で開発・実行できるECMA標準334および335の、もっとも一般的な実装にすぎません。
+</p>
+
+<p>ECMA 334/335のアーキテクチャは、プログラマーにとっては利益となるものです。これは退屈な低レベル処理の面倒を見てくれるので、開発コストとメンテナンス性を低減させてくれます。これによって、プログラマーはイノベーションとプログラミングの楽しみに集中することができます。
+</p>
+
+<p>この文書を書いている時点で、MonoはLinux, Unix, Windows, MacOS, その他の埋め込みシステムをホストOSとして、Intel, PPC, Sparc, ARMおよびHPPAをホストCPUとして、サポートしています。
+</p>
+
+<p>Monoプロジェクトの作業には、現在のところ以下のような基盤が含まれています:</p>
+
+<blockquote>
+	
+  <p>C# コンパイラ、仮想マシン、発展したコード生成エンジン（ジャストインタイムコンパイルとコードのプリコンパイル）。</p>
+  
+  <p>ASP.NET Webフォーム、Webサービス、ADO.NETデータベース、Windows.Formsをサポートするクラスライブラリ。</p>
+
+  <p>Mono, Unix, Gnome 固有のライブラリ。</p>
+
+</blockquote>
+
+<p>私たちはMicrosoftのAPIの実装だけに対象を絞っているのではありません。MonoはUnix, Gnomeおよびその他のフリー/オープンソース ソフトウェアに特化した機能を実現するさまざまなライブラリも公開しています。</p>
+
+<p>基本構想:</p>
+
+<img src="two-stacks.png"/>
+
+
+<p>Monoは、開発者たちが、デスクトップ用途にGtk+およびGnomeを使用した、Unix/Linuxアプリケーションを作成できるようにしています。強力なCairoライブラリを使用して、ベクターグラフィックスの作業が行えるようにしています。そしてMozillaライブラリを基盤とする進化したGUIをビルドすることができます。これらによって、Monoは、Linux/Unixアプリケーションを作成する優れた手段になっています。</p>
+
+<p>Monoのライブラリはサードパーティのデータベース（Postgres, MySQL, DB2, Sybase, Sqlite）、標準に準拠したディレクトリ サービス（LDAP）をサポートしています。XML Schemaのサポートに加えて、MonoライブラリではRELAX NGの機構に基づくバリデーターとリーダーを提供しています。</p>
+
+<p>もしあなたがWindows開発経験者であれば、Monoは、Linuxアプリケーションを容易に作成させてくれます。もしあなたにLinuxの経験があれば、Monoはあなたのコードをより高速にビルドし他のプラットフォームに移植させてくれます。</p>
+	
+<h2>ECMA標準の自由な実装の重要性</h2>
+
+<p>今日では、.NET/ECMA仮想マシンは、最も先進的な商用VMであり、私たちはこの利点をLinux開発者にもたらしたいと考えています。また、Linuxが、プログラマーの生産性という点で、市場競争力をもってほしいとも考えています。</p>
+
+<p>これはまた、Windows開発者が、彼らのコードベースを、単一のプラットフォーム以外でも、LinuxやMac向けに書き換えることなくサポートできるようにするキーポイントでもあります。アプリケーションのエンジンを共有しながら、GUIをネイティブ ライブラリに移植することができます。すなわち、LinuxではGtkを、MacではCocoaを使用しながら、C#でコードを維持し、機能豊富なVMとクラスライブラリの利益を得られるようにします。</p>
+
+<p>これによって、あなたは知識を、経験を、より多くのプラットフォームをサポートする部分を再利用して、開発コストの低減を可能にしてくれます。</p>
+
+<h2>Monoのステータス</h2>
+
+<p>Mono 1.0シリーズには、実行環境、C#コンパイラ、プリコンパイラ、JITエンジン、および関連ライブラリが含まれています。</p>
+
+<p>ASP.NET Webフォーム、ASP.NET Webサービス、ADO.NET, リモーティング、シリアライゼーション、ディレクトリ サービスは全機能が実装されており、日々の使用に耐えうるものです。</p>
+
+<p>Mono 1.0に含まれない主要な機能は、コード アクセス セキュリティ(CAS)、Windows.Forms、EnterpriseServices（これは何時になってもサポートされないでしょう）およびCOMコンポーネントです。</p>
+
+<p>COMはUnixではあまり使われていない技術であり、いくつかのアプリケーションが使用しているだけであり、使用されている時は、独自のバージョンのCOMが使用されています（MozillaやOpenOfficeなど）。従って、私たちは現在これらをサポートする計画はありません。[訳注 - もちろんXimianがサポートする予定がないという意味です。]</p>
+
+<p>詳しくは、Monoの将来のリリースについて詳細な計画を含んでいる<a href="http://www.go-mono.com/mono-roadmap.html">Mono ロードマップ</a>、および<a href="http://www.mono-project.com/about/faq.html">FAQ</a>を参照してください。</p>
+
+<h2>Monoとライセンス</h2>
+
+<p>MonoランタイムはGNU LGPLの条項の下でライセンスされていますが、仮想マシンのプロプラエタリ拡張を望んでいる方には、商用ライセンスでも提供しています。詳しくはmono-licensing@ximian.comに連絡して下さい。</p>
+
+<p>Monoコンパイラ(C#, VB.NET)はGNU GPLの条項の下でライセンスされています。</p>
+
+<p>Monoクラスライブラリは、より緩やかなオープンソース ライセンスであるMIT X11ライセンスの下で提供されています。</p>
+</body>
+</html>

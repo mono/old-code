@@ -1,0 +1,414 @@
+<?xml version="1.0" encoding="utf-8"?>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:monodoc="http://www.go-mono.org/xml/monodoc">
+<head>
+	<title>Glade# for Rapid Development: Simple Web Browser</title>
+
+	<meta name = "DC.Description" content = "" />
+	<meta name = "DC.Contributor" content = "Erik Dasque" />
+	<meta name = "DC.Contributor" content = "Aaron Weber" />
+	<meta name = "DC.Contributor" content = "Johannes Roith" />
+
+	<link rel="stylesheet" type="text/css" href="../../../style.css" />
+</head>
+<body> 
+
+<h1>Glade# for Rapid Development: Simple Web Browser</h1>
+
+<h2>Contents</h2>
+<ul>
+	<li>1. <a href="#intro">Introduction</a></li>
+	<li>3. <a href="#project">Project Setup</a></li>
+	<li>4. <a href="#glade">Building the Interface</a></li>
+	<li>5. <a href="#coding">Start Coding</a></li>
+	<li>6. <a href="#i18n">Internationalization</a></li>
+	<li>7. <a href="#todo">Further Exercises</a></li>
+</ul>
+<h2><a id="intro">Introduction</a></h2>
+
+<p>
+  In the <a href="glade.html">previous example</a> we built a very
+  simple glade application using a simple editor and the Glade Interface
+  Builder. In this example, we'll build a slightly more complex
+  application, taking advantage of more tools: a web browser.
+</p>
+
+<p>
+  Many applications display rich content with an HTML rendering
+  engine. Evolution and Monodoc, for example, use
+  gtkhtml to render and edit messages, Monodevelop uses the Mozilla
+  project's Gecko, and Konqueror and KMail use the khtml widget.
+</p>
+
+<p>
+  Mono includes bindings for both gtkhtml and Gecko, but in this
+  example we'll use Gecko.  Gtkhtml is more suited to simple displays,
+  such as email messages or static documentation pages, but Gecko is
+  more full-featured and therefore better suited to use in a
+  full-fledged web browser.  
+</p>
+
+<p>We'll use the following tools in this example:</p>
+
+<ul>
+<li>Mono</li>
+<li>GTK# (gtk-sharp)</li>
+<li>Gecko# (gecko-sharp, gtkmozembed#)</li>
+<li>Monodevelop, an IDE for Mono</li>
+</ul>
+
+<p>
+  Monodevelop isn't absolutely necessary here, but we'll
+  be using it in the examples and screenshots.
+</p>
+
+<h2><a id="project">Project Setup</a></h2>
+
+<p>
+  First, launch Monodevelop and then select <b>File -> New
+  Solution</b>. A dialog appears, offering you several choices for
+  template and project type. Select C# for your template and Glade#
+  Project for the project type. This will automatically fill in some
+  starter code for you: a window and a button, similar to the "Hello
+  World" code we wrote earlier.  
+</p>
+
+<div align="center"><img src="glade2_img/MonoD_1.png" /></div>
+
+<blockquote>
+  <b>Note:</b> Monodevelop uses the same project terminology as Visual
+  Studio.NET: a "Solution" contains multiple "Projects," each of which
+  contains one or more source files. Other platforms describe this
+  arrangement as one of "Projects" and "Sub-Projects."
+</blockquote>
+
+
+<p>
+  There's one more step as we get set up: adding the gecko-sharp
+  assembly to the list of references we'll be using in
+  Monodevelop.  To do that, right click on <b>References</b> in the
+  <b>Solutions</b> tab on the left hand side, click <b>Edit Reference</b>
+  and check the
+  box marked <b>gecko-sharp</b>.  Adding the assembly means that
+  Monodevelop will offer autocompletion and syntax validation on Gecko
+  objects as well as those in its default set of assemblies. 
+</p>
+
+<p> 
+  Name your project MyBrowser and save it in a new directory. Now
+  we're ready to start. 
+</p>
+
+<div align="center"><img src="glade2_img/Reference.png" /></div>
+
+<h2><a id="glade">Building the Interface</a></h2>
+
+<p> 
+  The first step is building the user interface. If you're using
+Monodevelop, you already have a glade XML file started for you, in the
+<tt>MyBrowser/Resource/</tt> directory. Double-click on that file in
+the list of project files Monodevelop provides, or open it using
+Glade. If you are not using Monodevelop, start Glade and create a new
+GNOME project, then create a new window for it. 
+ </p>
+
+<p> Double click on the <i>window1</i> Glade object, so that its
+properties are displayed in the Properties dialog. Then, change its
+title to say "My Browser" instead of "Glade Window.
+</p>
+
+<div align='center'><img src="glade2_img/Glade1.png" /></div>
+
+<p> Next, click the vertical box button (<img
+src="glade2_img/vbox.png" align="baseline"/>) and click in the window.
+When prompted, select 2 rows. You now have a top and bottom half of
+your window. The top half will consist of buttons and toolbars, and
+the bottom half will be the HTML display area. 
+ </p>
+
+<p> 
+To add spaces for your buttons, create a horizontal box (<img
+src="glade2_img/hbox.png" align="baseline" />) with 3 colums in the
+top row of the vertical box you created earlier.
+</p>
+
+<div align='center'><img src="glade2_img/Glade2.png" /><img src="glade2_img/Glade3.png"/></div>
+
+<p> 
+  In the three colums of the top half of the window, we'll add two
+  buttons and a text entry.  In the Properties dialogs for the buttons
+  you added, go to the Widget tab and select the stock Backward and
+  Forward icons. Using stock icons provides application consistency
+  across the desktop. In addition, stock labels are already
+  translated, so you get free localization.
+</p>
+
+<p>
+  Right-click the top area and choose <b>hbox->Select</b> to select
+  the hbox.  Change its Packing property so that <i>Expand</i> and
+  <i>Fill</i> are "No." Now the box will take up only as much space as
+  it needs, rather than filling all available space.
+</p>
+
+<p>
+  In the bottom half of the UI, add a frame (img
+  src="glade2_img/frame.png" align="baseline" />). Then, right-click
+  on its label and select <b>Delete</b> so that it is blank and
+  unlabeled. Later, we'll fill the frame with the Gecko rendering
+  widget, which is not available in Glade.
+</p>
+
+<p>
+Your UI should now look like this:
+</p>
+
+<div> <img src="glade2_img/Glade5.png"/></div>
+
+<p>
+Now that looks more like a web browser! With the UI more or less
+complete, save your work and quit Glade.
+</p>
+
+
+<h2><a id="coding">Start Coding</a></h2>
+
+<p>
+  The code that the project wizard generated for us should look
+  pretty familiar by now:
+</p>
+
+<pre class="code">// project created on 4/16/04 at 2:17 P
+using System;
+using Gtk;
+using Glade;
+
+public class GladeApp
+{
+        public static void Main (string[] args)
+        {
+                new GladeApp (args);
+        }
+
+        public GladeApp (string[] args) 
+        {
+                Application.Init();
+
+                Glade.XML gxml = new Glade.XML (null, "gui.glade", "window1", null);
+                gxml.Autoconnect (this);
+                Application.Run();
+        }
+
+        /* Connect the Signals defined in Glade */
+        public void OnWindowDeleteEvent (object o, DeleteEventArgs args) 
+        {
+                Application.Quit ();
+                args.RetVal = true;
+        }
+}
+</pre>
+
+<p>
+  Now, we'll add to the code. Our changes here are marked in red:
+</p>
+
+<pre class="code">
+...
+using Glade;<font color="Green"> 
+  // Earlier, we added a reference to the Gecko.dll assembly. Noting
+  // here that we are using it lets the compiler know we're using classes
+  // from that namespace, so we can type <b>WebControl</b> directly and not 
+  // have to specify <b>Gecko.WebControl</b> everywhere.</font>
+<font color="Red"><b>using Gecko;</b></font>
+
+public class GladeApp
+{
+...</pre>
+
+
+<p> 
+  As we saw earlier, Glade can automatically bind UI controls to
+  references, provided that indicate that the object is a
+  <b>Glade.Widget</b>, like so:
+</p>
+
+<pre class="code">
+...
+public class GladeApp
+{
+<font color="Green"> // Because frame1 and entry1 are tagged as Widgets
+ // the Glade runtime will bind them to UI controls with the same name</font>
+<font color="Red"><b>[Widget] Frame frame1;
+[Widget] Entry entry1;</b></font>
+...</pre>
+
+<p>
+  Because Glade only includes standard widgets, we couldn't put the
+  browser control into our UI when we created it earlier. Instead,
+  we'll write it in code, starting with a variable to refer to
+  it. Let's call it "web."
+</p>
+
+<pre class="code">
+...
+public class GladeApp
+{
+[Widget] Frame frame1;
+[Widget] Entry entry1;
+
+<font color="Green"> // Define a variable for our web control </font>
+<font color="Red"><b>WebControl web;</b></font>
+...</pre>
+
+
+<p> 
+  Now that we've defined a variable to refer to it, we can actually
+  create the control:
+</p>
+
+<pre class="code">
+...
+Glade.XML gxml = new Glade.XML (null, "gui.glade", "window1", null);
+gxml.Autoconnect (this);
+
+<font color="Green"> // First we create a WebControl, using its default constructor</font>
+<font color="Red"><b>web = new WebControl();</b></font>
+
+<font color="Green"> // Then we ask it to show itself.
+ // This is required because of a Gecko bug, and doesn't actually show the control yet. </font>
+<font color="Red"><b>web.Show();</b></font>
+
+<font color="Green"> // Next, we'll add the web control to our existing frame:</font>
+<font color="Red"><b>frame1.Add(web);</b></font>
+...</pre>
+
+<p> 
+  Now things begin to get really interesting.  Type "entry1." and
+  you'll get a list of possible completions. Select "Activated," the
+  event called when someone types into the text entry and presses
+  Return. We want the entered text to be loaded as a URL, so we'll
+  need to delegate a new method, load_url, to entry1.Activated.
+</p>
+
+<p>
+  C# supports operator overloading like C++ does, so we can do that
+  with a simple shortcut, literally adding the method load_url to the
+  list of delegates that will be fired when
+  <i>entry1.Activated</i> occurs. To do that, we'll just add the
+  following line, right before "Application.Run()."
+</p>
+
+<pre class="code"><font color="Green">
+                 // We can define load_url later</font><font color="Red">
+                 <b>entry1.Activated += load_url;</b></font>
+ </pre>
+
+ <p>
+  Of course, now we have to actually implement the load_url method we
+  delegated to the entry1.Activated event. We'll get the URL from the
+   text entry control. In other languages, such as Java, we'd do that
+   by using a "getter" method, something like
+   <tt>entry1.getText().</tt> In C#, we have a shortcut, again through
+   operator overloads. "Getter" and "setter" methods still exist, but
+   you can also just get or set data as a property of its parent
+   object: entry1.Text, instead of creating a string, setting the
+   string to the value of entry1.getText(), and then using the data.
+   That seems trivial at first, but in more complicated situations it
+   can clarify syntax to a great degree.
+ </p>
+
+<pre class="code">
+...<font color="Green">
+// Connect the Signals defined in Glade </font>
+public void OnWindowDeleteEvent (object o, DeleteEventArgs args) 
+{
+        Application.Quit ();
+        args.RetVal = true;
+}
+<font color="Green">
+// A delegate signature has two parameters.
+
+// The first one is the source object that the event was invoked on
+// and the second is the list of arguments for that event.
+
+// We have it easy here, because we already know where the event comes 
+// from, and don't care much about the arguments either.
+</font>
+<font color="Red">
+void load_url( object source, EventArgs args) {
+    <b>web.LoadUrl(entry1.Text);
+}</b></font>
+...</pre>
+
+
+
+  <p>
+  Save your work and select <b>Run->Compile All</b>.  Since the
+  gui.glade file is listed in the project's resource file list, it
+will be bundled into the executable automatically.
+</p>
+
+<p> 
+After compilation, you should be able to run the application by
+selecting <b>Run->Run</b>. Test it by entering a URL such as
+http://go-mono.com, and pressing Enter to trigger the entry1.Activated
+event. 
+</p>
+<p><i>N.B. If you'd like to run your application from the command line, you'll need to add MOZILLA_HOME to your LD_LIBRARY_PATH</i>
+</p>
+
+<h2><a id="i18n">Internationalization</a></h2>
+
+<p> Because we've used some stock components in our UI, Gnome will
+know how to automatically localize them for us. For example, in a
+terminal, go to the MyBrowser/bin/Debug/ directory, where the browser
+executable was built earlier, and enter the command:</p>
+
+<pre>
+LANG=fr_FR mono MyBrowser.exe
+</pre>
+
+<p>
+  Setting the LANG environment variable to fr_FR (French as spoken
+  in France, as opposed to, say, fr_CA, the Canadian (Quebecois)
+  dialect.)
+</p>
+<p>
+You should see this:
+</p>
+
+ <div align='center'><img src='glade2_img/french.png' /></div>
+
+ <p>For a better example, try this one:</p>
+
+<pre>
+LANG=he_IL mono MyBrowser.exe
+</pre>
+<p>
+he_IL designates Hebrew (he) as used in Israel (IL). Notice how the
+button and general UI order has been inverted to reflect the
+right-to-left writing direction found in Hebrew.
+</p>
+
+<div align='center'><img src='glade2_img/hebrew.png' /></div>
+
+
+
+<h2><a id="todo">Further Exercises</a></h2>
+
+<p>
+  To build on what you've learned so far, try the following exercises:
+</p>
+
+
+<ul>
+  <li> Attach actions to the Forward and Back buttons. You'll need to implement a history queue, and decide how far back it should go.</li>
+  <li> Implement a Refresh button. </li>
+  <li> Implement a Go button, so that entry1.Activated can be triggered without pressing Return.</li>
+  <li> Implement a Home button.</li>
+  <li> Add a status bar. </li>
+  <li> Add exception handling for missing pages (404) and so forth.</li>
+  <li> Add an application menu with an About box.</li>
+</ul>
+
+</body>
+</html>

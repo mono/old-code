@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="utf-8"?>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:monodoc="http://www.go-mono.org/xml/monodoc">
+<head>
+	<title>MySQL Installation on Windows</title>
+
+	<meta name = "DC.Description" content = "Monos Database Framework" />
+	<meta name = "DC.Contributor" content = "Johannes Roith" />
+
+	<link rel="stylesheet" type="text/css" href="../style.css" />
+
+	<meta name = "CVS.English.Version" content = "1.7" />
+</head>
+<body>
+
+<h2>Getting MySQL</h2>
+MySQL is offered as a zip file, containing an executeable
+setup.exe. If you go with the default settings, MySQL, the
+documentation and other tools are installed to <i>c:\mysql\</i>.
+The installation will take 20 MB.
+<h2>Installation</h2>
+On Windows NT/2000/XP MySql will be installed as a service by
+default. It will start, when you reboot, but you can also run it
+manually with 
+<pre class="console">
+net start mysql
+</pre>
+You can stop it with 
+<pre class="console">
+net stop mysql
+</pre>
+<h2>Windows 95/98/ME</h2>
+Note, that you should never use Windows 9x as server or MySQL on
+Windows 9x as production environment.
+<p>If you want to work with 9x for development, that's OK.</p>
+<p>MySQL ships with a small tool, WinMySQLAdmin, that can help you
+to start the MySQL server manually on Windows NT/2000/XP and
+Windows 95/98/ME. You can run it with:</p>
+<pre class="console">
+c:\mysql\bin\winmysqladmin.exe
+</pre>
+
+After getting username and password, the tool will resist as a
+tray icon. It will put itself in the Autorun directory and startup
+the server, when you start your computer, if you click on "my.ini
+Setup/Create Button in Start Menu". 
+
+</body>
+</html>

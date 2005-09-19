@@ -1,0 +1,92 @@
+<?xml version="1.0" encoding="utf-8"?>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:monodoc="http://www.go-mono.org/xml/monodoc">
+<head>
+	<title>Networking - Server</title>
+
+	<meta name = "DC.Description" content =" System.Net" />
+	<meta name = "DC.Contributor" content =" Johannes Roith" />
+
+	<link rel="stylesheet" type="text/css" href="../style.css" />
+</head>
+<body>
+
+
+<h2>Server</h2>
+
+
+
+<pre class="code">
+// Simple Server
+// (C) 2003 by Johannes Roith
+
+using System;
+using System.Net;
+using System.Net.Sockets;
+using System.Text;
+
+class SimpleServer {
+
+	public static void Main() {
+		
+	Byte[] buffer1 = new Byte[256];
+	int cnt;
+
+	string data = "";
+
+	ASCIIEncoding ascii = new ASCIIEncoding();
+
+	TcpListener listener1 = new TcpListener(1000);
+
+	listener1.Start();
+
+
+	try {
+
+		Socket socket1 = listener1.AcceptSocket();
+		while (data.Trim() != "quit") {
+
+			cnt = socket1.Receive(buffer1, buffer1.Length, 0);
+
+			data = ascii.GetString(buffer1, 0, cnt);
+
+			Console.WriteLine(data.Trim());
+		}
+	}
+	catch {}
+
+	listener1.Stop();
+	}
+}
+
+</pre>
+
+<p>Before we take a closer look at the code, run the example.</p>
+
+<p> Then open a new console somewhere and type:</p>
+
+<pre class="console">
+telnet localhost 1000
+</pre>
+
+<p>now type some txt in telnet and press ENTER. You will notice, the text qill appear at the Server Console. To stop the Server, type "quit".</p>
+
+<h2>A closer look</h2>
+
+<p>At first, you have to include the system.Net and System.Net.Sockets namespace.</p>
+
+<p>We will create a buffer ( buffer1) as an array of bytes.</p>
+
+<p>We create a TcpListener on port 1000 and bind it to a socket (socket1).</p>
+
+<p>We can then get data through the method Receive(), where the first argument is the buffer, the second amount of data, we want to read, (this must not be more than the length of the buffer) and the third is from where we want to begin reading the data (we want to begin at the first byte).</p>
+
+
+<p>As the data is in amn arry of bytes, we have to extract it (using ascii.GetString().</p>
+
+<p>e then print the data to the console and reqpeat the process until the trimmed data is "quit".</p>
+
+<p>Ok, that's it for now. The server has - besides it is not very useful - many problems, for example only one Client can connect at the same time. We will later try to make a really useful server.</p>
+
+</body>
+</html>

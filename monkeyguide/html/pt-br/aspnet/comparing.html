@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="utf-8"?>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:monodoc="http://www.go-mono.org/xml/monodoc">
+<head>
+	<title>WebSites and WebServices with ASP.NET</title>
+
+	<meta name = "DC.Description" content = "" />
+	<meta name = "DC.Contributor" content = "Johannes Roith" />
+
+	<link rel="stylesheet" type="text/css" href="../style.css" />
+
+	<meta name = "CVS.English.Version" content = "1.9" />
+</head>
+<body>
+
+<h2>Introduction</h2>
+Could you imagine coding _everything_ in assembler?
+<p>Not?</p>
+<p>Well, I don't feel comfortable as well. But HTML is easy, so how
+should this be comparable? It's comparable in that way, that
+current development tools like Java PHP or plain ASP work directly
+on top of the technical base, without any abstraction layer.</p>
+<p>A calendar does consists of at least 100 lines of HTML with
+programming code mixed in. In ASP.NET a calendar looks like
+this:</p>
+<pre class="code">
+&lt;asp: calendar runat="server"/&gt;
+</pre>
+Cool! But the Browser can't read this. In fact this calendar
+consists of 100 lines, too, but they are encapsulated in an ASP.NET
+control, and for the developer accessible, like HTML tags.
+Developers can of course create their own controls.
+<p>Most WebPages for example have those banners at the top, with
+logo and sometimes navigation in it. This is a typical case for an
+ASP.NET control. So what ASP.NET wants to do, and what makes it
+different from other WebDevelopment environments, is, that HTML tags
+or complex objects, built of several HTML tags are accessible as
+objects.</p>
+
+</body>
+</html>

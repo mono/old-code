@@ -1,0 +1,69 @@
+<?xml version="1.0" encoding="utf-8"?>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:monodoc="http://www.go-mono.org/xml/monodoc">
+<head>
+	<title>ADO.NET</title>
+
+	<meta name = "DC.Description" content = "Monos Database Framework" />
+	<meta name = "DC.Contributor" content = "Johannes Roith" />
+
+	<link rel="stylesheet" type="text/css" href="../style.css" />
+
+	<meta name = "CVS.English.Version" content = "1.12" />
+</head>
+<body>
+<h2>Contents</h2>
+<ul>
+<li>1. <a href="#introduction">Supported Databases</a></li>
+<li>2. <a href="#introduction">Credits</a></li></ul>
+<h2>I. Supported Databases</h2>
+While Microsoft ships ADO.NET providers for MS SQL Server, SqlXML,
+OLE DB and - since 1.1 - ODBC and Oracle in the namespace
+System.Data, Mono is far ahead MS here. Besides the providers in
+System.Data, in the namespace Mono.Data currently holds providers
+for: 
+<ul>
+<li>Firebird | <a href="http://firebird.sf.net">homepage</a> | <a href="dbfirebird.html">about provider...</a></li>
+<li>IBM DB2 | <a href="http://www.ibm.com">homepage</a> | <a href="dbdb2.html">about provider...</a></li>
+<li>Postgres</li>
+<li>MySQL</li>
+<li>SqlLite</li>
+<li>Sybase</li>
+<li>TDS Generic</li></ul>
+Mono's OLE DB implementation, based on LibGDA, has additionally
+support for (and others already listed): 
+<ul>
+<li>MS Access</li></ul>
+If your favorite Database is not listed here, on Unix Systems
+unixodbc can handle these (and others already listed) with
+appropriate Drivers: 
+<ul>
+<li>Easysoft ODBC-ODBC Bridge</li>
+<li>StarSQL</li>
+<li>Informix</li>
+<li>AdabasD</li>
+<li>Empress</li>
+<li>miniSQL</li>
+<li>SQI</li>
+<li>miniSQL</li>
+<li>News Server</li>
+<li>YARD SQL</li>
+<li>RDBMS Linter SQL</li>
+<li>Ovrimos Webbase</li>
+<li>Mimer SQL</li>
+<li>Ingres</li>
+<li>SAPdb</li></ul>
+Also more providers are planned: 
+<ul>
+<li>miniSQL</li>
+<li>SapDB</li>
+<li>BerkeleyDB</li>
+</ul>
+7 Databases direct and 18 indirect should be enough for all your
+database needs. Some of these providers require native libraries,
+but most will be pure C#, as development goes on. All providers
+share a common interface, so it's relatively easy to port from one
+DB to another. [TODO]
+
+</body>
+</html>

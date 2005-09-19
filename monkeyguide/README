@@ -1,0 +1,32 @@
++---------------
+| Introduction |
+----------------
+
+Monkeyguide is a documentation/tutorial/manual about 
+Mono, related class libraries and tools.
+
++------------------------+
+| Translation guidelines |
+-------------------------+
+
+[TODO]
+
++------------------------------+
+| Monkeyguide Style guidelines |
++------------------------------+
+ 
+To keep things consistent, if you want to contribute
+please keep to these guidelines.
+ 
+ 
+1. Always include the style.css stylesheet like that:
+        <link rel="stylesheet" type="text/css" href="style.css" />
+ 
+2. Put code/examples between
+ 
+        <pre class="code">
+        your code here
+        </pre>
+ 
+3. Use the default gtk+2 theme and (optionally) the crux WM theme for
+screenshots

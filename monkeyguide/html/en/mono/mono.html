@@ -1,0 +1,130 @@
+<?xml version="1.0" encoding="utf-8"?>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:monodoc="http://www.go-mono.org/xml/monodoc">
+<head>
+	<title>Mono</title>
+	<meta name = "DC.Contributor" content = "Miguel de Icaza" />
+	<link rel="stylesheet" type="text/css" href="../style.css" />
+</head>
+<body>
+
+<h1> What is Mono?</h1> 
+
+	<p>Mono is a project that delivers an implementation of the .NET
+	Framework (standardized by ECMA) and extensions across a wide
+	range of operating systems and CPU architectures.</p>
+
+	<p>The standards are the ECMA 334 and 335.</p>
+
+	<p>We like this platform, because it helps developing software in
+	less time: reduce the cost of development, improve maintenance
+	and increases the fun, by taking care of the low-level boring
+	details, and allowing programmers to focus on innovation.</p>
+
+	<p>Currently Linux, Unix, Windows, MacOS and other embedded
+	systems as the host OS, and Intel, PPC, Sparc, ARM and HPPA as
+	the host CPUs.</p>
+
+	<p>The effort contains the basics:</p>
+
+	<blockquote>
+	
+		<p>C# compiler, a virtual machine, an advanced code
+		generation engine (for just-in-time compilation and
+		pre-compilation of code).</p>
+
+		<p>Class libraries to support ASP.NET WebForms,
+		WebServices, ADO.NET databases and Windows.Forms</p>
+
+		<p>Mono, Unix or Gnome specific libraries.</p>
+
+	</blockquote>
+
+	<p>But we have not limited ourselves to implementing the
+	Microsoft APIs.  Mono ships with various libraries that
+	exploit features unique to Unix, Gnome and free software.</p>
+
+	<p>Conceptually:</p>
+
+	<img src="two-stacks.png"/>
+
+
+	<p>For instance we developed support for developing desktop
+	applications on Unix/Linux with Gtk+ and Gnome, and we support
+	the latest technologies from Freedesktop.org like Cairo and we
+	also provide Mozilla bindings to create powerful desktop
+	applications that reuse this engine.  All of these greatly
+	simplifies app development on the Linux desktop. </p>
+
+	<p>We support third-party databases (Postgress, MySQL, DB2,
+	Sybase, SqlLite), support for standard compliant directory
+	services (LDAP), and we do not limit ourselves to Xml Schema,
+	we have validators and readers for Relax-NG based systems as
+	well.</p>
+
+	<p>So Mono has not limited itself to providing a path for Windows
+	developers to try out Linux, but we also integrate with the
+	Linux/Unix ecosystem.</p>
+	
+<h2>The Importance of a free implementation of the ECMA standards</h2>
+
+	<p>There are various reasons. </p>
+
+	<p>Today the .NET/ECMA virtual machine is one of the most
+	advanced commercial VMs available, and we want to bring the
+	benefits of this virtual machine to Linux developers.  To
+	allow Linux to compete in the marketplace in terms of
+	programmer productivity.</p>
+
+	<p>It is also key to allow Windows developers to support more
+	than one platform with their codebase, instead of requiring
+	them to rewrite their code to support Linux or the Mac: they
+	can share the engine of their applications, and port their GUI
+	to native libraries: Gtk on Linux, and Cocoa on Mac, while
+	keeping all of their code in C# and obtaining the benefits of
+	this rich VM and all of the class libraries available for
+	them.</p>
+
+	<p>In a way, you get to reuse your knowledge, your experience,
+	your staff to support more platforms, and you can reduce your
+	costs of development.</p>
+
+<h2>State of Mono 1.0</h2>
+
+	<p>Mono 1.0 includes the execution environment, the C#
+	compiler, the pre-compiler, JIT engine and associated
+	libraries.</p>
+
+	<p>The ASP.NET WebForms, ASP.NET Web Services, ADO.NET, Remoting,
+	serialization, DirectoryServices are all functional and being
+	used in a day-to-day basis.  </p>
+
+	<p>The major components that will not ship in the Mono 1.0 time
+	frame are Code Access Security (CAS),  Windows.Forms and
+	EnterpriseServices (which we are not likely to support at any
+	point) nor support for COM components.  </p>
+
+	<p>COM is not wildly used in Unix, only a few apps use it, and
+	when they do, its their own version of COM (Mozilla and
+	OpenOffice), so we have no plans at this point for that.</p>
+
+	<p>People might want to read the Mono Roadmap, which is
+	available in <a
+	href="http://www.go-mono.com/mono-roadmap.html">http://www.go-mono.com/mono-roadmap.html</a>
+	this document contains the precise plans for Mono 1.0 and 1.1
+	and what will be available on each release.</p>
+
+<h2>Mono and Licensing</h2>
+
+	<p>The Mono runtime is licensed under the terms of the GNU
+	LGPL, but it is also available under a commercial license for
+	those who want to add proprietary extensions to the virtual
+	machine.</p>
+
+	<p>The Mono Compilers (C#, VB.NET) are licensed under the
+	terms of the GNU GPL.</p>
+
+	<p>The Mono class libraries are licensed under the terms of
+	the MIT X11 license, which is a very lax open source license.</p>
+</body>
+</html>

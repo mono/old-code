@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="utf-8"?>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:monodoc="http://www.go-mono.org/xml/monodoc">
+<head>
+	<title>Gtk# - Drag-and-drop (DND) - Idle functions</title>
+
+	<meta name ="DC.Description" content ="" />
+	<meta name ="DC.Contributor" content ="Johannes Roith" />
+
+	<link rel="stylesheet" type="text/css" href="../../../style.css" />
+</head>
+<body>
+
+<p>An application capable of GTK+ drag-and-drop first defines and
+sets up the GTK+ widget(s) for drag-and-drop. Each widget can be a
+source and/or destination for drag-and-drop. Note that these GTK+
+widgets must have an associated X Window, check using
+GTK_WIDGET_NO_WINDOW(widget)).</p>
+<p>Source widgets can send out drag data, thus allowing the user to
+drag things off of them, while destination widgets can receive drag
+data. Drag-and-drop destinations can limit who they accept drag
+data from, e.g. the same application or any application (including
+itself).</p>
+<p>Sending and receiving drop data makes use of GTK+ signals.
+Dropping an item to a destination widget requires both a data
+request (for the source widget) and data received signal handler
+(for the target widget). Additional signal handers can be connected
+if you want to know when a drag begins (at the very instant it
+starts), to when a drop is made, and when the entire drag-and-drop
+procedure has ended (successfully or not).</p>
+<p>Your application will need to provide data for source widgets
+when requested, that involves having a drag data request signal
+handler. For destination widgets they will need a drop data
+received signal handler.</p>
+<p>So a typical drag-and-drop cycle would look as follows:</p>
+<p>1. Drag begins.</p>
+<p>2. Drag data request (when a drop occurs).</p>
+<p>3. Drop data received (may be on same or different
+application).</p>
+<p>4. Drag data delete (if the drag was a move).</p>
+<p>5. Drag-and-drop procedure done.</p>
+<p>There are a few minor steps that go in between here and there,
+but we will get into detail about that later.</p>
+
+</body>
+</html>

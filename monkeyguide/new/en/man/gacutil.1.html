@@ -1,0 +1,101 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta name="generator" content=
+"HTML Tidy for Linux/x86 (vers 1st October 2003), see www.w3.org" />
+<title>Manpage of gacutil</title>
+</head>
+<body>
+
+<h1>gacutil</h1>
+
+
+
+<hr />
+<a name="lbAB" id="lbAB"></a>
+<h2>NAME</h2>
+gacutil - Global Asssembly Cache management utility. <a name="lbAC"
+id="lbAC"></a>
+<h2>SYNOPSIS</h2>
+<p><b>gacutil [-user] [command] [options]</b> <a name="lbAD" id=
+"lbAD"></a></p>
+<h2>DESCRIPTION</h2>
+<i>gacutil</i> is a tool used by developers to install assemblies
+into the system Global Assembly Cache (GAC) to become part of the
+assemblies that are available for all applications at runtime.
+<p>Notice that they are not directly available to the compiler, the
+convention is that assemblies must also be placed in a separate
+directory for being accessed to the compiler. This is done with the
+-package directive to gacutil.</p>
+<p>The tool allows for installationl, removal, and listing of the
+contents of the assembly cache.</p>
+<p>The GAC is relative to the Mono installation prefix:
+mono_prefix/lib/mono. <a name="lbAE" id="lbAE"></a></p>
+<h2>FLAGS</h2>
+The "-user" flag enables you to install/remove the assembly into
+the user's assembly cache, as opposed to the global one.
+<p><a name="lbAF" id="lbAF"></a></p>
+<h2>COMMANDS</h2>
+<i>-i path_to_assembly [-f] [-root ROOTDIR] [-package NAME]</i>
+<p>The above installs the assembly into the GAC, use the -f flag to
+force an installation an overwrite anything in there.</p>
+<p>The -package option can be used to also create a directory in in
+prefix/lib/mono with the name NAME, and a symlink is created from
+NAME/assembly_name to the assembly on the GAC. This is used so
+developers can reference a set of libraries at once.</p>
+<p>The -root option is used by developers integrating this with
+automake tools or packaging tools that require a prefix directory
+to be specified. The root represents the "libdir" component of a
+prefix (typically prefix/lib).</p>
+<p><i>-l</i></p>
+<p>Lists the contents of the Global Assembly Cache</p>
+<p><i>-u assembly_name [-root]</i></p>
+<p>The above removes the given assembly name from the Global
+Assembly Cache. As opposed to the install option that takes a
+filename, this takes as an argument the assembly name, which looks
+like this:</p>
+<pre>
+        MyLibrary.Something, version=1.0.0.0, publicKeyToken=xxxx,culture=neutral
+</pre>
+<p>Notice that you can have spaces in the command line, there is no
+need to quote them.</p>
+<p>The removal performs a greedy removal, if you only specifiy one
+component like, "MyLibrary.Something", it will remove all versions
+of the library. <a name="lbAG" id="lbAG"></a></p>
+<h2>FILES</h2>
+On Unix assemblies are loaded from the installation lib directory.
+If you set `prefix' to /usr, the assemblies will be located in
+/usr/lib. On Windows, the assemblies are loaded from the directory
+where mono and mint live.
+<p>/etc/mono/config, ~/.mono/config</p>
+<p>Mono runtime configuration file. See the <a href=
+"http://localhost/cgi-bin/man/man2html?5+mono-config">mono-config</a>(5)
+manual page for more information. <a name="lbAH" id="lbAH"></a></p>
+<h2>WEB SITE</h2>
+Visit: <a href="http://www.go-mono.com">http://www.go-mono.com</a>
+for details <a name="lbAI" id="lbAI"></a>
+<h2>SEE ALSO</h2>
+<b><a href=
+"mcs.1.html">mcs</a>(1),</b><a href="mono.1.html">
+mono</a>(1)
+<hr />
+<a name="index" id="index"></a>
+<h2>Index</h2>
+<dl>
+<dt><a href="#lbAB">NAME</a></dt>
+<dt><a href="#lbAC">SYNOPSIS</a></dt>
+<dt><a href="#lbAD">DESCRIPTION</a></dt>
+<dt><a href="#lbAE">FLAGS</a></dt>
+<dt><a href="#lbAF">COMMANDS</a></dt>
+<dt><a href="#lbAG">FILES</a></dt>
+<dt><a href="#lbAH">WEB SITE</a></dt>
+<dt><a href="#lbAI">SEE ALSO</a></dt>
+</dl>
+<hr />
+This document was created by <a href=
+"http://localhost/cgi-bin/man/man2html">man2html</a>, using the
+manual pages.<br />
+Time: 15:17:19 GMT, June 25, 2004
+</body>
+</html>

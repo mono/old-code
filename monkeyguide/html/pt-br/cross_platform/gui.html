@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="utf-8"?>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:monodoc="http://www.go-mono.org/xml/monodoc">
+<head>
+	<title>Fast Cross-platform GUI</title>
+
+	<meta name ="DC.Description" content ="Monos Database Framework" />
+	<meta name ="DC.Contributor" content ="Johannes Roith" />
+
+	<link rel="stylesheet" type="text/css" href="../style.css" />
+
+	<meta name = "CVS.English.Version" content = "1.9" />
+</head>
+<body>
+
+<h2>Your options</h2>
+
+When it comes to GUI, the .NET Framework shows it's side, that
+makes code unportable. Microsoft does offer one toolkit, called
+System.windows.Forms. It's based on the Windows APIs, which make it
+look native. Mono is implementing it, for compatibility reasons, but
+the implementation is based on wine, a windows emulator, and has
+several disadvantages. First, such an application can be executed
+with mono, but needs a special command, that em,bedds wine. It
+integrates bad with the rest of the system on other OS than
+Windows and certainly will not be ported to all platforms.
+<p>Secondly, and that's even more of a reason, it's not very
+powerful. While Windows programmer might be used to it - unlike
+both Linux desktops GUI toolkits - it does fix widgets with
+coordinates on the form. Gtk#/Qt# use an intelligent boxing-system.
+The user can resize the form - it will be never to small.
+Internationalization is much easier, that way, because if the text
+doesn't fit in the room, the box is automatically made bigger.</p>
+<p>The way Java did take is called Swing. Swing looks consistent
+(ugly) across all platforms. And it is slow. Very slow. In fact
+that's one of the reasons why people think Java is slow in general.
+But we have better options. There are two GUI toolkits out there,
+one used by KDE desktop, one by Gnome. Both are ported to Windows
+and MacOS X. Gtk, the Gnome toolkit, is even ported to Framebuffer
+and BeOS. Gtk# (the C# binding to Gtk) is very fast, currently Qt#
+is even faster. Much faster than Swing.</p>
+
+<p>So, what GUI to take? My personal favorite is Gtk#. Why? The
+Windows and MacOS X versions of Qt are not free, currently. The
+developers are working on porting the X11 code to Windows. But
+currently it is not done. Besides that I'm a Gnome fan, and more
+used to the Gtk+ toolkit.</p>
+
+<h2>II. Learning about things</h2>
+<p>The Mono Handbook has a big section GNOME.NET. Not all of Gnome
+is multi platform. But we have clearly marked, what is. The portable
+part is:</p>
+
+<ul>
+	<li>Gtk - Widgets &amp; Co.</li>
+	<li>Gdk - Drawin</li>
+	<li>Pango - 1st class internationalization support</li>
+	<li>Atk - accessibility support for people with disabilities</li>
+	<li>Glade - Forms, based on XML, that can be changed
+	dynamically</li>
+	<li>Glade Interface Builder - Tools to easily create those XML
+	files.</li></ul>
+	The next step is, to learn about these in
+<a href="../index.html#gnome">chapter 18</a>. 
+
+</body>
+</html>

@@ -1,0 +1,173 @@
+<?xml version="1.0" encoding="utf-8"?>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:monodoc="http://www.go-mono.org/xml/monodoc">
+<head>
+	<title>Gtk# - Miscellaneous Widgets - Tree and List Widget</title>
+
+	<meta name ="DC.Description" content ="" />
+	<meta name ="DC.Contributor" content ="Johannes Roith" />
+
+	<link rel="stylesheet" type="text/css" href="../../../style.css" />
+</head>
+<body>
+<p>The <i>TreeView</i> widget is one of the more complex GTK
+widgets. It is well worth while spending some time studing it
+carefully.</p>
+<p>These widgets are designed around a <i>Model/View/Controller</i>
+design and consists of four major parts:</p>
+<p><b>Gtk.TreeView :</b> the tree view widget</p>
+<p><b>Gtk.TreeViewColumn</b> : the view column</p>
+<p><b>Gtk.CellRenderer</b> : the cell renderers</p>
+<p><b>Gtk.TreeModel</b> : the model interface</p>
+<p>A quick look at the situation boils down to this:</p>
+<p>CellRender -----&gt; TreeViewColumn -----&gt; TreeView</p>
+<p>A cell (CellRenderer) of type <b>text</b>, <b>pixbuf</b> or
+<b>toggle</b> is created and packed into a newly created column
+(TreeViewColumn). The column in turn is appended to the tree
+(TreeView). Data is now added to the tree model (TreeStore or
+ListStore) and the model is associated with the newly created
+tree.</p>
+<br />
+<p>Lets start with a simple example and explain as we go:</p>
+<p>We will create a simple list view with one column and text data
+stored in it. We could of course create multiple columns of
+different types, but for our purposes simple is better.</p>
+<p>Lets create the <i>TreeView</i> widget first. We will assume that
+the parent widget that we are going to pack the <i>TreeView</i>
+widget into has already been created.</p>
+<p>First we create a <i>ListStore</i> for holding the data that our
+list widget is going to display.</p>
+<p>The <i>ListStore</i> object is a list model for use with a
+<i>TreeView</i> widget. It implements the <i>TreeModel</i>
+interface, and consequently, can use all of the methods available
+there. It also implements the <i>TreeSortable</i> interface so it
+can be sorted by the view. Finally, it also implements the tree
+interface.</p>
+<pre class="code">
+ListStore store = null;
+</pre>
+<p>Now we create a new <i>TreeView</i> widget and associate our
+newly created <i>ListStore</i> with the <i>TreeView</i>.</p>
+<pre class="code">
+TreeView tv = new TreeView (store);
+</pre>
+<p>We could also have created a <i>TreeView</i> without the "store"
+and added it to the <i>TreeModel</i> after the fact, like so:</p>
+<pre class="code">
+TreeView tv = new TreeView ();
+tv.Model = store;
+</pre>
+<p>We can now assign attributes to the <i>TreeView</i> such as
+making sure headers are visible, headers are clickable, enable
+search in columns, etc. Headers refer to the column headers that
+appear as buttons and may be tied to such functions as sorting the
+view of column data.</p>
+<pre class="code">
+tv.HeadersVisible = true;
+tv.HeadersClickable = false;
+tv.EnableSearch = false;
+</pre>
+<p>Next we want to add columns to our <i>TreeView</i>. We are going
+to add one column. We get a new <i>TreeViewColumn</i> and a new
+<i>CellRenderer</i> of type <b>text</b> to add to our column.</p>
+<p><i>TreeViewColumn</i> attributes which are added with
+<i>AddAttribute</i> can be used to set such things as column
+colours.</p>
+<pre class="code">
+tv.AppendColumn ("Name", new CellRendererText (), "text", 0);
+</pre>
+<p>Since we are not going to add any more columns to our
+<i>TreeView</i> we can finish by packing it into whatever parent
+widget we have.</p>
+<pre class="code">
+mywidget.Add (tv);
+mywidget.ShowAll ();
+</pre>
+<p>Our next task is to to populate the <i>TreeStore</i> with data.
+Data is stored in the <i>ListStore</i> that was created as the
+first step above. When a <i>ListStore</i> or <i>TreeStore</i> is
+created we tell it what type of data the store is holding for each
+column . In the example below we have one column of type
+string.</p>
+<pre class="code">
+store = new ListStore (typeof (string));
+</pre>
+<p>If we had more than one column we would expand the creation of
+the <i>ListStore</i> to include those columns and their type. Here
+is an example that creates two columns, one of type <b>boolean</b>
+and one of type <b>string</b>.</p>
+<pre class="code">
+store = new ListStore (typeod (boolean), typeof (string));
+</pre>
+Right now lets put some data in our list. We need to get a new
+<i>TreeIter</i>. A <i>TreeIter</i> is used to store the location
+where the data will be stored.  
+<pre class="code">
+TreeIter iter = new TreeIter ();
+</pre>
+Great now lets put four rows of text data into the list.
+Note the order of the arguments to AppendValue
+indicates the column we are writing data to. 
+<pre class="code">
+for (int i = 0; i &lt; 4; i++) {
+  string data = "Data " + i.ToString();
+  iter = store.AppendValues (data);
+}
+</pre>
+<h2>Example</h2>
+<p>Here is a example of what we have just done, complete with a 
+toplevel window.</p>
+<pre class="code">
+namespace Samples {
+        using System;
+        using Gtk;
+
+        public class TreeViewSample {
+                
+                public static void Main (string[] args)
+                {
+                        TreeStore store = null;
+                                                
+                        Application.Init ();
+
+                        store = new TreeStore (typeof(string), typeof (string));
+
+                        TreeIter iter = new TreeIter ();
+                        
+                        for (int i=0; i&lt;10; i++)
+                        {
+                                string name = "Demo " + i.ToString();
+                                string type = "Data " + i.ToString();
+                                iter = store.AppendValues (name, type);
+                        }
+                        
+                        Window win = new Window ("TreeView List Demo");
+                        win.DeleteEvent += delete_cb;
+                        win.SetDefaultSize (400,250);
+
+                        ScrolledWindow sw = new ScrolledWindow ();
+                        win.Add (sw);
+
+                        TreeView tv = new TreeView (store);
+                        tv.HeadersVisible = true;
+
+                        tv.AppendColumn ("Demo", new CellRendererText (), "text", 0);
+                        tv.AppendColumn ("Data", new CellRendererText (), "text", 1);
+
+                        sw.Add (tv);
+                        sw.Show();
+                        win.ShowAll ();
+                        Application.Run ();
+                }
+
+                private static void delete_cb (System.Object o, DeleteEventArgs args)
+                {
+                        Application.Quit ();
+                        args.RetVal = true;
+                }
+        }
+}
+</pre>
+
+</body>
+</html>

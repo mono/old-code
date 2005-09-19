@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="utf-8"?>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:monodoc="http://www.go-mono.org/xml/monodoc">
+<head>
+	<title>Using Mint</title>
+
+	<meta name = "DC.Description" content = "" />
+	<meta name = "DC.Contributor" content = "Johannes Roith" />
+
+	<link rel="stylesheet" type="text/css" href="../style.css" />
+</head>
+<body>
+
+<h2>Contents</h2>
+<ul>
+<li>1. <a href="#simplecompile">Execute</a></li>
+<li>2. <a href="#simplecompile">Options</a></li>
+<li>3. <a href="#simplecompile">Credits</a></li></ul>
+The mint program is an interpreter for ECMA CLI byte<br />
+ codes. It executes the bytecodes contains in program.exe<br />
+ and optionally passes the arguments to it. 
+<h2>Execute</h2>
+When available try to execute with mono. That's up to time times
+faster.
+<p>Dont forget the .exe!</p>
+<pre class="console">
+mint &amp;ltfile.exe&gt;
+</pre>
+<h2>Options</h2>
+The following Generic options are supported: 
+<h3>--help , -h</h3>
+Displays usage instructions. 
+<h3>--config filename</h3>
+Load the specified configuration file instead of the default
+one(s). The default files are /etc/mono/config and ~/.mono/config
+or the file specified in the MONO_CONFIG environment variable, if
+set. 
+<h3>--trace</h3>
+Traces execution showing when methods are entered and left.
+--traceops Traces execution at the instruction level and displays
+the stack contents. --traceclassinit Shows when classes are
+initialized 
+<h3>--noptr</h3>
+Suppresses printing of pointer addresses in trace output. 
+<h3>--profile</h3>
+Performs runtime profiling of the code and displays statistics at
+the end of execution. 
+<h3>--opcode-count</h3>
+Displays the number of opcodes executed. 
+<h3>--dieonex</h3>
+Aborts execution upon hitting an exception. 
+<h3>--debug method</h3>
+Debugs the method whose name is `method'. You can specify the
+method like this: `class:method' or `class::method' 
+<h3>--opcode-count</h3>
+Displays the number of opcodes executed 
+
+</body>
+</html>

@@ -1,0 +1,150 @@
+<?xml version="1.0" encoding="utf-8"?>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:monodoc="http://www.go-mono.org/xml/monodoc">
+<head>
+	<title>XPath tutorial - Descendant axis</title>
+
+	<meta name = "DC.Description" content = "" />
+	<meta name = "DC.Contributor" content = "Johannes Roith" />
+
+	<link rel="stylesheet" type="text/css" href="../style.css" />
+
+	<meta name = "CVS.English.Version" content = "1.5" />
+</head>
+<body>
+The descendant axis contains the descendants of the context node; a
+descendant is a child or a child of a child and so on; thus the
+descendant axis never contains attribute or namespace nodes 
+<h3>Example 1</h3>
+<b>XPath Expression:</b> Select all descendants of document root
+and therefore all elements 
+<pre class="code">
+/descendant::*
+</pre>
+<b>XML:</b> 
+<pre class="code">
+&lt;?xml version="1.0"&gt;
+     &lt;<span class="elementOn">AAA</span>&gt;
+          &lt;<span class="elementOn">BBB</span>&gt;
+               &lt;<span class="elementOn">DDD</span>&gt;
+                    &lt;<span class="elementOn">CCC</span>&gt;
+                         &lt;<span class="elementOn">DDD</span>/&gt;
+                         &lt;<span class="elementOn">EEE</span>/&gt;
+                    &lt;/<span class="elementOn">CCC</span>&gt;
+               &lt;/<span class="elementOn">DDD</span>&gt;
+          &lt;/<span class="elementOn">BBB</span>&gt;
+          &lt;<span class="elementOn">CCC</span>&gt;
+               &lt;<span class="elementOn">DDD</span>&gt;
+                    &lt;<span class="elementOn">EEE</span>&gt;
+                         &lt;<span class="elementOn">DDD</span>&gt;
+                              &lt;<span class="elementOn">FFF</span>/&gt;
+                         &lt;/<span class="elementOn">DDD</span>&gt;
+                    &lt;/<span class="elementOn">EEE</span>&gt;
+               &lt;/<span class="elementOn">DDD</span>&gt;
+          &lt;/<span class="elementOn">CCC</span>&gt;
+     &lt;/<span class="elementOn">AAA</span>&gt;
+</pre>
+<h3>Example 2</h3>
+<p><b>XPath Expression:</b> Select all descendants of /AAA/BBB</p>
+<pre class="code">
+/AAA/BBB/descendant::*
+</pre>
+<b>XML:</b> 
+<pre class="code">
+&lt;?xml version="1.0"&gt;
+     &lt;<span class="element">AAA</span>&gt;
+          &lt;<span class="element">BBB</span>&gt;
+               &lt;<span class="elementOn">DDD</span>&gt;
+                    &lt;<span class="elementOn">CCC</span>&gt;
+                         &lt;<span class="elementOn">DDD</span>/&gt;
+                         &lt;<span class="elementOn">EEE</span>/&gt;
+                    &lt;/<span class="elementOn">CCC</span>&gt;
+               &lt;/<span class="elementOn">DDD</span>&gt;
+          &lt;/<span class="element">BBB</span>&gt;
+          &lt;<span class="element">CCC</span>&gt;
+               &lt;<span class="element">DDD</span>&gt;
+                    &lt;<span class="element">EEE</span>&gt;
+                         &lt;<span class="element">DDD</span>&gt;
+                              &lt;<span class="element">FFF</span>/&gt;
+                         &lt;/<span class="element">DDD</span>&gt;
+                    &lt;/<span class="element">EEE</span>&gt;
+               &lt;/<span class="element">DDD</span>&gt;
+          &lt;/<span class="element">CCC</span>&gt;
+     &lt;/<span class="element">AAA</span>&gt;
+</pre>
+<h3>Example 3</h3>
+<p><b>XPath Expression:</b> Select all elements which have CCC
+among its ancestors</p>
+<pre class="code">
+//CCC/descendant::*
+</pre>
+<b>XML:</b> 
+<pre class="code">
+&lt;?xml version="1.0"&gt;
+     &lt;<span class="element">AAA</span>&gt;
+          &lt;<span class="element">BBB</span>&gt;
+               &lt;<span class="element">DDD</span>&gt;
+                    &lt;<span class="element">CCC</span>&gt;
+                         &lt;<span class="elementOn">DDD</span>/&gt;
+                         &lt;<span class="elementOn">EEE</span>/&gt;
+                    &lt;/<span class="element">CCC</span>&gt;
+               &lt;/<span class="element">DDD</span>&gt;
+          &lt;/<span class="element">BBB</span>&gt;
+          &lt;<span class="element">CCC</span>&gt;
+               &lt;<span class="elementOn">DDD</span>&gt;
+                    &lt;<span class="elementOn">EEE</span>&gt;
+                         &lt;<span class="elementOn">DDD</span>&gt;
+                              &lt;<span class="elementOn">FFF</span>/&gt;
+                         &lt;/<span class="elementOn">DDD</span>&gt;
+                    &lt;/<span class="elementOn">EEE</span>&gt;
+               &lt;/<span class="elementOn">DDD</span>&gt;
+          &lt;/<span class="element">CCC</span>&gt;
+     &lt;/<span class="element">AAA</span>&gt;
+</pre>
+<h3>Example 4</h3>
+<p><b>XPath Expression:</b> Select elements DDD which have CCC
+among its ancestors</p>
+<pre class="code">
+//CCC/descendant::DDD
+</pre>
+<b>XML:</b> 
+<pre class="code">
+&lt;?xml version="1.0"&gt;
+     &lt;<span class="element">AAA</span>&gt;
+          &lt;<span class="element">BBB</span>&gt;
+               &lt;<span class="element">DDD</span>&gt;
+                    &lt;<span class="element">CCC</span>&gt;
+                         &lt;<span class="elementOn">DDD</span>/&gt;
+                         &lt;<span class="element">EEE</span>/&gt;
+                    &lt;/<span class="element">CCC</span>&gt;
+               &lt;/<span class="element">DDD</span>&gt;
+          &lt;/<span class="element">BBB</span>&gt;
+          &lt;<span class="element">CCC</span>&gt;
+               &lt;<span class="elementOn">DDD</span>&gt;
+                    &lt;<span class="element">EEE</span>&gt;
+                         &lt;<span class="elementOn">DDD</span>&gt;
+                              &lt;<span class="element">FFF</span>/&gt;
+                         &lt;/<span class="elementOn">DDD</span>&gt;
+                    &lt;/<span class="element">EEE</span>&gt;
+               &lt;/<span class="elementOn">DDD</span>&gt;
+          &lt;/<span class="element">CCC</span>&gt;
+     &lt;/<span class="element">AAA</span>&gt;
+</pre>
+<b>C# code:</b> 
+<pre class="code">
+<b>// BasicSyntax - /xpath/basicsyntax.cs
+// Copyright 2003 by Johannes Roith</b>
+
+using System;
+using System.Xml.XPath;
+
+class BasicSyntax {
+        static void Main() {
+                
+        }
+
+}
+</pre>
+
+</body>
+</html>

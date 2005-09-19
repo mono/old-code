@@ -1,0 +1,134 @@
+<?xml version="1.0" encoding="utf-8"?>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:monodoc="http://www.go-mono.org/xml/monodoc">
+<head>
+	<title>The CanvasLine Item</title>
+
+	<meta name = "DC.Description" content = "" />
+	<meta name = "DC.Contributor" content = "Johannes Roith" />
+
+	<link rel="stylesheet" type="text/css" href="../../../style.css" />
+
+	<meta name = "CVS.English.Version" content = "1.4" />
+</head>
+<body>
+
+Using the CanvasLine you can draw a simple line on th screen - not
+much more. As always we must create the Object first. 
+<pre class="code">
+CanvasLine line1 = new CanvasLine(root);
+</pre>
+The first argument "root" is the Canvas root as created in the
+first example. Now as the CanvasText has been created we can use
+it. 
+<p>Unfortunately it is not that comfortable to position a line,
+than it is to set the position of the text.</p>
+<p>The coordinates must be contained in an array of the type
+double.</p>
+<pre class="code">
+double[] points = {0, 10, 0, 100};
+</pre>
+This would mean the first point has the coordinates (0/10), the
+second one has (0/100). 
+<p>The points array can not be directly assigned to the Points
+property, because it expects a CanvasPoints object.</p>
+<p>The first step is to define the coordinates, where the text
+should be placed. This can be done easily by using the X / Y
+properties.</p>
+<pre class="code">
+text1.X = int x_coordinate;
+text1.Y = int y_coordinate;
+</pre>
+It is important to know, that those coordinates do not describe the
+top-left corner of the text, but the center. 
+<p>It is just as important to define a color for your text. If you
+don't do this, the text will not display on the screen. For
+consistency with other items the Color is called FillColor.</p>
+<pre class="code">
+text1.FillColor = string color;
+</pre>
+The color can be either a name like "red", "green", "black" or a
+HTML-like color code. 
+<p>Often used examples for color-codes are:</p>
+<pre class="code">
+#000000 - black
+#ffffff - white
+        - red
+</pre>
+Last, but not least the most important property is of course the
+text itself: 
+<pre class="code">
+text1.Text = string text;
+</pre>
+<p>After that the text must be shown using Show().</p>
+<p>That's it.</p>
+<p><img src="canvas3.png" border="0" /></p>
+<pre class="code">
+using System;
+using Gtk;
+using GtkSharp;
+using Gnome;
+
+class CanvasTest {
+
+        public CanvasTest() {
+
+
+                Application.Init();
+
+                Window window1 = new Window("Hello Canvas!");
+                window1.DeleteEvent += new DeleteEventHandler (delete_event);
+
+                Canvas canvas1 = Canvas.NewAa();
+
+                int Width = 100;
+                int Height = 100;
+
+                canvas1.SetScrollRegion(0, 0, Width, Height);
+                canvas1.WidthRequest = Width;
+                canvas1.HeightRequest = Height;
+                CanvasGroup root = canvas1.Root();
+
+                // Draw Background
+
+                CanvasRect background = new CanvasRect(root);
+                background.X1 = 0;
+                background.X2 = Width;
+                background.Y1 = 0;
+                background.Y2 = Height;
+                background.FillColor = "#ffffff";
+                background.Show();
+
+                // Here we go
+
+                CanvasText hello = new CanvasText(root);
+                hello.X = 40;
+                hello.Y = 10;
+                hello.FillColor = "#000000";
+                hello.Text = "Hello, Canvas!";
+                hello.Show();
+
+                canvas1.Show();
+
+                window1.Add(canvas1);
+                window1.ShowAll();
+                Application.Run();
+
+        }
+
+        public static void Main()
+        {
+                new CanvasTest();
+        }
+
+        void delete_event (object obj, DeleteEventArgs args)
+        {
+                Application.Quit ();
+        }
+
+}
+
+</pre>
+
+</body>
+</html>

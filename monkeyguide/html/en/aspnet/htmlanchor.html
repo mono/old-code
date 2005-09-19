@@ -1,0 +1,41 @@
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<title>The Mono Handbook - Programming with ASP.NET - HTML
+controls</title>
+<link rel="stylesheet" type="text/css" href="../style.css" />
+</head>
+<body>
+<div class="topframe" width="100%">
+<b>HTMLAnchor</b></div>
+<h1>HTMLAnchor</h1>
+by Johannes Roith
+(<a href="mailto:johannes@jroith.de">johannes@jroith.de</a>) 
+<h2>Description</h2>
+Use the HtmlAnchor control to programmatically control an
+<b>&lt;a&gt;</b> HTML element. The <b>&lt;a&gt;</b> HTML element
+allows you to create a hyperlink that allows you to move to another
+location on the page or to another Web page. 
+<p>The HtmlAnchor control must be well formed with an opening and
+closing tag. You can specify the caption for the control by placing
+text between the opening and closing tags. This server control is
+commonly used to dynamically modify the attributes and properties
+of the <a>element, display hyperlinks from a data source, and
+control events to generate HtmlAnchor controls dynamically.</a></p>
+<h2><a>Example 1</a></h2>
+<pre class="code">
+void Page_Load(object sender, EventArgs e) 
+{ 
+   anchor1.HRef = mainpage;
+}
+
+&lt;form runat="server"&gt;
+
+&amp;lta id="anchor1" runat="server"&gt;Link to Main page&lt;/a&gt;
+
+&lt;/form&gt;
+</pre>
+<div class="copyright">The Mono Handbook -
+<a href="http://www.go-mono.org">&#169; Copyright 2002 by Johannes
+Roith</a></div>
+</body>
+</html>

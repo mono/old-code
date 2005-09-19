@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="utf-8"?>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:monodoc="http://www.go-mono.org/xml/monodoc">
+<head>
+	<title>Gtk# - Timeouts</title>
+
+	<meta name ="DC.Description" content ="" />
+	<meta name ="DC.Contributor" content ="Johannes Roith" />
+
+	<link rel="stylesheet" type="text/css" href="../../../style.css" />
+</head>
+<body>
+<p>You may be wondering how you make GTK do useful work when in
+gtk_main. Well, you have several options. Using the following
+function you can create a timeout function that will be called
+every "interval" milliseconds.</p>
+<pre class="code">
+uint GLib.Timeout.Add( uint     interval,
+                       TimeoutHandler);
+</pre>
+The first argument is the number of milliseconds between calls to
+your function, and the second argument is the function you wish to have
+called. The return value is an integer "tag" which may be used to stop the
+timeout by calling: 
+<pre class="code">
+bool GLib.Source.Remove( uint tag );
+</pre>
+You may also stop the timeout function by returning false
+from your callback function. Obviously this means if you want your
+function to continue to be called, it should return true. 
+<p>The declaration of your callback should look something like
+this:</p>
+<pre class="code">
+bool timeout_callback();
+</pre>
+
+</body>
+</html>

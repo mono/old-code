@@ -1,0 +1,100 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta name="generator" content=
+"HTML Tidy for Linux/x86 (vers 1st October 2003), see www.w3.org" />
+<title>Manpage of wsdl</title>
+</head>
+<body>
+
+<h1>wsdl</h1>
+Section: User Commands (1)<br />
+
+
+<hr />
+<a name="lbAB" id="lbAB"></a>
+<h2>NAME</h2>
+wsdl - Mono's Web Service Proxy Generator <a name="lbAC" id=
+"lbAC"></a>
+<h2>SYNOPSIS</h2>
+<p><b>wsdl</b> [options] [path | url] <a name="lbAD" id=
+"lbAD"></a></p>
+<h2>DESCRIPTION</h2>
+<i>wsdl</i> is a tool for generating proxy classes that can be used
+to access to web services. The tool reads a WSDL document from the
+provided path or url, and downloads referenced schemas or other
+WSDL documents if needed.
+<p><a name="lbAE" id="lbAE"></a></p>
+<h2>OPTIONS</h2>
+The following options are available:
+<dl compact="compact">
+<dt><i>-appsettingurlkey:key -urlkey:key</i></dt>
+<dd>Specifies that the url for the services should be read from the
+&lt;appsettings&gt; section of the configuration file, using the
+provided key.</dd>
+<dt><i>-appsettingbaseurl:url, -baseurl:url</i></dt>
+<dd>Specifies a base URL for the service. The final URL will be
+constructed by combining this value with the URL read from the
+<i>-appsettingurlkey</i> option, and the <i>location</i> attribute
+specified in the WSDL document.</dd>
+<dt><i>-language:language, -l</i></dt>
+<dd>Language of the code to generate. It can be CS (default) or
+VB.</dd>
+<dt><i>-namespace:name, -n:name</i></dt>
+<dd>The namespace of the generated classes. If none is specified,
+the default namespace is used.</dd>
+<dt><i>-out:filename, -o:filename</i></dt>
+<dd>The target file for generated code.</dd>
+<dt><i>-protocol:protocol, -p:protocol</i></dt>
+<dd>The protocol for which to generate code. It can be Soap
+(default), HttpGet or HttpPost.</dd>
+<dt><i>-sample:METHOD</i></dt>
+<dd>This will display XML request and reply of the sample
+invocations to that SOAP message. You can use the -protocol: option
+to render the message in different forms.</dd>
+<dt><i>-server</i></dt>
+<dd>Generate a server skeleton instead of a client proxy.</dd>
+<dt><i>-nologo</i></dt>
+<dd>Supress the startup logo.</dd>
+<dt><i>-u:username, -user:username</i></dt>
+<dd>The user name to use when connecting to the server.</dd>
+<dt><i>-p:password, -password:password</i></dt>
+<dd>The password to use when connecting to the server.</dd>
+<dt><i>-d:domain, -domain:domain</i></dt>
+<dd>The domain to use when connecting to the server.</dd>
+</dl>
+<p><a name="lbAF" id="lbAF"></a></p>
+<h2>AUTHORS</h2>
+Lluis Sanchez Gual (<a href=
+"mailto:lluis@ximian.com">lluis@ximian.com</a>)
+<p><a name="lbAG" id="lbAG"></a></p>
+<h2>LICENSE</h2>
+wsdl is released under the terms of the GNU GPL.
+<p><a name="lbAH" id="lbAH"></a></p>
+<h2>SEE ALSO</h2>
+<a href=
+"disco.1.html">disco</a>(1),
+<a href=
+"soapsuds.1.html">soapsuds</a>(1),
+<a href="mono.1.html">mono</a>(1),
+<a href="mcs.1.html">mcs</a>(1)
+<hr />
+<a name="index" id="index"></a>
+<h2>Index</h2>
+<dl>
+<dt><a href="#lbAB">NAME</a></dt>
+<dt><a href="#lbAC">SYNOPSIS</a></dt>
+<dt><a href="#lbAD">DESCRIPTION</a></dt>
+<dt><a href="#lbAE">OPTIONS</a></dt>
+<dt><a href="#lbAF">AUTHORS</a></dt>
+<dt><a href="#lbAG">LICENSE</a></dt>
+<dt><a href="#lbAH">SEE ALSO</a></dt>
+</dl>
+<hr />
+This document was created by <a href=
+"http://localhost/cgi-bin/man/man2html">man2html</a>, using the
+manual pages.<br />
+Time: 15:17:20 GMT, June 25, 2004
+</body>
+</html>

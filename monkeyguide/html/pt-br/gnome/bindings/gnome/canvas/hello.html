@@ -1,0 +1,302 @@
+<?xml version="1.0" encoding="utf-8"?>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:monodoc="http://www.go-mono.org/xml/monodoc">
+<head>
+	<title>Hello Canvas!</title>
+
+	<meta name = "DC.Description" content = "" />
+	<meta name = "DC.Contributor" content = "Johannes Roith" />
+
+	<link rel="stylesheet" type="text/css" href="../../../style.css" />
+
+	<meta name = "CVS.English.Version" content = "1.6" />
+</head>
+<body>
+The Gnome Canvas is the part of Gnome, that I was not able to find
+a really complete tutorial about, so this is really needed as the
+Canvas is a nice piece of software to code with. 
+<p>In my experience it is far superior to the System.Windows.Forms
+way of Drawing.</p>
+<p>So, here we go..</p>
+<h2>Hello Canvas, first try</h2>
+Our first application will do nothing more than print a nice "Hello
+Canvas!" on the screen. 
+<p>The Canvas can be created with a simple</p>
+<pre class="code">
+Canvas canvas1 = new Canvas();
+</pre>
+Next, we will define the Size of the Canvas. The value will be
+needed several times, so we create two variables... 
+<pre class="code">
+int Width = 100;
+int Height = 100;
+</pre>
+... and use them. 
+<pre class="code">
+canvas1.SetScrollRegion(0, 0, Width, Height);
+canvas1.WidthRequest = Width;
+canvas1.HeightRequest = Height;
+</pre>
+Each Canvas needs a root... 
+<pre class="code">
+CanvasGroup root = canvas1.Root();
+</pre>
+Now we are ready. With the Canvas. But there is no text,yet.
+<p>So let me introduce the first CanvasItem: the CanvasText.</p>
+<p>Each Item has several methods and properties, often X and Y
+coordinate, a FillColor, somtimes also an OutlineColor. The
+CanvasText also has the Text property.</p>
+<pre class="code">
+CanvasText hello = new CanvasText(root);
+hello.X = 0;
+hello.Y = 0;
+hello.FillColor = "#000000";
+hello.Text = "Hello, Canvas!";
+hello.Show();
+</pre>
+So please have a look at your first canvas code: 
+<pre class="code">
+using System;
+using Gtk;
+using GtkSharp;
+using Gnome;
+
+class CanvasTest {
+
+        public CanvasTest() {
+
+
+                Application.Init();
+
+                Window window1 = new Window("Hello Canvas!");
+                window1.DeleteEvent += new DeleteEventHandler (delete_event);
+<b>               Canvas canvas1 = new Canvas();
+
+                int Width = 100;
+                int Height = 100;
+
+                canvas1.SetScrollRegion(0, 0, Width, Height);
+                canvas1.WidthRequest = Width;
+                canvas1.HeightRequest = Height;
+                CanvasGroup root = canvas1.Root();
+
+                // Here we go
+
+                CanvasText hello = new CanvasText(root);
+                hello.X = 0;
+                hello.Y = 0;
+                hello.FillColor = "#000000";
+                hello.Text = "Hello, Canvas!";
+                hello.Show();
+
+                canvas1.Show();
+</b>
+                window1.Add(canvas1);
+                window1.ShowAll();
+                Application.Run();
+
+        }
+
+        public static void Main()
+        {
+                new CanvasTest();
+        }
+
+        void delete_event (object obj, DeleteEventArgs args)
+        {
+                Application.Quit ();
+        }
+
+}
+</pre>
+We can compile this with: 
+<pre class="console">
+mcs -r gtk-sharp.dll -r glib-sharp.dll -r gnome-sharp.dll hello.cs
+</pre>
+Now run it and you will see...<br />
+.. something messy as show here :( 
+<p><img src="canvas1.png" border="0" /></p>
+<h2>Hello, Canvas, second try</h2>
+Ok, this was disappointing. But the fix is very easy. 
+<p>It seams like the coordinates (X/Y) apply to the center of the
+text.</p>
+<p>For now, we can simply change the coordinates:</p>
+<pre class="code">
+hello.X = 40;
+hello.Y = 10;
+</pre>
+Change this a compile once again. 
+<p><img src="canvas2.png" border="0" /></p>
+<h2>Hello Canvas, with Background</h2>
+This was already very nice, but in most cases you will also require
+a background (e.g. white), to make the information more readable. 
+<p>The bad news is, GnomeCanvas has no Background property.</p>
+<p>Not that nice, but working is to make a white background, by
+drawing a white Rectangle. We create the CanvasRect object.</p>
+<pre class="code">
+// Draw Background
+
+CanvasRect background = new CanvasRect(root);
+</pre>
+And then set the coordinates to (0/0) and the Width and Height of
+our Canvas. The FillColor is specified as Hex Color Code (you maybe
+know this from HTML). 
+<pre class="code">
+background.X1 = 0;
+background.X2 = Width;
+background.Y1 = 0;
+background.Y2 = Height;
+background.FillColor = "#ffffff";
+background.Show();
+</pre>
+You probably want the complete example: 
+<pre class="code">
+using System;
+using Gtk;
+using GtkSharp;
+using Gnome;
+
+class CanvasTest {
+
+        public CanvasTest() {
+
+
+                Application.Init();
+
+                Window window1 = new Window("Hello Canvas!");
+                window1.DeleteEvent += new DeleteEventHandler (delete_event);
+<b>               Canvas canvas1 = new Canvas();
+
+                int Width = 100;
+                int Height = 100;
+
+                canvas1.SetScrollRegion(0, 0, Width, Height);
+                canvas1.WidthRequest = Width;
+                canvas1.HeightRequest = Height;
+                CanvasGroup root = canvas1.Root();
+
+                // Draw Background
+
+                CanvasRect background = new CanvasRect(root);
+                background.X1 = 0;
+                background.X2 = Width;
+                background.Y1 = 0;
+                background.Y2 = Height;
+                background.FillColor = "#ffffff";
+                background.Show();
+
+                // Here we go
+
+                CanvasText hello = new CanvasText(root);
+                hello.X = 40;
+                hello.Y = 10;
+                hello.FillColor = "#000000";
+                hello.Text = "Hello, Canvas!";
+                hello.Show();
+
+                canvas1.Show();
+</b>
+                window1.Add(canvas1);
+                window1.ShowAll();
+                Application.Run();
+
+        }
+
+        public static void Main()
+        {
+                new CanvasTest();
+        }
+
+        void delete_event (object obj, DeleteEventArgs args)
+        {
+                Application.Quit ();
+        }
+
+}
+</pre>
+<h2>Hello Canvas, antialiased</h2>
+OK, this looks pretty nice, but it could be even nicer if it would
+be anti-aliased. I strongly encourage you to enable antialiasing
+whenever possible, otherwise some Items simply look awful. 
+<p>You might have discovered or guessed the Aa property. Sadly this
+is read-only. You will have to create the Canvas differently.
+Instead of</p>
+<pre class="code">
+Canvas  canvas1 = new Canvas();
+</pre>
+you use: 
+<pre class="code">
+Canvas canvas1 = Canvas.NewAa();
+</pre>
+<h2>Hello Canvas, final</h2>
+Here is the final code and a nice screenshot: 
+<p><img src="canvas3.png" border="0" /></p>
+<pre class="code">
+using System;
+using Gtk;
+using GtkSharp;
+using Gnome;
+
+class CanvasTest {
+
+        public CanvasTest() {
+
+
+                Application.Init();
+
+                Window window1 = new Window("Hello Canvas!");
+                window1.DeleteEvent += new DeleteEventHandler (delete_event);
+<b>               Canvas canvas1 = Canvas.NewAa();
+
+                int Width = 100;
+                int Height = 100;
+
+                canvas1.SetScrollRegion(0, 0, Width, Height);
+                canvas1.WidthRequest = Width;
+                canvas1.HeightRequest = Height;
+                CanvasGroup root = canvas1.Root();
+
+                // Draw Background
+
+                CanvasRect background = new CanvasRect(root);
+                background.X1 = 0;
+                background.X2 = Width;
+                background.Y1 = 0;
+                background.Y2 = Height;
+                background.FillColor = "#ffffff";
+                background.Show();
+
+                // Here we go
+
+                CanvasText hello = new CanvasText(root);
+                hello.X = 40;
+                hello.Y = 10;
+                hello.FillColor = "#000000";
+                hello.Text = "Hello, Canvas!";
+                hello.Show();
+
+                canvas1.Show();
+</b>
+                window1.Add(canvas1);
+                window1.ShowAll();
+                Application.Run();
+
+        }
+
+        public static void Main()
+        {
+                new CanvasTest();
+        }
+
+        void delete_event (object obj, DeleteEventArgs args)
+        {
+                Application.Quit ();
+        }
+
+}
+</pre>
+That's it. In the next chapters I will introduce all available
+Items and then create some example applications. 
+
+</body>
+</html>

@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="utf-8"?>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:monodoc="http://www.go-mono.org/xml/monodoc">
+<head>
+	<title>Introduction</title>
+
+	<meta name = "DC.Description" content = "Introduction" />
+	<meta name = "DC.Contributor" content = "Johannes Roith" />
+
+	<link rel="stylesheet" type="text/css" href="../style.css" />
+
+	<meta name = "CVS.English.Version" content = "1.9" />
+</head>
+<body>
+
+The .NET framework ships with a namespace, System.Data, that is not
+part of the ECMA class library. Mono has implemented it however.
+This namespace is also often called with it's marketing term
+"ADO.NET". The name comes from ADO, the ActiveX Data Objects,
+Microsoft's latest Database layer. ADO.NET builds on top of it,
+partially. The mono implementation does not. 
+
+<p>ADO.NET is an API to access Data sources of any kind, but
+especially relational Databases.</p>
+
+<p>Microsoft ships the .NET Framework with Database providers for
+MS SQL Server, Oracle, ODBC, Ole-DB and XML.<br />
+Mono does ship all of these, but additionally native providers for
+MySQL, PostgreSQL, and IBM DB2.</p>
+
+<p>Those Databases not available directly can be accessed through
+either ODBC or OLE-DB. Both are implemented on Windows and Unix
+systems. All those databases share a common interface, that makes
+them easy to use, and speeds up porting. There is also a XML
+provider, that enables you to access XML files as a database.</p>
+
+<p>This chapter will look at the databases available, differences
+in the providers, how to install &amp; program with it and will
+give you some examples.</p>
+
+</body>
+</html>

@@ -1,0 +1,118 @@
+<?xml version="1.0" encoding="utf-8"?>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:monodoc="http://www.go-mono.org/xml/monodoc">
+<head>
+	<title>Gtk# - Container Wdigets - Aspect Frames</title>
+
+	<meta name ="DC.Description" content ="" />
+	<meta name ="DC.Contributor" content ="Johannes Roith" />
+
+	<link rel="stylesheet" type="text/css" href="../../../style.css" />
+
+	<meta name = "CVS.English.Version" content = "1.11" />
+</head>
+<body>
+
+The aspect frame widget is like a frame
+widget, except that it also enforces the aspect ratio (that is, the
+ratio of the width to the height) of the child widget to have a
+certain value, adding extra space if necessary. This is useful, for
+instance, if you want to preview a larger image. The size of the
+preview should vary when the user resizes the window, but the
+aspect ratio needs to always match the original image.
+<p>To create a new aspect frame use:</p>
+<pre class="code">
+AspectFrame aspectframe1 = new AspectFrame( string label,
+                                            float       xalign,
+                                            float       yalign,
+                                            float       ratio,
+                                            bool       
+obey_child);
+</pre>xalign and yalign specify alignment as with Alignment
+widgets. If obey_child is "true", the aspect ratio of a child
+widget will match the aspect ratio of the ideal size it requests.
+Otherwise, it is given by ratio.
+<p>To change the options of an existing aspect frame, you can
+use:</p>
+<pre class="code">
+aspectframe1.Set(          float          xalign,
+                           float          yalign,
+                           float          ratio,
+                           bool           obey_child);
+</pre>As an example, the following program uses an AspectFrame to
+present a drawing area whose aspect ratio will always be 2:1, no
+matter how the user resizes the top-level window.
+<p>
+<img src="aspectframe.png" border="0" />
+</p>
+<pre class="code">
+// aspectframe.cs - Gtk# Tutorial example
+//
+// Author: Johannes Roith &gt;johannes@jroith.de&lt;
+//
+// (c) 2002 Johannes Roith
+
+namespace GtkSharpTutorial {
+
+        using Gtk;
+        using GtkSharp;
+        using System;
+        using System.Drawing;
+
+
+        public class aspectframe
+        {
+
+                static void delete_event (object obj,
+DeleteEventArgs args)
+                {
+                        Application.Quit();
+                }
+
+                public static void  Main(string[] args)
+                {
+
+                        Application.Init ();
+
+                        /* Create new window */
+                        Window window = new Window ("Aspect
+Frame");
+                        window.BorderWidth = 10;
+
+                        window.DeleteEvent += new
+DeleteEventHandler (delete_event);
+
+                        /* Create an aspect_frame and add it to our
+toplevel window */
+   
+                        AspectFrame aspect_frame = new
+AspectFrame("2x1", (float)0.5,(float)0.5, 2, false);
+   
+                        window.Add(aspect_frame);
+                        aspect_frame.Show();
+   
+                        /* Now add a child widget to the aspect
+frame */
+  
+                        DrawingArea  drawing_area = new
+DrawingArea();
+   
+                        /* Ask for a 200x200 window, but the
+AspectFrame will give us a 200x100
+                         * window since we are forcing a 2x1 aspect
+ratio */
+                        drawing_area.SetSizeRequest (200, 200);
+                        aspect_frame.Add(drawing_area);
+                        drawing_area.Show();
+
+                        window.ShowAll();
+   
+                        Application.Run();
+                }
+        }
+
+}
+</pre>
+
+</body>
+</html>

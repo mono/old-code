@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="utf-8"?>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:monodoc="http://www.go-mono.org/xml/monodoc">
+<head>
+	<title>Gtk# - Widget Overview - Casting</title>
+
+	<meta name ="DC.Description" content ="" />
+	<meta name ="DC.Contributor" content ="Johannes Roith" />
+
+	<link rel="stylesheet" type="text/css" href="../../../style.css" />
+
+	<meta name = "CVS.English.Version" content = "1.7" />
+</head>
+<body>
+[NOTE: If I think about it this chapter is oboloete, is it?] 
+<p>[REMOVE THIS (?)]</p>
+<p>You'll notice as you go on that GTK uses a type casting system.
+This is always done using macros that both test the ability to cast
+the given item, and perform the cast. Some common ones you will see
+are:</p>
+<pre class="code">
+  G_OBJECT (object)
+  GTK_WIDGET (widget)
+  GTK_OBJECT (object)
+  GTK_SIGNAL_FUNC (function)
+  GTK_CONTAINER (container)
+  GTK_WINDOW (window)
+  GTK_BOX (box)
+</pre>
+These are all used to cast arguments in functions. You'll see them
+in the examples, and can usually tell when to use them simply by
+looking at the function's declaration. As you can see below in the
+class hierarchy, all GtkWidgets are derived from the GObject base
+class. This means you can use a widget in any place the function
+asks for an object - simply use the G_OBJECT() macro. For example: 
+<pre class="code">
+g_signal_connect( G_OBJECT (button), "clicked",
+                  G_CALLBACK (callback_function), callback_data);
+</pre>
+This casts the button into an object, and provides a cast for the
+function pointer to the callback. Many widgets are also containers.
+If you look in the class hierarchy below, you'll notice that many
+widgets derive from the Container class. Any one of these widgets
+may be used with the GTK_CONTAINER macro to pass them to functions
+that ask for containers. Unfortunately, these macros are not
+extensively covered in the tutorial, but I recommend taking a look
+through the GTK header files or the GTK API reference manual. It
+can be very educational. In fact, it's not difficult to learn how a
+widget works just by looking at the function declarations. 
+
+</body>
+</html>

@@ -1,0 +1,147 @@
+<?xml version="1.0" encoding="utf-8"?>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:monodoc="http://www.go-mono.org/xml/monodoc">
+<head>
+	<title>Classes - Class Basics</title>
+
+	<meta name ="DC.Description" content ="" />
+	<meta name ="DC.Contributor" content ="Johannes Roith" />
+
+	<link rel="stylesheet" type="text/css" href="../style.css" />
+</head>
+<body>
+
+<p>
+Now it is time to learn how to declare and use a class. In the first steps of
+this tutorial, you saw a "Hello World!" sample. You could observe that
+you had to declare a class, event you didn't have to use it. This situation is because
+C# is a 100% OO language, and it won't let you declare any function or even variable
+outside a class. Even the Main() method, the entry point of an application, must be contained
+in a class.
+</p>
+
+<p>
+The best for learning is writing code, so, let's see this first approach to a class declaration.
+Note that when you declare a class, you are only defining the prototype of the class, and
+if you want to use an instance - create a variable of that type -, you have to declare it. So, let's
+declare a useless class:
+</p>
+
+<pre class="code">
+ class MyClass {
+
+ }
+</pre>
+<p>
+As you can see, there's no difficult in declaring a class. Observe the reserved word <b>class</b>, which lets us
+declare a new class type. Next we have the word MyClass, which is the name of the new user defined type. Finally,
+pay attention on the brackets; inside them we will be able to put any method/field we could need.
+</p>
+<p>
+Next, if you want to use it, you have to use declare an instance of it:
+</p>
+<pre class="code">
+
+ MyClass class = new MyClass();
+
+</pre>
+<p>
+With that line, you are creating an instance. Note the reserved word <b>new</b>; it is neccesary for the
+creation of more instances. Did you see the () ? you can make use of them if you want to pass a parameter
+when declaring a new instance. Don't worry if you feel you need to know it better; we will be learning this
+topic in the next sections, and is called <b>constructor</b>.
+</p>
+<p>
+All right. But this class does nothing, event if we want to create an instance of it. So, let's add it a pair of
+elements: a field and a method.
+</p>
+<pre class="code">
+
+ int myField = 12;
+
+ public int GetResult ( int n )
+ {
+
+ 	return myField*n;
+
+ }
+
+</pre>
+<p>
+By the way: if you don't know what a function/method is, don't worry and try to pay attention to this example. 
+Continuing with our travel, you will see we have a method that returns a <b>int</b>, the multiplication of a
+parameter, n, and our field,  MyField, with value of 12. You will appreciate that the declaraton of our method has a
+<b>public</b> word. With it, we are saying "we want to let anyone to access this method" ( we will be studying this
+topic in the next sections ).
+</p>
+<p>
+A entire example of this could be:
+</p>
+<pre class="code">
+//
+// class-basics.cs
+// A first approach to a class
+//
+
+using System;
+
+ //
+ // Our test class
+ //
+ class MyClass 
+ {
+
+ 	int myField = 12;
+
+ 	public int GetResult ( int n )
+	{
+
+		return myField*12;
+
+	}
+
+ }
+
+ //
+ // Our class containing the Main() method
+ //
+ class Tester 
+ {
+
+ 	static void Main ()
+	{
+
+		MyClass class = new MyClass();
+		int n = 56;
+
+		//
+		// Call the public accessible method
+		//
+		Console.WriteLine(" The value of GetResult({0}) is {1}", n, class.GetResult(n));
+
+	}
+
+ }
+
+</pre>
+<p>
+ Save it as class-basics.cs and compile it:
+</p>
+<pre class="console">
+ mcs class-basics.cs
+</pre>
+<p>
+And run it with
+</p>
+<pre class="console">
+ mono class-basics.exe
+</pre>
+<p>
+If everything went perfect, you should see:
+</p>
+<pre class="console">
+ The value of GetResult(56) is 672
+</pre>
+
+</body>
+</html>

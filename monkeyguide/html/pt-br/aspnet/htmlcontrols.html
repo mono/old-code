@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="utf-8"?>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:monodoc="http://www.go-mono.org/xml/monodoc">
+<head>
+	<title>HTMLControls</title>
+
+	<meta name = "DC.Description" content = "" />
+	<meta name = "DC.Contributor" content = "Johannes Roith" />
+
+	<link rel="stylesheet" type="text/css" href="../style.css" />
+
+	<meta name = "CVS.English.Version" content = "1.6" />
+</head>
+<body>
+<h2>Introduction</h2>
+HTML Controls are in most WebDevelopment Enviroments treated as
+text and controlled through the Output. This is a big step back
+compared to Client-side programming. This is the point, where the
+power of ASP.NET becomes clear.
+<p>How would you create a link to the main page from a variable?
+Traditionally like that:</p>
+<pre class="code">
+&amp;lta href="&lt;% Response.Write(mainpage); %&gt;"&gt;Link to Main page&lt;/a&gt;
+</pre>
+This leads to unreadable, and code difficult to maintain. ASP.NET
+provides a very, very elegant solution. 
+<h3>Welcome Objects!</h3>
+Like in Gtk#, or System.Windows.Forms many HTML controls are
+accessible as objects. Their properties can be easily changed.
+ASP.NET generates pure HTML at runtime. 
+<pre class="code">
+void Page_Load(object sender, EventArgs e) 
+{ 
+   anchor1.HRef = mainpage;
+}
+
+&lt;form runat="server"&gt;
+
+&amp;lta id="anchor1" runat="server"&gt;Link to Main page&lt;/a&gt;
+
+&lt;/form&gt;
+</pre>
+Is there to say anything more? This code looks much, much cleaner
+and does do exactly the same. Web Pages have finally caught up with
+Client programming. This chapter will introduce all controls and
+provide examples. 
+</body>
+</html>

@@ -1,0 +1,157 @@
+<?xml version="1.0" encoding="utf-8"?>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:monodoc="http://www.go-mono.org/xml/monodoc">
+<head>
+	<title>Consuming Web Services: an example</title>
+
+	<meta name = "DC.Description" content = "" />
+	<meta name = "DC.Contributor" content = "Johannes Roith" />
+	<meta name = "DC.Contributor" content = "Shane Landrum" />
+
+	<link rel="stylesheet" type="text/css" href="../style.css" />
+</head>
+<body>
+
+<p>
+  As an example of what can be done with web services, let's use a part of 
+  Google's publicly accessible web services, the Google spell checker.
+  When you enter "spelll checker" in Google, it will ask you if you meant 
+  "spell checker".  With the Google web service, you can use that function 
+  directly from C#.
+</p>
+
+<h3>First Steps: Creating the local stub</h3>
+
+<p>To create the local library that will invoke Google's web service,
+  we'll use their WSDL file.
+  You can get the Google WSDL files at <a href="http://api.google.com/GoogleSearch.wsdl">http://api.google.com/GoogleSearch.wsdl</a>.
+  To generate the C# stub source type:
+  <pre class="console">
+    wsdl GoogleSearch.wsdl
+  </pre>
+  This will result in <tt>GoogleSearchService.cs</tt>. Compile with:
+  <pre class="console">
+    mcs /target:library GoogleSearchService.cs
+  </pre>
+  Now you have the final stub assembly: <tt>GoogleSearchService.dll</tt>
+</p>
+
+<h3>Google License key</h3>
+
+<p>
+  Google does lock the web service with a special key. You can obtain a key at
+  <a href="https://www.google.com/accounts/NewAccount">https://www.google.com/accounts/NewAccount</a>. 
+  This key allows ~ 50 actions per day. You must replace my sample key 
+  with yours.
+</p>
+
+<h3>Application 1: The Google Spell Checker on a Webpage</h3>
+
+<p>
+  We will start by using the spell checker on a simple web page.
+  First you will have to drop the stub GoogleSearchService.dll in 
+  your ASP.NET bin dir (FIXME: elaborate). 
+  The example is very simple to understand. 
+</p>
+<pre class="code">
+<span style="color: #0000FF">&lt;%@ Page Language="C#" %&gt;</span>
+<span style="color: #0000FF">&lt;script runat="Server"&gt;</span>
+
+void Page_Load(object sender, EventArgs e) {
+    
+	// Put your license key here
+	const string licensekey = "FCszK/FQFHJWQE1n5OkeGmZAWzCFY5+7";
+	
+	// Create a Google Search object
+	<span style="color: #FF0000">GoogleSearchService Service1 = new GoogleSearchService()</span>;
+	
+	// Ask for spelling suggestion
+	// The first argument is your key
+	// The second one, the text the user should enter.
+	
+	String suggestion = <span style="color: #FF0000">Service1.doSpellingSuggestion(licensekey, TextBox1.Text)</span>;	
+	
+	// Display the suggestion, if any
+	if (suggestion == null)
+		Label1.Text = "[No suggestion]";
+	else	
+		Label1.Text = suggestion;
+}
+<span style="color: #0000FF">&lt;/script&gt;</span>
+
+
+&lt;html&gt;
+&lt;body&gt;
+&lt;h2&gt;Hello WebService!&lt;/h2&gt;
+<span style="color: #0000FF">&lt;form runat="server"&gt;</span>
+&lt;p&gt;<span style="color: #0000FF">&lt;asp:TextBox id="TextBox1" runat="server"&gt;&lt;/asp:TextBox&gt;</span>&lt;/p&gt;
+&lt;p&gt;<span style="color: #0000FF">&lt;asp:Label id="Label1" runat="server"&gt;&lt;/asp:Label&gt;</span>&lt;/p&gt;
+&lt;p&gt;<span style="color: #0000FF">&lt;input type="submit" value="Submit" runat="server"&gt;&lt;/input&gt;</span>&lt;/p&gt;
+<span style="color: #0000FF">&lt;/form&gt;</span>
+&lt;/body&gt;
+&lt;/html&gt;
+</pre>
+
+<p>
+This will look like this:<br/>
+<img src="google.png" border="1" />
+</p>
+
+<p>The code where the web service is accessed is marked red.
+To test the service enter "spelll checker" for example, and watch
+it correct your spelling.</p>
+
+
+<h3>Application 2: A Console Application</h3>
+
+<p>
+You can also consume the WebService with a Console or Gtk# 
+application. You'll need to reference GoogleSearchService.dll when you compile.
+<pre class="console">
+mcs /r:GoogleSearchService.dll spellchecker.cs
+</pre>
+
+The Code:
+
+<pre class="code">
+using System;
+
+class SpellChecker {
+
+	public static void Main(string [] args) {
+    
+		// Your license key
+		const string licensekey = "FCszK/FQFHJWQE1n5OkeGmZAWzCFY5+7";
+		
+		// Create a Google Search object
+		GoogleSearchService Service1 = new GoogleSearchService();
+		
+		// Ask for spelling suggestion
+		// The first argument is your key
+		// The second one, the text the user should enter.
+		
+		String suggestion = Service1.doSpellingSuggestion(licensekey, args[0]);	
+		
+		// Display the suggestion, if any
+		if (suggestion == null)
+			Console.WriteLine("[No suggestion]");
+		else	
+			Console.WriteLine(suggestion);
+	}
+}
+</pre>
+</p>
+
+<h3>Documentation</h3>
+
+<p>
+If you want to do more, you will require documentation of the web service.
+For Google's API, one place to look is in the comments of the WSDL file.
+Individual web service providers are responsible for providing good
+documentation, though you may be able to use the C# introspection tools
+or read the source generated by <tt>wsdl</tt> for a slightly better idea
+of how any given web service works.
+</p>
+
+</body>
+</html>

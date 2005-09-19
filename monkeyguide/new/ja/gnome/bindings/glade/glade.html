@@ -1,0 +1,485 @@
+<?xml version="1.0" encoding="utf-8"?>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:monodoc="http://www.go-mono.org/xml/monodoc">
+<head>
+<!--
+  <title>Glade# for Rapid Development: Hello World</title>
+-->
+  <title>短時間で開発することを目的とした Glade# : Hello World</title>
+
+	<meta name = "DC.Description" content = "" />
+	<meta name = "DC.Contributor" content = "Erik Dasque" />
+	<meta name = "DC.Contributor" content = "Aaron Weber" />
+	<meta name = "DC.Contributor" content = "Johannes Roith" />
+
+<!--
+	<link rel="stylesheet" type="text/css" href="../../../style.css" />
+-->
+	<link rel="stylesheet" type="text/css" href="style.css" />
+
+    <meta name="translator" content="Takeshi AIHANA &lt;aihana@gnome.gr.jp&gt;" />
+    <meta name="description" content="第1版 2005年02月10日" />
+    <meta name="description" content="原文:
+	  http://svn.myrealbox.com/source/trunk/monkeyguide/new/en/gnome/bindings/glade/glade.html" />
+
+</head>
+<body> 
+
+<!--
+<h1>Glade# for Rapid Development: Hello World</h1>
+-->
+<h1>短時間で開発することを目的とした Glade# : Hello World</h1>
+
+<!--
+<h2>Contents</h2>
+-->
+<h2>目次</h2>
+<!--
+<ul>
+	<li>1. <a href="#intro">Introduction</a></li>
+	<li>2. <a href="#create_ui">Creating the UI</a></li>
+	<li>3. <a href="#coding">Creating the Code</a></li>
+	<li>4. <a href="#self_contained">Bundling XML Into the Executable</a></li>
+</ul>
+-->
+<ol>
+	<li><a href="#intro">はじめに</a></li>
+	<li><a href="#create_ui">UI の生成</a></li>
+	<li><a href="#coding">コードの生成</a></li>
+	<li><a href="#self_contained">XML を実行形式に埋め込む</a></li>
+</ol>
+
+<!--
+<h2><a id="intro">Introduction</a></h2>
+-->
+<h2><a id="intro">はじめに</a></h2>
+
+<p> 
+<!--
+  In the previous chapter, you learned how create a GUI the hard way,
+  with code alone.  In this chapter, we'll look at using the Glade GUI
+  builder. Glade lets you construct a user interface visually, and keep
+  it neatly separated from the rest of the code. 
+-->
+前の章では、コードのみの面倒なやり方で GUI (グラフィカル・ユーザ・インタフェース) の作成について学習しました。本章では、<strong>Glade GUI ビルダ</strong>を使った方法について見ていくことにします。Glade を使うと視覚的にユーザ・インタフェースを組み立てることができ、コードの生成とユーザ・インタフェースの構築をきっちり分けることが可能になります。
+</p>
+
+<p>
+<!--
+  Glade comes in two pieces:
+-->
+Glade を使ったプログラミングは二つの部分からなります:
+  <ul>
+<!--
+    <li>The Glade application itself, which lets you build the UI and saves it as an XML file.</li>
+    <li>The libglade library,  which loads the XML and generates the UI at runtime.</li>
+-->
+    <li>UI (ユーザ・インタフェース) を構築して、その結果を XML ファイルへ保存してくれる、Glade 本体</li>
+    <li>実行時に XML を読み込んで UI を生成してくれる、libglade ライブラリ</li>
+  </ul>
+</p>
+
+  <p>
+<!--
+    If you install the packages glade, libglade, and gtk-sharp, you
+    will have all you need: gtk-sharp includes the .NET wrappers for
+    libglade. You can use Glade and libglade with a variety of
+    languages, including Python, C, C++, and of course C#. Check the
+    Glade documentation for details.
+-->
+'glade'、'libglade'、'gtk-sharp' といったパッケージをインストールしているなら、既に必要なものは揃っていることになります: 'gtk-sharp' には libglade 用の .NET ラッパーが含まれています。Glade と libglade は Python、C、C++、そしてもちろん C# といった色々なプログミング言語と一緒に利用することが可能になっています。その詳細については Glade 同梱のドキュメントを参照してみて下さい。
+  </p>
+  
+  <p>
+<!--
+    If you build an application using libglade, libglade must be
+    installed for the application to run, and you must include the XML
+    application file with your application. If you are using Gtk#, you
+    can bundle the XML file as part of the executable.
+-->
+libglade を使ってアプリケーションを構築する場合、そのアプリケーションを実行するには libglade ライブラリがインストールされている必要があり、加えてアプリケーションと <em>XML インタフェース・ファイル</em>を一緒にしておかなければなりません。Gtk# を利用する場合は、その XML インタフェース・ファイルを実行形式の一部に埋め込むことが可能になっています。
+  </p>
+	  
+
+
+<!--
+<h2><a id="create_ui">Creating the UI</a></h2>
+-->
+<h2><a id="create_ui">UI の生成</a></h2>
+<table cellpadding="5" border="0">
+<tr>
+<td valign="top"><img src="glade-palette.png" border="0" /></td>
+<td valign="top">
+
+  <p>
+<!--
+    First, open the Glade Interface Designer (make sure you're
+    using version 2.0 or newer, usually run with the command
+    glade-2). Glade opens with three windows: the main window, a
+    properties window, and a palette window.  In the main window,
+    click the <b>New</b> button, and when prompted select <b>GNOME
+    Project.</b>
+-->
+まず最初に、Glade インタフェース・デザイナを起動して下さい (バージョン 2.0 以上かどうか確認しておいて下さい。通常はコマンド <strong>glade-2</strong> で起動します)。すると、Glade は三つのウィンドウを開きます: メイン・ウィンドウ、プロパティ・ウィンドウ、そしてパレット・ウィンドウです。メイン・ウィンドウのツールバーにある<strong>新規</strong>ボタンをクリックすると、"<em>生成するプロジェクトを選択して下さい:</em>" という質問が表示されるので、<strong>GNOME プロジェクト</strong>を選択して下さい。			  
+  </p>
+
+  <blockquote>
+<!--
+    <b>Note:</b> Glade 2.5 and later make use of Gtk+ 2.4, which
+    offers a wider range of widgets than Gtk+ 2.2. Prior to Mono 1.0,
+    GNOME.NET (including gtk-sharp) will support only Gtk+ 2.2
+    widgets.  Although you can use any version of Glade after 2.0 to
+    design your interface, versions between 2.0 and 2.5 are suggested,
+    to avoid accidental selection of unsupported widgets.
+-->
+    <b>注記:</b> Glade のバージョン 2.5 以上は GTK+ バージョン 2.4 を使用します。このバージョンでは、GTK+ バージョン 2.2 よりもより多くのウィジットをサポートしています。Mono 1.0 よりも前のバージョン、そして GNOME.NET (含む、gtk-sharp) では GTK+ バージョン 2.2 のウィジットだけサポートしています。インタフェースを設計するにはバージョン 2.0 以上の Glade を利用することは可能ですが、未サポートのウィジットを選択しないようにするためにバージョン 2.0 ? 2.5 がお奨めです。
+  </blockquote>
+
+
+  <p>
+<!--
+  Now, select your first widget from the palette: a window. All other
+  widgets go inside a window. As you might expect for the first item
+  in every project, the window button is the first button in the
+  palette.  When you click the window button, a new window opens,
+  labeled <b>window1</b>. The Properties dialog now shows information
+  about the window, including Type, Position, and Caption.
+-->
+ここで、パレット・ウィンドウから最初のウィジットである、'ウィンドウ' を選択して下さい。Glade のプロジェクトで最初に選択するアイテムはご想像のとおり、パレット・ウィンドウにある <img src="glade-firstbutton.png" border="0" /> (ウィンドウ) ボタンです。このボタンをクリックすると、<strong>window1</strong> という名前が付いた新しいウィンドウがオープンされます。このときプロパティ・ダイアログには、このオブジェクトのクラス、位置、タイトルといったウィンドウに関連する情報が表示されます。
+</p>
+
+<p>
+<!--
+  The next step is adding signals, so that your window will have an
+  action. In the properties dialog, select the <b>Signals</b>
+  tab. Then, click the <b>...</b> next to the signal entry box to
+  display a list of predefined signals available to you. Select
+  "delete_event," one of the GtkWidget signals.  Leave it with the
+  default name, "on_window1_delete_event". You can use this signal to
+  quit your application when the window closes.  
+-->
+次のステップはシグナルの追加です。先ほど生成したウィンドウにアクションを一つ持たせることにします。プロパティ・ダイアログで、<strong>シグナル</strong> のタブを選択して下さい。そして、シグナルを入力するエントリ "シグナル:" の横にある <img	src="glade-entersignal.png" border="0" /> ボタンをクリックして、事前に定義されている利用可能なシグナルの一覧を表示させて下さい。その中から GtkWidget シグナルの一つである、"delete_event" を選択して下さい。デフォルトのハンドラ名 "on_window1_delete_event" はそのままにしておいて下さい。ウィンドウを閉じる際に、このシグナルを利用してアプリケーションを終了することが可能になります。
+</p>
+
+<p>
+<!--
+  Next, add a button to your window: click the button tool in the
+  palette (it's in the left column, with an "OK" on it) and
+  then click in your new window.  Because you have not placed anything
+  else in the window, the button will fill all the available space.
+-->
+次に、ウィンドウにボタンを追加して下さい: パレット・ウィンドウにある <img src="glade-placebutton.png" border="0" /> (ボタン) をクリックします。このウィンドウには他にインタフェースを何も配置していないので、ボタンはウィンドウで利用可能なスペース全体を埋め尽くす感じになります。
+</p>
+
+
+<blockquote>
+<!--
+  <p> <b>Note:</b> In Glade, there are four categories of widget: Gtk+
+  Basic, Gtk+ Additional, GNOME, and Deprecated. The first two are
+  easily portable to Windows and Macintosh OS X. If you are developing
+  for Linux only, you may find the items in the GNOME category to be
+  useful, in particular the "Druid" or assistant object, the font
+  selector, and icon lists. The Deprecated tools, obviously, are not
+  recommended.</p>
+-->
+<p>
+<b>注記:</b> Glade にはウィジットのカテゴリが四つあります: GTK+ 基本ウィジット、GTK+ 追加ウィジット、GNOME、そして下位互換ウィジットです。最初の二つは Windows や Macintosh OS X にも簡単に移植できます。もし Linux プラットフォームのみの開発ならば、GNOME カテゴリにあるインタフェースが有用でしょう。特に "ドルイド" または "アシスタント"、フォント選択ダイアログ、そしてアイコン・リストです。下位互換ウィジットらは、どうみても、推奨ではありません。
+</p>
+</blockquote>
+
+
+<p>
+<!--
+  Just like the window, the button needs a signal before it can do
+  anything.  In the properties window, click <b>Signals</b>. 
+  properties and add a signal handler for the GtkButton signal
+  "clicked," leaving it with the default name, "on_button1_clicked".
+-->
+最初に生成したウィンドウ同様に、ボタンに何かさせるにはシグナルが必要です。プロパティ・ウィンドウで、<strong>シグナル</strong> のタブをクリックし、GtkButton ウィジットのシグナル "clicked" のハンドラを追加して下さい (ハンドラの名前はデフォルトの "on_button1_clicked" のままにしておいて下さい)。
+</p>
+
+<p>
+<!--
+  Now, save your project in a new directory, naming it "button."  
+  Glade will create two files for you: button.glade, which describes
+  your window and button, and button.gladep, which is a Glade project file 
+  we don't need to work with right now. The button.glade file should
+  look like this:
+-->
+ここで、こおプロジェクトに "button" という名前を付けて任意のディレクトリに保存して下さい。その際に、Glade は二つのファイルを生成します: 先ほど生成したウィンドウとボタンのインタフェースを記述した <strong>button.glade</strong> (Glade XML インタフェース・ファイル)、そして、作業には直接関係のない Glade プロジェクト・ファイルの <strong>button.gladep</strong>です。<strong>button.glade</strong> ファイルは次のようになっているはずです:
+</p>
+
+</td>
+
+<td valign="top">
+  <img src="glade-m.png" border="0" />
+  <br />
+  <img src="glade-properties.png" border="0" />
+</td>
+</tr>
+</table>
+
+
+<pre class="code">
+&lt;?xml version="1.0" standalone="no"?&gt; &lt;!--*- mode: xml -*--&gt;
+&lt;!DOCTYPE glade-interface SYSTEM "http://glade.gnome.org/glade-2.0.dtd"&gt;
+
+&lt;glade-interface&gt;
+
+&lt;widget class="GtkWindow" id="window1"&gt;
+  &lt;property name="visible"&gt;True&lt;/property&gt;
+  &lt;property name="title" translatable="yes"&gt;window1&lt;/property&gt;
+  &lt;property name="type"&gt;GTK_WINDOW_TOPLEVEL&lt;/property&gt;
+  &lt;property name="window_position"&gt;GTK_WIN_POS_NONE&lt;/property&gt;
+  &lt;property name="modal"&gt;False&lt;/property&gt;
+  &lt;property name="resizable"&gt;True&lt;/property&gt;
+  &lt;property name="destroy_with_parent"&gt;False&lt;/property&gt;
+  &lt;signal name="delete_event" handler="on_window1_delete_event" last_modification_time="Mon, 05 Apr 2004 13:31:33 GMT" /&gt;
+  &lt;child&gt;
+    &lt;widget class="GtkButton" id="button1"&gt;
+      &lt;property name="border_width"&gt;10&lt;/property&gt;
+      &lt;property name="visible"&gt;True&lt;/property&gt;
+      &lt;property name="can_focus"&gt;True&lt;/property&gt;
+      &lt;property name="label" translatable="yes"&gt;button1&lt;/property&gt;
+      &lt;property name="use_underline"&gt;True&lt;/property&gt;
+      &lt;property name="relief"&gt;GTK_RELIEF_NORMAL&lt;/property&gt;
+      &lt;signal name="clicked" handler="on_button1_clicked_event" last_modification_time="Mon, 05 Apr 2004 13:31:57 GMT" /&gt;
+
+    &lt;/widget&gt;
+  &lt;/child&gt;
+&lt;/widget&gt;
+
+&lt;/glade-interface&gt;
+</pre>
+<br />
+
+
+<h2><a id="coding">コードの生成</a></h2>
+
+<p> 
+<!--
+The code we will use in this example is similiar to the code from
+previous chapters. However, most of the action has moved from the
+Main() method to the GladeTest constructor, because Main() is now
+<b>static</b> and therefore does not belong to any class. Using the
+GladeTest() method makes things simpler and neater. There are three
+other portions of code you should pay special attention to. 
+-->
+この例で使用することになるコードは前章で紹介したコードによく似ています。しかしながら、Main() メソッドを <strong>static</strong> にし、どのクラスにも属さないようにするために、その動作のほとんどは Main() メソッドから GladeTest() コンストラクタへ移動しました。コンストラクタ GladeTest() を使ってよりシンプルにそしてコードをきれいにまとめてみました。他に、このコードには特別な配慮を払うべき部分が三カ所ほどあります。
+</p>
+
+<ul>
+  <li>
+<!--
+    As in other examples, we define namespaces and assemblies first. 
+    In this example, the namespace is "GladeSamples" and
+    we're using System, Gtk and Glade. The addition of Glade
+    here allows us use of the Glade# assembly.
+-->
+他の例のように、名前空間 (namespace) とアセンブリを最初に定義します。この例では、名前空間は "GladeSamples" で、アセンブリとして System、Gtk と Glade を使用します。ここで Glade を追加することにより、Glade# アセンブリを利用できるようになります。
+  </li>
+
+  <li>
+<!--
+    Next, look at the first two lines in the Application.Init() function,
+    which will hook our Glade XML file to our code.  In the first line, we
+    create an instance of a Glade.XML object. The constructor is provided
+    with the file name (button.glade) and the primary widget we'll be
+    working with (window1). (The third parameter is for the XML
+    translation domain. It defaults to null and we can ignore it for now).
+-->
+次に、Application.Init() 関数の先頭から二行目までのコードに注目して下さい。これらの文により Glade XML インタフェース・ファイルをコードの中に組み込みます。最初の行で、Glade.XML オブジェクトのインスタンスを生成します。コンストラクタには Glade XML インタフェース・ファイル (button.glade) と第一のウィジットとして window1 を引き渡します。(三番目の引数は XML の翻訳ドメインです。とりあえず、ここではデフォルトの null を渡して無視することにします)。
+  <pre class="code">
+    Glade.XML gxml = new Glade.XML ("button.glade", "window1", null);</pre>
+  
+  <p>
+<!--
+    With that line, the user interface we created earlier is now
+    accessible to our application as the object named 'gxml.'
+-->
+この行を追加することにより、アプリケーション側から 'gxml' というオブジェクトで先に生成しておいたユーザ・インタフェースにアクセスできるようになります。
+  </p>
+  
+  <p>
+<!--
+    Now we'll call the Autoconnect() method in our user  interface object:
+-->
+そして、ユーザ・インタフェース・オブジェクトのメソッド Autoconnect() を呼び出します。
+  </p> 
+  
+  <pre class="code">
+    gxml.Autoconnect (this); </pre>
+</li>
+
+
+<li>
+<!--
+    Finally, note that importing the Glade file didn't import every
+  object in it: you need to import them individually:
+-->
+最後に、Glade ファイルの取り込みでは全てのオブジェクトをインポートするわけではない点に注意して下さい: それぞれ一つずつ実際にインポートしていく必要があります: 
+  <pre class="code">
+[Glade.Widget]
+Button button1;</pre>
+  
+
+<!--
+  Once you've done that, you can interact with the object, adding more
+  properties and events that aren't defined in the Glade file.  Here,
+  we set the width of the button border to ten pixels: 
+-->
+一度、Glade XML インタフェースをインポートすれば、このファイルの中で定義されていないようなプロパティやイベントをたくさん追加するといった、オブジェクトと相互にやりとりできるようになります。ここでは、実際にボタンの境界線の幅を 10ピクセルにセットしています:
+<pre class="code">
+button1.BorderWidth=10;
+</pre>
+</li>
+</ul>
+
+<p>
+<!--
+Here's the full example:
+-->
+この例の完全なコードは次のとおりです:
+</p>
+
+<pre class="code">
+namespace GladeSamples {
+        using System;
+        using Gtk;
+        using Glade;
+
+        public class GladeTest
+        {
+                public static void Main (string[] args)
+                {
+                        new GladeTest(args);
+                }
+<font color="green"> 
+<!--
+                /* The following two lines "import" the Glade objects, allowing
+                 * us to work with the signal handlers we created earlier.
+                 * If you do not import your objects this way, you must write
+                 * your own signal handling code. */
+-->
+                /* 次の二行で、先に生成したシグナル・ハンドラを使って動作できるようにするために、
+                 * Glade オブジェクトを "インポート" しています。
+                 * この方法でオブジェクトをインポートしない場合は、
+                 * 自分でシグナル・ハンドラのコードを記述する必要があります。*/
+</font>
+                [Glade.Widget]      
+                Button button1;
+
+                public GladeTest (string[] args) 
+                {
+                        Application.Init();
+<font color="green">      
+<!--
+                         /* The next lines load the glade file button.glade
+                          * (in the current directory), select window1 and 
+                          * connect it to the current object, an instance
+                          * of GladeTest. */
+-->
+                         /* 次の行で (同じディレクトリにある) Glade XML ファイル 
+                          * button.glade を読み込み、window1 を選択して
+                          * 現在のオブジェクトである GladeTest のインスタンスへ
+                          * 接続しています */
+</font>
+                        Glade.XML gxml = new Glade.XML ("button.glade", "window1", null);
+                        gxml.Autoconnect (this);
+
+                        button1.BorderWidth=10;
+
+                        Application.Run();
+                }
+<font color="green">
+<!--
+                  /* The following two methods implement the signal handling code
+                   * defined in the UI designer*/
+-->
+                  /* 次の二つのメソッドは、
+                   * Glade UI デザイナで定義したシグナル・ハンドラの実装です */
+</font>
+                public void on_window1_delete_event (object o, DeleteEventArgs args) 
+                {
+                        Application.Quit ();
+                        args.RetVal = true;
+                }
+    
+                public void on_button1_clicked (System.Object obj, EventArgs e) 
+                {
+                        Console.WriteLine ("Button 1 clicked");
+                }
+        }
+}
+</pre>
+
+
+<!--
+  <p>Save the file as GladeTest.cs, and compile it:</p>
+-->
+  <p>このコードを GladeTest.cs という名前で保存し、コンパイルします:</p>
+<pre class="code">
+mcs -unsafe -pkg:gtk-sharp,glade-sharp GladeTest.cs
+</pre>
+
+<!--
+<p>Then, run it:</p>
+-->
+<p>そして、実行します:</p>
+<pre class="code">mono GladeTest.exe</pre>
+<p>
+<!--
+You should get this:
+-->
+次の図のような結果になるはずです:
+</p>
+<img src="sample1.png" border="0"/>
+
+
+
+<!--
+<h3><a id="self_contained">Bundling XML Into the Executable</a></h3>
+-->
+<h3><a id="self_contained">XML を実行形式に埋め込む</a></h3>
+
+<p>
+<!--
+  Our earlier application consisted of a single EXE file, but now we
+  have an additional file to distribute: the button.glade XML
+  file. Fortunately, we can embed button.glade directly into our
+  executable.
+-->
+上のアプリケーションは単一の EXE ファイルですが、このアプリケーションを配布するために XML ファイル "button.glade" を追加してみます。幸運にも、このファイル button.glade を実行形式の中に直接埋め込むことも可能です。
+</p>
+
+<p>
+<!--
+  To do that, we'll use a different constructor when creating the gxml
+  object. This constructor uses four parameters, the first of which is
+  the System.Reflection.Assembly object that we want to contain our file.
+-->
+これを行うには、オブジェクト gxml を生成する際に別のコンストラクタを用意することになります。このコンストラクタでは四つの引数を受け取り、一番目の引数は XML ファイルを格納することになる System.Reflection.Assembly です。
+</p>
+
+<pre class="code">
+Glade.XML gxml = new Glade.XML (<b>null</b>, "button.glade", "window1", null);
+gxml.Autoconnect (this);
+</pre>
+
+
+<p>
+<!--
+  The null value there forces the application to look in the current
+  assembly to find the file, instead of looking for it in the actual
+  filesystem. Then, we use the resource flag on the compiler to
+  compile the button.glade file into the executable:
+-->
+これを null にすると、アプリケーション側が実際のファイルシステムの中からではなく、現在のアセンブリの中から XML ファイルを見つけるように強制的に指示することになります。それから、XML ファイルの "button.glade" を実行形式に埋め込むんでコンパイルするために、コンパイラのフラグ <strong>-resource</strong> を追加します。
+</p>
+
+<pre class="code">
+mcs -unsafe -resource:button.glade -pkg:gtk-sharp,glade-sharp  GladeTest.cs
+</pre>
+
+</body>
+</html>

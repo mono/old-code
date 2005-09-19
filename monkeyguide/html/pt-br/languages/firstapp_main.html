@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="utf-8"?>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:monodoc="http://www.go-mono.org/xml/monodoc">
+<head>
+	<title>The first Application - Main() Method</title>
+
+	<meta name ="DC.Description" content ="" />
+	<meta name ="DC.Contributor" content ="Johannes Roith" />
+	<meta name ="DC.Contributor" content ="PJ Cabrera" />
+	<meta name ="DC.Contributor" content ="Carlos Alberto Cortez Guevara" />
+
+	<link rel="stylesheet" type="text/css" href="../style.css" />
+
+	<meta name = "CVS.English.Version" content = "1.5" />
+</head>
+<body>
+While in the Perl sample it is clear that the program is executed
+line by line and it will at first print "Hello World", this is not
+that obvious in C#. You could have a class with several methods: 
+<pre class="code">
+class Hello {
+
+void Method1() {
+
+}
+
+void Method2() {
+
+}
+
+}
+</pre>
+What will be executed first? It would be wrong to assume Method1,
+because it is above Method2. You could as well write Method2 above
+Method1. The truth is the program will not even compile.  There is
+always one Method called Main(), that is executed when the
+application is started. It is responsible for eventually calling
+other methods. 
+<pre class="code">
+static void Main() {
+
+}
+</pre>
+Normally methods are always part of an object. The word static does
+tell the compiler that this method is not part of an object. That
+is because when Main() should be the first executed method we have
+no chance to create an object. void indicates, that Main() does
+not return anything. 
+<p>We do only one thing in our Main() method:</p>
+<pre class="code">
+Console.WriteLine("Hello, World!");
+</pre>
+
+</body>
+</html>

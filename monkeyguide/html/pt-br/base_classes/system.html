@@ -1,0 +1,174 @@
+<?xml version="1.0" encoding="utf-8"?>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:monodoc="http://www.go-mono.org/xml/monodoc">
+<head>
+	<title>Basic namespaces: System</title>
+
+	<meta name = "DC.Description" content = "" />
+	<meta name = "DC.Contributor" content = "Johannes Roith" />
+
+	<link rel="stylesheet" type="text/css" href="../style.css" />
+
+	<meta name = "CVS.English.Version" content = "1.10" />
+</head>
+<body>
+
+<h2>Contents</h2>
+<ul>
+<li><a href="#helloworld">I. System.</a></li></ul>
+<p>All these Classes need to be described. Who wants to help?
+<b>Helping is really easy and a straight forward task.</b> It's
+enough if you pick only *one* class. Contact me at
+<a href="mailto:johannes@jroith.de">johannes@jroith.de</a>.</p>
+<h2>I. System.Object</h2>
+[TODO:GetType(), ToString(), GetHashCode(), Equals(),
+ReferenceEquals();MemberWiseClone();] 
+<h2>System.Console</h2>
+Provides access to input and output.
+<p>Console.Write() : Writes output to the console.<br />
+Console.WriteLine() : Adds \n at the end of the line.</p>
+<p>Both are overloaded serval time, so you can pass them Boolean,
+Int32, Char, Double, String, ...</p>
+<p>Console.Read() : Read a single char.<br />
+Console.WriteLine() : Reads complete line.</p>
+<pre class="code">
+<b>// getname.cs</b>
+
+using System;
+
+class consoletest {
+
+        public static void Main(){
+
+                string name;
+
+                Console.Write("Please enter your name: ");
+                name = Console.ReadLine();
+                Console.WriteLine("Hello, " + name + "!");
+
+        }
+
+}
+
+</pre>
+<h2>System.String</h2>
+[TODO] 
+<h2>System.Uri</h2>
+[TODO] 
+<h2>System.UriBuilder</h2>
+[TODO] 
+<h2>System.Convert</h2>
+[TODO] 
+<h2>System.GC</h2>
+[TODO] 
+<h2>System.BitConverter</h2>
+[TODO] 
+<h2>System.Version</h2>
+This class is overloaded and can either generate a version number
+string (x.x.x.x) from 4 integers, or split a version string in it's
+four numbers.
+<p>Each number is then accessible as obj.Major, obj.Minor,
+obj.Revision, obj.Build.</p>
+<pre class="code">
+<b>// guidtest.cs
+// Generates a version form 4 integers, Splits the numbers again from the string.</b>
+
+using System;
+
+class versiontest {
+
+        public static void Main(){
+
+                Version v = New Version(1, 3, 12, 40);
+
+                // v.ToString() is now  "1.3.12.40"
+                Version v2 = New Version(v.ToString());
+
+                Console.WriteLine("Major:"    + v2.Major);
+                Console.WriteLine("Minor:"    + v2.Minor);
+                Console.WriteLine("Revision:" + v2.Revision);
+                Console.WriteLine("Build:"    + v2.Build);              
+
+        }
+
+}
+</pre>
+<h2>System.Guid</h2>
+This class can generate a "Global Unique Indetifier", that is
+unique across time and location.
+<p>Important is, that the method NewGuid must be called, to
+generate an unique number.</p>
+<pre class="code">
+<b>// guidtest.cs</b>
+
+using System;
+
+class guidtest {
+
+        public static void Main(){
+
+                string name;
+                Guid myguid = New Guide();
+                myguide = myguide.NewGuid();
+
+                Console.WriteLine(myguide.ToString());
+
+        }
+
+}
+</pre>
+<h2>System.Math</h2>
+Offers 2 mathematical constants: e and pi
+<p>Offers many mathematical functions:</p>
+<ul>
+<li>Abs()</li>
+<li>Acos()</li>
+<li>Asin()</li>
+<li>Atan()</li>
+<li>Atan2()</li>
+<li>Ceiling()</li>
+<li>Cost()</li>
+<li>Cosh()</li>
+<li>Exp()</li>
+<li>Floor()</li>
+<li>IEEERemainder()</li>
+<li>Log()</li>
+<li>Log10()</li>
+<li>Max()</li>
+<li>Min()</li>
+<li>Pow()</li>
+<li>Round()</li>
+<li>Sign()</li>
+<li>Sin()</li>
+<li>Sinh()</li>
+<li>Sqrt()</li>
+<li>Tan()</li>
+<li>Tanh()</li></ul>
+[TODO: Explain function and using] 
+<p>[TODO: Write a big example, where they all can be used]</p>
+<h2>System.Environment</h2>
+This class contains only static methods, that provide information
+about the OperatingSystem.
+<p>There is nothing to explain, instead of that here is a good
+commented example, printing all properties.</p>
+<p>[TODO: Write Example]</p>
+<pre class="code">
+<b>// enviroment.cs</b>
+
+using System;
+
+class r1 {
+
+        public static void Main(){
+
+                Console.WriteLine("Computer name: " + System.Enviroment.MachineName);
+
+                // continue...
+        }
+
+}
+
+</pre>
+
+</body>
+</html>

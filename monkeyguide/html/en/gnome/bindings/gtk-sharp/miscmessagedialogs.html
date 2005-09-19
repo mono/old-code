@@ -1,0 +1,69 @@
+<?xml version="1.0" encoding="utf-8"?>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:monodoc="http://www.go-mono.org/xml/monodoc">
+<head>
+	<title>Gtk# - Miscellaneous Widgets - MessageDialogs</title>
+
+	<meta name ="DC.Description" content ="" />
+	<meta name ="DC.Contributor" content ="Johannes Roith" />
+
+	<link rel="stylesheet" type="text/css" href="../../../style.css" />
+</head>
+<body>
+
+	The MessageDialog inherits from
+	Dialog, but is simplified a bit, so you can easily and fast
+	make a common type of dialog.
+
+	<p><code>Creation of a MessageDialog</code>:</p>
+	<pre class="code">
+Gtk.Window main = new Gtk.Window ("MessageDialog");
+
+MessageDialog dialog = new MessageDialog (main, DialogFlags.DestroyWithParent, 
+					  MessageType.Question, ButtonsType.YesNo, 
+					  "Do you want to destroy this dialog?");
+dialog.Response += Response;
+dialog.Show();
+</pre>Combine your own MessageDialog by combining the following
+enumeration's values.
+
+	<ul>
+		<li>Gtk.DialogFlags</li>
+
+		<li>Gtk.MessageType</li>
+
+		<li>Gtk.ButtonsType</li>
+	</ul>
+
+	<p><code>User response handler</code>:</p>
+	<pre class="code">
+static void Response (object sender, ResponseArgs args)
+{
+	switch ((ResponseType)args.ResponseId) {
+	case ResponseType.Yes: 
+		Console.WriteLine ("Response is: Yes");
+		break;
+	case ResponseType.No:
+		Console.WriteLine ("Response is: No");
+		break;
+	case ResponseType.DeleteEvent:
+		Console.WriteLine ("Dialog destroyed");
+		break;
+	default:
+		Console.WriteLine (args.ResponseId);
+		break;
+	}
+}
+</pre>The Gtk.ResponseType enumeration contains even more response
+codes, go check it out.
+
+	<p>You can find a full sample which exercises the
+	MessageDialog in the <a href=
+	"http://www.go-mono.com/tutorial/html/en/appendencies/samples.html">
+	samples section</a>.</p>
+
+	<p>MessageDialog in action:<br />
+	<img src="MessageDialog.png" /></p>
+
+</body>
+</html>

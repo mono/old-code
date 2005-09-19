@@ -1,0 +1,124 @@
+<?xml version="1.0" encoding="utf-8"?>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:monodoc="http://www.go-mono.org/xml/monodoc">
+<head>
+	<title>Installation on MacOS X</title>
+
+	<meta name = "DC.Description" content = "" />
+	<meta name = "DC.Contributor" content = "Johannes Roith" />
+
+	<link rel="stylesheet" type="text/css" href="../style.css" />
+
+	<meta name = "CVS.English.Version" content = "1.9" />
+</head>
+<body>
+<div class="section">
+<h2><a id="step1">What you need to start</a></h2>
+<p class="sidebar"><a href="http://connect.apple.com/"
+title="ADC">Apple Development</a> (Free registration
+required).<br />
+ <a href="http://fink.sourceforge.net/" title="Fink">Fink</a> at
+Sourceforge.</p>
+<p>First of all you'll need to make sure you've got the Apple
+development tools installed. If you have got them on CD install
+them, if not you'll have to go to the
+<a href="http://connect.apple.com/" title="ADC">Apple web site</a>
+and get them from there. A free registration is required.</p>
+<p>Next you need to get a couple of other things:</p>
+<ul>
+<li>pkg-config</li>
+<li>glib2</li></ul>
+<p>The easiest way to get these is by using
+<a href="http://fink.sourceforge.net/">Fink</a> which makes it very
+easy. Get the latest version of fink, and run it.</p>
+<pre>
+sudo dselect
+</pre>
+<p>Find the packages (pkg-config is installed as part of fink) and
+let fink do it's job.</p></div>
+<div class="section">
+<h2><a id="step2">Mono</a></h2>
+<p class="sidebar"><a href="http://www.go-mono.com/"
+title="Mono">Mono</a> website: downloads, help, and info.</p>
+<p>Get the 0.18 release of Mono from the
+<a href="http://www.go-mono.com/download.html">Mono web site</a>.
+You need the mono-0.18.tar.gz source. Unpack the files into a
+directory of your choice, *nix people might like to choose
+/usr/local/src, Mac people might like Documents/mono, it doesn't
+make any difference.</p>
+<p>A few things to note first... mono doesn't actually work on OS X
+(yet), but mint does (a little anyway). So you should be able to
+compile most C# programs that compile with mono, but don't expect
+everything to work.</p></div>
+<div class="section">
+<h2><a id="step3">Patch for OS X</a></h2>
+<p class="sidebar"><a href="mono-0.18-osx.diff.patch"
+title="The Patch">Download</a> the patch, and get the os x
+<a href="tramp-macosx.c">tramp.c</a> file.</p>
+<p>There are few changes required to get mono to work on OS X. Easy
+way to do this is to download the
+<a href="mono-0.18-osx.diff.patch">patch file</a> from here and
+apply it.</p>
+<pre>
+patch -p1 &lt; mono-0.18-osx.diff.patch
+</pre>
+<p>Second, you need a different <a href="tramp-macosx.c">tramp.c
+file</a>. After you've applied the patch replace the
+mono-0.18/mono/arch/ppc/tramp.c file with the new one. (Big thanks
+to John Duncan for this file)</p>
+<pre>
+cp tramp-macosx.c mono-0.18/mono/arch/ppc/tramp.c
+</pre></div>
+<div class="section">
+<h2><a id="step4">Compile Mono</a></h2>
+<p>Now it starts to get easy.... From the mono directory just
+type:</p>
+<pre>
+./configure --prefix=/usr/local
+</pre>
+<p>If you want mono installed somewhere other than /usr/local, put
+something else after the --prefix. Next type:</p>
+<pre>
+make
+</pre></div>
+<div class="section">
+<h2><a id="step5">Install Mono</a></h2>
+<p class="sidebar"><a href="mcs">MCS</a> compiler wrapper.</p>
+<p>Another easy bit (providing all the above went ok...)</p>
+<pre>
+sudo make install
+</pre>
+<p>To get mcs (the Mono C# Compiler) to work, you will need to
+change the mcs file that gets created in /usr/local/bin. It tries
+to use mono which doesn't compile so either change the mcs file to
+look as shown below:</p>
+<pre>
+#!/bin/sh
+/usr/local/bin/mint /usr/local/bin/mcs.exe "$@"
+</pre>
+<p>Or you can <a href="mcs">download it from here</a>. Make sure
+the file has execute permissions.</p>
+<pre>
+chmod a+x mcs
+</pre></div>
+<div class="section">
+<h2><a id="step6">Test Your Installation</a></h2>
+<p class="sidebar"><a href="helloworld.cs">Hello World</a> C#
+program for a quick test of the mcs compiler and mint interpreter.
+You can also get the <a href="helloworld.exe">compiled version</a>
+if you want.</p>
+<p>As a simple test to make sure what you have now works, you can
+download the <a href="helloworld.cs">Hello World</a> program and
+compile it with the command</p>
+<pre>
+mcs helloworld.cs
+</pre>
+<p>You will see a warning saying that non-atomic functions are
+used, but don't worry about that. Just type the next line to run
+your program:</p>
+<pre>
+mint helloworld.exe
+</pre>
+</div>
+</body>
+</html>

@@ -1,0 +1,149 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 20010904//EN"
+"http://www.w3.org/TR/2001/REC-SVG-20010904/DTD/svg10.dtd">
+<!-- Created with Inkscape (http://www.inkscape.org/) -->
+<svg
+   id="svg1"
+   sodipodi:version="0.32"
+   inkscape:version="0.37"
+   width="210mm"
+   height="297mm"
+   sodipodi:docbase="/cvs/monkeyguide/html/en/embeding"
+   sodipodi:docname="callback.svg"
+   xmlns="http://www.w3.org/2000/svg"
+   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
+   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
+   xmlns:xml="http://www.w3.org/XML/1998/namespace"
+   xmlns:xlink="http://www.w3.org/1999/xlink">
+  <defs
+     id="defs3" />
+  <sodipodi:namedview
+     id="base"
+     pagecolor="#ffffff"
+     bordercolor="#666666"
+     borderopacity="1.0"
+     inkscape:pageopacity="0.0"
+     inkscape:pageshadow="2"
+     inkscape:zoom="1"
+     inkscape:cx="305.259583"
+     inkscape:cy="505.731995"
+     inkscape:window-width="1388"
+     inkscape:window-height="990"
+     inkscape:window-x="0"
+     inkscape:window-y="27" />
+  <rect
+     style="font-size:12;fill:#edd332;fill-opacity:0.75;fill-rule:evenodd;stroke:#000000;stroke-width:0.477161pt;"
+     id="rect574"
+     width="200.09982300"
+     height="69.09920502"
+     x="43.18700686"
+     y="142.54074512" />
+  <text
+     xml:space="preserve"
+     style="fill:black;fill-opacity:1;stroke:none;font-family:Arial;font-style:normal;font-weight:normal;font-size:20;stroke-opacity:1;stroke-width:1pt;stroke-linejoin:miter;stroke-linecap:butt;text-anchor:start;writing-mode:lr;"
+     x="66.2200803"
+     y="182.266133"
+     id="text578"
+     sodipodi:linespacing="100%"><tspan
+       x="66.2200775"
+       y="182.266129"
+       sodipodi:role="line"
+       id="tspan583">Existing C code.</tspan></text>
+  <rect
+     style="font-size:12;fill:#7bd332;fill-opacity:0.75;fill-rule:evenodd;stroke:#000000;stroke-width:0.447031pt;"
+     id="rect585"
+     width="175.62718201"
+     height="69.09920502"
+     x="244.72635928"
+     y="142.54074512" />
+  <text
+     xml:space="preserve"
+     style="fill:black;fill-opacity:1;stroke:none;font-family:Arial;font-style:normal;font-weight:normal;font-size:20;stroke-opacity:1;stroke-width:1pt;stroke-linejoin:miter;stroke-linecap:butt;text-anchor:start;writing-mode:lr;"
+     x="267.759440"
+     y="184.131367"
+     id="text586"
+     sodipodi:linespacing="100%"><tspan
+       x="267.759430"
+       y="184.131363"
+       sodipodi:role="line"
+       id="tspan589">Mono Runtime</tspan></text>
+  <path
+     style="font-size:12;fill:none;fill-opacity:0.75;fill-rule:evenodd;stroke:#000000;stroke-width:0.580948pt;"
+     d="M 324.62234 123.84153 L 325.34212 143.2757 L 324.62234 123.84153 z "
+     id="path623" />
+  <path
+     sodipodi:type="arc"
+     style="font-size:12;fill:#ff0000;fill-opacity:0;fill-rule:evenodd;stroke:#000000;stroke-width:1pt;"
+     id="path624"
+     sodipodi:cx="378.60607910"
+     sodipodi:cy="85.69301605"
+     sodipodi:rx="24.47263718"
+     sodipodi:ry="20.87372017"
+     d="M 403.078716 85.693016 A 24.472637 20.873720 0 1 0 354.133442,85.693016 A 24.4726 20.8737 0 1 0 403.079 85.693 L 378.606079 85.693016 z"
+     transform="matrix(0.470588,0.000000,0.000000,0.517241,146.4548,70.16039)" />
+  <rect
+     style="font-size:12;fill:#eb9632;fill-opacity:0.75;fill-rule:evenodd;stroke:#000000;stroke-width:0.574507pt;"
+     id="rect625"
+     width="290.07278442"
+     height="69.09920502"
+     x="421.79310122"
+     y="142.54074512" />
+  <text
+     xml:space="preserve"
+     style="fill:black;fill-opacity:1;stroke:none;font-family:Arial;font-style:normal;font-weight:normal;font-size:20;stroke-opacity:1;stroke-width:1pt;stroke-linejoin:miter;stroke-linecap:butt;text-anchor:start;writing-mode:lr;"
+     x="459.221812"
+     y="182.144001"
+     id="text626"
+     sodipodi:linespacing="100%"><tspan
+       x="459.221802"
+       y="182.143997"
+       sodipodi:role="line"
+       id="tspan629">Your Managed Assembly.</tspan></text>
+  <path
+     style="font-size:12;fill:none;fill-opacity:0.75;fill-rule:evenodd;stroke:#000000;stroke-width:0.580948pt;"
+     d="M 132.02392 230.15995 L 131.30414 210.72578 L 132.02392 230.15995 z "
+     id="path631" />
+  <path
+     sodipodi:type="arc"
+     style="font-size:12;fill:#ff0000;fill-opacity:0;fill-rule:evenodd;stroke:#000000;stroke-width:1pt;"
+     id="path632"
+     sodipodi:cx="378.60607910"
+     sodipodi:cy="85.69301605"
+     sodipodi:rx="24.47263718"
+     sodipodi:ry="20.87372017"
+     d="M 403.078716 85.693016 A 24.472637 20.873720 0 1 0 354.133442,85.693016 A 24.4726 20.8737 0 1 0 403.079 85.693 L 378.606079 85.693016 z"
+     transform="matrix(-0.470588,-5.762851e-17,6.334166e-17,-0.517241,310.1914,283.8411)" />
+  <path
+     style="fill:none;fill-rule:evenodd;stroke:black;stroke-opacity:1;stroke-width:1pt;stroke-linejoin:miter;stroke-linecap:butt;fill-opacity:0.75;"
+     d="M 125 143.61218 C 127.96422 137.8616 133.78314 130.22013 142.5 126.11218 C 150.2119 122.39233 158.44776 119.45965 167.5 117.36218 C 174.92245 115.24148 182.96526 113.70965 191.25 113.61218 C 198.996 112.38913 207.16882 111.88755 215 111.11218 C 223.33333 111.11218 231.66667 111.11218 240 111.11218 C 247.91667 111.11218 255.83333 111.11218 263.75 111.11218 C 271.62961 112.02137 279.30248 112.36218 287.5 112.36218 C 294.57983 113.13735 301.38914 113.61218 308.75 113.61218 C 310.41667 113.61218 312.08333 113.61218 313.75 113.61218 "
+     id="path634" />
+  <path
+     style="fill:none;fill-rule:evenodd;stroke:black;stroke-opacity:1;stroke-width:1pt;stroke-linejoin:miter;stroke-linecap:butt;fill-opacity:0.75;"
+     d="M 352.5 196.11218 C 354.42247 195.62604 365.36739 193.6961 372.5 193.61218 C 380.15119 193.61218 388.08274 193.45187 395 194.86218 C 403.10291 195.1154 411.08848 196.0325 418.75 197.36218 C 426.25 197.36218 433.75 197.36218 441.25 197.36218 C 449.29113 197.0849 455.7922 195.21326 463.75 194.86218 C 465.83333 194.86218 467.91667 194.86218 470 194.86218 "
+     id="path635" />
+  <path
+     style="fill:none;fill-rule:evenodd;stroke:black;stroke-opacity:1;stroke-width:1pt;stroke-linejoin:miter;stroke-linecap:butt;fill-opacity:0.75;"
+     d="M 493.75 212.36218 C 490.92166 217.65889 483.54007 227.98109 477.5 234.86218 C 467.99841 240.83667 459.4159 244.69571 448.75 247.36218 C 439.28025 248.15796 430.76726 250.17797 421.25 251.11218 C 410.56521 253.08378 399.96762 253.61218 388.75 253.61218 C 375.38361 253.53536 363.12846 251.80681 350 251.11218 C 336.65545 249.42792 323.37723 247.23632 310 246.11218 C 299.71116 243.96559 289.37799 243.08518 278.75 242.36218 C 268.21992 241.66941 258.11571 240.27849 247.5 239.86218 C 240.26381 237.89506 231.62583 237.55908 223.75 237.36218 C 211.65744 237.24363 200.89861 235.26714 188.75 234.86218 C 178.6664 233.74768 167.13195 234.1059 157.5 232.36218 C 151.85604 232.83914 147.27914 233.61218 141.25 233.61218 "
+     id="path636" />
+  <text
+     xml:space="preserve"
+     style="fill:black;fill-opacity:1;stroke:none;font-family:helvetica;font-style:normal;font-weight:normal;font-size:12px;stroke-opacity:1;stroke-width:1pt;stroke-linejoin:miter;stroke-linecap:butt;"
+     x="127.50000000"
+     y="106.11218262"
+     id="text637"><tspan
+       id="tspan638">1. C to Mono API</tspan></text>
+  <text
+     xml:space="preserve"
+     style="fill:black;fill-opacity:1;stroke:none;font-family:helvetica;font-style:normal;font-weight:normal;font-size:12px;stroke-opacity:1;stroke-width:1pt;stroke-linejoin:miter;stroke-linecap:butt;"
+     x="327.500000"
+     y="224.862183"
+     id="text640"><tspan
+       id="tspan641">2. Mono calls managed code</tspan></text>
+  <text
+     xml:space="preserve"
+     style="fill:black;fill-opacity:1;stroke:none;font-family:helvetica;font-style:normal;font-weight:normal;font-size:12px;stroke-opacity:1;stroke-width:1pt;stroke-linejoin:miter;stroke-linecap:butt;"
+     x="486.250000"
+     y="243.612183"
+     id="text643"><tspan
+       id="tspan644">3. Managed code calls back into C world.</tspan></text>
+</svg>

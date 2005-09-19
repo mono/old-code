@@ -1,0 +1,110 @@
+<?xml version="1.0" encoding="utf-8"?>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:monodoc="http://www.go-mono.org/xml/monodoc">
+<head>
+	<title>GStreamer#</title>
+
+	<meta name = "DC.Description" content = "" />
+	<meta name = "DC.Contributor" content = "Johannes Roith" />
+
+	<link rel="stylesheet" type="text/css" href="../../../style.css" />
+</head>
+<body> 
+
+<h2>Contents</h2>
+<ul>
+<li>1. Introduction</li>
+<li>2. Basic concepts</li></ul>
+<h2>Introduction</h2>
+GStreamer is a framework for creating streaming media applications.
+The fundamental design comes from the video pipeline at Oregon
+Graduate Institute, as well as some ideas from DirectShow. 
+<p>GStreamer's development framework makes it possible to write any
+type of streaming multimedia application. The GStreamer framework
+is designed to make it easy to write applications that handle
+either audio or video or both. The pipeline design is made to have
+no extra overhead above what the applied filters induce. This makes
+GStreamer a good framework for designing even high-end audio
+applications which puts high demands on latency.</p>
+<p>One of the the most obvious uses of GStreamer is using it to
+build a media player. GStreamer already includes components for
+building a media player that can support a very wide variety of
+formats, including MP3, Ogg Vorbis, MPEG1, MPEG2, AVI, Quicktime,
+mod and so on. GStreamer, however, is much more than just another
+media player. Its main advantages are that the pluggable components
+can be mixed and matched into arbitrary pipelines so that it's
+possible to write a full-fledged video or audio editing
+application.</p>
+<p>The framework is based on plugins that will provide the various
+codec and other functionality. The plugins can be connected and
+arranged in a pipeline. This pipeline defines the flow of the data.
+Pipelines can also be edited with a GUI editor and saved as XML so
+that pipeline libraries can be made with a minimum of effort.</p>
+<p>The GStreamer core function is to provide a framework for
+plugins, data flow and media type handling/negotiation. It also
+provides an API to write applications using the various
+plugins.</p>
+<p>This book is about GStreamer from a developer's point of view;
+it describes how to write a GStreamer application using the
+GStreamer libraries and tools. For an explanation about writing
+plugins, we suggest the Plugin Writers Guide.</p>
+<h3>Motivation</h3>
+<h4>Multitude of duplicate code</h4>
+The Linux user who wishes to hear a sound file must hunt through
+their collection of sound file players in order to play the tens of
+sound file formats in wide use today. Most of these players
+basically reimplement the same code over and over again. 
+<p>The Linux developer who wishes to embed a video clip in their
+application must use crude hacks to run an external video player.
+There is no library available that a developer can use to create a
+custom media player.</p>
+<h4>'One goal' media players/libraries</h4>
+Your typical MPEG player was designed to play MPEG video and audio.
+Most of these players have implemented a complete infrastructure
+focused on achieving their only goal: playback. No provisions were
+made to add filters or special effects to the video or audio data. 
+<p>If I wanted to convert an MPEG2 video stream into an AVI file,
+my best option would be to take all of the MPEG2 decoding
+algorithms out of the player and duplicate them into my own AVI
+encoder. These algorithms cannot easily be shared accross
+applications.</p>
+<p>Attempts have been made to create libraries for handling various
+media types. Because they focus on a very specific media type
+(avifile, libmpeg2, ...), significant work is needed to integrate
+them due to a lack of a common API. GStreamer allows you to wrap
+these libraries with a common API, which significantly simplifies
+integration and reuse.</p>
+<h4>Non unified plugin mechanisms</h4>
+Your typical media player might have a plugin for different media
+types. Two media players will typically implement their own plugin
+mechanism so that the codecs cannot be easily exchanged. The plugin
+system of the typical media player is also very tailored to the
+specific needs of the application. 
+<p>The lack of a unified plugin mechanism also seriously hinders
+the creation of binary only codecs. No company is willing to port
+their code to all the different plugin mechanisms.</p>
+<p>While GStreamer also uses it own plugin system it offers a very
+rich framework for the plugin developper and ensures the plugin can
+be used in a wide range of applications, transparently interacting
+with other plugins. The Framework that GStreamer provides for the
+plugins is flexible enough to host even the most demanding
+plugins.</p>
+<h4>Provision for network transparency</h4>
+No infrastructure is present to allow network transparent media
+handling. A distributed MPEG encoder will typically duplicate the
+same encoder algorithms found in a non-distributed encoder. 
+<p>No provisions have been made for emerging technologies such as
+the GNOME object embedding using Bonobo.</p>
+<p>The GStreamer cores does not use network transparent
+technologies at the lowest level as it only adds overhead for the
+local case. That said, it shouldn't be hard to create a wrapper
+around the core components.</p>
+<h4>Catch up with the Windows(tm) world</h4>
+We need solid media handling if we want to see Linux succeed on the
+desktop. 
+<p>We must clear the road for commercially backed codecs and
+multimedia applications so that Linux can become an option for
+doing multimedia.</p>
+
+</body>
+</html>

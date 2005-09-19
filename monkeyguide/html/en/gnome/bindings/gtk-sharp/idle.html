@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="utf-8"?>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:monodoc="http://www.go-mono.org/xml/monodoc">
+<head>
+	<title>Gtk# - Idle functions</title>
+
+	<meta name ="DC.Description" content ="" />
+	<meta name ="DC.Contributor" content ="Johannes Roith" />
+
+	<link rel="stylesheet" type="text/css" href="../../../style.css" />
+</head>
+<body>
+
+<p>What if you have a function which you want to be called when
+nothing else is happening ?</p>
+<pre class="code">
+gint gtk_idle_add( GtkFunction function,
+                   gpointer    data );
+</pre>
+This causes GTK to call the specified function whenever nothing
+else is happening. 
+<pre class="code">
+void gtk_idle_remove( gint tag );
+</pre>
+I won't explain the meaning of the arguments as they follow very
+much like the ones above. The function pointed to by the first
+argument to gtk_idle_add will be called whenever the opportunity
+arises. As with the others, returning FALSE will stop the idle
+function from being called. 
+
+</body>
+</html>

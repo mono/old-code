@@ -1,0 +1,86 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta name="generator" content=
+"HTML Tidy for Linux/x86 (vers 1st October 2003), see www.w3.org" />
+<title>Manpage of Mono</title>
+</head>
+<body>
+
+<h1>Mono</h1>
+
+
+
+<hr />
+<a name="lbAB" id="lbAB"></a>
+<h2>NAME</h2>
+chktrust - Check the trust of a PE executable. <a name="lbAC" id=
+"lbAC"></a>
+<h2>SYNOPSIS</h2>
+<p><b>chktrust [options] filename</b> <a name="lbAD" id=
+"lbAD"></a></p>
+<h2>DESCRIPTION</h2>
+Verify if an PE executable (CLR assembly, Win32 EXE or DLL) has a
+valid Authenticode(r) signature that can be traced back to a
+trusted certificate authority (CA). This means that
+<dl compact="compact">
+<dt>(a) the signature is valid (i.e. file integrity) and,</dt>
+<dt>(b) the code-signing certificate can be chained back to one of
+the</dt>
+<dd>certificates in the Trust store.</dd>
+</dl>
+<a name="lbAE" id="lbAE"></a>
+<h2>OPTIONS</h2>
+<dl compact="compact">
+<dt><i>-q, -quiet</i></dt>
+<dd>Quiet mode. Limited display on console.</dd>
+<dt><i>-v, -verbose</i></dt>
+<dd>Verbose mode. More details displayed on the console.</dd>
+<dt><i>-help, -h, -?, /?</i></dt>
+<dd>Display help about this tool.</dd>
+</dl>
+<a name="lbAF" id="lbAF"></a>
+<h2>KNOWN RESTRICTIONS</h2>
+chktrust cannot validate Authenticode signatures on CAB files.
+<a name="lbAG" id="lbAG"></a>
+<h2>AUTHOR</h2>
+Written by Sebastien Pouliot <a name="lbAH" id="lbAH"></a>
+<h2>COPYRIGHT</h2>
+Copyright (C) 2003 Motus Technologies. Copyright (C) 2004 Novell.
+Released under BSD license. <a name="lbAI" id="lbAI"></a>
+<h2>MAILING LISTS</h2>
+Visit <a href=
+"http://mail.ximian.com/mailman/mono-list">http://mail.ximian.com/mailman/mono-list</a>
+for details. <a name="lbAJ" id="lbAJ"></a>
+<h2>WEB SITE</h2>
+Visit: <a href="http://www.go-mono.com">http://www.go-mono.com</a>
+for details <a name="lbAK" id="lbAK"></a>
+<h2>SEE ALSO</h2>
+<b><a href=
+"signcode.1.html">signcode</a>(1),</b><a href="makecert.1.html">
+makecert</a>(1),<b><a href=
+"certmgr.1.html">certmgr</a>(1),</b><a href="setreg.1.html">
+setreg</a>(1)
+<hr />
+<a name="index" id="index"></a>
+<h2>Index</h2>
+<dl>
+<dt><a href="#lbAB">NAME</a></dt>
+<dt><a href="#lbAC">SYNOPSIS</a></dt>
+<dt><a href="#lbAD">DESCRIPTION</a></dt>
+<dt><a href="#lbAE">OPTIONS</a></dt>
+<dt><a href="#lbAF">KNOWN RESTRICTIONS</a></dt>
+<dt><a href="#lbAG">AUTHOR</a></dt>
+<dt><a href="#lbAH">COPYRIGHT</a></dt>
+<dt><a href="#lbAI">MAILING LISTS</a></dt>
+<dt><a href="#lbAJ">WEB SITE</a></dt>
+<dt><a href="#lbAK">SEE ALSO</a></dt>
+</dl>
+<hr />
+This document was created by <a href=
+"http://localhost/cgi-bin/man/man2html">man2html</a>, using the
+manual pages.<br />
+Time: 15:17:17 GMT, June 25, 2004
+</body>
+</html>

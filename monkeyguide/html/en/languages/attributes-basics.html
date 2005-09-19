@@ -1,0 +1,426 @@
+<?xml version="1.0" encoding="utf-8"?>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:monodoc="http://www.go-mono.org/xml/monodoc">
+<head>
+    <title>Attributes</title>
+
+    <meta name="DC.Description" content="Introduction to attributes" />
+    <meta name="DC.Contributor" content="Lars Thomas Denstad" />
+    
+    <link rel="stylesheet" type="text/css" href="../style.css" />
+</head>
+<body>
+<H1>Attributes</H1>
+
+<P>
+Metadata is an important part of an assembly. C# allows you to add any
+kind of metadata a number of parts of your program. This feature is
+called <B>Attributes</B>. The .NET framework has already defined a
+number of attribute-types, but it also allows you to define <I>custom
+attributes</I>.
+</P>
+
+<P>
+The purpose of attributing your code might not be immediately
+apparent. Let's first take a look at some of the attributes that are
+already defined by the .NET framework.
+</P>
+
+<UL>
+<LI><code>[Serializable]</code>/<code>[NonSerialized]</code> - Indicate whether or not a class or methods should be serialized.</LI> 
+<LI><code>[Obsolete]</code> - Flag obsolete methods.</LI> 
+<LI><code>[DefaultEvent]</code> - Define a control's default event.</LI>
+</UL>
+
+<P>
+As you can see, attributes typically supplies additional information
+about a piece of code, be it a class, method or member. It does not
+change the way the code will run.
+</P>
+
+<P>When a source file is compiled, the attributes are always stored
+within the assembly.</P>
+
+<H2>Writing custom attributes</H2>
+
+When designing a custom attribute, first consider:
+
+<UL>
+
+<LI>What part of the code should be attributable?</LI>
+
+<LI>Should the attributes be inheritable?</LI>
+
+<LI>Should it be possible to use multiple instances of this attribute
+on the same element?</LI>
+
+</UL>
+
+In theory, pretty much any part of a source file can be
+attributed. Which parts of the code a custom attribute can be applied
+is up to the attribute developer to decide. The developer has fine
+grained control, and can <B>or</B> (<code>|</code>) any of these
+<code>AttributeTargets</code>:
+
+<UL>
+<LI><code>Assembly</code></LI>
+<LI><code>Class</code></LI>
+<LI><code>Constructor</code></LI>
+<LI><code>Delegate</code></LI>
+<LI><code>Enum</code></LI>
+<LI><code>Event</code></LI>
+<LI><code>Field</code></LI>
+<LI><code>Interface</code></LI>
+<LI><code>Method</code></LI>
+<LI><code>Module</code></LI>
+<LI><code>Parameter</code></LI>
+<LI><code>Property</code></LI>
+<LI><code>ReturnValue</code></LI>
+<LI><code>Struct</code></LI>
+<LI><code>All</code></LI>
+</UL>
+
+<P>
+We're ready to take a stab at defining an attribute:
+</P>
+
+<pre class="code">
+// ------------------------------------------------------------
+// An attribute indicating how cool a part of the code is.
+// ------------------------------------------------------------
+
+using System;
+
+[AttributeUsage(AttributeTargets.Method,     // (1)
+                Inherited = false,           // (2)
+		AllowMultiple = false)]      // (3)
+public class CoolAttribute : Attribute {     // (4)
+
+   private int coolness;                    
+
+   public CoolAttribute(int coolness) {      // (5)
+      this.coolness = coolness;
+   }
+
+   public int Coolness { get { return this.coolness; } }
+}
+</pre>
+
+<P>
+As you can see, implementing a custom attribute starts with using an
+attribute. The <code>AttributeUsage</code>-attribute indicates how the
+attribute should act, and we see some of the items we discussed
+earlier reappear. The first parameter to the
+<code>AttributeUsage</code>-attribute is <I>mandatory</I> (1), you
+<I>must</I> tell the AttributeUsage-attribute to which parts the
+Cool-attribute should be allowed applied.
+</P>
+
+<P>
+In this example, we only allow our attribute to say something about
+methods. Had we wanted to allow it to also cover classes, we could
+have written:
+</P>
+
+<pre class="code">
+[AttributeUsage(AttributeTargets.Class | AttributeTargets.Methods, ...
+</pre>
+
+<P>
+The next parameters (2)/(3) are <I>named</I>, and this is a sure sign
+that they are optional. Named parameters can be omitted and appear in
+any order. <code>Inherited</code> decides whether the attribute should
+follow the method into subclasses. <code>AllowMultiple</code> decides
+whether this attribute can be used multiple times <I>for the same
+attribute target</I>.</P>
+
+<P>Our code goes on to inherit from <code>Attribute</code> (4) and
+implement a constructor that accepts an <code>int</code> (5).</P>
+
+<P>
+Let's see example of code that uses the Cool-attribute:</P>
+
+<pre class="code">
+class TestingCool {
+
+  [Cool(10)]
+  public void SuperCoolMethod() { }
+
+  [Cool(1)]
+  public void SuperDullMethod() { }
+
+}
+</pre>
+
+<P>
+As you can see, the "Attribute"-part of the
+<code>CoolAttribute</code>-name is removed when you actually use the
+attribute. We have successfully attributed two methods,
+<code>SuperCoolMethod</code> and <code>SuperDullMethod</code> with our
+brand new <code>Cool</code>-attribute.
+</P>
+
+<P>
+As you can see, the <code>Cool</code>-attribute accepts one
+parameter. In fact, it demands it. The supplied <code>int</code> is a
+mandatory parameter.
+</P>
+
+<P>Mandatory parameters to attributes are defined using the parameters
+to the constructor. If you don't want to have mandatory parameters to
+your custom attribute you can:</P>
+
+<UL>
+<LI>Write a constructor accepting 0 parameters.</LI>
+<LI>Skip implementing a constructor, letting the default-constructor do the job.</LI>
+</UL>
+
+<P>Ok, so far so good. But what about optional/named parameters? Let's
+expand our initial example:</P>
+
+<pre class="code">
+// ------------------------------------------------------------
+// Extended version: 
+// An attribute indicating how cool a part of the code is.
+// ------------------------------------------------------------
+
+using System;
+
+[AttributeUsage(AttributeTargets.Method,     
+                Inherited = false,          
+		AllowMultiple = false)]      
+public class CoolAttribute : Attribute {    
+
+   private int coolness;                    
+   private string coolDescription = "";
+   private string coolnessReason = "";
+
+   public CoolAttribute(int coolness) {    
+      this.coolness = coolness;
+   }
+
+   public CoolAttribute(string coolDescription,    // (1)
+                        int coolness) 
+   { 
+      this.coolDescription = coolDescription;
+      coolness = 0;
+   }
+
+   public string CoolnessReason {                  // (2)
+      set { coolnessReason = value; }
+      get { return coolnessReason;  }
+   }
+
+   public int Coolness { 
+      get { return this.coolness; } 
+   }
+}
+</pre>
+
+<P>
+We have added an extra constructor (1) to allow us to supply a textual
+description of how cool something is, aswell as a numeric
+value. Notice how it has a <I>different signature</I> from the
+original constructor; this is important for all the normal reasons.
+</P>
+
+<P>
+We have also added a writable property (2) called
+<code>CoolnessReason</code> which allows us to elaborate exactly why
+something is cool. This will be an optional/named parameter, as
+illustrated by the below code:
+</P>
+
+<pre class="code">
+class TestingCool {
+
+  [Cool("Smashing method", 10, CoolnessReason = "Fat sorting algorithm")]
+  public void SuperCoolMethod() { }
+
+  [Cool("Decent stuff", 7)]
+  public void KindOfCoolMethod() {}
+
+  [Cool(1, CoolnessReason = "It crashes all machines in the neighborhood")]
+  public void SuperDullMethod() { }
+
+}
+</pre>
+
+<P>
+Above we have examples of all ways of adding our attribute; first
+constructor which only accepts an integer, second constructor which
+also accepts a textual string indicating how cool something is and the
+and the optional reason.
+</P>
+
+<P>
+Now, for the big question: What's happened? Adding the
+<code>Cool</code>-attribute is just a description of the methods. It
+doesn't <b>really</b> make the methods cooler. To see the results of
+our hard labor, we need to go into the executable or library
+(whichever you chose to compile the examples to):</P>
+
+<pre class="code">
+$ monodis attributetest.exe
+</pre>
+
+<P>And we'll find this snippet:</P>
+
+<pre class="code">
+    // method line 6
+    .method public hidebysig
+           instance default void SuperCoolMethod()  cil managed
+    {
+        .custom instance void class CoolAttribute::.ctor(string, int32) =  (
+                01 00 0F 53 6D 61 73 68 69 6E 67 20 6D 65 74 68   // ...Smashing meth
+                6F 64 0A 00 00 00 01 00 54 0E 0E 43 6F 6F 6C 6E   // od......T..Cooln
+                65 73 73 52 65 61 73 6F 6E 15 46 61 74 20 73 6F   // essReason.Fat so
+                72 74 69 6E 67 20 61 6C 67 6F 72 69 74 68 6D    ) // rting algorithm
+
+        // Method begins at RVA 0x20f8
+        // Code size 1 (0x1)
+        .maxstack 0
+        IL_0000: ret
+    } // end of method TestingCool::instance default void SuperCoolMethod()
+</pre>
+
+...and this:
+
+<pre class="code">
+    // method line 8
+    .method public hidebysig
+           instance default void SuperDullMethod()  cil managed
+    {
+        .custom instance void class CoolAttribute::.ctor(int32) =  (
+                01 00 01 00 00 00 01 00 54 0E 0E 43 6F 6F 6C 6E   // ........T..Cooln
+                65 73 73 52 65 61 73 6F 6E 2B 49 74 20 63 72 61   // essReason+It cra
+                73 68 65 73 20 61 6C 6C 20 6D 61 63 68 69 6E 65   // shes all machine
+                73 20 69 6E 20 74 68 65 20 6E 65 69 67 68 62 6F   // s in the neighbo
+                72 68 6F 6F 64                                  ) // rhood
+
+        // Method begins at RVA 0x2118
+        // Code size 1 (0x1)
+        .maxstack 0
+        IL_0000: ret
+    } // end of method TestingCool::instance default void SuperDullMethod()
+</pre>
+
+So it's apparent that we've made an impression on the <code>TestingCool</code>-class.
+
+<H2>Reading attributes</H2>
+
+<P>
+So, running attributed code shows that the attributes have no apparent
+impact. So what does? You guessed it: reading them.
+</P>
+
+<P>The main entry point to reading attributes is the method
+<code>GetCustomAttributes</code>, which is available from a number of
+different classes, including:</P>
+
+<UL>
+<LI><code>MemberInfo</code></LI>
+<LI><code>ParameterInfo</code></LI>
+<LI><code>Type</code> (inherited from MemberInfo)</LI>
+</UL>
+
+<P>
+The <code>GetCustomAttributes</code>-method returns an object array
+(<code>object []</code>), perfect for the C#
+<code>foreach</code>-construct.
+</P>
+
+<H3>Getting class attributes</H3>
+
+<P>
+To get the custom attributes from a class, you need to make an
+instance of the <code>TypeDelegator</code>-class.
+</P>
+
+<pre class="code">
+// ------------------------------------------------------------
+// Get all custom attributes from the TestingCool-class
+// ------------------------------------------------------------
+
+TypeDelegator t = new TypeDelegator(new TestingCool().GetType());     // (1)
+foreach (object o in t.GetCustomAttributes(true))                     // (2)
+{
+   Console.WriteLine(o.ToString());
+}
+</pre>
+
+<P>
+In (1) we supply in instance of the <code>TestingCool</code>'s
+<code>Type</code> class as constructor argument to the
+type-delegator. We then iterate the custom attributes for the class
+(2).
+</P>
+
+<H3>Getting attributes from other elements</H3>
+
+<P>
+Getting the custom attributes from a method, use the
+<code>GetMethods</code>-method available on <code>Type</code>, which
+returns a <code>MethodInfo []</code>. <code>MethodInfo</code> has the
+<code>GetCustomAttributes</code>-method.
+</P>
+
+<P>
+The <code>Type</code>-class also provides a
+<code>GetMembers</code>-method that returns a <code>MemberInfo
+[]</code>, which in turn also provides a
+<code>GetCustomAttributes</code>-method.
+</P>
+
+<P>
+For more information, consult the <code>System.Reflection</code> API
+documentation.
+</P>
+
+<H2><code>GetCustomAttributes</code></H2>
+
+<P>The <code>GetCustomAttributes</code>-method has two different
+signatures:</P>
+
+<pre class="code">
+object[] GetCustomAttribute(boolean);
+object[] GetCustomAttribute(Type, boolean);
+</pre>
+
+<P>
+The <code>boolean</code> parameter indicates whether or not you want
+to include attributes which are inherited from the base class. The
+optional <code>Type</code> parameter allows you to filter out a
+specific type of attributes.
+</P>
+
+<P> 
+To use the filtering function, call
+<code>GetCustomAttribute</code> like this:
+</P>
+
+<pre class="code">
+object [] attributes = t.GetCustomAttributes(typeof(CoolAttribute), true);
+</pre>
+
+<P>
+...where <code>t</code> still refer to an instance of the
+<code>TypeDelegator</code>-class.
+</P>
+
+<P>
+The return value is an instance of the original attribute-class, which
+can be tested with the <code>is</code>-keyword:
+</P>
+
+<pre class="code">
+if (o is CoolAttribute) {
+   CoolAttribute ca = (CoolAttribute)o;
+   if (ca.Coolness > 6) {
+      Console.WriteLine("This method IS cool.");
+   } 
+}
+</pre>
+
+</body>
+</html>

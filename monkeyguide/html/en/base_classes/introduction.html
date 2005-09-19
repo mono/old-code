@@ -1,0 +1,73 @@
+<?xml version="1.0" encoding="utf-8"?>
+<html xmlns="http://www.w3.org/1999/xhtml"
+	      xmlns:monodoc="http://www.go-mono.org/xml/monodoc">
+<head>
+        <title>Collections - Introduction</title>
+
+        <meta name ="DC.Description" content ="" />
+        <meta name ="DC.Contributor" content ="Carlos Alberto Cortez" />
+
+        <link rel="stylesheet" type="text/css" href="../style.css" />
+</head>
+<body>
+<h2>Introduction</h2>
+<p>
+There is a theorial base for the use of Collections and Dymaical Arrays, that
+establishes the features of every group of objects defined in a certain API (in this case,
+the Mono Library). These features are all defined using interfaces and abstract classes
+that the well defined data-structures object must implement. Then it is possible to find
+a second stage, the design oriented to the data structures avalaible in other languages and
+architectures (like linked lists, graphs and so on).
+</p>
+<p>
+The most general agroupation of object is called <i><b>Collection</b></i>, and this is only
+formed by certains objects. An example of a collection is a group of fruits in a
+store. A soecial collection, called <i><b>List</b></i> is defined as a group of elements that
+can be indexed. The special feature of this group is that there must be a way to access
+and sort the elements in a certain order. An example would be a group of identifiers 
+in the data base of a sport club, refering each one to a member. Another special collection,
+<i><b>Map/Dictionary</b></i>, uses to be a group in which every element has an associated value and an associated
+key. Note that it is similar to the <i>List</i>, with the only difference that the identifier,
+called <i>key</i> trends to be a more complex element than an integer -such a string-.
+</p>
+<p>
+Thus the <i><b>List</b></i> and <i><b>Map/Dictionary</b></i> are special kinds of 
+<i><b>Collection</b></i>s. Below a table describes the differences between them.
+</p>
+<center>
+<table border="2" cellpadding="3" cellspacing="3" width="80%">
+	<tr align="center">
+		<td></td>
+		<th>Collection</th>
+		<th>List</th>
+		<th>Dictionary</th>
+	</tr>
+	<tr>
+		<td width="25%">Group of objects</td>
+		<td align="center" width="25%">X</td>
+		<td align="center" width="25%">X</td>
+		<td align="center" width="25%">X</td>
+	</tr>
+	<tr>
+		<td>Element Count</td>
+		<td align="center" width="25%">X</td>
+		<td align="center" width="25%">X</td>
+		<td align="center" width="25%">X</td>
+	</tr>
+	<tr>
+		<td>Element Index</td>
+		<td align="center" width="25%">-</td>
+		<td align="center" width="25%">X</td>
+		<td align="center" width="25%">X</td>
+	</tr>
+	<tr>
+		<td>Key/Value</td>
+		<td align="center" width="25%">-</td>
+		<td align="center" width="25%">-</td>
+		<td align="center" width="25%">X</td>
+	</tr>
+</table>
+</center>
+</body>
+</html>
+

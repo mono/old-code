@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="utf-8"?>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:monodoc="http://www.go-mono.org/xml/monodoc">
+<head>
+	<title>The first Application - Compiling and running</title>
+
+	<meta name ="DC.Description" content ="" />
+	<meta name ="DC.Contributor" content ="Johannes Roith" />
+	<meta name ="DC.Contributor" content ="PJ Cabrera" />
+	<meta name ="DC.Contributor" content ="Carlos Alberto Cortez Guevara" />
+
+	<link rel="stylesheet" type="text/css" href="../style.css" />
+</head>
+<body>
+
+Before we can run our example, we have to compile it to the Common
+Intermediate Language, or CIL used by the Mono and .NET runtimes.
+Once you have installed Mono, you can type the following at the
+command-line: You can pass command-line parameters to the compiler
+to change the name of the output file, embed debugging symbols in
+the generated file, and more. You can learn more about using the
+Mono C# Compiler in section 7.2 of The Mono Handbook. 
+<p>The Mono C# compiler is command-line compatible with the
+Microsoft .NET Framework C# compiler. If you were entering examples
+from a Microsoft .NET tutorial or .NET centric book, generally you
+could substitute mcs for any mention of csc, and it should work
+OK.</p>
+<p>Type this source in your favourite editor (like notepad) and
+save it as "hello.cs" somewhere.</p>
+<p>Now open a new console window, change to that directory and
+type:</p>
+<pre class="console">
+mcs hello.cs
+</pre>
+This command produces a file named HelloWorld.exe in the current
+directory. This file contains our program, ready to run. <br />
+You can execute your first program in C# by typing: 
+<pre class="console">
+mono hello.exe
+</pre>
+
+</body>
+</html>

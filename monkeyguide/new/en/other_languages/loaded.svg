@@ -1,0 +1,102 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 20010904//EN"
+"http://www.w3.org/TR/2001/REC-SVG-20010904/DTD/svg10.dtd">
+<!-- Created with Inkscape (http://www.inkscape.org/) -->
+<svg
+   id="svg1"
+   sodipodi:version="0.32"
+   inkscape:version="0.37"
+   width="210mm"
+   height="297mm"
+   sodipodi:docbase="/cvs/monkeyguide/html/en/embeding"
+   sodipodi:docname="loaded.svg"
+   xmlns="http://www.w3.org/2000/svg"
+   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
+   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
+   xmlns:xml="http://www.w3.org/XML/1998/namespace"
+   xmlns:xlink="http://www.w3.org/1999/xlink">
+  <defs
+     id="defs3" />
+  <sodipodi:namedview
+     id="base"
+     pagecolor="#ffffff"
+     bordercolor="#666666"
+     borderopacity="1.0"
+     inkscape:pageopacity="0.0"
+     inkscape:pageshadow="2"
+     inkscape:zoom="1.73663344"
+     inkscape:cx="305.259588"
+     inkscape:cy="620.939535"
+     inkscape:window-width="1388"
+     inkscape:window-height="990"
+     inkscape:window-x="0"
+     inkscape:window-y="27" />
+  <rect
+     style="font-size:12;fill:#edd332;fill-opacity:0.75;fill-rule:evenodd;stroke:#000000;stroke-width:0.477161pt;"
+     id="rect574"
+     width="200.09982300"
+     height="69.09920502"
+     x="43.18700686"
+     y="142.54074512" />
+  <text
+     xml:space="preserve"
+     style="fill:black;fill-opacity:1;stroke:none;font-family:Arial;font-style:normal;font-weight:normal;font-size:20;stroke-opacity:1;stroke-width:1pt;stroke-linejoin:miter;stroke-linecap:butt;text-anchor:start;writing-mode:lr;"
+     x="66.2200803"
+     y="182.266133"
+     id="text578"
+     sodipodi:linespacing="100%"><tspan
+       x="66.2200775"
+       y="182.266129"
+       sodipodi:role="line"
+       id="tspan583">Existing C code.</tspan></text>
+  <rect
+     style="font-size:12;fill:#7bd332;fill-opacity:0.75;fill-rule:evenodd;stroke:#000000;stroke-width:0.447031pt;"
+     id="rect585"
+     width="175.62718201"
+     height="69.09920502"
+     x="244.72635928"
+     y="142.54074512" />
+  <text
+     xml:space="preserve"
+     style="fill:black;fill-opacity:1;stroke:none;font-family:Arial;font-style:normal;font-weight:normal;font-size:20;stroke-opacity:1;stroke-width:1pt;stroke-linejoin:miter;stroke-linecap:butt;text-anchor:start;writing-mode:lr;"
+     x="267.759440"
+     y="184.131367"
+     id="text586"
+     sodipodi:linespacing="100%"><tspan
+       x="267.759430"
+       y="184.131363"
+       sodipodi:role="line"
+       id="tspan589">Mono Runtime</tspan></text>
+  <path
+     style="font-size:12;fill:none;fill-opacity:0.75;fill-rule:evenodd;stroke:#000000;stroke-width:0.580948pt;"
+     d="M 324.62234 123.84153 L 325.34212 143.2757 L 324.62234 123.84153 z "
+     id="path623" />
+  <path
+     sodipodi:type="arc"
+     style="font-size:12;fill:#ff0000;fill-opacity:0;fill-rule:evenodd;stroke:#000000;stroke-width:1pt;"
+     id="path624"
+     sodipodi:cx="378.60607910"
+     sodipodi:cy="85.69301605"
+     sodipodi:rx="24.47263718"
+     sodipodi:ry="20.87372017"
+     d="M 403.078716 85.693016 A 24.472637 20.873720 0 1 0 354.133442,85.693016 A 24.4726 20.8737 0 1 0 403.079 85.693 L 378.606079 85.693016 z"
+     transform="matrix(0.470588,0.000000,0.000000,0.517241,146.4548,70.16039)" />
+  <rect
+     style="font-size:12;fill:#eb9632;fill-opacity:0.75;fill-rule:evenodd;stroke:#000000;stroke-width:0.574507pt;"
+     id="rect625"
+     width="290.07278442"
+     height="69.09920502"
+     x="421.79310122"
+     y="142.54074512" />
+  <text
+     xml:space="preserve"
+     style="fill:black;fill-opacity:1;stroke:none;font-family:Arial;font-style:normal;font-weight:normal;font-size:20;stroke-opacity:1;stroke-width:1pt;stroke-linejoin:miter;stroke-linecap:butt;text-anchor:start;writing-mode:lr;"
+     x="459.221812"
+     y="182.144001"
+     id="text626"
+     sodipodi:linespacing="100%"><tspan
+       x="459.221802"
+       y="182.143997"
+       sodipodi:role="line"
+       id="tspan629">Your Managed Assembly.</tspan></text>
+</svg>

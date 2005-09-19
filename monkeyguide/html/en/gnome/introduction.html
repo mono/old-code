@@ -1,0 +1,100 @@
+<?xml version="1.0" encoding="utf-8"?>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:monodoc="http://www.go-mono.org/xml/monodoc">
+<head>
+	<title>GNOME Development with Mono</title>
+
+	<meta name = "DC.Description" content = "" />
+	<meta name = "DC.Contributor" content = "Aaron Weber" />
+
+	<link rel="stylesheet" type="text/css" href="../style.css" />
+</head>
+<body>
+  <h1>GNOME Development with Mono</h1>
+
+
+  <h2>What is Gtk#?</h2>
+  <p>
+    This chapter covers use of the GNOME development platform with C#
+    and .NET. The breadth of features and stability of the GNOME
+    development platform and the rapid development tools from .NET
+    make a powerful combination, as you will see in the following
+    exercises.  Among the tools available to you as a developer are
+    the Glade user interface design tools, the GnomeDB database access
+    system, the Gecko HTML engine from Mozilla, and the GConf
+    settings registry.  That means that, for example, you can write a
+    web browser in just a few lines of code, as we do in <a
+    href="glade2.html">the second Glade.NET exercise.</a>
+  </p>
+  
+  <p> 
+    As we explore the use of the GNOME tools, be aware that you can
+    use one library without committing yourself to the rest of them, or
+    committing yourself to the GNOME desktop environment or even any
+    particular OS. While Gtk# is primarily designed for development of
+    Linux and UNIX applications, many of the Gtk# libraries are
+    fully functional on Windows and Macintosh OS X as well. Where
+    possible, examples will be cross-platform functional, and we will
+    note libraries and function calls that do not translate across
+    platforms.
+  </p>
+
+
+<h2>Installing the Gtk# Development Environment</h2>
+
+  <p>
+    The standard GNOME packages you will need are probably already
+    part of your distribution. If not, you can install them from Red
+    Carpet and OpenCarpet servers, package
+    repositories like <a href="http://rpmfind.net">RPMFind</a> or <a
+    href="http://pkg-mono.alioth.debian.org/">Debian.org</a>, or 
+    with the one-step <a
+    href="http://www.gnome.org/~jdub/garnome/">GARNOME</a> build script.
+  </p>
+  
+  <p>
+    A comfortable base set of packages for a Linux developer would be:
+  </p>
+    <ul>
+      <li>glib and glib-devel, for basic convenience functions</li>
+      <li>pango and pango-devel, for text-rendering with full UTF-8 compliance</li>
+      <li>atk and atk-devel, for accessibility</li>
+      <li>gtk2, gtk2-devel, gtk-sharp and gtk-sharp-devel, for the actual GUI toolkit</li>
+      <li>ORBit and ORBit-devel, for CORBA object communications</li>
+      <li>gtkmozembed (sometimes packaged as part of mozilla-devel), for Mozilla embedding</li>
+      <li>gtksourceview and gtksourceview-devel</li>
+    </ul>
+
+    <p>
+      If you are using Monodevelop, you have most of these libraries
+      already. 
+    </p>
+
+    <p>
+      Windows developers will also need the <a
+      href="http://cygwin.org">Cygwin</a> and mingw-cc tools.
+    </p>
+
+ 
+<h2>Installing the Glade Interface Builder</h2>
+
+<p>
+
+The Glade UI tool is not required but is strongly recommended. It is
+included with most Linux distributions, and a <a
+href="http://primates.ximian.com/~damon/glade/WinGlade.exe">Windows
+version</a> is also available.
+</p>
+
+<p> 
+The Glade application allows you to use simple drag-and-drop tools to
+lay out your user interface, and then saves the UI as an XML
+file. Then, with a single call to the libglade library, the user
+interface is generated and attached to the data structures and
+functions you have created in your code. Because user interface
+generation happens at runtime, you can even adjust the UI without
+recompiling. 
+</p>
+
+</body>
+</html>

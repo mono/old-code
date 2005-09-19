@@ -1,0 +1,84 @@
+<?xml version="1.0" encoding="utf-8"?>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:monodoc="http://www.go-mono.org/xml/monodoc">
+<head>
+	<title>News</title>
+
+	<meta name = "DC.Description" content = "" />
+	<meta name = "DC.Contributor" content = "Johannes Roith" />
+
+	<link rel="stylesheet" type="text/css" href="../style.css" />
+</head>
+<body>
+<h3>Display News</h3>
+To display the news, all we have to do is to read the RSS XML file
+and generate HTML. The output is written to the WebControl "news". 
+<p><b>The mono RSS file:</b></p>
+<pre class="code">
+&lt;%
+
+using System;
+using System.IO;
+using System.Xml;
+
+static string HTMLstring;
+
+  public static void Main(string [] args) {
+
+      StreamReader objStream = File.OpenText("index.rss");
+
+                                XmlDocument doconn = new XmlDocument();
+                                doconn.Load(objStream);
+        
+                                XmlNodeList elemList = doconn.GetElementsByTagName("item");
+                                foreach (XmlNode me in elemList)
+                                {
+
+                                        string ItemTitle = null;
+                                        string ItemDescription = null;
+
+                                        XmlNodeList elemList2 = me.ChildNodes;
+
+                                        foreach (XmlNode me2 in elemList2)
+                                        {
+                                                if (me2.Name == "title") { 
+                                                ItemTitle = me2.InnerText;
+                                                }
+
+                                                if (me2.Name == "description") { 
+                                                ItemDescription = me2.InnerText;
+                                                }
+
+                                        }
+                                        
+                                        // Now make HTML
+                                        AddHTML(ItemTitle, ItemDescription);
+
+                                }
+
+                                news.InnerHTML = HTMLstring;
+  }
+
+  public static void AddHTML(string ItemTitle, string ItemDescription)
+
+        {
+
+        // For some reason only two new lines should indicate one<br />
+        ItemDescription = ItemDescription.Replace("\n\n", "&lt;p&gt;");
+        HTMLstring += "&lt;h2&gt;" + ItemTitle + "&lt;/h2&gt;" + "\n" + 
+                       ItemDescription + "\n\n";
+        }
+}
+
+%&gt;
+
+&lt;html&gt;
+&lt;head&gt;
+&lt;/head&gt;
+&lt;body&gt;
+&lt;span id="news" runat="server" /&gt;
+&lt;/body&gt;
+</pre>
+
+</body>
+</html>

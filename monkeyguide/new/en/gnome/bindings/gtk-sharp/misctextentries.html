@@ -1,0 +1,185 @@
+<?xml version="1.0" encoding="utf-8"?>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:monodoc="http://www.go-mono.org/xml/monodoc">
+<head>
+	<title>Gtk# - Miscellaneous Widgets - TextEntries</title>
+
+	<meta name ="DC.Description" content ="" />
+	<meta name ="DC.Contributor" content ="Johannes Roith" />
+
+	<link rel="stylesheet" type="text/css" href="../../../style.css" />
+</head>
+<body>
+
+The Entry widget allows text to be typed and displayed in a single
+line text box. The text may be set with function calls that allow
+new text to replace, prepend or append the current contents of the
+Entry widget. 
+<p>Create a new Entry widget with the following function.</p>
+<pre class="code">
+Entry entry1 = new Entry();
+</pre>
+The next function alters the text which is currently within the
+Entry widget. 
+<pre class="code">
+entry1.Text = string text;
+</pre>
+The property Text sets the contents of the Entry widget, replacing
+the current contents. Note that the class Entry implements the
+Editable interface which contains some more functions for
+manipulating the contents. 
+<p>The contents of the Entry can be retrieved by retrieving the
+value of the following property. This is useful in the events
+described below.</p>
+<pre class="code">
+string text = entry1.Text;
+</pre>
+<p>If we don't want the contents of the Entry to be changed by
+someone typing into it, we can change its editable state.</p>
+<pre class="code">
+entry1.Editable = bool editable;
+</pre>
+The function above allows us to toggle the editable state of the
+Entry widget by passing in a "true" or "false" value for the
+editable argument. 
+<p>If we are using the Entry where we don't want the text entered
+to be visible, for example when a password is being entered, we can
+use the following function, which also takes a boolean flag.</p>
+<pre class="code">
+entry1.Visibility = bool visible;
+</pre>
+A region of the text may be set as selected by using the following
+function. This would most often be used after setting some default
+text in an Entry, making it easy for the user to remove it. 
+<pre class="code">
+entry1.SelectRegion(int         start,
+                    int         end );
+</pre>
+If we want to catch when the user has entered text, we can connect
+to the activate or changed event. Activate is raised when the user
+hits the enter key within the Entry widget. Changed is raised when
+the text changes at all, e.g., for every character entered or
+removed. 
+<p>The following code is an example of using an Entry widget.</p>
+<p><img src="entry.png" border="0" /></p>
+<pre class="code">
+// MyTextEntry.cs - Gtk# Tutorial example
+//
+// Authors: Andr&#233;s S&#225;yago
+//          asath@ColombiaLinux.org
+//
+// (C) 2003 Andr&#233;s S&#225;yago
+// Colombia
+//
+
+namespace GtkSharpTutorial
+{
+  using Gtk;
+  using System;
+
+  public class textEntrySample
+  {
+    // The entry_toggle_* functions use it
+    static Entry entry;
+
+    static void enter_callback(object obj, EventArgs args)
+    {
+      string entry_text = ((Entry) obj).Text;
+      Console.WriteLine("Entry contents: " + entry_text);
+    }
+
+    static void entry_toggle_editable(object obj, EventArgs args)
+    {
+      entry.Editable = ((CheckButton) obj).Active;
+    }
+
+    static void entry_toggle_visibility(object obj, EventArgs args)
+    {
+      entry.Visible = ((CheckButton) obj).Active;
+    }
+
+    static void window_destroy(object obj, DeleteEventArgs args)
+    {
+      Application.Quit();
+    }
+
+    static void button_close(object obj, EventArgs args)
+    {
+      Application.Quit();
+    }
+
+    // Function for the Widgets building
+    static void create_text_entry()
+    {
+      Window window;
+      VBox vbox;
+      HBox hbox;
+      Button button;
+      CheckButton check;
+      int tmp_pos;
+
+      // Create a new window
+      window = new Window (WindowType.Toplevel);
+      window.SetDefaultSize(200, 100);
+      window.Title = "GTK Entry";
+      window.DeleteEvent += window_destroy;
+      
+      vbox = new VBox(false, 0);
+      window.Add(vbox);
+      vbox.Show();
+
+      // Box to enter text
+      entry = new Entry();
+      entry.MaxLength = 50;
+      // When the Enter key is pressed, print a message to the console
+      entry.Activated += enter_callback;
+      entry.Text = "hello";
+      tmp_pos = entry.Text.Length;
+      // Demostration of the 'InsertText' function (-1 is at end)
+      entry.InsertText(" world", -1, out tmp_pos);
+      // Text selected
+      entry.SelectRegion(0, entry.Text.Length);
+      vbox.PackStart(entry, true, true, 0);
+      entry.Show();
+
+      hbox = new HBox(false, 0);
+      vbox.Add(hbox);
+      hbox.Show();
+
+      check = new CheckButton("Editable");
+      hbox.PackStart(check, true, true, 0);
+      check.Toggled += entry_toggle_editable;
+      check.Active = true;
+      check.Show();
+
+      check = new CheckButton("Visible");
+      hbox.PackStart(check, true, true, 0);
+      check.Toggled += entry_toggle_visibility;
+      check.Active = true;
+      check.Show();
+
+      button = Button.NewFromStock(Gtk.Stock.Close);
+      button.Clicked += button_close;
+      vbox.PackStart(button, true, true, 0);
+      button.CanDefault = true;
+      button.GrabDefault();
+      button.Show();
+
+      window.Show();
+    }
+
+    // Main function
+    public static void Main(string[] args)
+    {
+      Application.Init ();
+      create_text_entry();
+      Application.Run ();
+    }
+  }
+}
+
+
+</pre>
+
+</body>
+</html>

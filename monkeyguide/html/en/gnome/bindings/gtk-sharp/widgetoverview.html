@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="utf-8"?>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:monodoc="http://www.go-mono.org/xml/monodoc">
+<head>
+	<title>Gtk# - Widget Overview</title>
+
+	<meta name ="DC.Description" content ="" />
+	<meta name ="DC.Contributor" content ="Johannes Roith" />
+
+	<link rel="stylesheet" type="text/css" href="../../../style.css" />
+</head>
+<body>
+<p>The general steps to creating a widget in GTK are:</p>
+<ul>
+<li>1. new Gtk.*() - one of various functions to create a new
+widget. These are all detailed in this section.</li>
+<li>2. Connect all signals and events we wish to use to the
+appropriate handlers.</li>
+<li>3. Set the attributes of the widget.</li>
+<li>4. Pack the widget into a container using the appropriate call
+such as gtk_container_add() or gtk_box_pack_start().</li>
+<li>5. *.Show() the widget.</li>
+<li>6. gtk_widget_show() lets GTK know that we are done setting the
+attributes of the widget, and it is ready to be displayed. You may
+also use gtk_widget_hide to make it disappear again. The order in
+which you show the widgets is not important, but I suggest showing
+the window last so the whole window pops up at once rather than
+seeing the individual widgets come up on the screen as they're
+formed. The children of a widget (a window is a widget too) will
+not be displayed until the window itself is shown using the
+gtk_widget_show() function.</li></ul>
+
+</body>
+</html>

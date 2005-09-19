@@ -1,0 +1,120 @@
+<?xml version="1.0" encoding="utf-8"?>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:monodoc="http://www.go-mono.org/xml/monodoc">
+<head>
+	<title>Programming with XML Schema</title>
+
+	<meta name = "DC.Description" content = "" />
+	<meta name = "DC.Contributor" content = "Atsushi Enomoto" />
+
+	<link rel="stylesheet" type="text/css" href="../style.css" />
+</head>
+<body>
+
+<h1>Programming with XML Schema</h1>
+
+<!--
+<h2>Contents</h2>
+
+<ol>
+	<li><a href="#intro">Introduction</a></li>
+	<li><a href="#outline">Reader classes outline</a>
+	<ol>
+		<li><a href="#xmltextreader">XmlTextReader</a></li>
+		<li><a href="#xmlnodereader">XmlNodeReader</a></li>
+		<li><a href="#xmlvalidatingreader">XmlValidatingReader</a></li>
+		<li><a href="#abstract-xmlreader">XmlReader: as a common XML Reading API</a></li>
+	</ol>
+	</li>
+	<li><a href="#howtouse">How to use XmlReader</a>
+	<ol>
+		<li><a href="#properties">Node information properties</a></li>
+		<li><a href="#methods">Reader methods</a></li>
+		<li><a href="#attributes">Attribute handling</a></li>
+		<li><a href="#api-notes">Important note</a></li>
+	</ol>
+	</li>
+	<li><a href="#tips">XML Reader Tips</a>
+	<ol>
+		<li><a href="#namespaces-false">Parsing documents without namespace</a></li>
+		<li><a href="#ctor">Consructors</a></li>
+		<li><a href="#dtd">XmlReader and DTD</a></li>
+	</ol>
+	</li>
+</ol>
+-->
+
+<h2><a name="intro">1. Introduction</a></h2>
+
+
+<h3>1.1. What is XML Schema?</h3>
+
+<p>XML Schema is one kind of the "schema language" such as DTD, RELAX NG, Schematron and so on. XML Schema is useful for "typed XML programming" with less expressiveness than Schematron or RELAX NG (or even DTD in a sense). XML Schema is one of the W3C Recommendation.</p>
+
+<p>There are three parts of the specification: <a href="http://www.w3.org/TR/xmlschema-0/">primer</a>, <a href="http://www.w3.org/TR/xmlschema-1/">structures</a> and <a href="http://www.w3.org/TR/xmlschema-2/">datatypes</a>.</p>
+
+
+<h3>1.2. How can we use XML schema in System.Xml?</h3>
+
+<p>In System.XML.dll, it is System.Xml.Schema namespace that holds the classes for XML Schema. In that namespace, most of them represents XML Schema element types. For example, XmlSchemaElement represents "xs:element" and XmlSchemaChoice means "xs:choice" (here the prefix "xs" is used as mapped to "http://www.w3.org/2001/XMLSchema" namespace URI).</p>
+
+<p>There are several areas in which XML Schema is used:</p>
+
+<ul>
+	<li>Validation - We can use XmlValidatingReader to validate XML document against a set of schemas.</li>
+	<li>CLR type mapping - We can use xsd.exe to export CLR Types from XML Schemas.</li>
+	<li>Data column mapping - We can infer DataSet columns and relations from XML Schemas (it is not fully supported yet).</li>
+</ul>
+
+<p>Moreover, note that Web service functionality is heavily dependent on the CLR type mapping.</p>
+
+
+
+<h2>2. Using XmlSchema and XmlSchemaCollection</h2>
+
+<h3>2.1. Reading, writing and compiling XmlSchema</h3>
+
+<p>In this section, the primary class is XmlSchema (System.Xml.Schema.XmlSchema). With this class, you can read and write an XML schema document for one namespace, using Read() and Write() methods.</p>
+
+<p>(You can use XmlSerializer to read and write XmlSchema, but it is not recommended to use deserialization. Firstly, it does not support LineNumber, LinePosition and SourceUri. Secondly, it brings some namespace scoping problems in identity constraints i.e. XmlSchemaXPath when any prefixes are specified in the "xpath" attributes.)</p>
+
+<p>After reading a schema into XmlSchema, you will have to call Compile() to check if the schema is really valid. Since you can build a schema structure manually, it might be invalid during the read and build process. Once you called Compile(), the Post Schema Compilation Information is set, and it is used for actual validation, type mapping, and so on.</p>
+
+<p>However, note that usually you don't have to call Compile() by yourself. As described below, when you use XmlSchemaCollection, it will automatically compile the schema you would add.</p>
+
+
+<h3>2.2. XmlSchemaCollection</h3>
+
+<p>By the way, XML Schema is designed as to handle one or more namespaces. How about multiple namespaces? XmlSchemaCollection class represents a collection of schemas. (In the forthcoming version of .NET 1.2, it will have the similar class named XmlSchemaSet, that is more conformant to W3C standard.</p>
+
+<p>To add a schema to the collection, use Add() method. When you add a schema, the schema is compiled using Compile() if it is not compiled yet.</p>
+
+
+
+<h2>3. Validating XML using XML Schema</h2>
+
+<h3>3.1. General purpose use</h3>
+
+<p>In the sections above, I described how XML Schema documents can be read into XmlSchema and XmlSchemaCollection classes. Now, it is time to "use" these classes. Firstly this section describes how to validate XML instances against XML Schema.</p>
+
+<p>XML Schema validation is done by XmlValidatingReader. It supports DTD validation and XML Schema validation.</p>
+
+<p>XmlValidatingReader instance can be created from an XmlReader. Note that Microsoft .NET Framework supports only XmlTextReader as its input. Mono can handle any XmlReader.</p>
+
+<p>To specify schemas, use Add() method of the Schemas property (that is type of XmlSchemaCollection).</p>
+
+
+<h3>3.2. Handling validation errors</h3>
+
+<p>Since XmlValidatingReader is represented as to handle many kinds of validation feature, it might be useless when you both have DTD and XML schema  (e.g. DTD for entities and XML Schema for document structures).</p>
+
+<p>Another use case is ignoring errors, when you just wanted to add Post Schema Validation Infoset to the document. (However, it is not highly recommended to depend on PSVI, since when you use it the document will become useless against other schemas anymore. That's the primary reason why RELAX NG is specified.)</p>
+
+<p>In such cases, you can specify ValidationType property (type of ValidationType) as DTD, Schema, or None. When you specify "None", no validation errors are thrown.</p>
+
+<p>You can also use ValidationEventHandler event (of type ValidationEventHandler delegate) to catch validation error manually. When you specified it, it also never throws any validation errors unless you rethrow the error in the delegated method.</p>
+
+
+
+</body>
+</html>

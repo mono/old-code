@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="utf-8"?>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:monodoc="http://www.go-mono.org/xml/monodoc">
+<head>
+	<title>GNOME.NET</title>
+
+	<meta name = "DC.Description" content = "" />
+	<meta name = "DC.Contributor" content = "Johannes Roith" />
+
+	<link rel="stylesheet" type="text/css" href="../../../style.css" />
+
+	<meta name = "CVS.English.Version" content = "1.4" />
+</head>
+<body> 
+
+	<p>Here is how to make the common about dialog, seen in so
+	many gnome applications.</p>
+
+	<h2>About dialog</h2>
+
+	<p><code>Function preparing and displaying a gnome about
+	dialog</code>:</p>
+	<pre class="code">
+void About()
+{
+	string [] authors = new String [] {
+		"I am weasel",
+		"I are baboon",
+	};
+
+	string [] documenters = new String [] {
+		"Cow",
+		"Chicken",      
+	};
+
+	string translators = "Mom, Dad";
+	Pixbuf pixbuf = new Pixbuf(null, "logo.png");
+			
+	Gnome.About about = new Gnome.About ("Cartoon viewer", "1.0.0",
+					     String.Format ("{0}\n{1}\n{2}\n{3}\n{4}\n{5}",
+							    "Copyright (C) 2003 Cartoon Company",
+							    "Cartoon viewer comes with ABSOLUTELY NO WARRANTY;",
+							    "This is free software, and you are welcome to",
+							    "redistribute it under certain conditions;",
+							    "see the text file: COPYRIGHT, distributed ",
+							    "with this program."),
+					     "Mono and Gtk# rocks!",
+					     authors, documenters, translators, pixbuf);
+	about.Show();
+}
+</pre>
+
+	<p>A program implementing the above function can be found
+	in the sample section.</p>
+
+	<p>Here are some screenshots showing what the about dialog
+	looks like.</p>
+
+	<table>
+		<tr>
+			<td><img src="main.png" /></td>
+
+			<td><img src="written_by.png" /></td>
+		</tr>
+
+		<tr>
+			<td><img src="documented_by.png" /></td>
+
+			<td><img src="translated.png" /></td>
+		</tr>
+	</table>
+
+</body>
+</html>

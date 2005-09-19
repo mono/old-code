@@ -1,0 +1,1773 @@
+2005-03-06  Atsushi Enomoto  <atsushi@ximian.com>
+
+	* new/ja/other_languages/basics.html : new translation by k.hiroshi.
+
+2005-02-24  Shane Landrum <epicene@pobox.com>
+
+	* new/en/gnome/bindings/gtk-sharp/buttonwidgetnormal.html:
+	Spelling fixes, translated some GTK+isms.
+	* new/en/gnome/bindings/gtk-sharp/gtk-sharp.html
+	* new/en/gnome/bindings/gtk-sharp/rangemouseandkey.html
+	* new/en/gnome/bindings/gtk-sharp/rangecommon.html
+	* new/en/gnome/bindings/gtk-sharp/rangeexample.html
+	* new/en/gnome/bindings/gtk-sharp/rangescrollbars.html
+	* new/en/gnome/bindings/gtk-sharp/rangewidgets.html
+	* new/en/gnome/bindings/gtk-sharp/rangescale.html:
+	Updated docs about Range widgets to port away some GTK+isms;
+	copyediting, some restructuring.
+	* new/en/index.html: Tracking changes.
+
+2005-02-23  Shane Landrum <epicene@pobox.com>
+
+	* new/en/gnome/bindings/gtk-sharp/widgetoverviewcasting.html: 
+	Removed as part of widget overview review.
+	* new/en/gnome/bindings/gtk-sharp/packingdetails.html
+	* new/en/gnome/bindings/gtk-sharp/packingwidgetstheory.html
+	* new/en/gnome/bindings/gtk-sharp/packingtables.html
+	* new/en/gnome/bindings/gtk-sharp/buttonwidget.html
+	* new/en/gnome/bindings/gtk-sharp/buttonwidgetnormal.html
+	* new/en/gnome/bindings/gtk-sharp/buttonwidgettoggle.html
+	* new/en/gnome/bindings/gtk-sharp/buttonwidgetstock.html
+	* new/en/gnome/bindings/gtk-sharp/buttonwidgetradio.html	
+	* new/en/gnome/bindings/gtk-sharp/adjustmentsinternals.html
+	* new/en/gnome/bindings/gtk-sharp/adjustments.html
+	* new/en/gnome/bindings/gtk-sharp/adjustmentscreating.html
+	* new/en/gnome/bindings/gtk-sharp/adjustmentsusing.html
+	* new/en/gnome/bindings/gtk-sharp/widgetoverview.html
+	* new/en/gnome/bindings/gtk-sharp/widgetoverviewcasting.html
+	* new/en/gnome/bindings/gtk-sharp/widgetoverviewwithoutwindows.html:
+	Copyediting; minor fixes.
+	* new/en/gnome/bindings/gtk-sharp/packingtablessample.html
+	* new/en/gnome/bindings/gtk-sharp/packingdemonstrationprogram.html
+	Copyediting, removed MonoBasic examples.
+	* new/en/gnome/bindings/gtk-sharp/widgetoverviewhierarchy.html
+	Added links to class documentation.
+	* new/en/gnome/bindings/gtk-sharp/gtk-sharp.html: Minor update.
+	* new/en/index.html
+	* toc2.xml: Tracking changes.
+	
+2005-02-23  Atsushi Enomoto  <atsushi@ximian.com>
+
+	* new/ja/deploy/gac-advanced.html : new translation.
+
+2005-02-18  Atsushi Enomoto  <atsushi@ximian.com>
+
+	* new/en/asp_net/mod_mono.html :
+	  reverted incorrectly commited translation.
+	* new/ja/asp_net/mod_mono.html :
+	  added new translation as expected.
+
+2005-02-18  Atsushi Enomoto  <atsushi@ximian.com>
+
+	* new/ja/asp_net/mod_mono.html : new translation.
+
+2005-02-15  Atsushi Enomoto  <atsushi@ximian.com>
+
+	* new/en/deploy/pkgconfig.html : synchronized title with toc2.xml.
+	* new/ja/deploy/pkgconfig.html : new translation.
+
+2005-02-14  Atsushi Enomoto  <atsushi@ximian.com>
+
+	* new/ja/gnome/glade/ : added glade.html and glade2.html translations
+	  including Japanized images. Contribution by Takeshi Aihana.
+	* new/en/xml/xmlwriter.html : added one more tip.
+
+2005-02-10 Gonzalo Paniagua Javier <gonzalo@ximian.com>
+
+	* makefile: `which xsltproc` -> xsltproc
+
+	* toc2.xml:
+	* new/en/asp_net/mod_mono.html: add mod_mono configuration.
+
+2005-02-09  Atsushi Enomoto  <atsushi@ximian.com>
+
+	* new/en/xml/xmlreader.html : revised during translation.
+	  new/ja/xml/xmlreader.html : translation.
+
+2005-02-09  Atsushi Enomoto  <atsushi@ximian.com>
+
+	* new/ja/cross_platform/comprules.html,
+	  new/ja/cross_platform/gui.html,
+	  new/ja/cross_platform/introduction.html :
+	  Translations. Contribution by Hiroyuki Ishimine.
+
+2005-02-08  Kazuki Oikawa <kazuki@panicode.com>
+
+	* new/ja/for_windows_developers/getting_started.html,
+	  new/ja/for_windows_developers/intro.html,
+	  new/ja/hello_world/intro.html,
+	  new/ja/hello_world/more_samples.html : translations.
+
+2005-02-05  Atsushi Enomoto  <atsushi@ximian.com>
+
+	* new/programming/interop.html : build fix (tidy).
+
+2005-02-05  Atsushi Enomoto  <atsushi@ximian.com>
+
+	* new/ja/intro/about.html,
+	  new/ja/preface.html,
+	  new/ja/mono/mono.html,
+	  new/ja/mono.context.png,
+	  new/ja/xml/xml.html : translations. contribution by k.hiroshi.
+
+2005-02-04  Atsushi Enomoto  <atsushi@ximian.com>
+
+	* makefile, mkmstoc-new.xsl : added localized document support.
+	* IDEAS : new requirements.
+
+2005-02-03  Jonathan Pryor  <jonpryor@vt.edu>
+
+	* new/en/programming/interop.html: Flush.  Lots of updates.  
+	  See "February 3, 2005" Revision History entry for details.
+
+2005-02-03  Atsushi Enomoto  <atsushi@ximian.com>
+
+	* IDEAS : added thoughs on build system.
+
+2005-02-03  Atsushi Enomoto  <atsushi@ximian.com>
+
+	* makefile : added target "install-new"
+
+2005-01-31  Shane Landrum <epicene@pobox.com>
+
+	* new/en/gnome/bindings/gtk-sharp/introduction.html: 
+	General proofreading and style edits.
+	* new/en/gnome/bindings/gtk-sharp/gtk-sharp.html
+	* new/en/gnome/bindings/gtk-sharp/getstart.html
+	* new/en/gnome/bindings/gtk-sharp/packingwidgetstheory.html
+	* new/en/gnome/bindings/gtk-sharp/packingwidgets.html: Style and
+	grammar edits on widget layout and packing.
+
+2005-01-28  Shane Landrum <epicene@pobox.com>
+
+	* new/en/gnome/bindings/gtk-sharp/monitoring_io.html
+	* new/en/gnome/bindings/gtk-sharp/dnd.html
+	* new/en/gnome/bindings/gtk-sharp/dnd_overview.html
+	* new/en/gnome/bindings/gtk-sharp/dnd_properties.html:
+	Style and clarity edits.
+	* new/en/gnome/bindings/gtk-sharp/gtk-sharp.html
+	* new/en/gnome/bindings/gtk-sharp/dnd_functions.html:
+	Added a code-based overview of how to use DND.
+
+2005-01-24  Shane Landrum <epicene@pobox.com>
+
+	* new/en/tools/monodoc/contributing.html
+	* new/en/tools/monodoc/tag-reference.html
+	* TODO : Rolled in monodoc tag reference from Joshua
+	Tauberer.
+
+2005-01-19  Shane Landrum <epicene@pobox.com>
+
+	* new/en/index.html
+	* TODO
+	* toc2.xml
+	* new/en/tools/gdb.html
+	* new/en/tools/cscomp-intro.html
+	* new/en/tools/disassembler.html
+	* new/en/tools/cscomp-cmdlo.html
+	* new/en/tools/compiling.png
+	* new/en/tools/debugger.html
+	* new/en/tools/debugger.png
+	* new/en/tools/assembler-intro.html: Moved some tools
+	docs from html/; no edits made for now. Added a new
+	chapter on assembly/disassembly.
+	* new/en/gnome/bindings/gtk-sharp/dnd_properties.html:
+	Edits to remove Gtk+-style enum references and replace
+	them with links to the API reference.
+
+2005-01-17  Shane Landrum <epicene@pobox.com>
+
+	* new/en/tools/monodoc/building_documentation.html:
+	Spelling fix.
+	* new/en/tools/monodoc/contributing.html
+	Notes about special tags for monodoc.
+	* new/en/gnome/bindings/gtk-sharp/dnd_overview.html
+	* new/en/gnome/bindings/gtk-sharp/dnd_properties.html:
+	Minor fixes, Gtk#-specific touches.
+	* new/en/gnome/bindings/gtk-sharp/gtk-sharp.html:
+	Removed a projected section about writing custom
+	widgets.
+	* TODO
+	* toc2.xml: Updates as appropriate.
+	
+2005-01-17  Shane Landrum <epicene@pobox.com>
+
+	* new/en/gnome/bindings/gtk-sharp/*: Moved from old
+	monkeyguide.
+	* new/en/index.html
+	* TODO
+	* toc2.xml: Minor updates.
+	
+2005-01-08  Shane Landrum <epicene@pobox.com>
+
+	* new/en/tools/monodoc/monodoc-monodoc2.png
+	* new/en/tools/monodoc/monodoc-monodoc3.png
+	* new/en/tools/monodoc/building_documentation.html
+	* new/en/tools/monodoc/monodoc-monodoc1.png: Rolled
+	in monodoc tutorial by Christian Hergert 
+	<chris@mosaix.net> .
+	* new/en/other_platforms: added new dir.
+	* makefile: adjusted "make new" slightly.
+	* new/en/credits.html
+	* new/en/index.html
+	* TODO
+	* toc2.xml: Minor adjustments consistent with
+	other listed changes.
+
+2005-01-07  Shane Landrum <epicene@pobox.com>
+
+	* new/en/gnome/bindings/canvas/* 
+	* new/en/gnome/bindings/gnomedb/* 
+	* new/en/gnome/bindings/gstreamer/*: Moved the parts
+	of the GStreamer, GnomeDB, and Gnome Canvas
+	tutorial that were completed over to the new 
+	monkeyguide.
+	* new/en/for_linux_developers/installation.html:
+	Moved old linux installation tutorial into a more
+	useful location.
+	* new/en/for_linux_developers/monodevelop.html:
+	Moved old monodevelop page into a more useful location.
+	* new/en/index.html
+	* toc2.xml
+	* TODO: Updates to reflect changes above.
+	
+2005-01-05  Shane Landrum <epicene@pobox.com>
+
+	* new/en/gnome/bindings/rsvg/*
+	* new/en/gnome/bindings/gconf/*
+	* new/en/gnome/bindings/glade/*: Ported sections
+	from old monkeyguide to new version.
+	* new/en/other_languages/Java.png: import forgotten
+	in earlier imports.
+	* TODO
+	* toc2.xml: Updates for newly-copied monkeyguide
+	sections.
+
+2005-01-04  Shane Landrum <epicene@pobox.com>
+
+	* new/en/cross_platform/*
+	* new/en/tools/monodoc
+	* new/en/tools/monodoc/contributing.html
+	* new/en/credits.html
+	* new/en/index.html
+	* TODO
+	* toc2.xml : Ported old monkeyguide's section
+	on cross-platform code, also section on contributing
+	docs.
+
+2005-01-04  Shane Landrum <epicene@pobox.com>
+
+	* new/en/presentations/mono-guadec.ppt
+	* new/en/presentations/debugger.sxi
+	* new/en/presentations/gtk-sharp-guadec.ppt
+	* new/en/presentations.html : Minor edits and adding
+	some files which I forgot to add before from html/.
+	* new/en/other_languages/* : Ported some of
+	the embedding docs together with some of html/en/languages.
+	* new/en/index.html
+	* TODO
+	* toc2.xml : General updates, added the other_languages
+	(embedding, etc) section.
+
+2005-01-04  Shane Landrum <epicene@pobox.com>
+
+	* new/en/index.html
+	* TODO
+	* toc2.xml
+	* new/en/presentations/*
+	* new/en/presentations.html: Ported old "presentations"
+	section to new monkeyguide.
+
+2005-01-03  Shane Landrum <epicene@pobox.com>
+
+	* new/en/gnome/bindings/diacanvas/screendump.png
+	* new/en/gnome/bindings/diacanvas/index.html:
+	Ported old diacanvas bindings info to new guide.
+	* new/en/index.html: Updates/regeneration.
+	* toc2.xml: Reordered some things, added some things.
+	* TODO : Added a section for checklisting what's been
+	ported to the new monkeyguide and what hasn't.
+
+2004-08-24  Shane Landrum <epicene@pobox.com>
+
+	* OUTLINE: note obsolete status.
+	* toc2.xml: update to include future plans.
+	* new/en/hello_world/tour.html: added code sample from samples/.
+	* new/en/web_services/tools.html: Note on mod_mono.
+	* new/en/for_linux_developers/ides.html: Moved IDE section in from
+	the old Monkeyguide.
+	* new/en/web_services/producing_web_services.html: Added a stub
+	page.
+
+2004-08-22  Shane Landrum <epicene@pobox.com>
+
+	* new/en/databases/firebird.html : fix doctype so build doesn't die
+	at xmllint step.
+	
+2004-08-21  Shane Landrum <epicene@pobox.com>
+
+	* new/en/for_linux_developers/getting_started.html: Rolled much of
+	the old Linux installation doc into here, since it's good enough.
+	* new/en/for_windows_developers/getting_started.html: Added
+	basic text.
+	* new/en/web_services/databases_and_aspnet.html : Broken out from
+	old ADO.NET docs into its own section, more logically organized.
+	* new/en/web_services/producing_web_services.html : New stub page.
+	* toc2.xml: moved the Hello World section.
+	* new/en/hello_world/intro.html: Began Hello World descriptions.
+	* new/en/hello_world/tour.html: Began Hello World GTK# example.
+	
+2004-08-21  Shane Landrum <epicene@pobox.com>
+
+	* new/en/appendencies/*: moved over to appendices/ for proper spelling.
+	* new/en/appendices/*: Moved old html/en/appendencies over to here.
+	* new/en/hello_world/more_samples.html: Some of html/en/appendencies--
+	parts that pointed to sample code-- moved here so that new developers
+	can get pointers to sample code early on.
+	* toc2.xml: Updated Appendices section.
+
+2004-08-21  Shane Landrum <epicene@pobox.com>
+
+	* new/en/man/* : copied over html/en/man/*, manpages for mono tools.
+	* toc2.xml: added links to manpages.
+	
+2004-08-21  Shane Landrum <epicene@pobox.com>
+
+	* new/en/databases/* : ported over most content from html/en/adonet/*;
+	added new introduction.
+	* toc2.xml : expanded outline.
+	
+2004-08-16  Shane Landrum <epicene@pobox.com>
+
+	* new/en/index.html: Regenerated.
+	* new/en/mono/mono.html: Minor fix for proper HTML validation.
+	* toc2.xml: Expanded the web services section.
+	* new/en/intro/about.html: Added reference to Mono: A Developer's
+	Notebook.
+	* new/en/web_services/intro.html: Minor edits.
+	* new/en/web_services/tools.html: Content copied from old aspnet/
+	content, revised and updated.
+	* new/en/web_services/about_web_services.html: Moved from old aspnet/
+	directory, renamed, and edited.
+	* new/en/web_services/consuming_web_services_google.html: Moved from
+	old aspnet/ directory, renamed, and edited.
+	* new/en/web_services/google.png: Copied from aspnet/.
+	
+2004-08-16  Shane Landrum <epicene@pobox.com>
+
+	* toc2.xml: Added the Mono introductory chapter.
+	* new/en/intro/about.html: Corrected a link, added first chapter.
+	* new/en/mono/architecture.html: Port and style edit of 
+	html/en/architecture/architecture.html; added a section
+	about managed versus unmanaged code.
+	* new/en/mono/mono.html: Port and style edit of 
+	html/en/mono/mono.html.
+	* new/en/mono/why-mono.html: Port and style edit of 
+	html/en/mono/why-mono.html.	
+	* new/en/mono/monoenabled.html: Port of 
+	html/en/mono/monoenabled.html.	
+	* new/en/mono/context.png: Copy of html/en/mono/context.png.
+	
+2004-08-14  Shane Landrum <epicene@pobox.com>
+
+	* OUTLINE: Expanded planning for some chapters.
+	* toc2.xml: Added subsections to chapters, similar to OUTLINE.
+	* new/en/glossary.html
+	* new/en/index.html
+	* new/en/for_linux_developers/differences_between_gtkplus_and_gtksharp.html
+	* new/en/for_linux_developers/getting_started.xml
+	* new/en/for_linux_developers/intro.html
+	* new/en/for_windows_developers/intro.html
+	* new/en/intro/about.html
+	* new/en/web_services/intro.html: Added new structural stubs.
+	* new/en/preface.html: Added credit line.
+	* new/en/appendencies/resources.html: Imported from html/en with
+	small changes.
+	
+2004-07-26  Shane Landrum <epicene@pobox.com>
+
+	* OUTLINE: new roadmap for the monkeyguide rewrite.
+	* makefile: added rules for building new monkeyguide. defined XSLTPROC.
+	* new/en/*.html: beginnings of the new monkeyguide.
+	* mkmstoc-new.xsl: copy of mkmstoc.xsl to generate docs in new/
+	* toc2.xml: new table of contents.		
+	
+2004-06-28  Jackson Harper  <jackson@ximian.com>
+
+	* html/en/tools/tracing.html: Documentation on tracing in the
+	runtime.
+	
+2004-06-15  Jackson Harper  <jackson@ximian.com>
+
+	* html/en/GAC/basics.html: A couple of cleanups suggested by
+	Erik. Try to sound like less of a baboon. Fix some spalling, add
+	section on using multiple GACs (MONO_GAC_PREFIX).
+		
+2004-06-13  Jonathan Pryor <jonpryor@vt.edu>
+	* html/en/wrapping/interop.html: Added "Properly Disposing of Resources"
+	  section; added Revision History to document; changed title.
+
+2004-06-13  John Luke  <jluke@cfl.rr.com>
+
+	* samples/tutorial/notebook/notebook.cs: s/Glib/GLib/
+	and remove using *Sharp, fixes bug #57477
+
+2004-05-29  Gonzalo Paniagua Javier <gonzalo@ximian.com>
+
+	* html/en/tools/gnunit-thumb.png:
+	* html/en/tools/gnunit.png:
+	* html/en/tools/nunit-gtk-thumb.png:
+	* html/en/tools/nunit-gtk.png: moved nunit-gtk* to gnunit*.
+
+	* html/en/tools/nunit.html: updated.
+
+	* html/en/tools/others.html: new file. It was referenced from index.html
+	but didn't exist in CVS.
+
+2004-05-15  Jackson Harper  <jackson@ximian.com>
+
+	* html/en/GAC/basics.html: Add documentation on the basics of
+	using the GAC.
+	
+2004-05-15  Jonathan Pryor <jonpryor@vt.edu>
+
+	* html/en/wrapping/interop.html: Added information about exceptions crossing
+    the managed/unmanaged boundary (summary: don't do that), some more
+    spelling fixes (s/marshalling/marshaling/g), info about .config files on
+    .dlls for native library specification.
+
+2004-03-31  Martin Willemoes Hansen  <mwh@sysrq.dk>
+
+	* html/en/appendencies/presentations.html: Added presentations held at Novell Brainshare 2004
+	* html/en/appendencies/presentations/brainshare-2004/*.ppt: Ditto
+
+2004-03-20  Jonathan Pryor <jonpryor@vt.edu>
+
+	* html/en/wrapping/interop.html: Updated based on suggetions from Marcus.
+	  Man page references are now in bold.  Spelling corrections, etc.
+
+2004-01-30  Hector E. Gomez Morales  <hgomez_36@flashmail.com>
+
+	* samples/tutorial/Makefile: Added checkbox sample to the build.
+	* samples/tutorial/eventbox/eventbox.cs: used new keyword to fix error.
+	* samples/tutorial/fifteen/Makefile: Added gnome-sharp.dll to enable compilation.
+	* samples/tutorial/frame/frame.cs: removed SetLabelAlign call.
+	* samples/tutorial/packing/packing.cs: Added GLib and GlibSharp to the "using ..." libraries.
+	* samples/tutorial/radiobuttons/radiobuttons.cs: Updated to new GTK# API.
+	* samples/tutorial/scribble/Scribble.cs: Updated to new GTK# API.
+	* samples/tutorial/scrolledwin/scrolledwin.cs: Fixed error about same varable name.
+	* samples/tutorial/spinbutton/Spinbutton.cs: Fixed error.
+	* samples/tutorial/textentry/Makefile: Changed from TextEntry to TextEntry.cs.
+
+	* html/en/xml/xmlreader.html:
+	* html/en/xml/xmlwriter.html: Fixed some typos that prevented build.
+
+2004-01-23  Martin Willemoes Hansen  <mwh@sysrq.dk>
+
+	* html/en/gnome/bindings/glade/glade.html: Added Jasper van Putten's patch
+	  which removes gnome as a dependency in the glade tutorial. This way windows
+	  users can have fun as well.
+
+2004-01-11 Johannes Roith <johannes@jroith.de>
+
+	* Start general overview
+	* Various fixes
+
+2004-01-06  Martin Willemoes Hansen  <mwh@sysrq.dk>
+
+	* html/en/appendencies/rreading.html: Removed
+	* html/en/appendencies/resources.html: Added link to mono books and mono faq
+	* html/en/index.html: Removed appendency recomended reading
+	* Documentation.xml: Removed appendency recomended reading and faq
+
+2004-01-04  Martin Willemoes Hansen  <mwh@sysrq.dk>
+
+	* IDEAS: Added Miguel de Icaza's "custom widget" idea
+
+2003-12-16  John Luke  <jluke@cfl.rr.com>
+
+	* html/en/gnome/bindings/packingdemonstrationprogram.html:
+		fix so it compiles, s/Glib/GLib
+		
+2003-12-14  Martin Willemoes Hansen  <mwh@sysrq.dk>
+
+	* html/en/architecture/architecture.html: Commited Jon Kessler's fixes
+	* html/en/mono/history.html: Ditto
+	* html/en/mono/dotnet.html: Ditto
+	* html/en/mono/mono.html: Ditto
+	* html/en/preface.html: Ditto
+	* html/en/target.html: Ditto
+	* html/en/appendencies/credits.html: Added Jon Kessler
+
+2003-12-11  Martin Willemoes Hansen  <mwh@sysrq.dk>
+
+	* html/en/appendencies/resources.html: Removed broken link to gtk# api.
+	  Added link to Mono Documentation Library.
+	  Removed link to sample code.
+	* html/en/appendencies/sampleapps.html: Added link to sample code.
+	* html/en/appendencies/rreading.html: Added Mono FAQ
+	* html/en/appendencies/faq.html: Removed
+	* html/en/index.html: Updated to reflect removed faq.
+	  Added a - delimiter for chapters.
+	  Fixed chapter numbers.
+	* ChangeLog: Fixed from DOS -> UNIX
+
+2003-12-10  Martin Willemoes Hansen  <mwh@sysrq.dk>
+
+	* Documentation.xml: Removed duplicated entry on GnomeDB#
+	* Documentation.xml: Reverted some erronous changes miguel made
+	  and fixed chapter numbers.
+
+2003-12-09  Martin Willemoes Hansen  <mwh@sysrq.dk>
+
+	* html/en/appendencies/rreading.html: Merged with the book listning on 
+	  go-mono.com
+
+2003-12-08  Martin Willemoes Hansen  <mwh@sysrq.dk>
+
+	* html/en/gnome/bindings/gnomedb: Added Marius Andreiana gnomedb tutorial.
+	* html/en/index.html: Ditto
+	* Documentation.xml: Ditto
+	* Documentation.xml: Added headline for the appendencies section
+
+2003-11-19  John Luke  <jluke@cfl.rr.com>
+
+	* html/en/wrapping/clibs.html: update to how gtk# now works
+
+2003-11-17  John Luke  <jluke@cfl.rr.com>
+
+	* html/en/tools/assembler-intro.html:
+	* html/en/tools/assembler.html:
+	* html/en/tools/debugger.html:
+	* html/en/tools/monodis.html:
+	* html/en/tools/nunit.html:
+	* html/en/tools/mbascomp-cmdlo.html:
+	* html/en/tools/cscomp-cmdlo.html:
+	* html/en/tools/cscomp-intro.html: Apply various typo/grammar fixes from
+	  Manuel Lora <vanguardist@cox.net>
+	
+2003-11-09  Richard Torkar <richard.torkar@htu.se>
+
+	* html/en/appendencies/faq.html: Changed q126 to be more generic
+
+2003-10-15  Martin Willemoes Hansen  <mwh@sysrq.dk>
+
+	* html/en/mono/history.html: Added
+	* html/en/index.html: Added entry to mono history
+	* Documentation.xml: Ditto
+
+2003-09-30  Alejandro Sánchez Acosta <asanchez@gnu.org>
+
+	* html/en/gnome/bindings/gtk-sharp: Added rangewidget sample.
+
+2003-09-25  Martin Willemoes Hansen  <mwh@sysrq.dk>
+
+	* html/en/appendencies/sampleapps.html: Added monumeric
+
+2003-09-05  Johannes Roith <johannes@jroith.de>
+
+	* Hmm, have not done many changlog entries for some time ;)
+	* Many cleanups
+	* Prepare translation
+
+2003-08-23  John Luke  <jluke@cfl.rr.com>
+
+	* html/en/wrapping/clibs.html: spelling, grammar, typo fixes
+
+2003-08-22  Martin Willemoes Hansen  <mwh@sysrq.dk>
+
+	* Changelog: 
+	* ChangeLog: Renamed Changelog to ChangeLog, now emacs ChangeLog mode works
+	out of the box ;)
+	* html/en/wrapping/clibs.html: Added lots of contents.
+
+2003-08-21  Martin Willemoes Hansen <mwh@sysrq.dk>
+
+	* Documentation.xml: Added chapter 28 on GObject based C library wrapping.
+	* html/en/index.html: Updated entry to chapter 28.
+	* html/en/wrapping/clibs.html: Updated to be more oriented towards Gtk#
+	wrapper tools.
+
+2003-08-06  Martin Willemoes Hansen <mwh@sysrq.dk>
+	* Documentation.xml: Fixed Chapter 10 Section headlines
+
+2003-07-25  Martin Willemoes Hansen <mwh@sysrq.dk>
+	* html/en/appendencies/ecma.html: Fixed ecma links.
+
+2003-07-21  Martin Willemoes Hansen <mwh@sysrq.dk>
+	* html/en/wrapping/clibs.html: Added section on unions.
+
+2003-07-16  Martin Willemoes Hansen <mwh@sysrq.dk>
+	* Applied Ugo Albarello <ugo.albarello@007mundo.com>'s patch see
+	  below.
+	* /html/en/gnome/bindings/gtk-sharp/gtk-sharp.html:
+          Fix the URL to Calendar Widget section (and removes the (*) mark)
+	* /html/en/gnome/bindings/gtk-sharp/miscprogress.html:
+	  Sample ported from C/Gtk+ to C#/Gtk#
+	* /html/en/gnome/bindings/gtk-sharp/timeouts.html:
+	  'Ported' to C#/Gtk#
+
+2003-07-10  Martin Willemoes Hansen <mwh@sysrq.dk>
+	* /html/en/gnome/bindings/diacanvas: Added
+	* /html/en/index.html: 
+	  /Documentation.xml: Moved all gnome bindings in GNOME.NET 
+	  into top level links of GNOME.NET
+	* /html/en/gnome/style.css: Removed, outdated and not used.
+
+2003-07-09  Martin Willemoes Hansen <mwh@sysrq.dk>
+	* /html/en/gnome/bindings/gtk-sharp/misccalendar.html: Applied
+	  Ugo Albarello <ugo.albarello@007mundo.com>'s patch.
+	* /html/en/ChangeLog: Content moved to this log
+	* /html/en/gnome/documentation: Removed, MonoDoc does the job.
+	* /html/en/about.html: Moved author information to appendencies/credits.html
+	* PEOPLE: Removed, content is now maintained in appendencies/credits.html
+	* NOTES, README: Merged NOTES and README into README
+
+2003-06-30  Martin Willemoes Hansen <mwh@sysrq.dk>
+	* Documentation.xml: Added subsections for Creating ASP.NET Web Pages 
+	* html/en/tools/monodocbrowser.html: Added
+
+2003-06-28  Martin Willemoes Hansen <mwh@sysrq.dk>
+	* samples/tutorial/nunit: Added sample code
+	* html/en/tools/ngen.html: Split out from nunit.html
+	* html/en/tools/nant.html: Split out from nunit.html
+	* html/en/tools/nunit.html: Added links, nunit-gtk, install, sample
+	  credits section.
+	* html/en/tools/debugger.html: Added credits section, install info.
+	* html/en/tools/monodis.html: Added Contents menu
+	* html/en/tools/asembler.html: Added Contents menu
+
+2003-06-05  Martin Willemoes Hansen <mwh@sysrq.dk>
+	* html/en/gnome/bindings/gtk-sharp/menu_manual_creation.html :
+	* html/en/gnome/bindings/gtk-sharp/menu_manual_example.html :
+	  Applied patches from Ugo Albarello <ugo.albarello@007mundo.com>
+	* html/en/gnome/index.html: removed
+	* html/en/wrapping/clibs.html: Added
+
+2003-06-04  Miguel de Icaza  <miguel@ximian.com>
+ 
+        * html/en/mono/mono.html: Add document.
+        * html/en/mono/monoenabled.html: Edits.
+        * html/en/about.html: Added authors to the about section.
+
+2003-06-04  Martin Willemoes Hansen <mwh@sysrq.dk>
+	* html/en/gnome/bindings/gconf/gconf.html: Applied patch from 
+	  Pablo Baena <pbaena@uol.com.ar>
+
+2003-05-21  Martin Willemoes Hansen <mwh@sysrq.dk>
+	* html/en/appendencies/sampleapps.html: Added link to PolarViewer
+
+2003-04-29  Martin Willemoes Hansen <mwh@sysrq.dk>
+	* samples/tutorial/gnome_about: Added gnome about dialog sample
+	* html/en/gnome/bindings/gnome/gnome.html: Added gnome about dialog
+	* samples/tutorial/messagedialog: Added a messagedialog sample
+	* html/en/gnome/bindings/gtk-sharp/miscmessagedialogs.html
+
+2003-04-25  Alejandro Sánchez Acosta <asanchez@gnu.org>
+	* samples/tutorial/textentry: Added TextEntry sample
+
+2003-04-07  Alp Toker <alp@atoker.com>
+	* html/en/installation/linux.html: Rewrote Debian installation section.
+	
+2003-03-24  Martin Willemoes Hansen <mwh@sysrq.dk>
+	* Added author of ide/eclipse.html
+
+2003-03-15  Alejandro Sanchez Acosta <asanchez@gnu.org>
+	* Added custombutton and menubar samples to gtksharp tutorial.
+
+2003-03-11  Charles Iliya Krempeaux <charles@reptile.ca>
+	* People are going to be doing alot of copy & pasting from
+	  this book!... so, to prevent people from having many
+	  headaches from wondering why the contents of their App
+	  won't show, changing Gnome.App.Show() to Gnome.App.ShowAll().
+	* monkeyguide/html/en/gnome/bindings/gnome/adding_contents.html :
+	  Changed Show() to ShowAll().
+	* monkeyguide/html/en/gnome/bindings/gnome/hello_world.html :
+	  Changed Show() to ShowAll().
+	* monkeyguide/html/en/gnome/bindings/rsvg/hello_world.html :
+	  Changed Show() to ShowAll().
+
+2003-03-09  Martin Willemoes Hansen <mwh@sysrq.dk>
+	* Fixed up installation/linux.html added a Credits section to it.
+	* Applied Laurent Guerby <guerby@acm.org> patch to 
+	  installation/linux.html  and installation/overview.html
+
+2003-03-08  Lee Mallabone <gnome@fonicmonkey.net>
+	* monkeyguide/html/en/gnome/bindings/gtk-sharp/treeview.html:
+	  Readability and formatting update from George Farris <farrisg@shaw.ca>
+
+2003-03-07  Martin Willemoes Hansen <mwh@sysrq.dk>
+	* Added a link to Pablo Baena's app GnoMencoder.
+	* Added links to two of my own sample apps, menu for 
+	  jumpnbump and a little game.
+
+2003-03-06  Lee Mallabone <gnome@fonicmonkey.net>
+	* monkeyguide/html/en/gnome/bindings/gtk-sharp/treeview.html:
+	  Added documentation about TreeView written by George Farris 
+	  <farrisg@shaw.ca>, with some formatting tweaks to fit in 
+	  with Monkeyguide.
+	* monkeyguide/html/en/gnome/bindings/gtk-sharp/gtk-sharp.html:
+	  Add link to treeview docs.
+
+2003-02-25  Charles Iliya Krempeaux <charles@reptile.ca>
+	* monkeyguide/html/en/index.html : Did some renaming, in the
+	  "Chapter 18" part of the page.  Changed some of the "Gtk#"
+	  to the (now) prefered "GNOME.NET".
+	* monkeyguide/html/en/index.html : Updated it by creating
+	  a link for the "Rsvg#" section.
+	* monkeyguide/PEOPLE : Updated to reflect that I am (also) doing
+	  work on the Rsvg# stuff.
+	* monkeyguide/html/en/gnome/bindings/rsvg/ : Created this directory
+	  to hold the Rsvg# tutorials.
+	* monkeyguide/html/en/gnome/bindings/rsvg/rsvg.html : Created this
+	  file as a starting point for the Rsvg# stuff.
+	* monkeyguide/html/en/gnome/bindings/rsvg/introduction.html : Created
+	  the "introduction section" of the Rsvg# stuff.
+	* monkeyguide/html/en/gnome/bindings/rsvg/hello_world.html : Created
+	  a "Hello World" tutorial for Rsvg#.
+	* monkeyguide/html/en/gnome/bindings/rsvg/vector_vs_pixmap.html : made,
+	  basically, a stub file for this.  (To be written later.)
+
+2003-02-22  Charles Iliya Krempeaux <charles@reptile.ca>
+	* monkeyguide/html/en/gnome/bindings/gnome/hello_world.html :
+	  Updated it to my latest draft of this tutorial.
+	* html/en/cross_platform/gui.html : It previously called
+	  the GNOME.NET chapter to be chapter 12.  Corrected this
+	  to say Chapter 18.
+	* html/en/gnome/bindings/gnome/gnome.html : Added a link for
+	  "Adding Contents" tutorial, to the tables of contents.
+	* html/en/gnome/bindings/gnome/adding_contents.html : Created
+	  the GNOME.NET "Adding Contents" tutorial.
+
+2003-02-13  Martin Willemoes Hansen
+	* Corrected a bug using [GladeWidget] in 
+          /gnome/bindings/glade/glade.html
+
+2003-02-12  Johannes Roith <johannes@jroith.de>
+	* New ADO.NET content
+	* Some ASP.NET modifications
+
+2003-02-08  Johannes Roith <johannes@jroith.de>
+	* Add mobile ASP.NET content
+	* New style.css
+
+2003-02-07  Johannes Roith <johannes@jroith.de>
+	* Rewritten Gnome# HTML to be monkeyguide conform
+	* Add Introduction to Gnome#
+	* Add TOC anf footbar to Glade#
+	* Add content to .NET Introduction
+	* Add to GStreamer tutorial
+	* Fixed FreeBSD installation text
+	* Add new ASP.NET tutorial
+	* Add ASP.NET examples directory to /samples
+
+
+2003-02-06  Martin Willemoes Hansen <mwh@sysrq.dk>
+	* Added Charles to PEOPLE
+	* Added Charles intial work on Gnome#
+	* Made an initial outline for Gnome#
+	* Removed old bindings.html file
+
+2003-01-23  Martin Willemoes Hansen <mwh@sysrq.dk>
+	* Added some credits sections and removed
+	  some duplicated credits.
+
+2003-01-21  Martin Willemoes Hansen <mwh@sysrq.dk>
+ 	* Added a credits section and a TOC to
+	  ide/sharpdevelop.html converted eclipse.html
+	  to unix text.
+	* Added a credits section to 
+  	  gnome/bindings/gtk-sharp/gtk-sharp.html
+	  Removed duplicated Introduction text.
+	* Added a credits section to
+	  gnome/bindings/gstreamer/gstreamer.html
+	  Removed duplicated TOC's
+
+2003-01-20  Martin Willemoes Hansen <mwh@sysrq.dk>
+ 	* Fixed gnome/bindings/gtk-sharp/getstart.html
+	  btn was not added to the window.
+
+2003-01-14  Johannes Roith <johannes@jroith.de>
+	* Work on Gtk# tutorial
+
+2003-01-13  Johannes Roith <johannes@jroith.de>
+	* release 0.1
+	* Many additions
+
+2003-01-12  Johannes Roith <johannes@jroith.de>
+	* Improved design
+	* Add architecture
+	* Add QT# section
+
+2003-01-11  Johannes Roith <johannes@jroith.de>
+	* Big design improvments
+	* Add installation stuuf
+
+2003-01-10  Johannes Roith <johannes@jroith.de>
+	* Redesign TOC
+	* Add Gnome installation
+	* Remove Mono introduction
+	* Misc Changes
+
+2003-01-09  Martin Willemoes Hansen <mwh@sysrq.dk>
+	* Removed redundant info in ressources.html
+          And extracted the presentation part into
+	  a new appendency.
+	* Removed maintainer/author field in 
+	  index.html, since its stated in the
+	  Credits section.
+
+2003-01-04  Martin Willemoes Hansen <mwh@sysrq.dk>
+	* Changed glade.html to reflect the new
+ 	  GladeWidget attribute.
+          Also added a TOC to it.
+        * Removed the IDE section and Linux kernel
+	  support from mono/intro.html
+	  Added the kernel support to 
+          installation/linux.html
+        * Added TOCs to the ide section.
+	  Also added a CREDITS section to
+	  eclipse.html
+	* Removed the specification of the Glade
+	  widget when using the GladeWidget 
+	  attribute in glade.html.
+
+2003-01-04  Johannes Roith <johannes@jroith.de>
+	* Add "What is mono?"
+	* Add some TOCs
+	* Add appendencies
+	* Add Embedding in  Perl
+	* Add about and target
+
+2003-01-03  Johannes Roith <johannes@jroith.de>
+	* Add installation instructions
+
+2003-01-02  Johannes Roith <johannes@jroith.de>
+	* Change title everywhere
+	* Add appendencies/ecma.html and entry in index.html
+	* Fix typos
+	* Other fixes everywhere
+
+2003-01-02  Johannes Roith <johannes@jroith.de>
+	* Integrate Gtk# documentation from Rachel
+
+2002-12-31  Johannes Roith <johannes@jroith.de>
+	* Update C# tutorial
+
+2002-12-31  Johannes Roith <johannes@jroith.de>02
+	* Add directory to put samples in
+
+2002-12-28  Martin Willemoes Hansen <mwh@sysrq.dk>
+	* Added Norman and Felix to the PEOPLE file
+
+2002-12-26  Johannes Roith <johannes@jroith.de>
+	* Adapt path and navigation bar
+	* Layout changes
+	* Other
+
+2002-12-26  Martin Willemoes Hansen <mwh@sysrq.dk>
+	* Removed duplicated files in the GNOME.NET chapter.
+	* Added introduction.html, same_gnome.html, bindings.html 
+	  to the GNOME.NET Chapter
+	* Changed PEOPLE to reflect that most in their, are
+	  working on the GNOME.NET chapter.
+	* Removed gnome from the repository.
+	* Added contributing.html and preface.html
+
+2002-12-25  Martin Willemoes Hansen <mwh@sysrq.dk>
+	* Changed structure of monkey guide to have multiple
+     	  languages.
+	* Incorporated Felix Faassen's TOC
+	* Added Felix to PEOPLE
+
+2002-12-25  Johannes Roith <johannes@jroith.de>
+	* Import Monkeyguide
+
+2002-11-27  Martin Willemoes Hansen <mwh@sysrq.dk>
+ 	* Added a section 'Various Tools', in lack of a better name
+       	  containing NUnit, NAnt
+
+2002-11-27  Martin Willemoes Hansen <mwh@sysrq.dk>
+       	* Changed Raciel in PEOPLE to his real name
+ 	* Added Cesar to PEOPLE, he helps raciel
+	* Added two #Develop presentations
+	* Added two of Mike Kestners presentations about gtk#
+
+2002-11-25  Martin Willemoes Hansen <mwh@sysrq.dk>
+
+	* Moved webcontent from mwh.sysrq.dk into the repository
+   	* Is now available from http://www.go-mono.com/gnometutorial
+	* Rollback XHTML conversion
+ 	* Changed writers.html to PEOPLE and IDEAS
+
+2002-11-16  Johannes Roith <johannes@jroith.de>
+
+	* Convert to XHTML
+
+2002-11-09  Johannes Roith <johannes@jroith.de>
+
+	* Initial import Martin Willemoes Hansen's tutorial and move
+	  stylesheets to an separate file
+2005-02-18  Shane Landrum <epicene@pobox.com>
+
+	* new/en/gnome/bindings/gtk-sharp/widgetoverviewcasting.html: 
+	Removed as part of widget overview review.
+	
+2005-02-18  Atsushi Enomoto  <atsushi@ximian.com>
+
+	* new/en/asp_net/mod_mono.html :
+	  reverted incorrectly commited translation.
+	* new/ja/asp_net/mod_mono.html :
+	  added new translation as expected.
+
+2005-02-18  Atsushi Enomoto  <atsushi@ximian.com>
+
+	* new/ja/asp_net/mod_mono.html : new translation.
+
+2005-02-15  Atsushi Enomoto  <atsushi@ximian.com>
+
+	* new/en/deploy/pkgconfig.html : synchronized title with toc2.xml.
+	* new/ja/deploy/pkgconfig.html : new translation.
+
+2005-02-14  Atsushi Enomoto  <atsushi@ximian.com>
+
+	* new/ja/gnome/glade/ : added glade.html and glade2.html translations
+	  including Japanized images. Contribution by Takeshi Aihana.
+	* new/en/xml/xmlwriter.html : added one more tip.
+
+2005-02-10 Gonzalo Paniagua Javier <gonzalo@ximian.com>
+
+	* makefile: `which xsltproc` -> xsltproc
+
+	* toc2.xml:
+	* new/en/asp_net/mod_mono.html: add mod_mono configuration.
+
+2005-02-09  Atsushi Enomoto  <atsushi@ximian.com>
+
+	* new/en/xml/xmlreader.html : revised during translation.
+	  new/ja/xml/xmlreader.html : translation.
+
+2005-02-09  Atsushi Enomoto  <atsushi@ximian.com>
+
+	* new/ja/cross_platform/comprules.html,
+	  new/ja/cross_platform/gui.html,
+	  new/ja/cross_platform/introduction.html :
+	  Translations. Contribution by Hiroyuki Ishimine.
+
+2005-02-08  Kazuki Oikawa <kazuki@panicode.com>
+
+	* new/ja/for_windows_developers/getting_started.html,
+	  new/ja/for_windows_developers/intro.html,
+	  new/ja/hello_world/intro.html,
+	  new/ja/hello_world/more_samples.html : translations.
+
+2005-02-05  Atsushi Enomoto  <atsushi@ximian.com>
+
+	* new/programming/interop.html : build fix (tidy).
+
+2005-02-05  Atsushi Enomoto  <atsushi@ximian.com>
+
+	* new/ja/intro/about.html,
+	  new/ja/preface.html,
+	  new/ja/mono/mono.html,
+	  new/ja/mono.context.png,
+	  new/ja/xml/xml.html : translations. contribution by k.hiroshi.
+
+2005-02-04  Atsushi Enomoto  <atsushi@ximian.com>
+
+	* makefile, mkmstoc-new.xsl : added localized document support.
+	* IDEAS : new requirements.
+
+2005-02-03  Jonathan Pryor  <jonpryor@vt.edu>
+
+	* new/en/programming/interop.html: Flush.  Lots of updates.  
+	  See "February 3, 2005" Revision History entry for details.
+
+2005-02-03  Atsushi Enomoto  <atsushi@ximian.com>
+
+	* IDEAS : added thoughs on build system.
+
+2005-02-03  Atsushi Enomoto  <atsushi@ximian.com>
+
+	* makefile : added target "install-new"
+
+2005-01-31  Shane Landrum <epicene@pobox.com>
+
+	* new/en/gnome/bindings/gtk-sharp/introduction.html: 
+	General proofreading and style edits.
+	* new/en/gnome/bindings/gtk-sharp/gtk-sharp.html
+	* new/en/gnome/bindings/gtk-sharp/getstart.html
+	* new/en/gnome/bindings/gtk-sharp/packingwidgetstheory.html
+	* new/en/gnome/bindings/gtk-sharp/packingwidgets.html: Style and
+	grammar edits on widget layout and packing.
+
+2005-01-28  Shane Landrum <epicene@pobox.com>
+
+	* new/en/gnome/bindings/gtk-sharp/monitoring_io.html
+	* new/en/gnome/bindings/gtk-sharp/dnd.html
+	* new/en/gnome/bindings/gtk-sharp/dnd_overview.html
+	* new/en/gnome/bindings/gtk-sharp/dnd_properties.html:
+	Style and clarity edits.
+	* new/en/gnome/bindings/gtk-sharp/gtk-sharp.html
+	* new/en/gnome/bindings/gtk-sharp/dnd_functions.html:
+	Added a code-based overview of how to use DND.
+
+2005-01-24  Shane Landrum <epicene@pobox.com>
+
+	* new/en/tools/monodoc/contributing.html
+	* new/en/tools/monodoc/tag-reference.html
+	* TODO : Rolled in monodoc tag reference from Joshua
+	Tauberer.
+
+2005-01-19  Shane Landrum <epicene@pobox.com>
+
+	* new/en/index.html
+	* TODO
+	* toc2.xml
+	* new/en/tools/gdb.html
+	* new/en/tools/cscomp-intro.html
+	* new/en/tools/disassembler.html
+	* new/en/tools/cscomp-cmdlo.html
+	* new/en/tools/compiling.png
+	* new/en/tools/debugger.html
+	* new/en/tools/debugger.png
+	* new/en/tools/assembler-intro.html: Moved some tools
+	docs from html/; no edits made for now. Added a new
+	chapter on assembly/disassembly.
+	* new/en/gnome/bindings/gtk-sharp/dnd_properties.html:
+	Edits to remove Gtk+-style enum references and replace
+	them with links to the API reference.
+
+2005-01-17  Shane Landrum <epicene@pobox.com>
+
+	* new/en/tools/monodoc/building_documentation.html:
+	Spelling fix.
+	* new/en/tools/monodoc/contributing.html
+	Notes about special tags for monodoc.
+	* new/en/gnome/bindings/gtk-sharp/dnd_overview.html
+	* new/en/gnome/bindings/gtk-sharp/dnd_properties.html:
+	Minor fixes, Gtk#-specific touches.
+	* new/en/gnome/bindings/gtk-sharp/gtk-sharp.html:
+	Removed a projected section about writing custom
+	widgets.
+	* TODO
+	* toc2.xml: Updates as appropriate.
+	
+2005-01-17  Shane Landrum <epicene@pobox.com>
+
+	* new/en/gnome/bindings/gtk-sharp/*: Moved from old
+	monkeyguide.
+	* new/en/index.html
+	* TODO
+	* toc2.xml: Minor updates.
+	
+2005-01-08  Shane Landrum <epicene@pobox.com>
+
+	* new/en/tools/monodoc/monodoc-monodoc2.png
+	* new/en/tools/monodoc/monodoc-monodoc3.png
+	* new/en/tools/monodoc/building_documentation.html
+	* new/en/tools/monodoc/monodoc-monodoc1.png: Rolled
+	in monodoc tutorial by Christian Hergert 
+	<chris@mosaix.net> .
+	* new/en/other_platforms: added new dir.
+	* makefile: adjusted "make new" slightly.
+	* new/en/credits.html
+	* new/en/index.html
+	* TODO
+	* toc2.xml: Minor adjustments consistent with
+	other listed changes.
+
+2005-01-07  Shane Landrum <epicene@pobox.com>
+
+	* new/en/gnome/bindings/canvas/* 
+	* new/en/gnome/bindings/gnomedb/* 
+	* new/en/gnome/bindings/gstreamer/*: Moved the parts
+	of the GStreamer, GnomeDB, and Gnome Canvas
+	tutorial that were completed over to the new 
+	monkeyguide.
+	* new/en/for_linux_developers/installation.html:
+	Moved old linux installation tutorial into a more
+	useful location.
+	* new/en/for_linux_developers/monodevelop.html:
+	Moved old monodevelop page into a more useful location.
+	* new/en/index.html
+	* toc2.xml
+	* TODO: Updates to reflect changes above.
+	
+2005-01-05  Shane Landrum <epicene@pobox.com>
+
+	* new/en/gnome/bindings/rsvg/*
+	* new/en/gnome/bindings/gconf/*
+	* new/en/gnome/bindings/glade/*: Ported sections
+	from old monkeyguide to new version.
+	* new/en/other_languages/Java.png: import forgotten
+	in earlier imports.
+	* TODO
+	* toc2.xml: Updates for newly-copied monkeyguide
+	sections.
+
+2005-01-04  Shane Landrum <epicene@pobox.com>
+
+	* new/en/cross_platform/*
+	* new/en/tools/monodoc
+	* new/en/tools/monodoc/contributing.html
+	* new/en/credits.html
+	* new/en/index.html
+	* TODO
+	* toc2.xml : Ported old monkeyguide's section
+	on cross-platform code, also section on contributing
+	docs.
+
+2005-01-04  Shane Landrum <epicene@pobox.com>
+
+	* new/en/presentations/mono-guadec.ppt
+	* new/en/presentations/debugger.sxi
+	* new/en/presentations/gtk-sharp-guadec.ppt
+	* new/en/presentations.html : Minor edits and adding
+	some files which I forgot to add before from html/.
+	* new/en/other_languages/* : Ported some of
+	the embedding docs together with some of html/en/languages.
+	* new/en/index.html
+	* TODO
+	* toc2.xml : General updates, added the other_languages
+	(embedding, etc) section.
+
+2005-01-04  Shane Landrum <epicene@pobox.com>
+
+	* new/en/index.html
+	* TODO
+	* toc2.xml
+	* new/en/presentations/*
+	* new/en/presentations.html: Ported old "presentations"
+	section to new monkeyguide.
+
+2005-01-03  Shane Landrum <epicene@pobox.com>
+
+	* new/en/gnome/bindings/diacanvas/screendump.png
+	* new/en/gnome/bindings/diacanvas/index.html:
+	Ported old diacanvas bindings info to new guide.
+	* new/en/index.html: Updates/regeneration.
+	* toc2.xml: Reordered some things, added some things.
+	* TODO : Added a section for checklisting what's been
+	ported to the new monkeyguide and what hasn't.
+
+2004-08-24  Shane Landrum <epicene@pobox.com>
+
+	* OUTLINE: note obsolete status.
+	* toc2.xml: update to include future plans.
+	* new/en/hello_world/tour.html: added code sample from samples/.
+	* new/en/web_services/tools.html: Note on mod_mono.
+	* new/en/for_linux_developers/ides.html: Moved IDE section in from
+	the old Monkeyguide.
+	* new/en/web_services/producing_web_services.html: Added a stub
+	page.
+
+2004-08-22  Shane Landrum <epicene@pobox.com>
+
+	* new/en/databases/firebird.html : fix doctype so build doesn't die
+	at xmllint step.
+	
+2004-08-21  Shane Landrum <epicene@pobox.com>
+
+	* new/en/for_linux_developers/getting_started.html: Rolled much of
+	the old Linux installation doc into here, since it's good enough.
+	* new/en/for_windows_developers/getting_started.html: Added
+	basic text.
+	* new/en/web_services/databases_and_aspnet.html : Broken out from
+	old ADO.NET docs into its own section, more logically organized.
+	* new/en/web_services/producing_web_services.html : New stub page.
+	* toc2.xml: moved the Hello World section.
+	* new/en/hello_world/intro.html: Began Hello World descriptions.
+	* new/en/hello_world/tour.html: Began Hello World GTK# example.
+	
+2004-08-21  Shane Landrum <epicene@pobox.com>
+
+	* new/en/appendencies/*: moved over to appendices/ for proper spelling.
+	* new/en/appendices/*: Moved old html/en/appendencies over to here.
+	* new/en/hello_world/more_samples.html: Some of html/en/appendencies--
+	parts that pointed to sample code-- moved here so that new developers
+	can get pointers to sample code early on.
+	* toc2.xml: Updated Appendices section.
+
+2004-08-21  Shane Landrum <epicene@pobox.com>
+
+	* new/en/man/* : copied over html/en/man/*, manpages for mono tools.
+	* toc2.xml: added links to manpages.
+	
+2004-08-21  Shane Landrum <epicene@pobox.com>
+
+	* new/en/databases/* : ported over most content from html/en/adonet/*;
+	added new introduction.
+	* toc2.xml : expanded outline.
+	
+2004-08-16  Shane Landrum <epicene@pobox.com>
+
+	* new/en/index.html: Regenerated.
+	* new/en/mono/mono.html: Minor fix for proper HTML validation.
+	* toc2.xml: Expanded the web services section.
+	* new/en/intro/about.html: Added reference to Mono: A Developer's
+	Notebook.
+	* new/en/web_services/intro.html: Minor edits.
+	* new/en/web_services/tools.html: Content copied from old aspnet/
+	content, revised and updated.
+	* new/en/web_services/about_web_services.html: Moved from old aspnet/
+	directory, renamed, and edited.
+	* new/en/web_services/consuming_web_services_google.html: Moved from
+	old aspnet/ directory, renamed, and edited.
+	* new/en/web_services/google.png: Copied from aspnet/.
+	
+2004-08-16  Shane Landrum <epicene@pobox.com>
+
+	* toc2.xml: Added the Mono introductory chapter.
+	* new/en/intro/about.html: Corrected a link, added first chapter.
+	* new/en/mono/architecture.html: Port and style edit of 
+	html/en/architecture/architecture.html; added a section
+	about managed versus unmanaged code.
+	* new/en/mono/mono.html: Port and style edit of 
+	html/en/mono/mono.html.
+	* new/en/mono/why-mono.html: Port and style edit of 
+	html/en/mono/why-mono.html.	
+	* new/en/mono/monoenabled.html: Port of 
+	html/en/mono/monoenabled.html.	
+	* new/en/mono/context.png: Copy of html/en/mono/context.png.
+	
+2004-08-14  Shane Landrum <epicene@pobox.com>
+
+	* OUTLINE: Expanded planning for some chapters.
+	* toc2.xml: Added subsections to chapters, similar to OUTLINE.
+	* new/en/glossary.html
+	* new/en/index.html
+	* new/en/for_linux_developers/differences_between_gtkplus_and_gtksharp.html
+	* new/en/for_linux_developers/getting_started.xml
+	* new/en/for_linux_developers/intro.html
+	* new/en/for_windows_developers/intro.html
+	* new/en/intro/about.html
+	* new/en/web_services/intro.html: Added new structural stubs.
+	* new/en/preface.html: Added credit line.
+	* new/en/appendencies/resources.html: Imported from html/en with
+	small changes.
+	
+2004-07-26  Shane Landrum <epicene@pobox.com>
+
+	* OUTLINE: new roadmap for the monkeyguide rewrite.
+	* makefile: added rules for building new monkeyguide. defined XSLTPROC.
+	* new/en/*.html: beginnings of the new monkeyguide.
+	* mkmstoc-new.xsl: copy of mkmstoc.xsl to generate docs in new/
+	* toc2.xml: new table of contents.		
+	
+2004-06-28  Jackson Harper  <jackson@ximian.com>
+
+	* html/en/tools/tracing.html: Documentation on tracing in the
+	runtime.
+	
+2004-06-15  Jackson Harper  <jackson@ximian.com>
+
+	* html/en/GAC/basics.html: A couple of cleanups suggested by
+	Erik. Try to sound like less of a baboon. Fix some spalling, add
+	section on using multiple GACs (MONO_GAC_PREFIX).
+		
+2004-06-13  Jonathan Pryor <jonpryor@vt.edu>
+	* html/en/wrapping/interop.html: Added "Properly Disposing of Resources"
+	  section; added Revision History to document; changed title.
+
+2004-06-13  John Luke  <jluke@cfl.rr.com>
+
+	* samples/tutorial/notebook/notebook.cs: s/Glib/GLib/
+	and remove using *Sharp, fixes bug #57477
+
+2004-05-29  Gonzalo Paniagua Javier <gonzalo@ximian.com>
+
+	* html/en/tools/gnunit-thumb.png:
+	* html/en/tools/gnunit.png:
+	* html/en/tools/nunit-gtk-thumb.png:
+	* html/en/tools/nunit-gtk.png: moved nunit-gtk* to gnunit*.
+
+	* html/en/tools/nunit.html: updated.
+
+	* html/en/tools/others.html: new file. It was referenced from index.html
+	but didn't exist in CVS.
+
+2004-05-15  Jackson Harper  <jackson@ximian.com>
+
+	* html/en/GAC/basics.html: Add documentation on the basics of
+	using the GAC.
+	
+2004-05-15  Jonathan Pryor <jonpryor@vt.edu>
+
+	* html/en/wrapping/interop.html: Added information about exceptions crossing
+    the managed/unmanaged boundary (summary: don't do that), some more
+    spelling fixes (s/marshalling/marshaling/g), info about .config files on
+    .dlls for native library specification.
+
+2004-03-31  Martin Willemoes Hansen  <mwh@sysrq.dk>
+
+	* html/en/appendencies/presentations.html: Added presentations held at Novell Brainshare 2004
+	* html/en/appendencies/presentations/brainshare-2004/*.ppt: Ditto
+
+2004-03-20  Jonathan Pryor <jonpryor@vt.edu>
+
+	* html/en/wrapping/interop.html: Updated based on suggetions from Marcus.
+	  Man page references are now in bold.  Spelling corrections, etc.
+
+2004-01-30  Hector E. Gomez Morales  <hgomez_36@flashmail.com>
+
+	* samples/tutorial/Makefile: Added checkbox sample to the build.
+	* samples/tutorial/eventbox/eventbox.cs: used new keyword to fix error.
+	* samples/tutorial/fifteen/Makefile: Added gnome-sharp.dll to enable compilation.
+	* samples/tutorial/frame/frame.cs: removed SetLabelAlign call.
+	* samples/tutorial/packing/packing.cs: Added GLib and GlibSharp to the "using ..." libraries.
+	* samples/tutorial/radiobuttons/radiobuttons.cs: Updated to new GTK# API.
+	* samples/tutorial/scribble/Scribble.cs: Updated to new GTK# API.
+	* samples/tutorial/scrolledwin/scrolledwin.cs: Fixed error about same varable name.
+	* samples/tutorial/spinbutton/Spinbutton.cs: Fixed error.
+	* samples/tutorial/textentry/Makefile: Changed from TextEntry to TextEntry.cs.
+
+	* html/en/xml/xmlreader.html:
+	* html/en/xml/xmlwriter.html: Fixed some typos that prevented build.
+
+2004-01-23  Martin Willemoes Hansen  <mwh@sysrq.dk>
+
+	* html/en/gnome/bindings/glade/glade.html: Added Jasper van Putten's patch
+	  which removes gnome as a dependency in the glade tutorial. This way windows
+	  users can have fun as well.
+
+2004-01-11 Johannes Roith <johannes@jroith.de>
+
+	* Start general overview
+	* Various fixes
+
+2004-01-06  Martin Willemoes Hansen  <mwh@sysrq.dk>
+
+	* html/en/appendencies/rreading.html: Removed
+	* html/en/appendencies/resources.html: Added link to mono books and mono faq
+	* html/en/index.html: Removed appendency recomended reading
+	* Documentation.xml: Removed appendency recomended reading and faq
+
+2004-01-04  Martin Willemoes Hansen  <mwh@sysrq.dk>
+
+	* IDEAS: Added Miguel de Icaza's "custom widget" idea
+
+2003-12-16  John Luke  <jluke@cfl.rr.com>
+
+	* html/en/gnome/bindings/packingdemonstrationprogram.html:
+		fix so it compiles, s/Glib/GLib
+		
+2003-12-14  Martin Willemoes Hansen  <mwh@sysrq.dk>
+
+	* html/en/architecture/architecture.html: Commited Jon Kessler's fixes
+	* html/en/mono/history.html: Ditto
+	* html/en/mono/dotnet.html: Ditto
+	* html/en/mono/mono.html: Ditto
+	* html/en/preface.html: Ditto
+	* html/en/target.html: Ditto
+	* html/en/appendencies/credits.html: Added Jon Kessler
+
+2003-12-11  Martin Willemoes Hansen  <mwh@sysrq.dk>
+
+	* html/en/appendencies/resources.html: Removed broken link to gtk# api.
+	  Added link to Mono Documentation Library.
+	  Removed link to sample code.
+	* html/en/appendencies/sampleapps.html: Added link to sample code.
+	* html/en/appendencies/rreading.html: Added Mono FAQ
+	* html/en/appendencies/faq.html: Removed
+	* html/en/index.html: Updated to reflect removed faq.
+	  Added a - delimiter for chapters.
+	  Fixed chapter numbers.
+	* ChangeLog: Fixed from DOS -> UNIX
+
+2003-12-10  Martin Willemoes Hansen  <mwh@sysrq.dk>
+
+	* Documentation.xml: Removed duplicated entry on GnomeDB#
+	* Documentation.xml: Reverted some erronous changes miguel made
+	  and fixed chapter numbers.
+
+2003-12-09  Martin Willemoes Hansen  <mwh@sysrq.dk>
+
+	* html/en/appendencies/rreading.html: Merged with the book listning on 
+	  go-mono.com
+
+2003-12-08  Martin Willemoes Hansen  <mwh@sysrq.dk>
+
+	* html/en/gnome/bindings/gnomedb: Added Marius Andreiana gnomedb tutorial.
+	* html/en/index.html: Ditto
+	* Documentation.xml: Ditto
+	* Documentation.xml: Added headline for the appendencies section
+
+2003-11-19  John Luke  <jluke@cfl.rr.com>
+
+	* html/en/wrapping/clibs.html: update to how gtk# now works
+
+2003-11-17  John Luke  <jluke@cfl.rr.com>
+
+	* html/en/tools/assembler-intro.html:
+	* html/en/tools/assembler.html:
+	* html/en/tools/debugger.html:
+	* html/en/tools/monodis.html:
+	* html/en/tools/nunit.html:
+	* html/en/tools/mbascomp-cmdlo.html:
+	* html/en/tools/cscomp-cmdlo.html:
+	* html/en/tools/cscomp-intro.html: Apply various typo/grammar fixes from
+	  Manuel Lora <vanguardist@cox.net>
+	
+2003-11-09  Richard Torkar <richard.torkar@htu.se>
+
+	* html/en/appendencies/faq.html: Changed q126 to be more generic
+
+2003-10-15  Martin Willemoes Hansen  <mwh@sysrq.dk>
+
+	* html/en/mono/history.html: Added
+	* html/en/index.html: Added entry to mono history
+	* Documentation.xml: Ditto
+
+2003-09-30  Alejandro Sánchez Acosta <asanchez@gnu.org>
+
+	* html/en/gnome/bindings/gtk-sharp: Added rangewidget sample.
+
+2003-09-25  Martin Willemoes Hansen  <mwh@sysrq.dk>
+
+	* html/en/appendencies/sampleapps.html: Added monumeric
+
+2003-09-05  Johannes Roith <johannes@jroith.de>
+
+	* Hmm, have not done many changlog entries for some time ;)
+	* Many cleanups
+	* Prepare translation
+
+2003-08-23  John Luke  <jluke@cfl.rr.com>
+
+	* html/en/wrapping/clibs.html: spelling, grammar, typo fixes
+
+2003-08-22  Martin Willemoes Hansen  <mwh@sysrq.dk>
+
+	* Changelog: 
+	* ChangeLog: Renamed Changelog to ChangeLog, now emacs ChangeLog mode works
+	out of the box ;)
+	* html/en/wrapping/clibs.html: Added lots of contents.
+
+2003-08-21  Martin Willemoes Hansen <mwh@sysrq.dk>
+
+	* Documentation.xml: Added chapter 28 on GObject based C library wrapping.
+	* html/en/index.html: Updated entry to chapter 28.
+	* html/en/wrapping/clibs.html: Updated to be more oriented towards Gtk#
+	wrapper tools.
+
+2003-08-06  Martin Willemoes Hansen <mwh@sysrq.dk>
+	* Documentation.xml: Fixed Chapter 10 Section headlines
+
+2003-07-25  Martin Willemoes Hansen <mwh@sysrq.dk>
+	* html/en/appendencies/ecma.html: Fixed ecma links.
+
+2003-07-21  Martin Willemoes Hansen <mwh@sysrq.dk>
+	* html/en/wrapping/clibs.html: Added section on unions.
+
+2003-07-16  Martin Willemoes Hansen <mwh@sysrq.dk>
+	* Applied Ugo Albarello <ugo.albarello@007mundo.com>'s patch see
+	  below.
+	* /html/en/gnome/bindings/gtk-sharp/gtk-sharp.html:
+          Fix the URL to Calendar Widget section (and removes the (*) mark)
+	* /html/en/gnome/bindings/gtk-sharp/miscprogress.html:
+	  Sample ported from C/Gtk+ to C#/Gtk#
+	* /html/en/gnome/bindings/gtk-sharp/timeouts.html:
+	  'Ported' to C#/Gtk#
+
+2003-07-10  Martin Willemoes Hansen <mwh@sysrq.dk>
+	* /html/en/gnome/bindings/diacanvas: Added
+	* /html/en/index.html: 
+	  /Documentation.xml: Moved all gnome bindings in GNOME.NET 
+	  into top level links of GNOME.NET
+	* /html/en/gnome/style.css: Removed, outdated and not used.
+
+2003-07-09  Martin Willemoes Hansen <mwh@sysrq.dk>
+	* /html/en/gnome/bindings/gtk-sharp/misccalendar.html: Applied
+	  Ugo Albarello <ugo.albarello@007mundo.com>'s patch.
+	* /html/en/ChangeLog: Content moved to this log
+	* /html/en/gnome/documentation: Removed, MonoDoc does the job.
+	* /html/en/about.html: Moved author information to appendencies/credits.html
+	* PEOPLE: Removed, content is now maintained in appendencies/credits.html
+	* NOTES, README: Merged NOTES and README into README
+
+2003-06-30  Martin Willemoes Hansen <mwh@sysrq.dk>
+	* Documentation.xml: Added subsections for Creating ASP.NET Web Pages 
+	* html/en/tools/monodocbrowser.html: Added
+
+2003-06-28  Martin Willemoes Hansen <mwh@sysrq.dk>
+	* samples/tutorial/nunit: Added sample code
+	* html/en/tools/ngen.html: Split out from nunit.html
+	* html/en/tools/nant.html: Split out from nunit.html
+	* html/en/tools/nunit.html: Added links, nunit-gtk, install, sample
+	  credits section.
+	* html/en/tools/debugger.html: Added credits section, install info.
+	* html/en/tools/monodis.html: Added Contents menu
+	* html/en/tools/asembler.html: Added Contents menu
+
+2003-06-05  Martin Willemoes Hansen <mwh@sysrq.dk>
+	* html/en/gnome/bindings/gtk-sharp/menu_manual_creation.html :
+	* html/en/gnome/bindings/gtk-sharp/menu_manual_example.html :
+	  Applied patches from Ugo Albarello <ugo.albarello@007mundo.com>
+	* html/en/gnome/index.html: removed
+	* html/en/wrapping/clibs.html: Added
+
+2003-06-04  Miguel de Icaza  <miguel@ximian.com>
+ 
+        * html/en/mono/mono.html: Add document.
+        * html/en/mono/monoenabled.html: Edits.
+        * html/en/about.html: Added authors to the about section.
+
+2003-06-04  Martin Willemoes Hansen <mwh@sysrq.dk>
+	* html/en/gnome/bindings/gconf/gconf.html: Applied patch from 
+	  Pablo Baena <pbaena@uol.com.ar>
+
+2003-05-21  Martin Willemoes Hansen <mwh@sysrq.dk>
+	* html/en/appendencies/sampleapps.html: Added link to PolarViewer
+
+2003-04-29  Martin Willemoes Hansen <mwh@sysrq.dk>
+	* samples/tutorial/gnome_about: Added gnome about dialog sample
+	* html/en/gnome/bindings/gnome/gnome.html: Added gnome about dialog
+	* samples/tutorial/messagedialog: Added a messagedialog sample
+	* html/en/gnome/bindings/gtk-sharp/miscmessagedialogs.html
+
+2003-04-25  Alejandro Sánchez Acosta <asanchez@gnu.org>
+	* samples/tutorial/textentry: Added TextEntry sample
+
+2003-04-07  Alp Toker <alp@atoker.com>
+	* html/en/installation/linux.html: Rewrote Debian installation section.
+	
+2003-03-24  Martin Willemoes Hansen <mwh@sysrq.dk>
+	* Added author of ide/eclipse.html
+
+2003-03-15  Alejandro Sanchez Acosta <asanchez@gnu.org>
+	* Added custombutton and menubar samples to gtksharp tutorial.
+
+2003-03-11  Charles Iliya Krempeaux <charles@reptile.ca>
+	* People are going to be doing alot of copy & pasting from
+	  this book!... so, to prevent people from having many
+	  headaches from wondering why the contents of their App
+	  won't show, changing Gnome.App.Show() to Gnome.App.ShowAll().
+	* monkeyguide/html/en/gnome/bindings/gnome/adding_contents.html :
+	  Changed Show() to ShowAll().
+	* monkeyguide/html/en/gnome/bindings/gnome/hello_world.html :
+	  Changed Show() to ShowAll().
+	* monkeyguide/html/en/gnome/bindings/rsvg/hello_world.html :
+	  Changed Show() to ShowAll().
+
+2003-03-09  Martin Willemoes Hansen <mwh@sysrq.dk>
+	* Fixed up installation/linux.html added a Credits section to it.
+	* Applied Laurent Guerby <guerby@acm.org> patch to 
+	  installation/linux.html  and installation/overview.html
+
+2003-03-08  Lee Mallabone <gnome@fonicmonkey.net>
+	* monkeyguide/html/en/gnome/bindings/gtk-sharp/treeview.html:
+	  Readability and formatting update from George Farris <farrisg@shaw.ca>
+
+2003-03-07  Martin Willemoes Hansen <mwh@sysrq.dk>
+	* Added a link to Pablo Baena's app GnoMencoder.
+	* Added links to two of my own sample apps, menu for 
+	  jumpnbump and a little game.
+
+2003-03-06  Lee Mallabone <gnome@fonicmonkey.net>
+	* monkeyguide/html/en/gnome/bindings/gtk-sharp/treeview.html:
+	  Added documentation about TreeView written by George Farris 
+	  <farrisg@shaw.ca>, with some formatting tweaks to fit in 
+	  with Monkeyguide.
+	* monkeyguide/html/en/gnome/bindings/gtk-sharp/gtk-sharp.html:
+	  Add link to treeview docs.
+
+2003-02-25  Charles Iliya Krempeaux <charles@reptile.ca>
+	* monkeyguide/html/en/index.html : Did some renaming, in the
+	  "Chapter 18" part of the page.  Changed some of the "Gtk#"
+	  to the (now) prefered "GNOME.NET".
+	* monkeyguide/html/en/index.html : Updated it by creating
+	  a link for the "Rsvg#" section.
+	* monkeyguide/PEOPLE : Updated to reflect that I am (also) doing
+	  work on the Rsvg# stuff.
+	* monkeyguide/html/en/gnome/bindings/rsvg/ : Created this directory
+	  to hold the Rsvg# tutorials.
+	* monkeyguide/html/en/gnome/bindings/rsvg/rsvg.html : Created this
+	  file as a starting point for the Rsvg# stuff.
+	* monkeyguide/html/en/gnome/bindings/rsvg/introduction.html : Created
+	  the "introduction section" of the Rsvg# stuff.
+	* monkeyguide/html/en/gnome/bindings/rsvg/hello_world.html : Created
+	  a "Hello World" tutorial for Rsvg#.
+	* monkeyguide/html/en/gnome/bindings/rsvg/vector_vs_pixmap.html : made,
+	  basically, a stub file for this.  (To be written later.)
+
+2003-02-22  Charles Iliya Krempeaux <charles@reptile.ca>
+	* monkeyguide/html/en/gnome/bindings/gnome/hello_world.html :
+	  Updated it to my latest draft of this tutorial.
+	* html/en/cross_platform/gui.html : It previously called
+	  the GNOME.NET chapter to be chapter 12.  Corrected this
+	  to say Chapter 18.
+	* html/en/gnome/bindings/gnome/gnome.html : Added a link for
+	  "Adding Contents" tutorial, to the tables of contents.
+	* html/en/gnome/bindings/gnome/adding_contents.html : Created
+	  the GNOME.NET "Adding Contents" tutorial.
+
+2003-02-13  Martin Willemoes Hansen
+	* Corrected a bug using [GladeWidget] in 
+          /gnome/bindings/glade/glade.html
+
+2003-02-12  Johannes Roith <johannes@jroith.de>
+	* New ADO.NET content
+	* Some ASP.NET modifications
+
+2003-02-08  Johannes Roith <johannes@jroith.de>
+	* Add mobile ASP.NET content
+	* New style.css
+
+2003-02-07  Johannes Roith <johannes@jroith.de>
+	* Rewritten Gnome# HTML to be monkeyguide conform
+	* Add Introduction to Gnome#
+	* Add TOC anf footbar to Glade#
+	* Add content to .NET Introduction
+	* Add to GStreamer tutorial
+	* Fixed FreeBSD installation text
+	* Add new ASP.NET tutorial
+	* Add ASP.NET examples directory to /samples
+
+
+2003-02-06  Martin Willemoes Hansen <mwh@sysrq.dk>
+	* Added Charles to PEOPLE
+	* Added Charles intial work on Gnome#
+	* Made an initial outline for Gnome#
+	* Removed old bindings.html file
+
+2003-01-23  Martin Willemoes Hansen <mwh@sysrq.dk>
+	* Added some credits sections and removed
+	  some duplicated credits.
+
+2003-01-21  Martin Willemoes Hansen <mwh@sysrq.dk>
+ 	* Added a credits section and a TOC to
+	  ide/sharpdevelop.html converted eclipse.html
+	  to unix text.
+	* Added a credits section to 
+  	  gnome/bindings/gtk-sharp/gtk-sharp.html
+	  Removed duplicated Introduction text.
+	* Added a credits section to
+	  gnome/bindings/gstreamer/gstreamer.html
+	  Removed duplicated TOC's
+
+2003-01-20  Martin Willemoes Hansen <mwh@sysrq.dk>
+ 	* Fixed gnome/bindings/gtk-sharp/getstart.html
+	  btn was not added to the window.
+
+2003-01-14  Johannes Roith <johannes@jroith.de>
+	* Work on Gtk# tutorial
+
+2003-01-13  Johannes Roith <johannes@jroith.de>
+	* release 0.1
+	* Many additions
+
+2003-01-12  Johannes Roith <johannes@jroith.de>
+	* Improved design
+	* Add architecture
+	* Add QT# section
+
+2003-01-11  Johannes Roith <johannes@jroith.de>
+	* Big design improvments
+	* Add installation stuuf
+
+2003-01-10  Johannes Roith <johannes@jroith.de>
+	* Redesign TOC
+	* Add Gnome installation
+	* Remove Mono introduction
+	* Misc Changes
+
+2003-01-09  Martin Willemoes Hansen <mwh@sysrq.dk>
+	* Removed redundant info in ressources.html
+          And extracted the presentation part into
+	  a new appendency.
+	* Removed maintainer/author field in 
+	  index.html, since its stated in the
+	  Credits section.
+
+2003-01-04  Martin Willemoes Hansen <mwh@sysrq.dk>
+	* Changed glade.html to reflect the new
+ 	  GladeWidget attribute.
+          Also added a TOC to it.
+        * Removed the IDE section and Linux kernel
+	  support from mono/intro.html
+	  Added the kernel support to 
+          installation/linux.html
+        * Added TOCs to the ide section.
+	  Also added a CREDITS section to
+	  eclipse.html
+	* Removed the specification of the Glade
+	  widget when using the GladeWidget 
+	  attribute in glade.html.
+
+2003-01-04  Johannes Roith <johannes@jroith.de>
+	* Add "What is mono?"
+	* Add some TOCs
+	* Add appendencies
+	* Add Embedding in  Perl
+	* Add about and target
+
+2003-01-03  Johannes Roith <johannes@jroith.de>
+	* Add installation instructions
+
+2003-01-02  Johannes Roith <johannes@jroith.de>
+	* Change title everywhere
+	* Add appendencies/ecma.html and entry in index.html
+	* Fix typos
+	* Other fixes everywhere
+
+2003-01-02  Johannes Roith <johannes@jroith.de>
+	* Integrate Gtk# documentation from Rachel
+
+2002-12-31  Johannes Roith <johannes@jroith.de>
+	* Update C# tutorial
+
+2002-12-31  Johannes Roith <johannes@jroith.de>02
+	* Add directory to put samples in
+
+2002-12-28  Martin Willemoes Hansen <mwh@sysrq.dk>
+	* Added Norman and Felix to the PEOPLE file
+
+2002-12-26  Johannes Roith <johannes@jroith.de>
+	* Adapt path and navigation bar
+	* Layout changes
+	* Other
+
+2002-12-26  Martin Willemoes Hansen <mwh@sysrq.dk>
+	* Removed duplicated files in the GNOME.NET chapter.
+	* Added introduction.html, same_gnome.html, bindings.html 
+	  to the GNOME.NET Chapter
+	* Changed PEOPLE to reflect that most in their, are
+	  working on the GNOME.NET chapter.
+	* Removed gnome from the repository.
+	* Added contributing.html and preface.html
+
+2002-12-25  Martin Willemoes Hansen <mwh@sysrq.dk>
+	* Changed structure of monkey guide to have multiple
+     	  languages.
+	* Incorporated Felix Faassen's TOC
+	* Added Felix to PEOPLE
+
+2002-12-25  Johannes Roith <johannes@jroith.de>
+	* Import Monkeyguide
+
+2002-11-27  Martin Willemoes Hansen <mwh@sysrq.dk>
+ 	* Added a section 'Various Tools', in lack of a better name
+       	  containing NUnit, NAnt
+
+2002-11-27  Martin Willemoes Hansen <mwh@sysrq.dk>
+       	* Changed Raciel in PEOPLE to his real name
+ 	* Added Cesar to PEOPLE, he helps raciel
+	* Added two #Develop presentations
+	* Added two of Mike Kestners presentations about gtk#
+
+2002-11-25  Martin Willemoes Hansen <mwh@sysrq.dk>
+
+	* Moved webcontent from mwh.sysrq.dk into the repository
+   	* Is now available from http://www.go-mono.com/gnometutorial
+	* Rollback XHTML conversion
+ 	* Changed writers.html to PEOPLE and IDEAS
+
+2002-11-16  Johannes Roith <johannes@jroith.de>
+
+	* Convert to XHTML
+
+2002-11-09  Johannes Roith <johannes@jroith.de>
+
+	* Initial import Martin Willemoes Hansen's tutorial and move
+	  stylesheets to an separate file

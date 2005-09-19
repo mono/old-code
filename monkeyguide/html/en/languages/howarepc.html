@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="utf-8"?>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:monodoc="http://www.go-mono.org/xml/monodoc">
+<head>
+	<title>The first Application - How are programs created?</title>
+
+	<meta name ="DC.Description" content ="" />
+	<meta name ="DC.Contributor" content ="Johannes Roith" />
+	<meta name ="DC.Contributor" content ="PJ Cabrera" />
+	<meta name ="DC.Contributor" content ="Carlos Alberto Cortez Guevara" />
+
+	<link rel="stylesheet" type="text/css" href="../style.css" />
+</head>
+<body>
+As you probably know a computer can only work with binary machine
+code, it can't understand a language like C#. However writing
+binary is very difficult if not impossible, at least not very fast
+;) 
+<p>Normally you write the program in a programming language like
+C#, that must be translated to machine code. The tool, that does
+perform this translation is called "compiler". The result is a
+binary file, that can be executed.</p>
+<p>Unlike a compiler, who translates a source and creates a binary,
+there are also interpreters. They work very differently. Normally
+your will feed your source in the interpreter at runtime on the
+computer of the user and it will generate native code
+on-the-fly.</p>
+<p>This has 2 disadvantages...</p>
+<ul>
+<li>Interpreted code can be read</li>
+<li>Interpreted code is slower</li></ul>
+... and 2 advantages: 
+<ul>
+<li>Interpreted code is platform independent</li>
+<li>Interpreted code does skip the compiling step</li></ul>
+<p>An example for a compiled language would be C or C++, while Perl
+is an interpreted language.</p>
+
+</body>
+</html>

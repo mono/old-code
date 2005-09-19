@@ -1,0 +1,2198 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+   "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<!-- 
+   vim: tabstop=3 shiftwidth=3 expandtab
+  -->
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en">
+<head>
+   <title>Managed Code Interop</title>
+   <meta name="DC.Description" content="Managed and Unmanaged Code Integration"/>
+   <meta name="DC.Contributor" content="Jonathan Pryor"/>
+   <link rel="stylesheet" type="text/css" href="../style.css"/>
+   <!--
+     TODO:
+      - Marshaling Linked Lists?
+      - Structure Padding (see latest email)
+      - Delegates (will they be marshaled properly if embedded in a struct?)
+      - Use of [Out] with arrays
+     Useful Quotes:
+      - Avoid Unicode/ANSI conversions if possible.
+
+      Converting strings from Unicode to ANSI and vice versa is an expensive
+      operation. For example, if strings need to be passed, but their content
+      is not important, you can declare a string parameter as an IntPtr and
+      the interop marshaler will not do any conversions. 
+
+
+      - For high-performance scenarios, declaring parameters and fields as
+      IntPtr can boost performance, albeit at the expense of ease-of-use and
+      maintainability.
+
+      Sometimes it is faster to do manual marshaling using methods available
+      on the Marshal class, rather than rely on default interop marshaling.
+      For example, if large arrays of strings must be passed across an interop
+      boundary, but only a few elements will be needed, declaring the array as
+      an IntPtr and accessing only those few elements manually will be much
+      faster.
+
+    IDisposable.Dispose() + Destructor can lead to thread safety issues (race
+    conditions).  Need to fix example in "Properly Disposing of Resources".
+    See:
+    http://msdn.microsoft.com/visualc/default.aspx?pull=/library/en-us/dnvs05/html/VS05Cplus.asp
+     -->
+   <style type="text/css">
+      /* from: http://www.xml.com/pub/a/2005/01/19/print.html */
+      ul.toc a:after {
+         content: leader ('.') target-counter(attr(href), page);
+      }
+   </style>
+</head>
+<body>
+<h1><a name="title" id="title">Managed and Unmanaged Code 
+   Integration</a></h1>
+   
+   <p style="text-align: center">Everything you (n)ever wanted to know about 
+   Marshaling (and were afraid to ask!)</p>
+
+   <p>Quick Navigation:</p>
+   <ul class="toc">
+      <li><a href="#intro">Introduction</a></li>
+      <li><a href="#library-handling">Library Handling</a><ul>
+         <li><a href="#library-windows">Windows DLL Handling</a></li>
+         <li><a href="#library-linux">Linux Shared Library Handling</a></li>
+         <li><a href="#library-mac-os-x">Mac OS X Frameworkk and .dylib 
+            Handling</a></li>
+         <li><a href="#library-names">Library Names</a></li>
+         </ul></li>
+      <li><a href="#invoking-unmanaged-code">Invoking Unmanaged Code</a><ul>
+         <li><a href="#invoking-unmanaged-code-exception-handling">Exception 
+            Propagation</a></li>
+         </ul></li>
+      <li><a href="#marshaling">Marshaling</a><ul>
+         <li><a href="#marshaling-memory">Memory Boundaries</a></li>
+         <li><a href="#marshaling-strings">Strings</a></li>
+         <li><a href="#marshaling-classes-or-structures">Class and Structure 
+            Marshaling</a></li>
+         <li><a href="#marshaling-class-struct-members">Marshaling Class and 
+            Structure Members</a></li>
+         <li><a href="#custom-marshal">Custom Marshaling</a></li>
+         </ul></li>
+      <li><a href="#avoiding-marshaling">Avoiding Marshaling</a><ul>
+         <li><a href="#gc-safe-pinvoke">GC-Safe P/Invoke code</a></li>
+         <li><a href="#resource-disposal">Properly Disposing of Resources</a></li>
+         </ul></li>
+      <li><a href="#miscellaneous">Miscellaneous Topics</a><ul>
+         <li><a href="#meaning-of-unsafe">Meaning of "Unsafe"</a></li>
+         <li><a href="#security">Security</a></li>
+         </ul></li>
+      <li><a href="#comments">Commentary</a></li>
+      <li><a href="#thanks">Thanks</a></li>
+      <li><a href="#copyright">Copyright</a></li>
+   </ul>
+
+   <h2><a name="intro" id="intro">Introduction</a></h2>
+   <p>The <a
+   href="http://www.ecma-international.org/publications/standards/ecma-335.htm"
+   >Common Language Infrastructure</a> 
+   (<acronym title="Common Language Infrastructure">CLI</acronym>) is
+   designed to make it "easy" to interoperate with existing code.  In principal,
+   all you need to do is create a 
+   <a href="T:System.Runtime.InteropServices.DllImportAttribute">DllImport</a>
+   function declaration for the existing 
+   code to invoke, and the runtime will handle the rest.  For example:</p>
+
+   <pre id="simple-dllimport" class="code">
+
+   [DllImport ("libc.so")]
+   private static extern int getpid ();
+   </pre>
+
+   <p>Please note that most of the classes and enumerations mentioned in this
+   document reside in the <a href="N:System.Runtime.InteropServices"
+   >System.Runtime.InteropServices</a> namespace.</p>
+
+   <p>The above C# function declaration would invoke the POSIX
+   <b>getpid</b>(2) system call on platforms that have the libc.so library (other
+   platforms would generate a 
+   <a href="T:System.EntryPointNotFoundException">EntryPointNotFoundException</a>).  
+   Simple.  Straightforward.  What could be easier?</p>
+
+   <p>There are three problems with this: (1) specifying the library in the 
+   DllImport statement;  (2) determining what function to actually invoke.  
+   (3) most existing 
+   code is far more complex.  Strings will need to be passed, structures may 
+   need to be passed, memory management practices will become involved...  
+   Existing code is a complex beast, and the interop layer needs to support 
+   this complexity.</p>
+
+   <h2><a name="library-handling" id="library-handling"
+      >Library Handling</a></h2>
+
+   <p>How does the runtime find the library specified in the DllImport
+   attribute?  This question is inherently platform specific.</p>
+
+   <h3><a name="library-windows" id="library-windows"
+      >Windows DLL Handling</a></h3>
+
+   <p>From the MSDN LoadLibrary documentation, the DLLs needed by the program
+   are searched for in the following order:</p>
+
+   <ol>
+      <li>The directory from which the application loaded.</li>
+      <li>The current directory</li>
+      <li>The system directory.  Use the <tt>GetSystemDirectory()</tt> function 
+         to get the path of this directory.</li>
+      <li>The 16-bit system directory.</li>
+      <li>The Windows directory.  Use the <tt>GetWindowsDirectory()</tt> 
+         function to get the path of this directory.</li>
+      <li>The directories that are listed in the <tt>PATH</tt> environment
+         variable.</li>
+   </ol>
+
+   <p>Of course, reality isn't quite that simple.  In practice, the "system"
+   directory is actually <tt>%WINDIR%\system32</tt>, except on Windows 9x
+   platforms where it's <tt>%WINDIR%\system</tt>.  The 16-bit system directory
+   is typically <tt>%WINDIR%\system</tt>, but isn't recognized as a separate
+   search directory on Windows 9x platforms.</p>
+
+   <p>Furthermore, on Windows Server 2003 and Windows XP SP1, the registry
+   entry <tt>HKEY_LOCAL_MACHINE\System\CurrentControlSet\Control\Session
+   Manager\SafeDllSearchMode</tt> alters the above ordering.  If this is
+   <tt>1</tt> (the default), then the current directory is searched after the
+   system and Windows directories.  This is a security feature (it prevents a
+   trojan library from being loaded instead of, for example,  
+   <tt>OLE32.DLL</tt>), but it turns the above list into: 1, 3, 4, 5, 2, 6.</p>
+
+   <h4><a name="library-windows-seealso" id="library-windows-seealso"
+      >See Also</a></h4>
+
+   <ul>
+      <li><a 
+      href="http://msdn.microsoft.com/library/default.asp?url=/library/en-us/dllproc/base/loadlibrary.asp"
+      ><tt>LoadLibrary()</tt> Documentation at MSDN</a>
+         </li>
+   </ul>
+
+   <h3><a name="library-linux" id="library-linux">Linux Shared Library Handling</a></h3>
+
+   <p>From the <b>dlopen</b>(3) man page, the necessary shared libraries needed by 
+   the program are searched for in the following order:</p>
+
+   <ol>
+      <li>A colon-separated list of directories in the user's
+         <tt>LD_LIBRARY_PATH</tt> environment variable.
+         This is a frequently-used way to allow native shared libraries to be
+         found by a CLI program.</li>
+      <li>The list of libraries cached in <tt>/etc/ld.so.cache</tt>.
+         <tt>/etc/ld.so.cache</tt> is created by editing
+         <tt>/etc/ld.so.conf</tt> and running <b>ldconfig</b>(8).
+         Editing <tt>/etc/ld.so.cache</tt> is the preferred way
+         to search additional directories, as opposed to using
+         <tt>LD_LIBRARY_PATH</tt>, as this is more secure (it's more difficult
+         to get a trojan library into <tt>/etc/ld.so.cache</tt> than it is to 
+         insert it into <tt>LD_LIBRARY_PATH</tt>).</li>
+      <li><tt>/lib</tt>, followed by <tt>/usr/lib</tt>.</li>
+   </ol>
+
+   <p>As a Mono extension, if the library being loaded is <tt>__Internal</tt>,
+   then the main program is searched for method symbols.  This is equivalent
+   to calling <b>dlopen</b>(3) with a <i>filename</i> of <tt>NULL</tt>.  This
+   allows you to P/Invoke methods that are within an application that is
+   embedding Mono.</p>
+
+   <h4><a name="library-linux-seealso" id="library-linux-seealso">See Also</a></h4>
+
+   <ul>
+      <li>The <b>dlopen</b>(3) man page.</li>
+      <li>The <b>ld.so</b>(8) man page.</li>
+      <li><a href="http://www-106.ibm.com/developerworks/linux/library/l-shlibs.html?ca=dgr-lnxw07SharedLib"
+         >Dissecting shared libraries</a>.</li>
+   </ul>
+
+   <h3><a name="library-mac-os-x" id="library-mac-os-x"
+      >Mac OS X Framework and .dylib Handling</a></h3>
+
+   <p>The Framework and library search path is:</p>
+
+   <ol>
+      <li>A colon-separated list of directories in the user's
+         <tt>DYLD_FRAMEWORK_PATH</tt> environment variable.</li>
+      <li>A colon-separated list of directories in the user's
+         <tt>DYLD_LIBRARY_PATH</tt> environment variable.</li>
+      <li>A colon-separated list of directories in the user's
+         <tt>DYLD_FALLBACK_FRAMEWORK_PATH</tt> environment variable, which
+         defaults to the directories:
+         <ul>
+            <li>~/Library/Frameworks</li>
+            <li>/Library/Frameworks</li>
+            <li>/Network/Library/Frameworks</li>
+            <li>/System/Library/Frameworks</li>
+         </ul>
+         </li>
+      <li>A colon-separated list of directories in the user's
+         <tt>DYLD_FALLBACK_LIBRARY_PATH</tt> environment variable, which
+         defaults to the directories:
+         <ul>
+            <li>~/lib</li>
+            <li>/usr/local/lib</li>
+            <li>/lib</li>
+            <li>/usr/lib</li>
+         </ul>
+         </li>
+   </ol>
+
+   <p>TODO: Will mono support both frameworks and dylibs?</p>
+
+   <h4><a name="library-macosx-seealso" id="library-macosx-seealso"
+      >See Also</a></h4>
+
+   <ul>
+      <li><a 
+      href="http://developer.apple.com/documentation/MacOSX/Conceptual/SystemOverview/Frameworks/chapter_7_section_2.html"
+      >The Framework as a Library Package at Apple</a>
+         </li>
+      <li>The <a href="http://www.hmug.org/man/1/dyld.html">dyld(1) 
+         man page</a></li>
+   </ul>
+   
+
+   <h3><a name="library-names" id="library-names">Library Names</a></h3>
+
+   <p>Knowing where to look for the library is only half of the problem.  
+   Knowing what library to load is the other half.</p>
+
+   <p>Different platforms have different naming conventions.  Windows
+   platforms append <tt>.DLL</tt> to the library name, such as
+   <tt>OLE32.DLL</tt>.  Linux platforms use a <tt>lib</tt> prefix and a
+   <tt>.so</tt> suffix <a href="#libname-note-versioning"><sup>1</sup></a>.
+   Mac OS X platforms have a <tt>lib</tt> prefix and a <tt>.dylib</tt>
+   suffix, unless they're a Framework, in which case they're a directory and
+   things get more complicated.</p>
+
+   <p class="part" id="libname-note-versioning">
+   <a name="libname-note-versioning">
+   Note 1: Strictly speaking, Unix shared libraries are typically versioned, and
+   the version number follows the <tt>.so</tt> suffix.  For example,
+   <tt>libfreetype.so.6.3.3</tt> is a fully versioned library.  Versioning
+   throws a "wrench" into the works, and is best dealt with through Mono's
+   <tt>&lt;dllmap/&gt;</tt> mechanism; see below for details.
+   </a></p>
+
+   <p>If you have control over the library name, keep the above naming
+   conventions in mind and don't use a platform-specific library name in the
+   DllImport statement.  Instead, just use the library name itself, without
+   any prefixes or suffixes, and rely on the runtime to find the appropriate
+   library at runtime.  For example:</p>
+
+   <pre id="library-name-example" class="code">
+
+   [DllImport ("MyLibrary")]
+   private static extern void Frobnicate ();
+   </pre>
+
+   <p>Then, you just need to provide <tt>MyLibrary.dll</tt> for Windows
+   platforms, <tt>libMyLibrary.so</tt> for Unix platforms, and
+   <tt>libMyLibrary.dylib</tt> for Mac OS X platforms.</p>
+
+   <p>What if you don't have the same name across all platforms?  For example, 
+   the GTK+ library name on Windows is <tt>libgtk-win32-2.0-0.dll</tt>, while 
+   the Unix equivalent library is <tt>libgtk-x11-2.0.so</tt>.  How do you 
+   write portable Platform Invoke (P/Invoke) code that will work 
+   cross-platform?</p>
+
+   <p>The short answer is that you don't.  There is no standard way of
+   specifying platform-specific library names.</p>
+
+   <p>However, as an extension, Mono provides a library mapping mechanism.
+   Two places are searched for library mappings: in the 
+   <tt>$prefix/etc/mono/config</tt> XML file, and in a per-assembly
+   <tt>.config</tt> file, located in the same directory as the assembly.
+   These files contains <tt>&lt;dllmap/&gt;</tt> elements, which map an input 
+   library (the library specified in the DllImport statement) to the actual 
+   platform-specific library to load.  For example:</p>
+
+   <pre id="mono-library-config" class="code">
+
+   &lt;configuration&gt;
+      &lt;dllmap dll="libgtk-win32-2.0-0.dll" 
+         target="libgtk-x11-2.0.so" /&gt;
+   &lt;/configuration&gt;
+   </pre>
+
+   <p>Unlike .NET, Mono permits <tt>.DLL</tt> assemblies to have 
+   <tt>.config</tt> files, which are <i>only</i> used for this library 
+   mapping mechanism.</p>
+
+   <p>Using this mechanism, the Mono-endorsed way of specifying DllImport
+   library names is to always use the Windows library name (as Microsoft .NET 
+   has no library mapping mechanism), and then provide a mapping in the
+   per-assembly <tt>.config</tt> file.  This is what the Gtk# library
+   does.</p>
+
+   <p>This mechanism can also be used to load strongly-versioned libraries on
+   Unix platforms.  For example:</p>
+
+   <pre id="mono-library-config-versioned" class="code">
+
+   &lt;configuration&gt;
+      &lt;dllmap dll="gtkhtml-3.0" 
+         target="libgtkhtml-3.0.so.4" /&gt;
+   &lt;/configuration&gt;
+   </pre>
+
+
+   <h2><a name="invoking-unmanaged-code" id="invoking-unmanaged-code"
+      >Invoking Unmanaged Code</a></h2>
+
+   <p>As far as managed code is concerned, unmanaged code is invoked merely by
+   invoking a method with an associated DllImport attribute.  The CLI runtime
+   must do more work to actually invoke the unmanaged code.</p>
+
+   <p>In principal, this is a straightforward process.  The library specified
+   in the DllImport attribute is loaded, as described above.  Then, the 
+   specified function is looked up (via <tt>GetProcAddess()</tt>
+   or <b>dlsym</b>(3)).  Finally, the function is invoked.</p>
+
+   <p>But what string is used for the function lookup (in 
+   <tt>GetProcAddress()</tt> or
+   <b>dlopen</b>(3))?  By default, the name of the managed code method is used, which
+   is why <a href="#simple-dllimport">getpid() in the above example</a> invokes 
+   <b>getpid</b>(2) from the C library.</p>
+
+   <p>Alternatively, the DllImport attribute's 
+   <a href="F:System.Runtime.InteropServices.EntryPoint">EntryPoint</a> field
+   can be set, and that string will be used instead.</p>
+
+   <p>Either way, the string used is assumed to refer to a C ABI-compatible
+   function exported by the specified library.  On some platforms, this may
+   cause a leading underscore to be prefixed to the symbol name.  Other
+   platforms generate no mangling.</p>
+
+   <p>Note that a C ABI is assumed.  This makes it nearly impossible to
+   directly invoke functions that are not C ABI compatible, such as C++
+   library functions that are not <tt>extern "C"</tt>.  Some variation on the
+   C ABI is permitted, such as variation in the function's
+   <a href="T:System.Runtime.InteropServices.CallingConvention"
+   >CallingConvention</a>.  The default CallingConvention is
+   platform-specific.  Under Windows, 
+   <a href="F:System.Runtime.InteropServices.CallingConvention.StdCall"
+   >StdCall</a> is the default, as this is used for most Win32 API functions.
+   Under Unix platforms, 
+   <a href="F:System.Runtime.InteropServices.CallingConvention.Cdecl"
+   >Cdecl</a> is the default.</p>
+
+   <p>Calling convention can be specified in C code by using the
+   <tt>__stdcall</tt> and <tt>__cdecl</tt> compiler intrinsics under Microsoft
+   Visual C++, and by using the <tt>__attribute__((stdcall))</tt> and
+   <tt>__attribute__((cdecl))</tt> compiler intrinsics under GCC.</p>
+
+   <p>Does having the default CallingConvention vary between platforms cause
+   portability problems?  Yes.  All the more reason to write as much code as
+   possible as managed code, avoiding the whole P/Invoke/marshaling conundrum
+   in the first place.</p>
+
+   <p>If you need to invoke C++ code, you have two choices: (1) make the C++
+   function <tt>extern "C"</tt>, treat it as a C function, and make sure that
+   it uses a known calling convention; (2) don't make the function <tt>extern
+   "C"</tt>, but make sure it uses a known calling convention.  If you use
+   option (2), you'll need to set the DllImport.EntryPoint field to the C++
+   mangled function name, such as <tt>_Z6getpidv</tt>.  You can retrieve the
+   mangled name through your compiler's binary tools, such as OBJDUMP.EXE or
+   <b>nm</b>(1).  Note that C++ mangled names are <i>highly</i> compiler specific,
+   and will (a) make your .NET assembly platform specific (you'll need a
+   different assembly for each different platform); (b) require updating the
+   .NET assembly every time you change C++ compilers (as the C++ name mangling
+   scheme can -- and frequently will -- change); and (c) be really ugly to
+   maintain because of (a) and (b).  Option (2) is not recommended.</p>
+
+   <h3><a name="invoking-unmanaged-code-exception-handling"
+      id="invoking-unmanaged-code-exception-handling">Exception
+      Propagation</a></h3>
+
+   <p>The above section mentioned a key point: P/Invoke assumes that the
+   unmanaged code conforms to the C ABI.  C doesn't support exceptions.  As
+   such, it is assumed that runtime exceptions will not propagate through
+   unmanaged code.</p>
+
+   <p>Furthermore, it's fairly simple for an exception to propagate through
+   unmanaged code whenever unmanaged code invokes managed code.  This
+   typically occurs through the use of callbacks -- using a function pointer
+   on the unmanaged side which can invoke a delegate on the managed side.  It
+   is very important that the unmanaged code <i>not</i> propagate <i>any</i>
+   exceptions -- it <i>must</i> catch all exceptions, or else the unmanaged
+   code calling the delegate will break.</p>
+
+   <p>The problem is, again, C doesn't support exceptions.  C++ supports
+   exceptions, BUT, and this is crucial, the C++ exception mechanism will
+   be (with one exception) different from the managed code exception
+   mechanism.  Since managed code doesn't know about unmanaged code's
+   exception handling support (C is assumed, and C doesn't support exceptions;
+   I'm sounding like a broken record), unmanaged exception handling support
+   might as well not exist, because it won't be used.</p>
+
+   <p>Given the above scenario -- unmanaged code invokes function pointer
+   which generates a managed exception -- what would happen?  The managed
+   exception handling mechanism is executed: the stack is searched for an
+   appropriate exception handler, then the stack is unwound, with any
+   <tt>finally</tt> blocks executed during the stack unwind process.</p>
+
+   <p>Note two things.  Managed code will be walking the stack, 
+   requiring that the CPU Stack Pointer and Instruction Pointers be set.  
+   Consequently, unmanaged code cannot participate in stack unwinding, 
+   as it will never be notified that a stack unwind is occurring.</p>
+
+   <p>Think about that for a minute.  If alarms are not sounding in your head,
+   you're in deep, deep trouble.  Consider this unmanaged C code:</p>
+
+   <pre id="unmanaged-leak-example" class="code">
+
+   typedef void (*Handler) (const char *message);
+
+   void InvokeHandler (Handler handler)
+   {
+      char *message = malloc (10);
+      strcpy (message, "A Message");
+      (*handler)(message);
+      free (message);
+   }
+   </pre>
+   
+   <p>If <tt>handler</tt> is a pointer to a managed delegate which may throw
+   an exception, then <b>free</b>(3) will <i>not</i> be executed,
+   resulting in a memory leak.  C++ destructors won't help you either, as
+   destructors still require the execution of <i>some</i> code, and that code
+   will never be invoked, as it's not C++ which is unwinding the stack, but
+   managed code, which doesn't know about C++ exception handling.</p>
+
+   <p>Obviously, the flip-side of this scenario -- a C++ exception being
+   propagated into managed code -- is equally bad.  As long as managed and
+   unmanaged code use different exception handling mechanisms, exceptions
+   <i>can not</i> be mixed between them.</p>
+
+   <p>The moral of this story: don't let exceptions propagate between managed
+   and unmanaged code.  The results won't be pretty.</p>
+
+   <p>This is particularly pertinent when wrapping C++ methods.  C++
+   exceptions will need to be mapped into an "out" parameter or a return 
+   value, so that managed code can know what error occurred, and 
+   (optionally) throw a managed exception to "propagate" the original 
+   C++ exception.</p>
+
+   <p>The one exception to this is when you use <i>both</i> .NET and
+   Microsoft Visual C++ to compile the unmanaged code.  .NET uses Windows
+   Structured Exception Handling (SEH) at the P/Invoke layer for its 
+   exception handling mechanism, and Microsoft Visual C++ uses SEH to 
+   implement C++ exception handling and supports the use of SEH in C as a 
+   language extension through the <tt>__try</tt>, <tt>__except</tt>, 
+   and <tt>__finally</tt> keywords.  SEH is a Microsoft extension; it does 
+   not exist outside of Microsoft and .NET, and as such is not portable.</p>
+
+   <h3><a name="invoking-unmanaged-code-seealso" 
+      id="invoking-unmanaged-code-seealso">See Also</a></h3>
+   <ul>
+      <li><a href="http://www.swig.org/">SWIG</a>, a code generation program
+      that easily wraps existing C and C++ code for use by a multitude of
+      languages, including CLI languages.  This makes it easier to invoke C++
+      code from a CLI application.</li>
+      <li><a href="http://msdn.microsoft.com/library/default.asp?url=/library/en-us/vccore98/HTML/_core_exception_handling_topics_.28.seh.29.asp"
+      >Structured Exception Handling Topics at MSDN</a></li>
+      <li><a href="http://weblogs.asp.net/cbrumme/archive/2003/10/01/51524.aspx"
+      >The .NET Exception Model</a>: Another one of Chris Brumme's excellent
+      blog entries.  More information than you ever wanted to know about .NET
+      exception handling.</li>
+   </ul>
+
+   <h2><a name="marshaling" id="marshaling">Marshaling</a></h2>
+
+   <p>How does code interop work?  Given a managed call site (the function
+   call), and an unmanaged callee site (the function that's being called), each
+   parameter in the call site is "marshaled" (converted) into an unmanaged
+   equivalent.  The marshaled data is in turn placed on the runtime stack
+   (along with other data), and the unmanaged function is invoked.</p>
+
+   <p>The complexity is due to the marshaling.  For simple types, such as 
+   integers and floating-point numbers, marshaling is a bitwise-copy
+   ("blitting"), just as would be the case for unmanaged code.  In some cases,
+   marshaling can be avoided, such as when passing structures by
+   reference to unmanaged code (a pointer to the structure is copied instead).  
+   It's also possible to obtain more control
+   over marshaling, using <a href="#custom-marshal">custom marshaling</a>.</p>
+   
+   <p>String types introduce additional complexity, as you need to specify the 
+   form of string conversion.  The runtime stores strings as UTF-16-encoded 
+   strings, and these will likely need to be marshaled to a more appropriate 
+   form (ANSI strings, UTF-8 encoded strings, etc.).  Strings get special 
+   support.</p>
+
+   <p>Some marshaling behavior is controlled through the 
+   <a href="T:System.Runtime.InteropServices.DllImportAttribute">DllImport</a>
+   and
+   <a href="T:System.Runtime.InteropServices.MarshalAsAttribute">MarshalAs</a>
+   attributes.</p>
+
+   <h3><a name="marshaling-memory" id="marshaling-memory">Memory 
+      Boundaries</a></h3>
+
+   <p>Managed and unmanaged memory should be considered to be completely
+   separate.  Managed memory is typically memory allocated on a 
+   garbage-collected heap, while unmanaged memory is anything else: the ANSI C
+   memory pool allocated through <b>malloc</b>(3), custom memory pools, and
+   garbage-allocated heaps outside the control of the CLI implementation (such
+   as a LISP or Scheme memory heap).</p>
+
+   <p>It is possible to lock a section of the managed heap by using the C#
+   <tt>fixed</tt> statement.  This is used so that a section of the managed
+   heap can be passed to unmanaged code without worrying that a future GC will
+   move the memory that the unmanaged code is operating on.  However, this is
+   completely under the control of the programmer, and is not how Platform
+   Invoke works.</p>
+
+   <p>During a P/Invoke call the runtime doesn't mimic the C# <tt>fixed</tt>
+   statement.  Instead, classes and structures (everything of consequence)
+   are marshaled to native code through the following pseudo-process:</p>
+
+   <ol>
+      <li>The runtime allocates a chunk of unmanaged memory.</li>
+      <li>The managed class data is copied into the unmanaged memory.</li>
+      <li>The unmanaged function is invoked, passing it the unmanaged memory
+         information instead of the managed memory information.  This must be
+         done so that if a GC occurs, the unmanaged function doesn't need to
+         worry about it.  (And yes, you need to worry about GCs, as the
+         unmanaged function could call back into the runtime, ultimately
+         leading to a GC.  Multi-threaded code can also cause a GC while
+         unmanaged code is executing.)</li>
+      <li>The unmanaged memory is copied back into managed memory.</li>
+   </ol>
+
+   <p>See <a href="#marshaling-classes-or-structures">Class and Structure
+   Marshaling</a> for more detailed information about marshaling classes and
+   structures.</p>
+
+   <p>There is one key point to keep in mind: the memory management specified
+   in the above process is implicit, and there is no way to control how the
+   runtime allocates the marshaled memory, or how long it lasts.  This is
+   crucial.  If the runtime marshals a string (e.g. UTF-16 to Ansi conversion),
+   the marshaled string will only last as long as the call.  The unmanaged
+   code CANNOT keep a reference to this memory, as it WILL be freed after the
+   call ends.  Failure to heed this restriction can result in "strange
+   behavior", including memory access violations and process death.  This is 
+   true for <i>any</i> marshaling process where the runtime allocates memory 
+   for the marshal process.</p>
+
+   <p>The one pseudo-exception to this point is with delegates.  The unmanaged
+   function pointer that represents the managed delegate lasts as long as the
+   managed delegate does.  When the delegate is collected by the GC, the
+   unmanaged function pointer will also be collected.  This is also important:
+   if the delegate is collected and unmanaged memory invokes the function
+   pointer, you're treading on thin ground.  Anything could happen, including
+   a process seg-fault.  Consequently, you <i>must</i> ensure that the
+   lifetime of the unmanaged function pointer is a proper subset of the
+   lifetime of the managed delegate instance.</p>
+
+   <h3><a name="marshaling-strings" id="marshaling-strings">Strings</a></h3>
+
+   <p><a href="T:System.String">String</a>s are special.  String marshaling 
+   behavior is also highly platform dependent.</p>
+
+   <p>String marshaling for a function call can be specified in the function
+   declaration with the DllImport attribute, by setting the 
+   <a href="F:System.Runtime.InteropServices.DllImportAttribute.CharSet"
+   >CharSet</a> field.  The default value for this field is 
+   <a href="F:System.Runtime.InteropServices.CharSet.Auto">CharSet.Ansi</a>.
+   The 
+   <a href="F:System.Runtime.InteropServices.CharSet.Auto">CharSet.Auto</a>
+   value implies "magic."</p>
+
+   <p>Some background.  The Microsoft Win32 API supports two forms of strings:
+   "ANSI" strings, the native character set, such as ASCII, ISO-8859-1, or a
+   Double Byte Character Set such as JIS; and Unicode strings, originally
+   UCS-2, and now UTF-16.  Windows supports these string formats by appending 
+   an "A" for Ansi string APIs and a "W" ("wide") for Unicode string APIs.</p>
+
+   <p>Consider this Win32 API description:</p>
+
+   <pre id="text-out-marshaling" class="code">
+
+   [DllImport ("gdi32.dll", 
+      CharSet=CharSet.Auto, 
+      CallingConvention=CallingConvention.StdCall)]
+   private static extern bool TextOut (
+      System.IntPtr hdc,
+      int nXStart,
+      int nYStart,
+      string lpString,
+      int cbString);
+   </pre>
+
+   <p>When TextOut is called, the "magic" properties of String marshaling
+   become apparent.  Due to string marshaling, the runtime doesn't just look
+   for an unmanaged function with the same name as the specified method, as
+   specified in <a href="#invoking-unmanaged-code">Invoking Unmanaged
+   Code</a>.  Other permutations of the function may be searched for,
+   depending on the CLI runtime and the host platform.</p>
+
+   <p>There are three functions that may be searched for:</p>
+   <ul>
+      <li>TextOutW for Unicode string marshaling</li>
+      <li>TextOutA for Ansi string marshaling</li>
+      <li>TextOut with the platform-default marshaling</li>
+   </ul>
+
+   <p>Under .NET, for platforms whose default character set is UCS2 or UTF-16 
+   Unicode (all flavors of Windows NT, and Windows XP), the default
+   search path is TextOutW, TextOutA, and TextOut.  
+   Unicode marshaling is preferred, as (ideally) the System.String can be
+   passed as-is to the function, as long as the function doesn't modify the
+   string parameter.  Windows CE does not look for TextOutA, as it has no Ansi
+   APIs.</p>
+   
+   <p>Under .NET, for platforms whose default character set is Ansi 
+   (Windows 9x, Windows ME), the default search path is TextOutA and TextOut 
+   (TextOutW is not looked for).
+   Ansi marshaling will require translating the Unicode
+   string into an 8-bit string (or DBCS, depending on the country) 
+   in the user's locale.  Most (all?) of the time,
+   this WILL NOT be UTF-8, so you CAN NOT assume that CharSet.Ansi will
+   generate UTF-8-encoded strings.</p>
+
+   <p>TODO: what does Mono do on Unix?</p>
+   
+   <p>If you don't want the runtime to search for the alternate unmanaged
+   functions, specify a CharSet value other than CharSet.Auto.  This will
+   cause the runtime to look only for the specified function.  Note that if
+   you pass a wrongly encoded string (e.g. calling MessageBoxW when the CharSet
+   is CharSet.Ansi, the default), you are crossing into "undefined" territory.  
+   The unmanaged function will receive data encoded in ways it wasn't expecting,
+   so you may get such bizarre things as Asian text when displaying "Hello,
+   World".</p>
+
+   <p>Perhaps in the future the 
+   <a href="T:System.Runtime.InteropServices.CharSet">CharSet</a>
+   enumeration will contain more choices,
+   such as UnicodeLE (little-endian), UnicodeBE (big-endian), Utf7, Utf8, and
+   other common choices.  Additionally, making such a change would also
+   likely require changing the UnmanagedType enumeration.  However, these would 
+   need to go through ECMA, so it won't happen next week.  (Unless some time 
+   has passed since this was originally written, in which case it may very 
+   well be next week.  But don't count on it.)</p>
+
+   <h4><a name="controlling-string-marshaling" id="controlling-string-marshaling"
+      >More Control</a></h4>
+
+   <p>Using the DllImport attribute works if you want to control all the
+   strings in a function, but what if you need more control?  You would need
+   more control if a string is a member of a structure, or if the function
+   uses multiple different types of strings as parameters.  In these
+   circumstances, the MarshalAs attribute can be used, setting the 
+   <a href="P:System.Runtime.InteropServices.MarshalAsAttribute.Value"
+   >Value</a> property (which is set in the constructor)
+   to a value from the
+   <a href="T:System.Runtime.InteropServices.UnmanagedType">UnmanagedType</a>
+   enumeration.  For example:</p>
+
+   <pre id="mixed-string-marshaling" class="code">
+
+   [DllImport ("does-not-exist")]
+   private static extern void Foo (
+      [MarshalAs(UnmanagedType.LPStr)] string ansiString,
+      [MarshalAs(UnmanagedType.LPWStr)] string unicodeString,
+      [MarshalAs(UnmanagedType.LPTStr)] string platformString);
+   </pre>
+
+   <p>As you can guess by reading the example, UnmanagedType.LPStr will
+   marshal the input string into an Ansi string, UnmanagedType.LPWStr will
+   marshal the input string into a Unicode string (effectively doing
+   nothing), and UnmanagedType.LPTStr will convert the string to the
+   platform's default string encoding.  For all flavors of Windows NT (Windows
+   NT 3.51 and 4.0, Windows 2000, Windows XP, Windows Server 2003) the
+   platform default encoding is Unicode, while for all Windows 9x flavors
+   (Windows 95, 98, ME) the platform default encoding is Ansi.</p>
+
+   <p>There are other UnmangedType string marshaling options, but they're
+   primarily of interest in COM Interop (BStr, AnsiBStr, TBStr).</p>
+
+   <p>TODO: Does anybody know the default encoding for Unix platforms?  I 
+   would guess Ansi as well...</p>
+
+   <p>If UnmanagedType doesn't provide enough flexibility for your string
+   marshaling needs (for example, you're wrapping GTK+ and you need to marshal
+   strings in UTF-8 format), look at the <a href="#custom-marshal">Custom
+   Marshaling</a> section.</p>
+
+   <h4 id="marshaling-caller-modifiable-strings"
+      >Passing Caller-Modifiable Strings</h4>
+
+   <p>A common C idiom is for the caller to provide the callee a buffer to
+   fill.  For example, consider <b>strncpy</b>(3):</p>
+
+   <pre id="strncpy-c-prototype" class="code">
+
+   char* strncpy (char *dest, const char *src, size_t n);
+   </pre>
+
+   <p>We can't use System.String for both parameters, as strings are
+   immutable.  This is OK for "src", but "dest" will be modified, and the
+   caller should be able to see the modification.</p>
+
+   <p>The solution is to use a 
+   <a href="T:System.Text.StringBuilder">System.Text.StringBuilder</a>, which
+   gets special marshaling support from the runtime.  This would allow
+   <b>strncpy</b>(3) to be wrapped and used as:</p>
+
+   <pre id="strncpy-csharp-prototype" class="code">
+
+   [DllImport ("libc.so")]
+   private static extern void strncpy (StringBuilder dest, 
+      string src, uint n);
+
+   private static void UseStrncpy ()
+   {
+      StringBuilder sb = new StringBuilder (256);
+      strncpy (sb, "this is the source string", sb.Capacity);
+      Console.WriteLine (sb.ToString());
+   }
+   </pre>
+
+   <p>Some things to note is that the return value of <b>strncpy</b>(3) was changed
+   to "void", as there is no way to specify that the return value will be the
+   same pointer address as the input "dest" string buffer, and thus it doesn't
+   need to be marshaled.  If "string" were used instead, Bad Things could
+   happen (the returned string would be freed; see 
+   <a href="#marshaling-string-return-values">Strings as Return Values</a>).
+   The StringBuilder is allocated with the
+   correct amount of storage as a constructor parameter, and this amount of
+   storage is passed to <b>strncpy</b>(3) to prevent buffer overflow.</p>
+
+   <p>TODO: how does StringBuilder interact with the specified CharSet?</p>
+
+   <h4><a name="marshaling-string-return-values" 
+      id="marshaling-string-return-values">Strings as Return Values</a></h4>
+
+   <p>The String type is a class, so see the
+   section on <a href="#cs-return-values">returning classes from
+   functions</a>.</p>
+
+   <p>If you don't want the runtime to free the returned string, either (a)
+   don't specify the return value (as was done for the <b>strncpy</b>(3) function
+   above), or (b) return an <a href="T:System.IntPtr">IntPtr</a> and use one of
+   the Marshal.PtrToString* functions, depending on the type of string
+   returned.  For example, use 
+   <a href="M:System.Runtime.InteropServices.Marshal.PtrToStringAnsi"
+   >Marshal.PtrToStringAnsi</a> to marshal from a Ansi string, and use 
+   <a href="M:System.Runtime.InteropServices.Marshal.PtrToStringUni"
+   >Marshal.PtrToStringUni</a> to marshal from a Unicode string.</p>
+
+   <h4><a name="marshaling-strings-seealso" id="marshaling-strings-seealso"
+      >See Also</a></h4>
+   <ul>
+      <li><a 
+      href="http://msdn.microsoft.com/library/default.asp?url=/library/en-us/cpguide/html/cpcondefaultmarshalingforstrings.asp"
+      >Default marshaling for Strings at MSDN</a>
+      </li>
+      <li><a href="http://msdn.microsoft.com/netframework/default.aspx?pull=/library/en-us/dndotnet/html/manunmancode.asp"
+      >An Overview of Managed/Unmanaged Code Interoperability</a>
+      </li>
+   </ul>
+
+   <h3><a name="marshaling-classes-or-structures" 
+      id="marshaling-classes-or-structures">Class and Structure Marshaling
+      </a></h3>
+
+   <p>The conceptual steps that occur to marshal classes and structures is
+   detailed above, in the <a href="#marshaling-memory">Memory Boundary</a>
+   section.</p>
+
+   <p>The principal difference between class and structure marshaling is
+   which, if any, of conceptual steps actually occurs. :-)</p>
+
+   <h4><a name="marshaling-classes" id="marshaling-classes"
+      >Class Marshaling</a></h4>
+
+   <p>Remember that classes are heap-allocated and garbage-collected in the
+   CLI.  As such, you cannot pass classes by value to unmanaged functions,
+   only by reference:</p>
+
+   <pre id="class-marshal-example" class="code">
+
+   /* Unmanaged code declarations */
+
+   struct UnmanagedStruct {
+      int a, b, c;
+   };
+
+   void WRONG (struct UnamangedStruct pass_by_value);
+
+   void RIGHT (struct UnmanagedStruct *pass_by_reference);
+   </pre>
+
+   <p>This means that you cannot use classes to invoke unmanaged functions
+   that expect pass-by-value variables (such as the WRONG function,
+   above).</p>
+
+   <p>There are two other issues with classes.  First of all, classes by
+   default use <a
+   href="F:System.Runtime.InteropServices.LayoutKind.Auto">Auto</a> layout.
+   This means that the ordering of class data members is unknown, and won't be
+   determined until runtime.  The runtime can rearrange the order of members in
+   any way it chooses, to optimize for access time or data layout space.  As
+   such, you MUST use the <a
+   href="T:System.Runtime.InteropServices.StructLayoutAttribute"
+   >StructLayoutAttribute</a> and specify a
+   <a href="E:System.Runtime.InteropServices.LayoutKind">LayoutKind</a> value
+   of <a href="F:System.Runtime.InteropServices.LayoutKind.Sequential"
+   >Sequential</a> or <a 
+   href="F:System.Runtime.InteropServices.LayoutKind.Explicit">Explicit</a>.
+   </p>
+
+   <p>Secondly, classes (again, by default) only have in-bound marshaling.
+   That is, Step 4 (copying the unmanaged memory representation back into 
+   managed memory) is ommitted.  If you need the unmanaged memory to be copied
+   back into managed memory, you must addorn the DllImport function
+   declaration argument with an 
+   <a href="T:System.Runtime.InteropServices.OutAttribute">Out</a> attribute.
+   You will also need to use the 
+   <a href="T:System.Runtime.InteropServices.InAttribute">In</a> attribute if
+   you want copy-in and copy-out behavior.  To summarize:</p>
+
+   <ul>
+      <li>Using [In] is equivalent to not specifying any parameter
+         attributes, and will skip Step 4 (copying unmanaged memory into
+         managed memory).</li>
+      <li>Using [Out] will skip Step 2 (copying managed memory into unmanaged
+         memory).</li>
+      <li>Use [In, Out] to both copy managed memory to unmanaged memory before
+         the unmanaged function call, and then copy unmanaged memory back to
+         managed memory after the function call.</li>
+   </ul>
+
+   <p>In some circumstances, the marshaled copy can be omitted.  The object
+   will simply be pinned in memory and a pointer to the start of the data
+   passed to the unmanaged function.</p>
+   
+   <p>TODO: When can this actually occur?  If this happened for any class with
+   Sequential layout, you wouldn't need to specify the [Out] attribute, as the
+   unmanaged code would see the actual object.  Is there a specific set of
+   circumstances for when this can occur?
+   
+   This appears to happen with
+   StringBuilder (my tests don't require an [Out] to see changes made to the
+   StringBuilder by unmanaged code), but this is the only example I can think
+   of.</p>
+
+   <h4><a name="marshaling-structures" id="marshaling-structures"
+      >Structure Marshaling</a></h4>
+
+   <p>There are two primary differences between classes and structures.
+   First, structures do not need to be allocated on the heap; they can be
+   allocated on the stack.  Secondly, they are LayoutKind.Sequential by 
+   default, so structure declarations do not need any additional attributes to 
+   use them with unmanaged code (assuming that the default sequential layout 
+   rules are correct for the unmanaged structure).</p>
+
+   <p>These differences permit structures to be passed by-value to unmanaged
+   functions, unlike classes.  
+   Additionally, if (a) the structure is located on the stack, and (b) the
+   structure contains only blittable types, then if
+   you pass a structure to an unmanaged function by-reference, the structure
+   will be passed directly to the unmanaged function, without an intermediate
+   unmanaged memory copy.  This means that you may not need to specify the Out
+   attribute to see changes made by unmanaged code.</p>
+
+   <p>Note that as soon as the structure contains a non-blittable type (such
+   as System.Boolean, System.String, or an array), this optimization is no
+   longer possible and a copy of the structure must be made as part of the
+   marshaling process.</p>
+   
+   <h4><a name="cs-return-values" id="cs-return-values">Classes and 
+      Structures as Return Values</a></h4>
+
+   <p>The differences in allocation behavior between classes and structures
+   also affect how they're handled as return values from functions.</p>
+
+   <p>Classes can be used as the return value of a function when the unmanaged
+   function returns a pointer to an unmanaged structure.  Classes cannot be
+   used for by-value return types.</p>
+
+   <p>Structures can be used when the unmanaged function returns the structure
+   by-value.  It is not possible to return structures with "ref" or "out", so if
+   an unmanaged function returns a pointer to a structure, System.IntPtr must
+   be used for "safe" code, or a pointer to the structure can be used for
+   "unsafe" code.  If System.IntPtr is used as the return type, 
+   <a href="M:System.Runtime.InteropServices.Marshal.PtrToStructure"
+   >Marshal.PtrToStructure</a> can be used to convert the unmanaged pointer
+   into a managed structure.</p>
+
+   <p>Memory management is also heavily involved.</p>
+
+   <h5><a name="cs-retval-memory-mgmt" id="cs-retval-memory-mgmt"
+      >Memory Management</a></h5>
+
+   <p>It's easy to skim over memory management for most of P/Invoke and
+   marshaling, but for return values the CLI implements some default handling
+   which must be considered.</p>
+
+   <p>The CLI assumes that, under certain circumstances, the CLI runtime is
+   responsible for freeing memory allocated by unmanaged code.  Return values
+   are one of those circumstances, causing the return value to be a memory
+   boundary for control of memory (de)allocation.</p>
+
+   <p>The CLI assumes that all memory that is passed between the CLI/unmanaged
+   code boundary is allocated via a common memory allocator.  The developer
+   does not get a choice in which memory allocator is used.  For managed code,
+   the <a href="M:System.Runtime.InteropServices.Marshal.AllocCoTaskMem"
+   >Marshal.AllocCoTaskMem</a> method can be used to allocate memory, 
+   <a href="M:System.Runtime.InteropServices.Marshal.FreeCoTaskMem"
+   >Marshal.FreeCoTaskMem</a> is used to free the memory allocated by
+   Marshal.AllocCoTaskMem, and 
+   <a href="M:System.Runtime.InteropServices.Marshal.ReAllocCoTaskMem"
+   >Marshal.ReAllocCoTaskMem</a> is used to resize a memory region originally
+   allocated by Marshal.AllocCoTaskMem.</p>
+
+   <p>Since classes are passed by reference, a pointer is returned, and the
+   runtime assumes that it must free this memory to avoid a memory leak.  The
+   chain of events is thus:</p>
+
+   <ol>
+      <li>Managed code invokes unmanaged function that returns a pointer to an
+         unmanaged structure in unmanaged memory.</li>
+      <li>An instance of the appropriate managed class is instantiated, and
+         the contents of the unmanaged memory is marshaled into the managed
+         class.</li>
+      <li>The unmanaged memory is freed by the runtime "as if" by invoking
+         Marshal.FreeCoTaskMem().</li>
+   </ol>
+
+   <p>How is Marshal.AllocCoTaskMem, Marshal.ReAllocCoTaskMem, and
+   Marshal.FreeCoTaskMem implemented?  That's platform-dependent.  (So much
+   for portable platform-dependent code.)  Under Windows, the 
+   COM Task Memory allocator is used (via <tt>CoTaskMemAlloc()</tt>, 
+   <tt>CoTaskMemReAlloc()</tt>, and <tt>CoTaskMemFree()</tt>).  Under Unix, 
+   the GLib memory functions 
+   <a href="http://developer.gnome.org/doc/API/2.0/glib/glib-Memory-Allocation.html#g-malloc"
+   >g_malloc</a>, 
+   <a href="http://developer.gnome.org/doc/API/2.0/glib/glib-Memory-Allocation.html#g-realloc"
+   >g_realloc</a>, and 
+   <a href="http://developer.gnome.org/doc/API/2.0/glib/glib-Memory-Allocation.html#g-free"
+   >g_free</a> functions are used.  Typically, these correspond to the ANSI C
+   functions <b>malloc</b>(3), <b>realloc</b>(3), and <b>free</b>(3), but this is not necessarily
+   the case as GLib can use different memory allocators; see
+   <a href="http://developer.gnome.org/doc/API/2.0/glib/glib-Memory-Allocation.html#g-mem-set-vtable"
+   >g_mem_set_vtable()</a> and
+   <a href="http://developer.gnome.org/doc/API/2.0/glib/glib-Memory-Allocation.html#g-mem-is-system-malloc"
+   >g_mem_is_system_malloc()</a>.</p>
+
+   <p>What do you do if you don't want the runtime to free the memory?  Don't
+   return a class.  Instead, return an IntPtr (the moral equivalent of a C
+   <tt>void*</tt> pointer), and then use the Marshal class methods to
+   manipulate that pointer.  This works for strings, and structures, but it
+   doesn't appear to work for classes, as there is no PtrToClass
+   method, so this technique is limited to strings and managed structures.</p>
+
+   <h4><a name="marshaling-class-struct-choosing" 
+      id="marshaling-class-struct-choosing">Choosing between Classes and
+      Structures</a></h4>
+
+   <p>So which should be used when wrapping unmanaged code, classes or
+   structures?</p>
+
+   <p>Generally, the answer to this question depends upon what the unmanaged
+   code requires.  If you require pass-by-value semantics, you must use
+   structures.  If you want to return a pointer to an unmanaged type without 
+   resorting to "unsafe" code, you must use classes.</p>
+
+   <p>And for the large intersection of unmanaged code that doesn't have
+   pass-by-value structures or return pointers to structures from functions?
+   Use whichever is more convenient for the end user.  Not all languages
+   support passing types by reference (Java, for example), so using classes
+   will permit a larger body of languages to use the wrapper library.</p>
+
+   <h4><a name="marshaling-class-struct-summary" 
+      id="marshaling-class-struct-summary">Summary</a></h4>
+
+   <p>It's always easier to show the code, so...  Given the following
+   unmanaged code declarations:</p>
+
+   <pre id="marshal-unmanaged-code" class="code">
+
+   /* unmanaged code declarations */
+
+   struct UnmanagedStruct {
+      int n;
+   };
+
+   void PassByValue (struct UnmanagedStruct s);
+
+   void PassByReferenceIn (struct UnmanagedStruct *s);
+   void PassByReferenceOut (struct UnmanagedStruct *s);
+   void PassByReferenceInOut (struct UnmanagedStruct *s);
+
+   struct UnmanagedStruct ReturnByValue ();
+   struct UnmanagedStruct* ReturnByReference ();
+
+   void DoubleIndirection (struct UnmanagedStruct **s);
+   </pre>
+
+   <p>The class wrapper could be:</p>
+
+   <pre id="marshal-class-wrapper" class="code">
+
+   /* note: sequential layout */
+   [StructLayout (LayoutKind.Sequential)]
+   class ClassWrapper {
+      public int n;
+
+      /* cannot wrap function PassByValue */
+
+      /* PassByReferenceIn */
+      [DllImport ("mylib")]
+      public static extern 
+         void PassByReferenceIn (ClassWrapper s);
+
+      /* PassByReferenceOut */
+      [DllImport ("mylib")]
+      public static extern 
+         void PassByReferenceOut ([Out] ClassWrapper s);
+
+      /* PassByReferenceInOut */
+      [DllImport ("mylib")]
+      public static extern 
+         void PassByReferenceInOut ([In, Out] ClassWrapper s);
+
+      /* cannot wrap function ReturnByValue */
+
+      /* ReturnByReference */
+      [DllImport ("mylib")]
+      public static extern ClassWrapper ReturnByReference ();
+         /* note: this causes returned pointer to be freed 
+            by runtime */
+
+      /* DoubleIndirection */
+      [DllImport ("mylib")]
+      public static extern 
+         void DoubeIndirection (ref ClassWrapper s);
+   }
+   </pre>
+
+   <p>While the structure wrapper could be:</p>
+
+   <pre id="marshal-struct-wrapper" class="code">
+
+   struct StructWrapper {
+      public int n;
+
+      /* PassByValue */
+      [DllImport ("mylib")]
+      public static extern void PassByValue (StructWrapper s);
+
+      /* PassByReferenceIn */
+      [DllImport ("mylib")]
+      public static extern void PassByReferenceIn (
+         ref StructWrapper s);
+
+      /* PassByReferenceOut */
+      [DllImport ("mylib")]
+      public static extern void PassByReferenceOut (
+         out StructWrapper s);
+
+      /* PassByReferenceInOut */
+      [DllImport ("mylib")]
+      public static extern void PassByReferenceInOut (
+         ref StructWrapper s);
+
+      /* ReturnByValue */
+      [DllImport ("mylib")]
+      public static extern StructWrapper ReturnByValue ();
+
+      /* ReturnByReference: CLS-compliant way */
+      [DllImport ("mylib", EntryPoint="ReturnByReference")]
+      public static extern IntPtr ReturnByReferenceCLS ();
+         /* note: this DOES NOT cause returned pointer to be 
+            freed by the runtime, so it's not identical to
+            ClassWrapper.ReturnByReference.
+            Use Marshal.PtrToStructure() to access the 
+            underlying structure. */
+
+      /* ReturnByReference: "unsafe" way */
+      [DllImport ("mylib", EntryPoint="ReturnByReference")]
+      public static unsafe extern StructWrapper* 
+         ReturnByReferenceUnsafe ();
+         /* note: this DOES NOT cause returned pointer to be 
+            freed by the runtime, so it's not identical to
+            ClassWrapper.ReturnByReference */
+
+      /* DoubleIndirection: CLS-compliant way */
+      [DllImport ("mylib", EntryPoint="DoubleIndirection")]
+      public static extern 
+         void DoubeIndirectionCLS (ref IntPtr s);
+         /* note: this is similar to ReturnByReferenceCLS().
+            Pass a `ref IntPtr' to the function, then use
+            Marshal.PtrToStructure() to access the 
+            underlying structure. */
+      
+      /* DoubleIndirection: "unsafe" way */
+      [DllImport ("mylib", EntryPoint="DoubleIndirection")]
+      public static unsafe extern 
+         void DoubeIndirectionUnsafe (StructWrapper **s);
+   }
+   </pre>
+
+   <h3 id="marshaling-class-struct-members"
+      >Marshaling Class and Structure Members</h3>
+
+   <p>Aside from the major differences between classes and structures outlined
+   above, the members of classes and structures are marshaled identically.</p>
+
+   <p>The general rule of advice is this: never pass classes or structures
+   containing members of reference type (classes) to unmanaged code.
+   This is because unmanaged code can't do anything safely with the unmanaged 
+   reference (pointer), and the CLI runtime doesn't do a "deep marshal"
+   (marshal members of marshaled classes, and their members, ad
+   infinitum).</p>
+
+   <p>The immediate net effect of this is that you can't have array
+   members in marshaled classes, and (as we've seen before) handling strings
+   can be "wonky" (as strings are also a reference type).</p>
+
+   <p>Furthermore, the default string marshaling is the 
+   <a href="#controlling-string-marshaling">platform default</a>, though this
+   can be changed by setting the
+   <a href="F:System.Runtime.InteropServices.StructLayoutAttribute.CharSet"
+   >StructLayoutAttribute.CharSet</a> field, which defaults to CharSet.Auto.
+   Alternatively, you can adorn string members with the MarshalAs attribute 
+   to specify what kind of string they are.</p>
+
+   <h4><a name="marshaling-bools" id="marshaling-bools">Boolean Members</a></h4>
+
+   <p>The System.Boolean (<i>bool</i> in C#) type is special.  (FUBAR might be
+   more appropriate.)  A <tt>bool</tt> within a structure is marshaled as an
+   <tt>int</tt> (a 4-byte integer), with 0 being <tt>false</tt> and non-zero
+   being <tt>true</tt>; see 
+   <a href="E:System.Runtime.InteropServices.UnmanagedType.Bool"
+   >UnmanagedType.Bool</a>.  A <tt>bool</tt> passed as an argument to a
+   function is marshaled as a <tt>short</tt> (a 2-byte integer), with 0 being
+   <tt>false</tt> and -1 being <tt>true</tt> (as all bits are set); see 
+   <a href="E:System.Runtime.InteropServices.UnmanagedType.VariantBool"
+   >UnmanagedType.VariantBool</a>.</p>
+
+   <p>You can always explicitly specify the marshaling to
+   use by using the <b>MarshalAsAttribute</b> on the boolean member, but there
+   are only three legal UnmanagedType values: UnmanagedType.Bool,
+   UnmanagedType.VariantBool, and UnmanagedType.U1.  
+   <a href="E:System.Runtime.InteropServices.UnmanagedType.VariantBool"
+   >UnmanagedType.U1</a>, the only un-discssed type, is a 1-byte integer where
+   1 represents <tt>true</tt> and 0 represents <tt>false</tt>.</p>
+
+   <p>If you need to marshal as another data type, you should overload the
+   method accepting the boolean parameter, and manually convert the boolean to
+   your desired type:</p>
+
+   <pre id="boolean-param-example" class="code">
+
+   // Unmanaged C declaration:
+   void DoSomething (int boolean);
+
+   // Managed declaration:
+   [DllImport ("SomeLibrary")]
+   private static extern void DoSomething (int boolean);
+
+   public static void DoSomething (bool boolean)
+   {
+      DoSomething (boolean ? 1 : 0);
+   }
+   </pre>
+
+   <h5><a name="marshaling-bools-seealso" id="marshaling-bools-seealso"
+      >See Also</a></h5>
+   <ul>
+      <li><a
+         href="http://msdn.microsoft.com/library/default.asp?url=/library/en-us/cpguide/html/cpcondefaultmarshalingforbooleans.asp"
+         >Default Marshaling for Boolean Types</a></li>
+   </ul>
+
+   <h4><a name="marshaling-unions" id="marshaling-unions">Unions</a></h4>
+
+   <p>A C union (in which multiple members share the same offset into a
+   structure) can be simulated by using the FieldOffset attribute and
+   specifying the same offset for the union members.</p>
+
+   <h4><a name="marshaling-arrays" id="marshaling-arrays"
+      >Arrays Embedded Within Structures</a></h4>
+
+   <p>Inline arrays can be marshaled by using a MarshalAs attribute with 
+   UnmanagedType.ByValArray and specifying the 
+   <a href="F:System.Runtime.InteropServices.MarshalAsAttribute.SizeConst"
+   >MarshalAsAttribute.SizeConst</a> field to the size of the array to
+   marshal.  Inline arrays which contain strings can use
+   UnmanagedType.ByValTStr for a string.</p>
+
+   <p>However, the runtime doesn't automatically allocate arrays specified as
+   UnmanagedType.ByValArray.  The programmer is still responsible for
+   allocating the managed array.  See the
+   <a href="#marshaling-members-summary">summary</a> for more information.</p>
+
+   <p>TODO: Bernie Solomon says that for <tt>out</tt> parameters, the 
+   runtime will allocate the inline array memory.  Check this out.</p>
+
+   <p>For example, the unmanaged structure:</p>
+
+   <pre id="native-array-example" class="code">
+
+   struct UnmanagedStruct {
+      int data[10];
+      char name[32];
+   };
+   </pre>
+
+   <p><i>Can</i> be represented in C# as:</p>
+
+   <pre id="slow-managed-array-example" class="code">
+
+   struct ManagedStruct_Slow {
+      [MarshalAs (UnmanagedType.ByValArray, SizeConst=10)]
+      public int[]  data;
+      [MarshalAs (UnmanagedType.ByValTStr, SizeConst=32)]
+      public string name;
+   };
+   </pre>
+
+   <p>Of course, the managed structure can be declared in other ways, with
+   varying performance and usage tradeoffs.  The previous declaration is the
+   most straightforward to use, but has worse performance characteristics.
+   The following structure will marshal faster, but will be more difficult to
+   work with:</p>
+
+   <pre id="fast-managed-array-example" class="code">
+
+   struct ManagedStruct_Fast_1 {
+      public int  data_0, data_1, data_2, data_3, data_4,
+                  data_5, data_6, data_7, data_8, data_9;
+      public byte name_00, name_01, name_02, name_03, name_04, 
+                  name_05, name_06, name_07, name_08, name_09,
+                  name_10, name_11, name_12, name_13, name_14,
+                  name_15, name_16, name_17, name_18, name_19,
+                  name_20, name_21, name_22, name_23, name_24,
+                  name_25, name_26, name_27, name_28, name_29,
+                  name_30, name_31,
+   };
+   </pre>
+
+   <p>Yet another alternative is to directly specify the size of the
+   structure, instead of letting the structure contents dictate the structure
+   size.  This is done via the 
+   <a href="P:System.Runtime.InteropServices.StructLayout.Size"
+   >StructLayout.Size</a> property.  This makes the structure terribly
+   annoying to deal with, as pointer arithmetic must be used to deal with the
+   <tt>name</tt> member:</p>
+
+   <pre id="another-fast-managed-array-example" class="code">
+
+   [StructLayout(LayoutKind.Sequential, Size=72)]
+   struct ManagedStruct_Fast_2 {
+      public int  data_0, data_1, data_2, data_3, data_4,
+                  data_5, data_6, data_7, data_8, data_9;
+      public byte name; /* first byte of name */
+      /* Size property specifies that 31 bytes of nameless
+         "space" is placed here. */
+   };
+   </pre>
+
+   <h5><a name="marshaling-arrays-v2" id="marshaling-arrays-v2"
+      >C# 2.0 Functionality</a></h5>
+
+   <p>C# 2.0 adds language features to deal with inline arrays, using a fixed
+   array syntax.  This allows the previous structure to be declard as:</p>
+
+   <pre id="v2-managed-array-example" class="code">
+
+   struct ManagedStruct_v2 {
+      public fixed int  data[10];
+      public fixed byte name[32];
+   };
+   </pre>
+
+   <p>Fixed array syntax is still "unsafe", and requires elevated privilege to
+   execute.</p>
+
+   <h5><a name="marshaling-arrays-djesk" id="marshaling-arrays-djesk"
+      >Real World Experience</a></h5>
+
+   <p>This might be of use.  From David Jesk 
+   (<a href="http://www.chat.net/~jeske/">http://www.chat.net/~jeske/</a>):
+   </p>
+
+   <blockquote id="david-jesk-quote">
+   <p>This time I have some PInvoke information to share, so that when
+   someone else runs into this issue they can see what I've done.</p>
+
+   <p>In my ClearSilver (www.clearsilver.net, an HTML template system) C#
+   wrapper, I wanted to access this C-struct:</p>
+
+   <pre id="clearsilver-example-1" class="code">
+
+   typedef struct _neo_err
+   {
+     int error;
+     int err_stack;
+     int flags;
+     char desc[256];
+     const char *file;
+     const char *func;
+     int lineno;
+     /* internal use only */
+     struct _neo_err *next;
+   } NEOERR;
+   </pre>
+
+   <p>My philosophy of using unsafe struct pointers, and just accessing the
+   struct out in unmanaged memory is great, and it's exactly what I want
+   to do. However, handling "char dest[256]" is not straightforward.</p>
+
+   <p>In C# arrays are reference types. Using one makes the struct a managed
+   type, and I can't put the array size in. The following is conceptually
+   what I want to do, however, it's obviously invalid:</p>
+
+   <pre id="clearsilver-example-2" class="code">
+
+   [StructLayout(LayoutKind.Sequential)]
+   unsafe struct NEOERR {
+     public int error;
+     public int err_stack;
+     public int flags;
+     public byte[256] desc;  // this is invalid, 
+                             // can't contain size
+     public const byte *file; 
+     public const byte *func; 
+     public int lineno;
+
+     /* internal use only */
+     private NEOERR *next;
+   };
+   </pre>
+
+   <p>This dosn't work either:</p>
+
+   <pre id="clearsilver-example-3" class="code">
+
+   [MarshalAs (UnmanagedType.LPStr, SizeConst=256)] 
+   public string desc; 
+   </pre>
+       
+   <p>Because in this case, I don't want to marshal the data. I just want to
+   talk to it in place. The solution I could come up with is this:</p>
+
+   <pre id="clearsilver-example-4" class="code">
+
+   [StructLayout(LayoutKind.Explicit)]
+   unsafe struct NEOERR {
+     [FieldOffset(0)] public int error;
+     [FieldOffset(4)] public int err_stack;
+     [FieldOffset(8)] public int flags;
+     // public byte[256] dest;  // not representable
+
+     // use this as an address??
+     [FieldOffset(12)] public byte dest_first_char;
+     [FieldOffset(268)] public byte *file; // const
+     [FieldOffset(272)] public byte *func; // const
+     [FieldOffset(276)] public int lineno;
+   };
+   </pre>
+
+   <p>UGH! First, this is obviously annoying. Second, the only way I can
+   figure to get access to "char dest[256]" is to use "char* dest =
+   &amp;nerr-&gt;dest_first_char;" and then just use dest as a pointer to the
+   string. I've dug through the documentation, and I can't find any
+   better solution.</p>
+
+   <p>Obviously it would be ideal if there were a way to represent a
+   value-type array. I wonder how Managed C++ handles "char foo[256];" in
+   a struct.</p>
+   </blockquote>
+
+   <h5><a name="marshaling-arrays-seealso" id="marshaling-arrays-seealso"
+      >See Also</a></h5>
+   <ul>
+      <li><a
+         href="http://weblogs.asp.net/ericgu/archive/2004/08/12/213676.aspx"
+         >Eric Gunnerson's C# Blog: Arrays inside of structures</a></li>
+   </ul>
+
+   <h4><a name="marshaling-members-summary" id="marshaling-members-summary"
+      >Summary</a></h4>
+
+   <p>Again, example native code...</p>
+
+   <pre id="marshal-class-struct-members-native" class="code">
+
+   /* original code */
+   struct UnmanagedInformation {
+      int num;
+      char* string;
+      int array[32];
+
+      union {
+         int64_t addr;  /* from &lt;stdint.h&gt;, C99 */
+         double other;
+      } stuff;
+   };
+   </pre>
+
+   <p>And the possible corresponding managed code:</p>
+
+   <pre id="marshal-class-struct-members-managed" class="code">
+
+   /* managed representation */
+   [StructLayout (LayoutKind.Explicit, CharSet=CharSet.Ansi)]
+   struct ManagedInformation {
+      [FieldOffset (0)] int num;
+      [FieldOffset (4)] string str;
+      [FieldOffset (8), 
+         MarshalAs (UnmanagedType.ByValArray, SizeConst=32)]
+      int[] array;
+
+      /* union members */
+      [FieldOffset (136)] long stuff_addr;
+      [FieldOffset (136)] double stuff_other;
+   }
+   </pre>
+
+   <p>Note that this isn't an exact match to the unmanaged code.  This
+   structure must be built in two phases to match the unmanaged
+   representation: (1) create the structure, and (2) allocate memory for 
+   ManagedInformation.array.  For example:</p>
+
+   <pre id="marshal-use-embedded-arrays" class="code">
+
+   ManagedInformation info = new ManagedInformation ();
+   info.array = new int[32];
+   </pre>
+
+   <h4><a name="marshaling-class-struct-members-fieldoffset-warning"
+      id="marshaling-class-struct-members-fieldoffset-warning">A Warning about
+      FieldOffset</a></h4>
+
+   <p>The FieldOffset attribute has one major pitfall: it makes offsets of
+   types explicit.  This is liable to break if (when) (1) the class/structure
+   contains a pointer, reference, or array, and (2) you change the bitsize of
+   your processor (move from a 32-bit processor to a 64-bit processor).  It is
+   preferable to use SequentialLayout if at all possible, as the runtime will
+   take care of updating the structural offsets when the size of pointers
+   changes.</p>
+
+   <h4><a name="marshaling-class-struct-members-seealso" 
+      id="marshaling-class-struct-members-seealso">See Also</a></h4>
+
+   <p>TODO: include MSDN examples using the more esotoric MarshalAs fields,
+   such as SizeParamIndex, ArraySubType, MarshalType, etc.</p>
+
+   <ul>
+      <li><a
+         href="http://msdn.microsoft.com/library/default.asp?url=/library/en-us/cpguide/html/cpconmarshalingdatawithplatforminvoke.asp"
+         >Marshaling Data with Platform Invoke at MSDN</a>
+      </li>
+      <li><a
+         href="http://msdn.microsoft.com/library/default.asp?url=/library/en-us/cpguide/html/cpconarrayssample.asp"
+         >Arrays Sample at MSDN</a>
+      </li>
+   </ul>
+
+   <h4><a name="marshaling-pointers" id="marshaling-pointers">Marshaling
+      Pointers</a></h4>
+
+   <p>Didn't we start using a managed execution environment to <i>avoid</i>
+   pointers?  But I digress...</p>
+
+   <p>Alas, pointers are a fact of life in unmanaged code.  As the 
+   <a href="#avoiding-marshaling">Avoiding Marshaling</a> section points out,
+   there are two ways to represent pointers: the "safe" way, using 
+   <a href="T:System.IntPtr">System.IntPtr</a> or
+   <a href="T:System.UIntPtr">System.UIntPtr</a>, and the "unsafe" way, by
+   using <tt>unsafe</tt> code and pointers.</p>
+
+   <h5><a name="marshaling-string-pointers" id="marshaling-string-pointers"
+      >Marshaling Embedded Strings</a></h5>
+
+   <p><i>Behold the topic that just won't die!</i>  "Inline" strings -- in
+   which the storage for the string is part of the structure itself -- were
+   covered <a href="#marshaling-arrays">previously</a>.  Obviously, and likely
+   more commonly, strings are not always allocated within the structure;
+   typically a pointer to a null-terminated string is stored.</p>
+
+   <p>The typical approach is to map the string as an IntPtr, and use
+   <a href="M:System.Runtime.InteropServices.Marshal.PtrToStringAnsi"
+   >Marshal.PtrToStringAnsi</a> and similar functions to manually marshal the
+   string.</p> 
+
+   <p>Why manually marshal?  Because you typically use a custom memory
+   allocator (such as <b>malloc</b>(3)), and don't want the runtime
+   incorrectly freeing the memory that the string references.  In this case,
+   it's <i>essential</i> that you manually marshal the string to avoid memory
+   corruption.</p>
+
+   <h3><a name="custom-marshal" id="custom-marshal">Custom Marshaling</a></h3>
+
+   <p>TODO: custom marshaling...</p>
+
+   <h4><a name="custom-marshal-seealso" id="custom-marshal-seealso"
+      >See Also</a></h4>
+
+   <ul>
+      <li><a 
+         href="http://msdn.microsoft.com/library/default.asp?url=/library/en-us/cpref/html/frlrfsystemruntimeinteropservicesicustommarshalerclasstopic.asp"
+         >ICustomMarshal Interface at MSDN</a>
+      </li>
+   </ul>
+
+   <h2><a name="avoiding-marshaling" id="avoiding-marshaling"
+      >Avoiding Marshaling</a></h2>
+
+   <p>Marshaling is no panacea, as marshaling implies copying data.
+   Marshaling may be problematic because the data translation is a complex,
+   time-consuming process.  Alternatively, it may be problematic 
+   because it isn't possible to copy the data, as the data isn't known or is 
+   likely to change.</p>
+
+   <p>An example of the latter would be the GTK+ libraries.  GTK+ is an
+   object-oriented toolkit written in C.  As with all object-oriented
+   libraries, there can be an unknown number of derived classes, each of which
+   having a different class size.  Furthermore, class instances are typically
+   accessed through pointers.  As such, marshaling the entire class between
+   managed and unmanaged memory is not an option, as a copy isn't desired,
+   access to the same instance is.</p>
+
+   <p>Another example is when using "opaque" data types; that is, types
+   through which interaction is solely through pointers, and nothing about the
+   internals of the type is public.  This describes a large portion of the
+   Win32 API, where HANDLE is used to represent most objects.</p>
+
+   <p>There are two ways to handle this in C#: the "type-safe" way, which
+   involves using pointers and the "unsafe" C# language features, and the
+   CLS-compliant way, which uses System.IntPtr to stand in for a void
+   pointer.</p>
+
+   <p>In both cases, the separation between managed and unmanaged memory is made
+   explicit.  Managed memory remains type-safe, while unmanaged memory is not
+   (since <a href="T:System.IntPtr">System.IntPtr</a> is used to point into 
+   unmanaged memory, and there is no way to ensure the actual type of what 
+   the System.IntPtr refers to).</p>
+
+   <p>Be warned that this may not be safe, if the "unmanaged" memory is itself
+   garbage collected.  This may be the case if the unmanaged memory is handled
+   by a different runtime system (Python, Ruby, Lisp, etc.) or a garbage
+   collector is being used (Boehm).  If the unmanaged memory is garbage
+   collected, then the System.IntPtr won't be updated when unmanaged memory
+   undergoes a garbage collection, resulting in memory corruption.</p>
+
+   <p>For example, given the unmanaged API:</p>
+
+   <pre id="no-marshal-unmanaged-code" class="code">
+
+   typedef void* HANDLE;
+
+   bool CreateItem (HANDLE *item);
+   void DestroyItem (HANDLE item);
+   int GetInfo (HANDLE item);
+   </pre>
+
+   <p>The "type-safe" C# wrapper (using "unsafe" code) is:</p>
+
+   <pre id="no-marshal-unsafe-wrapper" class="code">
+
+   struct Item {
+
+      [DllImport ("library")]
+      public static unsafe extern 
+         bool CreateItem (out Item* item);
+
+      [DllImport ("library")]
+      public static unsafe extern void DestroyItem (Item* item);
+
+      [DllImport ("library")]
+      public static unsafe extern int GetInfo (Item* item);
+   }
+
+   class ExampleUsage {
+      public static unsafe void Main ()
+      {
+         Item* item;
+         Item.CreateItem (out item);
+         int n = Item.GetInfo (item);
+         System.Console.WriteLine ("item count: {0}", 
+            n.ToString());
+         Item.DestroyItem (item);
+      }
+   }
+   </pre>
+
+   <p>This is "type-safe" in that you can't pass arbitrary memory locations to
+   the static Item functions, you must pass a pointer to an Item structure.
+   This isn't a strict amount of type safety, but it is likely to minimize
+   accidental memory corruption.  It's biggest problem is that it uses
+   "unsafe" code, and thus may not be usable from other .NET languages, such
+   as Visual Basic .NET and JavaScript.</p>
+
+   <p>The CLS compliant version uses System.IntPtr to refer to unmanaged
+   memory.  This is similar to what the 
+   <a href="T:System.Runtime.InteropServices.Marshal">Marshal</a> class does
+   to interoperate with unmanaged memory.</p>
+   
+   <pre id="no-marshal-IntPtr-wrapper" class="code">
+
+   class Item {
+
+      [DllImport ("library")]
+      public static extern bool 
+         CreateItem (out System.IntPtr item);
+
+      [DllImport ("library")]
+      public static extern void DestroyItem (System.IntPtr item);
+
+      [DllImport ("library")]
+      public static extern int GetInfo (System.IntPtr item);
+   }
+
+   class ExampleUsage {
+      public static unsafe void Main ()
+      {
+         System.IntPtr item = null;
+         Item.CreateItem (out item);
+         int n = Item.GetInfo (item);
+         System.Console.WriteLine ("item count: {0}", 
+            n.ToString());
+         Item.DestroyItem (item);
+      }
+   }
+   </pre>
+
+   <p>This is "unsafe" in that it is
+   easier to accidentally mis-use pointers.  For example, if you're using two
+   different libraries and wrapping them using System.IntPtr, it is possible
+   to pass an object allocated from one library to a function exported by the
+   other library, and the CLI Runtime will not catch this error, while the
+   "unsafe" C# code would catch this error.</p>
+
+   <p>However, this isn't normally considered a problem, as most
+   managed code shouldn't interact with P/Invoke code, but should instead
+   interact with managed wrappers for the unmanaged code, which can provide a
+   more natural interface to managed clients.</p>
+
+   <h3><a name="gc-safe-pinvoke" id="gc-safe-pinvoke"
+      >GC-Safe P/Invoke code</a></h3>
+
+   <p>There's one problem with the wrapper code described above: a
+   race-condition between user code and the runtime Garbage Collector (GC).</p>
+
+   <p>The GC that .NET uses is not conservative.  It knows all types involved,
+   and can distinguish between an integer that looks like a pointer and an
+   actual pointer value.  It knows all stack-allocated variables, and what the
+   scope of those variables is.  Finally, the GC does not see into unmanaged
+   code.</p>
+
+   <p>The result of this is that it's possible the the GC to collect a class
+   instance <i>while a method of the instance is still executing</i>.</p>
+   
+   <p>How is this possible?  If the method no longer references class data
+   (instance members), and no other code refers to it, the GC may collect the
+   class.  After all, if no instance members are used and no one is using the
+   instance, what's it matter if the instance is collected?</p>
+
+   <p>It matters a lot if unmanaged code thinks that the instance is still
+   alive.  Or, if the class has a finalizer, which could be executed while
+   native code is executing from within the native method.</p>
+
+   <p>Here is an example adapted from Chris Brumme's blog:</p>
+
+   <pre id="gc-safe-pinvoke-example" class="code">
+
+   class C {
+      // handle into unmanaged memory, for an unmanaged object
+      IntPtr _handle;
+
+      // performs some operation on h
+      [DllImport ("...")]
+      static extern void OperateOnHandle (IntPtr h);
+
+      // frees resources of h
+      [DllImport ("...")]
+      static extern void DeleteHandle (IntPtr h);
+
+      ~C() {
+         DeleteHandle(h);
+      }
+
+      public void m() {
+         OperateOnHandle(_handle);
+         // no further references to _handle
+      }
+   }
+
+   class Other {
+      void work() {
+         C c = new C();
+         c.m();
+         // no further references to <i>c</i>.  
+         // <i>c</i> is now eligable for collection.
+      }
+   }
+   </pre>
+
+   <p>Consider this: <tt>Other.work</tt> invokes <tt>C.m</tt>, which invokes
+   the unmanaged code <tt>C.OperateOnHandle</tt>.  Note that
+   <tt>Other.work</tt> doesn't use <tt>c</tt> anymore, so <tt>c</tt> is
+   eligible to be collected, and is placed on the GC finalization queue.</p>
+
+   <p>This would normally be reasonable, except for the interplay with
+   unmanaged code.  The unmanaged code <tt>C.OperateOnHandle</tt> is still
+   using a member held by the instance <tt>c</tt>, but the GC doesn't -- and
+   <i>can't</i> -- know this.</p>
+
+   <p>This introduces the possibility that, although unlikely,
+   <tt>C.DeleteHandle</tt> will be invoked (from the GC finalization thread)
+   <i>while</i> <tt>C.OperateOnHandle</tt> is still operating.</p>
+
+   <p>It's fair to assume that the unmanaged code won't appreciate this.  It's
+   fair to assume that this could cause major problems for the process,
+   including a segmentation fault.</p>
+
+   <p>In fact, a bug very similar to this exists in .NET v1.0, in one of the
+   Registry wrapper classes.</p>
+
+   <p>How do you avoid this problem?  Don't use raw IntPtrs.  With the IntPtr 
+   being used, the GC has no way of knowing that the class still needs to
+   hang around.  To avoid the bug, we avoid IntPtrs.</p>
+
+   <p>Instead of using IntPtr, we use 
+   <a href="T:System.Runtime.InteropServices.HandleRef">HandleRef</a>.  This
+   is a structure which holds both a reference to the containing class, as
+   well as the pointer value.</p>
+
+   <p>Next, instead of having the P/Invoke code accept IntPtr parameters, the
+   P/Invoke code accepts HandleRefs.  HandleRefs are special to the runtime
+   and GC system, and during a marshal operation they "collapse" into an
+   IntPtr.</p>
+
+   <p>This allows us to write the safe code:</p>
+
+   <pre id="gc-safe-pinvoke-safe-example" class="code">
+
+   class C {
+      // handle into unmanaged memory, for an unmanaged object
+      HandleRef _handle;
+
+      // performs some operation on h
+      [DllImport ("...")]
+      static extern void OperateOnHandle (HandleRef h);
+
+      // frees resources of h
+      [DllImport ("...")]
+      static extern void DeleteHandle (HandleRef h);
+
+      // Creates Resource
+      [DllImport ("...")]
+      static extern IntPtr CreateHandle ();
+
+      public C() {
+         IntPtr h = CreateHandle();
+         _handle = new HandleRef(this, h);
+      }
+
+      ~C() {
+         DeleteHandle(h);
+      }
+
+      public void m() {
+         OperateOnHandle(_handle);
+         // no further references to _handle
+      }
+   }
+
+   class Other {
+      void work() {
+         // Note: no change to client
+         C c = new C();
+         c.m();
+      }
+   }
+   </pre>
+
+   <h4><a name="gc-safe-pinvoke-seealso" id="gc-safe-pinvoke-seealso"
+      >See Also</a></h4>
+
+   <ul>
+      <li><a 
+         href="http://blogs.msdn.com/cbrumme/archive/2003/04/19/51365.aspx"
+         >Chris Brumme's Blog: Lifetime, GC.KeepAlive, handle recycling</a>
+      </li>
+   </ul>
+
+   <h3><a name="resource-disposal" id="resource-disposal"
+      >Properly Disposing of Resources</a></h3>
+
+   <p>When avoiding marshaling, you're referencing unmanaged memory and other
+   resources from managed code.  This confers a great deal of responsibility.
+   It also creates a great deal of concern, as more things can "go wrong" in
+   managed code, particularly because of exceptions and related complexity.
+   When any function can throw an exception, ensuring that resources are
+   properly disposed of can be a tricky matter.</p>
+
+   <p>As suggested in the <a href="#gc-safe-pinvoke">previous section</a>, 
+   a simple way to ensure that resources are eventually disposed is to wrap 
+   the resource within a class containing a finalizer.  The finalizer can 
+   then free the resource.</p>
+
+   <p>There are two problems with that approach, both of which have to do with
+   the garbage collector:</p>
+
+   <ol>
+      <li>The garbage collector cannot see into unmanaged memory, it only
+         deals with managed memory.  Thus, if you have a large amount of
+         memory in unmanaged memory (such as images or video data), all the
+         GC will see is the IntPtr(s) that refer to this data, and
+         not the size of the unmanaged memory "held" by the managed code.
+         Consequently, the GC won't know that a collection should be executed
+         (there won't be any "memory pressure" to cause a collection).
+
+         <p>This is partially fixed in .NET 2.0 by using the
+         <a href="http://longhorn.msdn.microsoft.com/lhsdk/ref/ns/system/c/gc/m/addmemorypressure.aspx"
+         >System.GC.AddMemoryPressure(long)</a> 
+         method, which can be used to tell the GC how much unmanaged memory a 
+         managed object is referencing, which can improve the GC heuristics.  
+         However, .NET 2.0 hasn't been shipped yet, and code will need to 
+         be modified to support this approach.</p>
+         </li>
+      <li>The .NET garbage collector does not execute an objects finalizer
+         when the object is collected.  Instead, the object is promoted a
+         generation, and the object's finalizer is executed the next time that
+         generation is collected.
+
+         <p>For example, if a Generation 0 object with a finalizer is eligible
+         for collection (i.e. no objects reference it), the object is promoted
+         a generation, and placed on the Generation 1 finalization queue.  The
+         next time Generation 1 is collected, the object's finalizer will be
+         executed.</p>
+         </li>
+   </ol>
+
+   <p>Problem 2 is a real killer, as collection frequency is inversely
+   proportional to the generation number.  Generation 0 is (typically)
+   collected 10 times as frequently as Generation 1, which in turn is
+   collected 10 times as frequently as Generation 2.  Generation 2 is intended
+   to be <i>rarely</i> collected, as these should be long-term objects that
+   persist through the life of the application.</p>
+
+   <p>Given that the soonest a finalizer is collected is after two
+   collections, one for Generation 0 and one for Generation 1 (which occurs
+   after ~10 Generation 0 collections), it can be a <i>long time</i> before a
+   finalizer is executed.  Relying on finalizers for resource disposal and 
+   collection is a <i>BAD IDEA</i>, even before considering that finalizers
+   are not guaranteed to be executed, especially at program shutdown.</p>
+
+   <p>Fortunately, there is a simple pattern used throughout the .NET Class
+   Libraries to help ensure that resources are disposed of quickly:</p>
+
+   <ol>
+      <li>Implement the <a href="T:System.IDisposable">System.IDisposable</a>
+         interface.</li>
+      <li>Call <a href="M:System.IDisposable.Dispose">Dispose</a> when
+         finished with the resource.  The implementation for Dispose does two
+         things: (1) dispose of the resource, and (2) call 
+         <a href="M:System.GC.SuppressFinalize">SuppressFinalize</a>.
+         SuppressFinalize informs the GC that the object's finalizer doesn't
+         need to be invoked, allowing the object to be freed during the
+         first collection, and not after a considerable delay.</li>
+   </ol>
+
+   <p>A sample implementation is:</p>
+
+   <pre id="resource-disposal-idisposable-impl" class="code">
+
+   // for IntPtr, IDisposable
+   using System;
+
+   // for HandleRef, DllImport
+   using System.Runtime.InteropServices;
+
+   sealed class UnmanagedResource : IDisposable
+   {
+      [DllImport ("...")]
+      private static extern IntPtr CreateResource ();
+
+      [DllImport ("...")]
+      private static extern 
+         void DeleteResource (HandleRef handle);
+
+      // Use a HandleRef to avoid race conditions; 
+      // see the <a 
+      href="gc-safe-pinvoke">GC-Safe P/Invoke Code</a> section
+      private HandleRef _handle;
+
+      public UnmanagedResource ()
+      {
+         IntPtr h = CreateResource ();
+         _handle = new HandleRef (this, h);
+      }
+
+      // Provide access to 3rd party code
+      public HandleRef Handle {
+         get {return _handle;}
+      }
+
+      // Dispose of the resource
+      public void Dispose ()
+      {
+         Cleanup ();
+
+         // Prevent the object from being placed on the 
+         // finalization queue
+         System.GC.SuppressFinalize (this);
+      }
+
+      // Finalizer provided in case Dispose isn't called.
+      // This is a fallback mechanism, but shouldn't be 
+      // relied upon (see previous discussion).
+      ~UnmanagedResource ()
+      {
+         Cleanup ();
+      }
+
+      // <i>Really</i> dispose of the resource
+      private void Cleanup ()
+      {
+         DeleteResource (Handle);
+
+         // Don't permit the handle to be used again.
+         _handle = new HandleRef (this, IntPtr.Zero);
+      }
+   }
+   </pre>
+
+   <p>Frequently IDisposable examples will provide a virtual
+   <tt>Dispose(bool)</tt> method, which both Dispose and the finalizer 
+   delegate to, as opposed to the <tt>Cleanup()</tt> method used above.  
+   However, providing both a a virtual function and a non-<tt>sealed</tt> 
+   class is advertising the ability/desire to subclass, 
+   which is a potentially bad idea.</p>
+
+   <p>It's a potentially bad idea, again, because of the garbage collector.
+   When an object is promoted a GC generation, <i>all</i> objects it refers 
+   to are <i>also</i> promoted a generation, recursively.  So if your 
+   finalizable object contains an ArrayList of other objects, both the 
+   ArrayList, all objects it contains, and all objects <i>those</i> objects 
+   reference will be promoted.  This can be a potentially large amount of 
+   managed memory which is promoted a generation.</p>
+   
+   <p>Given the GC promotion rules, it is highly recommended that finalizable
+   classes be "leaf" nodes; that is, objects that don't refer to other objects
+   within the managed memory "tree".  For this reason, it is highly suggested
+   that finalizable objects be sealed to prevent subclassing, to minimize the
+   number of managed objects that the finalizable object refers to.
+   Rico Mariani discusses this in "Almost-rule #2: Never have finalizers"; 
+   see the <a href="#resource-disposal-seealso">See Also</a> section.</p>
+
+   <p>Implementing the IDisposable interface isn't a complete solution,
+   as it requires that users remember to invoke the Dispose method.  
+   The C# <i>using</i> block can be used to ensure that Dispose is 
+   invoked at the end of the block:</p>
+
+   <pre id="resource-disposal-idisposable-usage" class="code">
+
+   using (UnmanagedResource ur = new UnmanagedResource()) {
+      // Use the unmanaged resource.  It will be automatically
+      // disposed of at the end of this block.
+   }
+   </pre>
+
+   <h4><a name="resource-disposal-seealso" id="resource-disposal-seealso"
+      >See Also</a></h4>
+
+   <ul>
+      <li><a href="http://blogs.msdn.com/ricom/archive/2003/12/02/40780.aspx"
+         >Rico Mariani's Blog: Two things to avoid for better memory
+         usage.</a>
+         </li>
+   </ul>
+   
+   <h2><a name="miscellaneous" id="miscellaneous">Miscellaneous Topics</a></h2>
+
+   <p>Topics that didn't seem to fit in anywhere else, but might be
+   useful.</p>
+
+   <h3><a name="meaning-of-unsafe" id="meaning-of-unsafe"
+      >Meaning of "Unsafe"</a></h3>
+
+   <p>A "problem" is that "unsafe" is an overloaded term.  It can
+   refer to the use of the "unsafe" C# keyword, and it can be used as
+   "anything that isn't safe", which may not require the
+   "unsafe" keyword.</p>
+
+   <p>So, "unsafe" can mean (a) C# keyword; (b) violates .NET type system
+   (similar to (a)); (c) may be insecure (reading files from a web client);
+   (d) capable of causing a segfault.  There are likely other meanings
+   people can dream up as well.  Note that (d) doesn't imply (b), as far as
+   .NET is concerned.  The runtime could itself have a bug that generates a
+   segfault, but this doesn't violate the type system.</p>
+
+   <p>IntPtr doesn't require a violation of the type system, as you can't get
+   the address of a .NET object (unless you "pin" it, which would require
+   the appropriate Security rights), and is thus principally useful for
+   interacting with unmanaged code, which exists outside of the .NET type
+   system.</p>
+
+   <p>Surely, this is pure semantics, but I can see the designers
+   perspective.</p>
+
+   <h3><a name="security" id="security">Security</a></h3>
+
+   <p>.NET has a highly flexible security
+   system.  You can't invoke DllImported functions unless your app has the
+   appropriate security rights -- generally, that the app is running on the
+   local machine.  If you're running it from a network share, or from a web
+   site (similar to Java Applets), then your app will get a
+   SecurityException.</p>
+
+   <p>You can get lots of security exceptions for various things, actually. 
+   Opening files can generate a security exception, for example.</p>
+
+   <p><a
+   href="T:System.Security.Permissions.SecurityPermission"
+   >System.Security.Permissions.SecurityPermission</a> is needed with 
+   <a href="F:System.Security.Permissions.SecurityPermissionFlag.UnmanagedCode"
+   >SecurityPermissionFlag.UnmanagedCode</a> 
+   specified in order to perform a P/Invoke.</p>
+
+   <p>Programs can't specify this permission; they can only request it
+   (or demand it, and if they can't get it, a SecurityException is
+   thrown).</p>
+
+   <p>Administrators are the people who specify what permissions an
+   application actually receives.</p>
+
+   <p>That's about the limits of my knowledge -- Security isn't my forte.  You
+   might find the following topics interesting.</p>
+
+   <ul>
+      <li><a
+        href="http://msdn.microsoft.com/library/default.asp?url=/library/en-us/cpguide/html/cpconrequestingpermissions.asp"
+        >Requesting Permissions at MSDN</a>
+      </li>
+      <li><a
+        href="http://msdn.microsoft.com/library/default.asp?url=/library/en-us/cpguide/html/cpconsecuritysyntax.asp"
+        >Security Syntax at MSDN</a>
+      </li>
+      <li><a
+        href="http://msdn.microsoft.com/library/default.asp?url=/library/en-us/cpguide/html/cpconcodeaccesssecurity.asp"
+        >Code Access Security at MSDN</a>
+      </li>
+      <li><a
+        href="http://msdn.microsoft.com/library/default.asp?url=/library/en-us/cpguide/html/cpconinheritancedemands.asp"
+        >Inheritance Demands at MSDN</a>
+      </li>
+   </ul>
+
+
+   <h3><a name="avoiding-marshal-seealso" id="avoiding-marshal-seealso"
+      >See Also</a></h3>
+
+   <ul>
+      <li><a 
+        href="http://msdn.microsoft.com/library/default.asp?url=/library/en-us/csspec/html/vclrfcsharpspec_A_2.asp"
+        >Unsafe Code at MSDN</a>
+      </li>
+   </ul>
+
+   <h2><a name="comments" id="comments">Commentary</a></h2>
+
+   <p>Interesting commentary that doesn't really belong elsewhere, but is
+   still good to know.</p>
+
+   <h3><a name="pinvoke-spec" id="pinvoke-spec">P/Invoke Specification</a></h3>
+
+   <p>From Paolo Molaro:</p>
+   <blockquote id="paolo-molaro-quote"><p>
+   Yes, the P/Invoke specification (or lack thereof) is a mess. It was done
+   by people that didn't [think] through the portability issues and this is
+   probably one of the reasons the MS CLR is not really supported on
+   9x-based platforms. Note: P/Invoke is intrinsically non-portable, the
+   main issue is that P/Invoke is poorly defined in a non-win32 system.
+   Think of Charset: they allow Ansi and Unicode (with Auto meaning one or
+   the other according to the platform), but the world uses also other
+   encodings. At the very least they should have added a Charset.Encoding
+   or something, with the actual encoding specified separately as a string,
+   for example (good luck, though, finding a UCS4 encoding
+   implementation in the base assemblies...).
+   </p></blockquote>
+
+   <h2><a name="thanks" id="thanks">Thanks</a></h2>
+
+   <p>Portions of this document were generated as a result of a mono-list
+   discussion between Jonathan Pryor and David Jeske.  See: 
+   <a href="http://lists.ximian.com/archives/public/mono-list/2003-July/014886.html"
+   >http://lists.ximian.com/archives/public/mono-list/2003-July/014886.html</a>.
+   </p>
+
+   <p>Thanks also to Paolo Molaro, Bernie Solomon, and Marcus 
+   for reviews and comments.</p>
+
+   <h2><a name="copyright" id="copyright">Copyright</a></h2>
+
+   <p>To the greatest extent possible, this document is dedicated to the 
+   Public Domain.  Please properly document 
+   <a href="mailto:jonpryor@vt.edu">Jonathan Pryor</a> as the original 
+   author (you don't go quoting Mark Twain without mentioning him even though 
+   his works are all Public Domain), but I fully expect that this document 
+   can (and will) be massaged for other mediums.</p>
+
+   <p>Note that some portions of this document are quotations from others,
+   such as <a href="#gc-safe-pinvoke-example">blog</a>
+   <a href="#resource-disposal-seealso">entries</a>
+   and <a href="#david-jesk-quote">email</a>
+   <a href="#paolo-molaro-quote">quotations</a>; 
+   the original author is mentioned when quotations are made.</p>
+
+   <h3>HTML Validation</h3>
+
+	<p><a href="http://validator.w3.org/check?uri=referer">Don't forget to 
+	validate the page regularly.</a></p>
+
+   <h3>Revision History</h3>
+   <dl>
+      <dt>February 3, 2005</dt>
+      <dd>Revised navigation menu to show 1st and 2nd level links.  
+         <a href="#library-linux">Documented Mono's <tt>__Internal</tt> 
+         library name extension</a> for importing symbols from within 
+         the loading program.
+         Added <a href="#marshaling-arrays">Marshaling Arrays</a> section,
+         which clarifies array marshaling issues and includes the David Jesk
+         commentary (which shouldn't have been in the "Avoiding Marshaling"
+         section anyway).
+         Added <a href="#marshaling-bools">boolean marshaling
+         information</a>.
+         Added <a href="#marshaling-string-pointers">Marshaling Embedded
+         Strings</a> information.
+         Minor corrections, additional links to blogs and articles, 
+         </dd>
+      <dt>June 14, 2004:</dt>
+      <dd>Added <a href="#resource-disposal">Properly Disposing of 
+         Resources</a> section; changed title to clarify document's intent.</dd>
+      <dt>June 6, 2004:</dt>
+      <dd>Mono <a href="#marshaling-string-return-values">properly frees the
+         memory of class-typed return values</a> now.  Remove comment stating
+         otherwise. [miguel]</dd>
+      <dt>May 15, 2004:</dt>
+      <dd>Added 
+         <a href="#invoking-unmanaged-code-exception-handling">Exception 
+         Propogation</a> section, updated 
+         <a href="#library-names">Mono's .config file handling</a>;
+         spelling correction: s/marshalling/marshaling/g (this matches MSDN
+         spelling conventions).
+         </dd>
+      <dt>March 20, 2004:</dt>
+      <dd>Added <a href="#marshaling-memory">Memory Boundaries</a> section
+         based on suggestions from Marcus; formatting changes.
+         </dd>
+      <dt>August-October 2003:</dt>
+      <dd>Initial Version.</dd>
+   </dl>
+</body>
+</html>
+

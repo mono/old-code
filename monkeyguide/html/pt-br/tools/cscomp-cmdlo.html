@@ -1,0 +1,168 @@
+<?xml version="1.0" encoding="utf-8"?>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:monodoc="http://www.go-mono.org/xml/monodoc">
+<head>
+	<title>C# compiler Command-line options</title>
+
+	<meta name = "DC.Description" content = "" />
+	<meta name = "DC.Contributor" content = "Johannes Roith" />
+
+	<link rel="stylesheet" type="text/css" href="../style.css" />
+
+	<meta name = "CVS.English.Version" content = "1.12" />
+</head>
+<body>
+<h2>Contents</h2>
+<ul>
+<li>1. <a href="#simplecompile">Simple Compile</a></li>
+<li>2. <a href="#simplecompile">Out Parameters</a></li>
+<li>3. <a href="#simplecompile">Using Targets</a></li></ul>
+<h2>Simple compile</h2>
+Mono's C# compiler is fully compatible the the MS compiler and has
+even the same switches. 
+<pre class="code">
+<b>// Hello World! : hello.cs</b>
+
+using System;
+
+class Hello {
+    static void Main() {
+        Console.WriteLine ("Hello, World!");
+    }
+}
+
+</pre>
+To compile, type 
+<pre class="console">
+mcs hello.cs
+</pre>
+This results in a file hello.exe, that you can execute with mono: 
+<pre class="console">
+mono hello.exe
+</pre>
+<h2>Out Parameters</h2>
+To compile to another filename: 
+<pre class="console">
+mcs /out:someothername.exe hello.cs
+</pre>
+<h2>Using Targets</h2>
+<h3>Exe</h3>
+This is the default and will create a console application. 
+<pre class="console">
+mcs /target:exe hello.cs
+</pre>
+<h3>Winexe</h3>
+This has no effect currently, when used with mono, but this might
+change, when mono will integrate with GUI filemangers like
+Nautilus. On the MS .NET Framework this causes the runtime not to
+open a console window, if not already opened. 
+<pre class="console">
+mcs /target:winexe hello.cs
+</pre>
+<h3>Library</h3>
+to compile a library: 
+<pre class="console">
+mcs /target:library hello.cs
+</pre>
+<h3>Module</h3>
+A module is not a complete application, but only for example one or
+two classes. Serveral module can be compiled to one application.
+This is useful if you want to compile one application out of a
+VB.NET module and a C# module. 
+<pre class="console">
+mcs /target:module hello.cs
+</pre>
+<h2>Other Options</h2>
+<h3>--about</h3>
+Displays information about the Mono C# compiler 
+<h3>-checked, -checked</h3>
+Sets the default compilation mode to `checked'. This makes all the
+math operations checked (the default is unchecked). 
+<h3>-checked-</h3>
+Sets the default compilation mode to `unchecked'. This makes all
+the math operations unchecked (this is the default). 
+<h3>-codepage:ID</h3>
+Specifies the code page used to process the input files from the
+point it is specified on. By default files will be processed in the
+Latin-1 code page. The compiler will also automatically detect
+Unicode files that have an embedded byte mark at the beginning. The
+special ID "utf8" can be used to switch to utf8 and the ID "reset"
+restores the automatic handling of code pages. 
+<h3>-define:SYMLIST, -d:SYMLIST</h3>
+Defines the symbol listed by the semi-colon sepa- reted list
+SYMLIST SYMBOL. This can be tested in the source code by the
+pre-processor, or can be used by methods that have been tagged with
+the Con- ditional attribute. 
+<h3>-debug, -debug+, -g</h3>
+Generate debugging information. The debugging information is stored
+in a file with the extension .dbg (if you install system wide
+assemblies, you need to install this file as well). To get stack
+traces with debugging information, you need to invoke the mono
+runtime with the `--debug' flag. 
+<h3>-debug-</h3>
+Do not generate debugging information. 
+<h3>--expect-error X L</h3>
+The compiler will expect the code to generate an error named `X' in
+line `L'. This is only used by the test suite. 
+<h3>--fatal</h3>
+This is used for debugging the compiler. This makes the error
+emission generate an exception that can be caught by a debugger. 
+<h3>--stacktrace</h3>
+Generates a stack trace at the time the error is reported, useful
+for debugging the compiler. 
+<h3>-lib:PATHLIST</h3>
+Each path specified in the comma-separated list will direct the
+compiler to look for libraries in that specified path. 
+<h3>-L PAT</h3>
+Directs the compiler to look for libraries in the specified path.
+Multiple paths can be provided by using the option multiple times. 
+<h3>-nostdlib, -nostdlib+</h3>
+Use this flag if you want to compile the core library. This makes
+the compiler load its internal types from the assembly being
+compiled. 
+<h3>-noconfig, -noconfig+</h3>
+Disables the default compiler configuration to be loaded. The
+compiler by default has references to the system assemblies. 
+<h3>-nowarn:WARNLIST</h3>
+Makes the compiler ignore warnings specified in the comma-separeted
+list WARNLIST&gt; 
+<h3>-out:FNAME, -o FNAME</h3>
+Names the output file to be generated. 
+<h3>--parse</h3>
+Used for benchmarking. The compiler will only parse its input
+files. 
+<h3>-resource:RESOURCE[,ID]</h3>
+Embeds to the given resource file. The optional ID can be used to
+give a different name to the resource. If not specified, the
+resource name will be the file name. 
+<h3>-linkresource:RESOURCE[,ID]</h3>
+Links to the specified RESOURCE. The optional ID can be used to
+give a name to the linked resource. 
+<h3>-recurse:PATTERN, --recurse PATTERN</h3>
+Does recursive compilation using the specified pat- tern. In Unix
+the shell will perform globbing, so you migth want to use it like
+this: bash$ mcs -recurse:'*.cs' 
+<h3>--timestamp</h3>
+Another debugging flag. Used to display the times at various points
+in the compilation process. 
+<h3>-unsafe, -unsafe+</h3>
+Enables compilation of unsafe code. 
+<h3>-warnaserror, -warnaserror+</h3>
+Treat warnings as errors. 
+<h3>-warn:LEVEL</h3>
+Sets the warning level. 0 is the lowest warning level, and 4 is the
+highest. The default is 2. 
+<h3>-r:ASSEMBLY1[,ASSEMBLY2], -r ASSEMBLY1[,ASSEMBLY2]</h3>
+Reference the named assemblies. Use this to use classes from the
+named assembly in your program. The assembly will be loaded from
+either the system directory where all the assemblies live, or from
+the path explicitly given with the -L option. You can also use a
+semicolon to separate the assemblies instead of a comma. 
+<h3>-v</h3>
+Debugging. Turns on verbose yacc parsing. 
+<h3>--</h3>
+Use this to stop option parsing, and allow option- looking
+parameters to be passed on the command line. 
+
+</body>
+</html>

@@ -1,0 +1,189 @@
+<?xml version="1.0" encoding="utf-8"?>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:monodoc="http://www.go-mono.org/xml/monodoc">
+<head>
+	<title>The Global Assembly Cache - Advanced Topics</title>
+	<link rel="stylesheet" type="text/css" href="../style.css" />
+</head>
+
+<body>
+<h1>The Global Assembly Cache - Advanced Topics</h1>
+
+  <p> 
+    This section explains some advanced topics regarding the <a 
+    href="basics.html#gac">Global Assembly Cache</a>. For an
+    introduction to the GAC please have a look at its <a 
+    href="basics.html">basics</a>.
+  </p>
+    
+<a name="delay_signed_assembly" />
+<h2>Using Delay Signed Assembly</h2>
+
+  <p>
+    <a href="basics.html#delay_signed_assembly">Delay signed assemblies</a>
+    are often used during software development to keep the private signing
+    key confidential. This is a necessary step if you also want to use the 
+    strongnames as an integrity mechanism.
+  </p>
+
+  <p>
+    Mono 1.0 doesn't support the verification of the strongname signatures
+    by the runtime. This means that the integrity mechanism isn't present.
+    However it is still possible to use delay signed assemblies with Mono.
+    For example developers may want the integrity of the strongnames when
+    their assemblies are running on a different runtime or may use the 
+    same private key for other purpose.
+  </p>
+
+  <p>
+    To delay sign an assembly you need to include:
+  </p>
+
+  <ul>
+    <li>
+      the <b>AssemblyDelaySign</b> attribute with a <b>true</b> parameter
+      somewhere in the project; and
+    </li>
+    <li>
+      the <b>AssemblyKeyFile</b> attribute with a reference to a file 
+      containing the public key. The private key would also work but 
+      would be pointless to use.
+    </li>
+  </ul>
+
+<pre class="code">
+[assembly: AssemblyDelaySign (true)]
+[assembly: AssemblyKeyFile ("mypublickeyfile.pub")]
+</pre>
+
+  <p>
+    By contrast a fully signed assembly would use a <b>false</b> parameter
+    to the <b>AssemblyDelaySign</b> attribute (or completely remove this 
+    attribute) and the <b>AssemblyKeyFile</b> attribute would reference a
+    file containing complete key pair (i.e. both the private and the 
+    public key).
+  </p>
+
+  <p>
+    Now a delay-signed assembly can't be of much help if it can't be used
+    by the runtime. This isn't generally a problem with Mono 1.0 (as the 
+    runtime doesn't enforce the strongname signature) but the verification
+    can still be turned off for:
+  </p>
+
+  <ul>
+    <li>
+      a single assembly (specificed as the assembly filename and public 
+      key token) for a specific user, a list of users or all users; or
+    </li>
+    <li>
+      all assemblies sharing the same public key token, again for a 
+      specific user, a list of users or all users.
+    </li>
+  </ul>
+
+<a name="delay_signed_config" />
+<h4>Delay Signed Configuration</h4>
+
+  <p>
+    The list of assemblies, or public key token, to be exempted of signature
+    verification is kept in the <b>machine.config</b> file. This file is 
+    usually located in <b>[prefix]/etc/mono</b>.
+  </p>
+
+  <p>
+    The configuration is kept under the 
+    <b>configuration/strongNames/verificationSettings</b> section. Each 
+    entry is named <b>skip</b> and has three attributes.
+  </p>
+
+  <ul>
+    <li>
+      <b>Token</b>: the public key token to ignore;
+    </li>
+    <li>
+      <b>Assembly</b>: the specific assembly name to ignore. A <b>*</b> can
+      be used for ignore every assemblies using the specified token; and
+    </li>
+    <li>
+      <b>Users</b>: the users for whom the signature verification is 
+      skipped. Multiple user names are comma separated. Again a <b>*</b>
+      can be used to skip verification for all users for the 
+      assembly/public key token.
+    </li>
+  </ul>
+
+  <p>
+    For example an entry to ignore all ECMA assemblies signatures for all
+    users would look like this:
+  </p>
+
+<pre class="code">
+&lt;skip Token="b77a5c561934e089" Assembly="*" Users="*" /&gt;
+</pre>
+
+<a name="public_key_token_remapping" />
+<h2>Public Key Token Remapping</h2>
+
+   <p>
+    The best example of remapping is the 
+    <a href="basics.html#ecma_key">ECMA</a> key. Every runtime must remap 
+    the ECMA public key token to it's own public key. This way each runtime
+    can verify the digital signature of the 
+    <a href="basics.html#standard_assembly">standard ECMA assemblies</a>.
+  </p>
+
+  <p>
+    The same problem applies to other assemblies as well. Few people have
+    access to the private key used to sign most of the framework assemblies
+    (known as msfinal). However to keep the same strongname we need the 
+    same public key (and public key token). Mono's solution to this problem
+    is to generalize the ECMA remapping mechanism to any public key token.
+  </p>
+
+  <p>
+    This generic remapping mechanism is only present in Mono. This means 
+    that the assemblies using it cannot work, out-of-the-box, with a 
+    different runtime (as the signature can't be directly verified). If 
+    you need to use those assemblies (e.g. for testing or debugging 
+    purposes) then you must turn off strongname verification for the 
+    specific assembly (or for entire public key token). See 
+    <a href="#delay_signed_assembly">Delay Signed Assemblies</a> for more
+    details.
+  </p>
+
+<a name="remapping_config" />
+<h4>Public Key Token Remapping Configuration</h4>
+
+  <p>
+    The remapping configuration is kept in the <b>machine.config</b> file. 
+    This file is usually located in <b>[prefix]/etc/mono</b>.
+  </p>
+
+  <p>
+    The configuration is kept under the 
+    <b>configuration/strongNames/pubTokenMapping</b> section. Each entry
+    is named <b>map</b> and has two attributes.
+  </p>
+
+  <ul>
+    <li>
+      <b>Token</b>: the public key token of the assembly; and
+    </li>
+    <li>
+      <b>PublicKey</b>: the public key that will be used to verify the
+      assembly strongname signature.
+    </li>
+  </ul>
+
+  <p>
+    For example the entry for the ECMA key would look like this:
+  </p>
+
+<pre class="code">
+&lt;map Token="b77a5c561934e089" PublicKey="002400000480000000..." /&gt;
+</pre>
+
+</body>
+</html>
+

@@ -1,0 +1,377 @@
+<?xml version="1.0" encoding="utf-8"?>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:monodoc="http://www.go-mono.org/xml/monodoc">
+<head>
+	<title>Installation on Linux</title>
+
+	<meta name = "DC.Description" content = "" />
+	<meta name = "DC.Contributor" content = "Johannes Roith" />
+	<meta name = "DC.Contributor" content = "Jaime Anguiano Olarra" />
+	<meta name = "DC.Contributor" content = "Hinne Hettema" />
+	<meta name = "DC.Contributor" content = "Martin Willemoes Hansen" />
+
+	<meta name = "CVS.English.Version" content = "1.17" />
+</head>
+<body>
+
+<h2>Contents</h2>
+<ol>
+<li>
+<a href="#rpm">Binary install on RedHat &amp; RPM based systems</a>
+</li>
+<li>
+<a href="#deb">Binary install on Debian</a>
+</li>
+<li>
+<a href="#source">Install from Source</a>
+</li>
+<li>
+<a href="#garbage">Garbage Collection</a>
+</li>
+<li>
+<a href="#kernel_support">Linux Kernel Support for Binaries</a>
+</li>
+<li>
+<a href="#credits">Credits</a>
+</li>
+</ol>
+<h2>Binary install on RedHat &amp; RPM based systems</h2>To get
+Mono running you will need to download rpms made for your
+distribution from a few sources.
+<ul>
+<li>From 
+<a href="http://www.go-mono.org/download.html">http://www.go-mono.org/download.html</a>
+<pre class="code">
+libgc-6.1-1.i386.rpm 
+libgc-devel-6.1-1.i386.rpm 
+mono-0.23-1.i386.rpm 
+mono-devel-0.23-1.i386.rpm
+</pre></li>
+<li>If you want to use Gtk#, from 
+<a href="ftp://ftp.gnome-db.org/pub/gnome-db/">ftp://ftp.gnome-db.org/pub/gnome-db/</a>
+<pre class="code">
+libgda-0.10.0-1.i386.rpm
+libgnomedb-0.10.0-1.i386.rpm
+</pre>And from 
+<a href="http://gtk-sharp.sourceforge.net/">http://gtk-sharp.sourceforge.net/</a>
+<pre class="code">
+gtk-sharp-0.7-1.i386.rpm
+</pre></li>
+</ul>
+<h2>Binary install on Debian</h2>
+<p>Alp Toker maintains the 
+<a href="http://www.debianplanet.org/mono/">Mono packages for
+Debian</a> GNU/Linux and Debian-based systems running the 
+<i>stable</i> and 
+<i>unstable</i> distribution across several harware
+architectures.</p>
+<p>To make use of the archive, append these lines to 
+<tt>/etc/apt/sources.list</tt> and run 
+<tt>apt-get update</tt>:</p>
+<h3>Debian GNU/Linux 3.0 stable (woody)</h3>
+<pre class="code">
+deb http://www.debianplanet.org/mono stable main
+deb-src http://www.debianplanet.org/mono stable main
+</pre>
+<h3>Debian GNU/Linux unstable (sid)</h3>
+<pre class="code">
+deb http://www.debianplanet.org/mono unstable main
+deb-src http://www.debianplanet.org/mono unstable main
+</pre>
+<h3>Installation and usage</h3>
+<p>The runtime and its dependencies can be downloaded and installed
+using 
+<tt>apt-get install mono</tt>. On platforms that are not yet
+supported by the faster JIT engine, the interpreter will be
+automatically installed and set as the default runtime.</p>
+<p>Sources can be downloaded using 
+<tt>apt-get source</tt> 
+<i>packagename</i>. Other packages worth mentioning are 
+<tt>gtk-sharp</tt>, the GUI toolkit, and 
+<tt>csharp-elisp</tt>, a C# mode for emacs. The complete list of
+packages can be searched using 
+<tt>apt-cache search</tt> 
+<i>keywords</i>. See the Mono for Debian site for further
+information.</p>
+<br />
+<br />
+<h2 class="sect2">
+<a name="source" id="source">Install from Source</a>
+</h2>
+<p>There are several ways to get Mono running on your computer.
+This document will discuss only one of those: downloading the
+source tarball and utilising the make utilities to get mono up and
+running. There is only one mono package to worry about if you are
+just after a 'base' install of mono: the mono runtime. This
+package, found under the name "mono-x.xx" has got a compiled
+version of the compiler built in.</p>
+<p>You'll be able to complete everything in this document if you
+just install the runtime, but taking a look at the compiler package
+is well worth the effort. The compiler is written in C# and is
+'self hosting' which means it is able to compile itself.</p>
+<p>As of this moment, it is my understanding that there are still
+some issues with the 'self hosting' bit of the compiler on linux,
+although this is expected to work in later versions of mono. If you
+are just interested in finding out how mono will work under linux,
+I would not worry about the self-hosting bit for now. The
+self-hosting of the compiler will be the topic of a future
+howto.</p>
+<p>See 
+<a href="http://www.go-mono.com/download.html" target="_top">the mono
+download site</a> for the source of the tarballs.</p>
+<p>This page also lists the current versions of the software mono
+depends on. Make sure that your system has all the required
+versions, otherwise mono won't compile.</p>
+<p>At a minimum for mono 0.12, you'll need to:</p>
+<ul>
+<li>
+<p>download and install 
+<a href="http//www.freedesktop.org/software/pkgconfig"
+target="_top">&#13;pkg-config</a>.</p>
+</li>
+<li>
+<p>download and install 
+<a href="ftp://ftp.gtk.org/pub/gtk/v1.3/glib-1.3.12.tar.gz"
+target="_top">&#13;glib 1.3</a>.</p>
+</li>
+</ul>
+<p>Installing the tarballs is done via GNU autoconf and automake.
+The general upshot of running autoconf and automake is that you can
+type 
+<b class="command">./configure</b> and then 
+<b class="command">make</b> to do the build. Typing 
+<b class="command">make install</b> completes the installation of
+mono on your system.</p>
+<p>To build the mono runtime package, unzip the tarball to some
+useful location. I tend to use 
+<b class="command">/usr/src</b> as the location, but you could
+really do it anywhere. For the install process, it is also a good
+idea to be 'root'. The installation process will shuttle some
+executables into 
+<b class="command">/usr/local/bin</b> (more about that later).</p>
+<p>Unzipping the tarballs will have created two directories in 
+<b class="command">&#13;/usr/src/</b>, one called something like
+mono-x.xx and the other mcs-x.xx. The one called 'mono' is the
+runtime environment, and this contains all that is initially needed
+to run mono and investigate its inner workings.</p>
+<p>To start building the mono runtime, first type 
+<b class="command">./configure</b>. You will see an output like
+this:</p>
+<pre class="code">
+&#13;[root@taurus mono-0.12]# ./configure
+loading cache ./config.cache
+checking host system type... i686-pc-linux-gnu
+checking target system type... i686-pc-linux-gnu
+checking build system type... i686-pc-linux-gnu
+checking for a BSD compatible install... (cached) /usr/bin/install
+-c
+checking whether build environment is sane... yes
+checking whether make sets ${MAKE}... (cached) yes
+checking for working aclocal... found
+
+
+snip ....
+
+
+checking BASE_DEPENDENCIES_CFLAGS...  -I/usr/include/glib-2.0
+-I/usr/lib/glib-2.0/include
+checking BASE_DEPENDENCIES_LIBS...  -lglib-2.0
+checking for GC_malloc in -lgc... (cached) no
+configure: warning: Compiling mono without GC.
+checking if off_t is 64 bits wide... no
+checking if _FILE_OFFSET_BITS=64 gives 64 bit off_t... ok
+
+snip ...
+
+creating Makefile
+creating mono/Makefile
+creating mono/utils/Makefile
+creating mono/metadata/Makefile
+creating mono/dis/Makefile
+creating mono/cil/Makefile
+creating mono/arch/Makefile
+creating mono/os/Makefile
+creating mono/os/win32/Makefile
+creating mono/os/unix/Makefile
+creating mono/arch/x86/Makefile
+creating mono/arch/ppc/Makefile
+creating mono/arch/sparc/Makefile
+creating mono/arch/arm/Makefile
+creating mono/interpreter/Makefile
+creating mono/tests/Makefile
+creating mono/benchmark/Makefile
+creating mono/monoburg/Makefile
+creating mono/monograph/Makefile
+creating mono/jit/Makefile
+creating mono/io-layer/Makefile
+creating mono/handles/Makefile
+creating runtime/Makefile
+creating scripts/Makefile
+creating man/Makefile
+creating doc/Makefile
+creating docs/Makefile
+creating config.h
+config.h is unchanged
+
+
+        GC:     auto
+
+
+[root@taurus mono-0.12]#
+</pre>
+<p>This means that the configure script has now created all the
+makefiles necessary to complete the build on your system. Note the
+"GC: auto" at the end of the list of commands. GC stands for
+"garbage collection" and it will be addressed in a later section of
+this document.</p>
+<p>You are now ready to start the mono "build" process. To kick
+this off, you can type 
+<b class="command">make</b> at the command prompt. You'll see
+something like this:</p>
+<pre class="code">
+&#13;[root@taurus mono-0.12]# make
+make  all-recursive
+make[1]: Entering directory `/usr/src/mono-0.12'
+Making all in mono
+make[2]: Entering directory `/usr/src/mono-0.12/mono'
+Making all in utils
+make[3]: Entering directory `/usr/src/mono-0.12/mono/utils'
+gcc -DHAVE_CONFIG_H -I. -I. -I../.. -I/usr/include/glib-2.0 
+-I/usr/lib/glib-2.0/include   -I/usr/include/glib-2.0 
+-I/usr/lib/glib-2.0/include   -I../.. -I../../mono   
+-D_FILE_OFFSET_BITS=64 -D_GNU_SOURCE   -g -Wall 
+-Wunused -Wmissing-prototypes -Wmissing-declarations 
+-Wstrict-prototypes  -Wmissing-prototypes -Wnested-externs 
+-Wpointer-arith -Wno-cast-qual -Wcast-align -Wwrite-strings 
+-c mono-hash.c
+
+</pre>
+<p>and this will continue for a while. On my 1 GHz Duron with 256
+MB of RAM the total build process takes about three minutes. All
+the terrible flags after gcc have essentially been set by the
+configure script and there is no need to worry about these.</p>
+<p>To finally install mono, you can type 
+<b class="command">make install</b> to get a working version of
+mono. This command will copy the scripts that run the executables
+to a place where the operating system will be ale to find them.
+This location is 
+<b class="command">/usr/local/bin</b> on my system.</p>
+<div class="sect2">
+<h2 class="sect2">
+<a name="garbage" id="garbage">Garbage Collection</a>
+</h2>
+<p>To make the mint interpreter work with garbage collection, you
+first need to install a garbage collection package on your system.
+Mono works with Boehm Garbage collection, which is found at 
+<a href="http://www.hpl.hp.com/personal/Hans_Boehm/gc/"
+target="_top">&#13;http://www.hpl.hp.com/personal/Hans_Boehm/gc/</a>.</p>
+<p>To get garbage collection to work, I downloaded the source
+tarball into 
+<b class="command">/usr/src/</b> and typed 
+<b class="command">./configure</b> followed by 
+<b class="command">make</b> and 
+<b class="command">make install</b>.</p>
+<p>There is one glitch to work around. The header file for the
+garbage collection 
+<b class="command">gc.h</b> is found in the 
+<b class="command">/usr/src/gc6.0/include</b> directory (at least
+on my system). The mono build process will break on this location:
+it is looking for the header file in some other place called 
+<b class="command">/usr/include/gc/</b> and won't be able to find
+the correct header file.</p>
+<p>The solution is to build a symbolic link between these two
+locations as follows</p>
+<pre class="code">
+&#13;[root@taurus include]# ln -s /usr/src/gc6.0/include/
+/usr/include/gc
+</pre>
+<p>after which you'll be able to list the directory contents as if
+they were in 
+<b class="command">/usr/include</b></p>
+<pre class="code">
+&#13;[root@taurus include]# pwd
+/usr/include
+[root@taurus include]# ls /usr/include/gc
+cord.h                gc_backptr.h  gc_inline.h            
+javaxfc.h
+ec.h                  gc_cpp.h      gc_local_alloc.h       
+leak_detector.h
+gc                    gc_gcj.h      gc_mark.h              
+new_gc_alloc.h
+gc_alloc.h            gc.h          gc_pthread_redirects.h  private
+gc_amiga_redirects.h  gc_inl.h      gc_typed.h             
+weakpointer.h
+[root@taurus include]#
+</pre>
+<p>To get mono to work with garbage collection, you'll have to
+rebuild the environment. This is done easily by typing 
+<b class="command">make distclean</b> to clean up any existing
+executables.</p>
+<p>Continue the build by typing 
+<b class="command">./configure</b>, and look at the last line. It
+should read:</p>
+<pre class="code">
+&#13;
+snip...
+
+creating config.h
+
+
+        GC:     boehm
+
+
+[root@taurus mono-0.12]#
+
+</pre>
+<p>The GC: boehm tells you that garbage collection has been turned
+on. Now to compile the runtime, you type 
+<b class="command">make</b> and 
+<b class="command">make install</b> as previously.</p>
+<p>You now have mono working with Garbage Collection.</p>
+<p>Although my experimentation is incomplete as of this time, I
+have found some issues with running Garbage Collection
+continuously, and my recommendation would be to turn it off for
+now.</p>
+<p>To turn garbage collection off again, you have to go to the 
+<b class="command">/usr/src</b> directory where you extracted the
+tarball. Enter the 
+<b class="command">gc6.0</b> directory and type 
+<b class="command">make uninstall</b> to uninstall Garbage
+Collection. Then in your 
+<b class="command">mono</b> directory, type 
+<b class="command">make distclean</b> followed by 
+<b class="command">./configure</b>, 
+<b class="command">make</b> and 
+<b class="command">make install</b>.</p>
+</div>
+<h2>
+<a name="kernel_support" id="kernel_support">Linux kernel support
+for binaries</a>
+</h2>
+<p>You can make your mono .exe files executable by following these
+steps:</p>
+<ol>
+<li>Enabling binfmt in your kernel.</li>
+<li>Adding the line below to your fstab:
+<br />
+<pre class="code">
+binfmt_misc /proc/sys/fs/binfmt_misc binfmt_misc none
+</pre></li>
+<li>On boot run the cmd below:
+<br />
+<pre class="code">
+echo ':CLR:M::MZ::/usr/bin/mono:' &gt;
+/proc/sys/fs/binfmt_misc/register
+</pre></li>
+<li>chmod +x foobar.exe</li>
+</ol>Another way to accomplish the above is to wrap the
+<br />mono .exe file it in a shell script, like this:
+<pre class="code">
+#!/bin/sh
+/usr/bin/mono "$@"
+</pre>Of course you should change /usr/bin/mono to the path your
+mono is. To get it done easily just replace /usr/bin/mono with the
+output of: which mono
+
+</body>
+</html>

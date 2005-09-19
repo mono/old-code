@@ -1,0 +1,263 @@
+<?xml version="1.0" encoding="utf-8"?>
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:monodoc="http://www.go-mono.org/xml/monodoc">
+
+<head>
+<meta name="generator" content=
+"HTML Tidy for Linux/x86 (vers 1st September 2004), see www.w3.org" />
+<title>Poupou on "An SSL server in 3 simple steps (and without
+boiling water)" (11/29/2004)</title>
+<link href="blogx.css" type="text/css" rel="stylesheet" />
+<script language="javascript" type="text/javascript" src=
+"http://pages.infinit.net/ctech/prettyprint.js">
+</script>
+</head>
+<body onload="paintColors();">
+<div class="entry">
+
+<h3 class="entryTitle">An SSL server in 3 simple steps (and without boiling water)</h3>
+
+<div class="entryBody">
+<p><b>Step 1 - Creating a SSL server certificate</b></p>
+<p>A SSL certificate is used to bind a public key with a host name.
+Without this protection any valid certificate could be used on any
+host (as long as you have the private key). So you must know your
+host name before creating your certificate. In doubt use the
+<code>hostname</code> command. As an alternative it is also
+possible to use the IP address of your computer.</p>
+<div class="console">
+<pre>
+&gt; hostname
+pollux
+</pre></div>
+<p>Building a SSL test (i.e. non trusted) certificate is easy once
+your know your host's name. Mono ships with a utility,
+<code>makecert</code>, for doing so. The following command will
+create a test certificate for an SSL server.</p>
+<div class="console">
+<pre>
+&gt; makecert -r -eku 1.3.6.1.5.5.7.3.1 -n "CN=pollux" -sv pollux.pvk pollux.cer
+Success
+</pre></div>
+<p>The parameters used to build this test certificate are:</p>
+<dl>
+<dt>-r</dt>
+<dd>Create a self-signed certificate (we don't need/want to build a
+hierarchy here). Maybe I should blog about being your own CA one of
+these days...</dd>
+<dt>-eku <a href=
+"http://www.alvestrand.no/objectid/1.3.6.1.5.5.7.3.1.html" target=
+"_blank">1.3.6.1.5.5.7.3.1</a></dt>
+<dd>Optional (as sadly most client don't require it). This
+indicates that your certificate is intended for server-side
+authentication.</dd>
+<dt>-n "CN=pollux"</dt>
+<dd>Common Name (CN) = Host name. This is verified the SSL client
+and must match the connected host (or else you'll get a warning or
+error or <b>*gasp*</b> nothing).</dd>
+<dt>-sv private.key</dt>
+<dd>The private key file. The key (1024 bits RSA key pair) will be
+automatically generated if the specified file isn't present.</dd>
+<dt>pollux.cer</dt>
+<dd>The created SSL certificate for your host.</dd>
+</dl>
+<p>Use <code>man makecert</code> to see all the options provided by
+<code>makecert</code>.</p>
+<p><b>Step 2 - The SSL server</b></p>
+<pre class="code">
+using System;
+using System.IO;
+using System.Net;
+using System.Net.Sockets;
+using System.Text;
+
+using Mono.Security.Authenticode;
+using Mono.Security.Protocol.Tls;
+using System.Security.Cryptography;
+using System.Security.Cryptography.X509Certificates;
+
+namespace SslHttpServer
+{
+    class SslHttpServer
+    {
+        private static X509Certificate _certificate;
+        private static string certfile;
+        private static string keyfile;
+
+        static void Main (string [] args)
+        {
+            certfile = (args.Length &gt; 1) ? args [0] : "ssl.cer";
+            keyfile = (args.Length &gt; 1) ? args [1] : "ssl.pvk";
+
+            Socket listenSocket = new Socket (AddressFamily.InterNetwork, SocketType.Stream, ProtocolType.Tcp);
+            IPEndPoint localEndPoint = new IPEndPoint (IPAddress.Any, 1888);
+            Socket requestSocket;
+
+            listenSocket.Bind (localEndPoint);
+            listenSocket.Listen (10);
+
+            while (true) {
+                try {
+                    requestSocket = listenSocket.Accept ();
+                    using (NetworkStream ns = new NetworkStream (requestSocket, FileAccess.ReadWrite, true)) {
+                        using (SslServerStream s = new SslServerStream (ns, Certificate, false, false)) {
+                                s.PrivateKeyCertSelectionDelegate += new PrivateKeySelectionCallback (GetPrivateKey);
+                                StreamReader reader = new StreamReader (s);
+                                StreamWriter writer = new StreamWriter (s, Encoding.ASCII);
+
+                                string line;
+                                string answer =
+                                        "HTTP/1.0 200\r\n" +
+                                        "Connection: close\r\n" +
+                                        "Content-Type: text/html\r\n" +
+                                        "Content-Encoding: " + Encoding.ASCII.WebName + "\r\n" +
+                                        "\r\n" +
+                                        "&lt;html&gt;&lt;body&gt;&lt;h1&gt;Hello World!&lt;/h1&gt;&lt;/body&gt;&lt;/html&gt;\r\n";
+
+                                // Read request header
+                                do {
+                                        line = reader.ReadLine ();
+                                        if (line != null)
+                                                Console.WriteLine (line);
+                                }
+                                while (line != null &amp;&amp; line.Length &gt; 0);
+
+                                // Send response
+                                writer.Write (answer);
+
+                                writer.Flush ();
+                                s.Flush ();
+                                ns.Flush ();
+                        }
+                    }
+                }
+                catch (Exception ex) {
+                        Console.WriteLine (ex.ToString ());
+                }
+            }
+        }
+
+        private static X509Certificate Certificate {
+                get {
+                        if (_certificate == null)
+                                _certificate = X509Certificate.CreateFromCertFile (certfile);
+                        return _certificate;
+                }
+        }
+
+        // note: makecert creates the private key in the PVK format
+        private static AsymmetricAlgorithm GetPrivateKey (X509Certificate certificate, string targetHost)
+        {
+                PrivateKey key = PrivateKey.CreateFromFile (keyfile);
+                return key.RSA;
+        }
+    }
+}
+</pre>
+<p>Note that the sample code use the port 1888 for SSL
+communication while the default SSL port is 443. This allows me
+(and others ;-) to let <a href="http://httpd.apache.org/" target=
+"_blank">Apache</a> runs with the default SSL port.</p>
+<p>Now compile the SSL server source code by including a reference
+to the <a href="http://pages.infinit.net/ctech/20031202-1004.html"
+target="_blank">Mono.Security.dll</a> assembly (the whole point of
+this blog entry).</p>
+<pre class="console">
+&gt; mcs sslserver.cs /r:Mono.Security.dll
+Compilation succeeded
+</pre>
+<p><b>Step 3 - Executing the SSL server</b></p>
+<p>Now execute the server using Mono and specify your certificate
+and private key (created in the first step).</p>
+<pre class="console">
+&gt; mono sslserver.exe pollux.cer pollux.pvk
+</pre>
+<p>Then from another terminal window, type: (don't forget to adjust
+host name and port number)</p>
+<pre class="console">
+&gt; wget https://pollux:1888/
+</pre>
+<p>then <b>ENTER</b>. A similar output should then be printed:</p>
+<pre class="console">
+--18:10:02--  https://pollux:1888/
+           =&gt; `index.html'
+Resolving pollux... 192.168.0.666
+Connecting to pollux[192.168.0.666]:1888... connected.
+HTTP request sent, awaiting response... 200
+Length: unspecified [text/html]
+ 
+    [ &lt;=&gt; ] 49            --.--K/s
+ 
+18:10:02 (478.52 KB/s) - `index.html' saved [49]
+</pre>
+<p>during this time the server terminal should have printed
+something like:</p>
+<pre class="console">
+GET / HTTP/1.0
+User-Agent: Wget/1.9.1
+Host: pollux:1888
+Accept: */*
+Connection: Keep-Alive
+</pre>
+<p><b>Notes</b></p>
+<ul>
+<li><a href="http://www.mozilla.org/products/firefox/" target=
+"_blank">FireFox</a>, <a href=
+"http://www.microsoft.com/windows/ie/default.mspx" target=
+"_blank">IE</a> and even <code>wget</code>, have the "bad habit" of
+starting a SSL connection using SSL v2 (i.e. with a version 2
+HelloClient structure). This is a bad habit because TLS, <a href=
+"http://www.ietf.org/rfc/rfc2246.txt" target="_blank">RFC2246</a>,
+specifies in Appendix E:
+<p><cite>Warning: The ability to send Version 2.0 client hello
+messages will be phased out with all due haste. Implementors should
+make every effort to move forward as quickly as possible. Version
+3.0 provides better mechanisms for moving to newer
+versions.</cite></p>
+and was published in <b>January 1999</b> (also note that TLS 1.0 is
+seen as SSL 3.1)! Another <i>funny</i> incident with appendix E is
+that both FireFox and IE (but not wget) have their own
+interpretation of <i>"This value must be 32."</i> where 32 == 16. I
+admit that (a) the <b>must</b> isn't capitalized (probably because
+the RFC doesn't reference <a href=
+"http://www.ietf.org/rfc/rfc2119.txt" target="_blank">RFC 2119</a>
+(Key words for use in RFCs to Indicate Requirement Levels) and that
+no capitalized <b>MUST</b> are present in the document - and (b)
+that both implementations predate the TLS specification - but still
+<b>they both</b> proclaims to support TLS ;-)</li>
+<li>On a Mono related note, support for version 2.0 <code>client
+hello</code> is very recent in <a href=
+"http://subversion.tigris.org/" target="_blank">SVN</a>. Actually
+it was planned to <b>*not* ever exists!</b>. So this will only be
+available in the next stable/unstable releases (i.e. FireFox and IE
+won't work with this sample if you use Mono 1.0.4 or 1.1.2).</li>
+<li>Acute readers have noticed that I didn't share the true address
+of <b>pollux</b> on my home network ;-).</li>
+<li>Very acute readers have noticed that they haven't been warned
+that you were using a test certificate by <code>wget</code>! - but
+Firefox and IE would have - no one is perfect it seems ;-)</li>
+</ul>
+<p><b>Thanks</b></p>
+<p>Many thanks to Carlos Guzman Alvarez for his excellent
+client/server SSL/TLS implementation and support, and to Joerg
+Rosenkranz for providing me his server sample code (which was my
+<i>last</i> reason not to blog about this earlier ;-). I'm glad we
+have both of you in the <a href="http://www.mono-%20project.com/"
+target="_blank">Mono</a> community :-)</p>
+<p class="entryFooter"><br />
+11/29/2004 18:07:16 | <a href=
+"mailto:spouliot@videotron.ca?subject=An%20SSL%20server%20in%203%20simple%20steps%20(and%20without%20boiling%20water)">
+Comments</a></p>
+</div>
+</div>
+<table>
+<tr>
+<td>The views expressed on this website/weblog are mine alone and
+do not necessarily reflect the views of my employer.</td>
+</tr>
+<tr>
+<td>Subscribe to my <a class="standardsButton" href=
+"/ctech/poupou.rss">RSS</a> feed.</td>
+</tr>
+</table>
+</body>
+</html>

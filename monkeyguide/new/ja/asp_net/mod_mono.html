@@ -1,0 +1,302 @@
+<?xml version="1.0" encoding="utf-8"?>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:monodoc="http://www.go-mono.org/xml/monodoc">
+<head>
+	<meta http-equiv="content-type" content="text/html;charset=utf-8" />
+	<title>mod_monoのコンフィグレーション</title>
+
+	<meta name = "DC.Description" content = "mod_mono installation guide" />
+	<meta name = "DC.Contributor" content = "Gonzalo Paniagua Javier" />
+	<meta name = "DC.Contributor" content = "Atsushi Enomoto" />
+
+	<link rel="stylesheet" type="text/css" href="style.css" />
+</head>
+<body>
+<h1>イントロダクション</h1>
+<p>
+mod_mono は、お好みのWebブラウザ向けにASP.NETを提供することを目的としている、Apache 1.3/2.0のモジュールです。
+</p>
+<p>
+このモジュールは、実際のリクエストを扱う部分を外部プログラム <b>mod-mono-server</b> に依存しています。<!-- maybe typo : s:/relay/rely/ -->
+この間の通信はunixソケットあるいはTCPソケットを使用して確立されます。
+</p>
+<p>
+初期のmod_monoでは、あなたは、モジュールから転送されるリクエストを理解するために必要なパラメータを保持していることを保証するために、自分でmod-mono-serverを開始しなければなりませんでした。これは現在でも、mod-mono-serverをapacheとは異なるライフサイクルで持っておきたいという人向けに、オプションとして存在しますが、おそらくあなたはmod_monoのビルトイン機能を使用してmod-mono-serverを開始・停止する方を望むことでしょう。
+</p>
+<h1>前提条件</h1>
+<p>
+<a href="http://httpd.apache.org">apache</a> Webサーバをインストールしている必要があるでしょう。
+</p>
+<p><a href="http://www.mono-project.com/downloads/">Mono project</a>の「ダウンロード」ページから<b>mono</b>, <b>XSP</b>, <b>mod_mono</b>を入手できます。XSPがmod-mono-serverが存在するモジュールとなります。
+</p>
+<h1>mod_monoをコンパイルする</h1>
+<p>
+もしあなたが既にmod_monoをパッケージとしてインストールしていれば、このセクションは<a
+href="#configuration">飛ばしてください</a>。
+</p>
+<p>
+mod_monoをコンパイルする前に、apacheのdevelopmentパッケージ（apache-devなど)が必要になります。このステージで、あなたは mod_mono-X.Y.Z.tar.gz というファイルを持っているべきです。そうしたら、以下の手順に従ってください:
+</p>
+<pre class="console">
+    $ tar xzf mod_mono-X.Y.Z.tar.gz
+    $ cd mod_mono-X.Y.Z
+(1) $ ./configure
+    $ make
+(2) $ make install
+</pre>
+<p>
+たぶん、あなたは(2)の前に 'su' を実行する必要があります。
+<br/>
+(1)については、あなたが使いたいと思う/使う必要があるかもしれない、いくつかのオプションがあります:
+<ul>
+<li><b>--prefix=</b>/xxx/yyy<br/>
+これはmod_monoのファイルをインストールする基準パスを設定します。
+</li>
+<li><b>--with-mono-prefix=</b>/aaa/bbb<br/>
+もしmod_monoのプレフィックスがmonoとは異なる場合、あなたは、mono実行ファイルとmod-mono-server.exeが正しく実行されるデフォルト パスとしてこれを使用して、monoのプレフィックスを設定すべきです。これは必須ではありませんが有用です。
+</li>
+<li><b>--with-apxs=</b>/xxx/yyy/apxs<br/>
+もしあなたのシステムが複数のapache（つまり1.3と2.0）の開発用ファイルをインストールしている場合、あなたはmod_monoの対象バージョンを選択する必要があるかもしれません。あなたが必要とするバージョンのapxs実行ファイルの完全パスを指定してください。
+</li>
+<li><b>--with-apr-config=</b>/xxx/yyy<br/>
+もしあなたがapache 2向けにコンパイルするときに、いくつかのヘッダファイルが見つからないというエラーに出会ったら、このオプションを使ってください。これはapache 2のapr-configツールの完全パスを要求します。
+</li>
+<li><b>--enable-debug</b><br/>
+あなたはapacheのerror_logファイル中により多くの出力を得ることになります。デバッグするときには有用でしょう。
+</li>
+</ul>
+</p>
+<a name="configuration" />
+<h1>詳しく説明されたコンフィグレーションの例</h1>
+<p>
+mono, XSP, mod_monoをインストールし終えた現在、何かをやってみたいことでしょう。
+</p>
+<h3>初めての場合</h3>
+<p>
+XSPをインストールしたとき、数多あるサンプルASP.NETページとwebサービスが同時にインストールされています。もしXSPをコンフィグレーションしたときのプレフィックスが /usr であれば、これらのサンプルファイルは /usr/share/doc/xsp/test 以下で見つかります。
+</p>
+<p>
+あなたがこれらのファイルを仮想パス /test 以下で利用可能にしたいとしましょう。そうしたら、あなたの httpd.conf ファイルを編集して（ヒント: /etc/httpd, /etc/apache2 など）、以下の行を(番号は削除して ;-)追加してください:
+</p>
+<pre class="code">
+1   LoadModule mono_module modules/mod_mono.so
+2   Alias /test "/usr/share/doc/xsp/test"
+3   AddMonoApplications default "/test:/usr/share/doc/xsp/test"
+4   &lt;Location /test&gt;
+5       SetHandler mono
+6   &lt;/Location&gt;
+</pre>
+<p>
+1行目では、mod_mono.soの完全パスを使う必要があるかもしれません。
+</p>
+<p>
+Ok。ではapacheを起動または再起動して、http://127.0.0.1/test/index.aspx をブラウズしてください。もしあなたがテストページを見られなければ、<a href="#trouble">トラブルシューティングのセクション</a>に進んでください。そうでなければ…ようこそASP.NETの世界へ!
+</p>
+<p>
+ではここで、あなたが今httpd.confに追加した行について説明しましょう。1行目は、apacheにmod_monoモジュールを読むことを指示しています。私は常に2行目の内容を用いて、apacheが、誰かが /test をリクエストしたときに備えて、ファイルとディレクトリをチェックして、最後にスラッシュを追加できるようにしておきます。
+</p>
+<p>
+3行目にある <i>AddMonoApplications</i> の最初の引数については、次のセクションで説明します。2番目のものは、mod-mono-serverに渡されて、/test 仮想パスが物理パス /usr/share/doc/xsp/test に該当することが分かるようにしています。そして5行目で、いま選択した位置の中から、/test/ 以下ではmod_monoが全てのリクエストを扱うということをapacheに指示しています。
+</p>
+<p>
+オッケー、これで動きました。でも何が起こったんでしょうか?
+あなたがapacheを起動したとき、mod_monoがmod-mono-serverを起動しました。そして、あなたが /test 以下の任意のページをリクエストしたとき、mod_monoはmod-mono-serverと接続し、リクエストデータを転送して、あなたのブラウザに送信されるレスポンスを処理したのです。最後に、もしあなたがapacheを停止したら、mod_monoはmod-mono-serverに落ちるように指示します。
+</p>
+<h3>アプリケーションの詳細</h3>
+<p>
+mod_monoでさまざまなアプリケーションを動作させるようにするには、どうすればよいのでしょうか?　最も簡単なオプションから始めましょう。httpd.confに以下の内容がになります:
+</p>
+<pre class="code">
+1   LoadModule mono_module modules/mod_mono.so
+2   Alias /test "/usr/share/doc/xsp/test"
+3   Alias /personal "/home/user/mypages"
+4   AddMonoApplications default "/test:/usr/share/doc/xsp/test,/personal:/home/user/mypages"
+5   &lt;Location /test&gt;
+6       SetHandler mono
+7   &lt;/Location&gt;
+8   &lt;Location /personal&gt;
+9       SetHandler mono
+10  &lt;/Location&gt;
+</pre>
+<p>
+ご覧の通り、これは単に3行目を（2行目と同じように）追加して、8, 9, 10行目を（5, 6, 7行目と同じように）追加しただけです。その他の変更点は、AddMonoApplications (4)で、これは値として新しいアプリケーションの仮想パスおよび物理パスを追加しています。
+</p>
+<p>
+では4行目に焦点を当ててみましょう。このドキュメントの最初の方で、mod_monoはmod-mono-serverのインスタンスを1つ以上実行して、それ（ら）と接続してASP.NETリクエストを伝送することができると書きました。
+<i>AddMonoApplications</i> およびサポートされているその他のディレクティブの大部分について、最初の引数は、実行中のmod-mono-serverのエイリアスです。その他のディレクティブでは、最初の引数を省略することができます。この場合、'default'が推定されます。おそらくあなたが考えたであろう:
+</p>
+<pre class="code">
+AddMonoApplications default "/test:/usr/share/doc/xsp/test,/personal:/home/user/mypages"
+
+	...これは以下のものと同等です...
+
+AddMonoApplications default "/test:/usr/share/doc/xsp/test"
+AddMonoApplications default "/personal:/home/user/mypages"
+</pre>
+<p>
+これによって、あなたはアプリケーションに関連するコンフィグレーションを、別のファイル上に保存しておくことが出来ます (Alias, AddMonoApplications, Location, ...)。
+</p>
+<h3>2つのアプリケーション、2つのmod-mono-server</h3>
+<p>
+あなたは、SessionやApplicationのレベルのオブジェクトを共有したくない、一定のメモリあるいはCPU使用量の制限をアプリケーション別に設定したい…といった理由で、
+それぞれのアプリケーションを別々のmod-mono-serverのインスタンスで実行したいと思うかもしれません。
+</p>
+<p>
+これを実現するために必要なコンフィグレーションを、先の2つのアプリケーションを使って見てみましょう:
+</p>
+<pre class="code">
+1   LoadModule mono_module modules/mod_mono.so
+2   Alias /test "/usr/share/doc/xsp/test"
+3   AddMonoApplications default "/test:/usr/share/doc/xsp/test"
+4   &lt;Location /test&gt;
+5       SetHandler mono
+6   &lt;/Location&gt;
+7
+8   Alias /personal "/home/user/mypages"
+9   AddMonoApplications personal "/personal:/home/user/mypages"
+11  &lt;Location /personal&gt;
+12      MonoSetServerAlias personal
+13      SetHandler mono
+14  &lt;/Location&gt;
+</pre>
+<p>
+このコンフィグレーションを使うと、mod_monoは、'default'と'personal'という2つのmod-mono-serverのインスタンスを起動します。'default'のインスタンスは/testを、'personal'のインスタンスは/personalを、それぞれハンドルします。mod_monoは、新しいエイリアスをディレクティブとして発見するたびに、そのエイリアスに対して設定された全てのパラメータを、新しいmod-mono-serverのインスタンスに割り当てます。
+</p>
+<p>
+ご覧の通り、入れ替わった行番号の他に、2つの変更点があります。ひとつは、9行目の<i>AddMonoApplications</i>で、最初の引数が'personal'になっています。もうひとつは12行目で、<i>MonoSetServerAlias</i>を導入しています。このディレクティブは、mod_monoに、どのmod-mono-serverのインスタンスが&lt;Location&gt;へのリクエストを処理するかを指示します。これはapacheの&lt;Directory&gt;と一緒に使うことも出来ます。<i>&lt;Location /test&gt;</i> の中では、<i>MonoSetServerAlias</i>は使いません。省略されている場合は 'default' インスタンスが使用されることを意味します。
+</p>
+<h3>上限を設定する</h3>
+<p>
+mod_monoから1つ以上のmod-mono-serverのインスタンスを起動する方法については、分かていると思います。以下は、それぞれのサーバについて、メモリとCPUの上限を設定する例です:
+</p>
+<pre class="code">
+1   LoadModule mono_module modules/mod_mono.so
+2   Alias /jeanette "/home/jeanette/web"
+3   AddMonoApplications jeanette "/jeanette:/home/jeanette/web"
+4   MonoMaxMemory jeanette 200000000
+5   MonoMaxCPUTime jeanette 3600
+6   &lt;Location /jeanette&gt;
+7       MonoSetServerAlias jeanette
+8       SetHandler mono
+9   &lt;/Location&gt;
+</pre>
+<p>
+4行目と5行目は、'jeanette' mod-mono-serverインスタンスの使用できる最大メモリ（バイト）と、消費できる最大CPU時間（秒）を設定しています。この上限に達すると、OSがmod-mono-serverをkillします。mod-mono-serverは、次のリクエストが来たときに、mod_monoによって、同じ上限で再起動します。
+</p>
+<h3>Unix とTCP のソケット</h3>
+<p>
+mod_monoとmod-mono-serverはUnixあるいはTCPのソケットを送受信できる、ということを書きました。Unixソケットを使用するのがデフォルトですが、apacheを使用しているマシンを複数とmod-mono-serverサービスを提供しているマシンが1台だけ使用している場合などには、TCPソケットを使用することもできます。
+</p>
+<p>
+あなたがUnixソケットを使用している場合、コントロールできるパラメータはファイル名だけです。ディレクティブは <i>MonoUnixSocket</i> となります:
+</p>
+<pre class="code">
+    LoadModule mono_module modules/mod_mono.so
+
+    Alias /julia "/home/julia/web"
+    AddMonoApplications default "/julia:/home/julia/web"
+    # When no MonoUnixSocket is provided, the default
+    # is /tmp/mod_mono_server[_alias]
+    # In this case, for the 'default' alias: /tmp/mod_mono_server
+    &lt;Location /julia&gt;
+        SetHandler mono
+    &lt;/Location&gt;
+
+    Alias /jennie "/home/jennie/web"
+    AddMonoApplications jennie "/jennie:/home/jennie/web"
+    # In this case, alias 'jennie': /tmp/mod_mono_server_jennie
+    &lt;Location /jennie&gt;
+        MonoSetServerAlias jennie
+        SetHandler mono
+    &lt;/Location&gt;
+
+    Alias /juno "/home/juno/web"
+    AddMonoApplications juno "/juno:/home/juno/web"
+    # Uses a file under juno's home directory
+-   MonoUnixSocket juno /home/juno/tmp/juno_server
+    &lt;Location /juno&gt;
+        MonoSetServerAlias juno
+        SetHandler mono
+    &lt;/Location&gt;
+</pre>
+<p>
+あなたは、実行しているapacheがファイルを生成・削除するのに必要なパーミッションを有している範囲で、どんなファイル名でも渡すことができます。
+</p>
+<p>
+1つのmod-mono-serverのインスタンスでTCPソケットをリッスンするためには、
+必須の <i>MonoListenPort</i> ディレクティブと、任意の <i>MonoListenAddress</i> ディレクティブがあります。以下の例を見てください:
+</p>
+<pre class="code">
+    LoadModule mono_module modules/mod_mono.so
+
+    Alias /jazmin "/home/jazmin/web"
+    AddMonoApplications jazmin "/jazmin:/home/jazmin/web"
+    # 'jazmin' mod-mono-server will be listening on
+    # port 9000, address 127.0.0.1
+-   MonoListenPort jazmin 9000
+    &lt;Location /jazmin&gt;
+        MonoSetServerAlias jazmin
+        SetHandler mono
+    &lt;/Location&gt;
+
+    Alias /joan "/home/joan/web"
+    AddMonoApplications joan "/joan:/home/joan/web"
+    # 'joan' mod-mono-server will be listening on
+    # port 7000, any address (0.0.0.0)
+-   MonoListenPort joan 7000
+-   MonoListenAddress joan 0.0.0.0
+    &lt;Location /joan&gt;
+        MonoSetServerAlias joan
+        SetHandler mono
+    &lt;/Location&gt;
+</pre>
+<p>
+<i>MonoUnixSocket</i> と <i>MonoListenPort</i> は相互に排他的です。
+</p>
+<h3>パス</h3>
+<p>
+必要に応じて、あなたはmono実行ファイルとmod-mono-server.exeの別の所在を指定することも出来ます。デフォルトの検索パスではmonoが見つけることが出来ない、アセンブリを含むディレクトリを、指定することも出来ます。Monoは、Windows I/Oエミュレーション レイヤーで使用される書き込み可能なディレクトリを要求します。通常はユーザーの.wapiディレクトリ（$HOME/.wapi）です。mod_monoでは、.wapiが生成されるディレクトリは/tmpに設定されますが、これは変更することができます。
+</p>
+<pre class="code">
+    LoadModule mono_module modules/mod_mono.so
+
+    Alias /jane "/home/jane/web"
+    AddMonoApplications jane "/jane:/home/jane/web"
+    # This uses mono 1.1.4 and ASP.NET 1.1 mod-mono-server
+    MonoExecutablePath jane /nfs/mono-1.1.4/bin/mono
+    MonoServerPath jane /nfs/mono-1.1.4/lib/mono/1.0/mod-mono-server.exe
+    &lt;Location /jane&gt;
+        MonoSetServerAlias jane
+        SetHandler mono
+    &lt;/Location&gt;
+
+    Alias /jackie "/home/jackie/web"
+    AddMonoApplications jackie "/jane:/home/jackie/web"
+    # This uses mono from SVN and the alpha ASP.NET 2.0 mod-mono-server
+    MonoExecutablePath jackie /svn/install/bin/mono
+    MonoServerPath jackie /svn/install/lib/mono/2.0/mod-mono-server2.exe
+    # Add this directories to the default paths searched by mono
+    # when looking for assemlies
+    MonoPath jackie "/home/jackie/NET/assemblies:/usr/local/assemblies"
+    # The .wapi directory will be created in /home/jackie
+    MonoWapidir jackie "/home/jackie"
+    &lt;Location /jackie&gt;
+        MonoSetServerAlias jackie
+        SetHandler mono
+    &lt;/Location&gt;
+
+</pre>
+
+<a name="trouble" />
+<h1>トラブルシューティング</h1>
+<h3>Access forbidden</h3>
+<p>
+もしあなたがapacheから403レスポンスを得ているなら、それはおそらくapacheを実行しているユーザーが、物理ディレクトリを参照する適切なパーミッションを有していないからです。それら全てのディレクトリとファイルのパーミッションを確認して、apacheを実行しているユーザーが読めるようにしてください。
+</p>
+<h3>mod-mono-serverが起動しない</h3>
+<p>
+apacheのerror_logファイル (/var/log/apache2/error_log ...) をチェックしてください。ここには、何が起こったのかが記録されているかもしれません。考え得る原因としては、monoあるいはmod-mono-serverがパス上で見つからなかったためであるとか、mod-mono-serverが生成しようとしているUnixソケットのファイルと同名のものが既に存在していて、mod-mono-serverがそれを削除できないためであるとか、古い.wapiディレクトリが存在しているためである、といったところです。
+</p>
+</body>
+</html>
+

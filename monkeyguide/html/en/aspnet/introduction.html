@@ -1,0 +1,76 @@
+<?xml version="1.0" encoding="utf-8"?>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:monodoc="http://www.go-mono.org/xml/monodoc">
+<head>
+	<title>Introduction</title>
+
+	<meta name = "DC.Description" content = "" />
+
+	<link rel="stylesheet" type="text/css" href="../style.css" />
+</head>
+<body>
+<p>
+  ASP.NET support is divided in two pieces:
+</p>
+<ul>
+    <li>Web Forms (Web Applications infrastructure).</li>
+
+    <li>Web Services (the SOAP-based rpc system). </li>
+</ul>
+
+<p>
+  Both are fully functional at this point. And many publicly available
+  applications such as IBuySpy, nGallery and many others are known to
+  work.  Some projects have been <a
+  href="http://www.go-mono.com/ports">ported</a> to work on Mono, while
+  others work out of the box.
+</p>
+
+<p>
+   Web Services stack is being used for commercial applications such
+  as SourceGear's Vault. They even funded the development of our Web
+  Services classes back in 2002. Another example is OpenLink's
+  Virtuoso. People from OpenLink also contributed to Mono.
+</p>
+
+<h2>Using ASP.NET with Mono</h2>
+
+<p>We provide three different mechanisms for hosting ASP.NET applications:</p>
+
+<ul>
+    <li>XSP: A light-weight web server written in C#.</li>
+
+    <li>mod_mono: An Apache module that works with both 1.3 and 2.0 versions. </li>
+
+    <li>Roll-your-own: The class libraries allow you to roll your own
+web server to dispatch web applications.  We do not cover this.</li>
+
+</ul>
+
+<h3>XSP</h3>
+
+<p>XSP is a simple web server written in C# that can be used to run your
+ASP.NET applications. The code is available from our download page or
+from the Anonymous CVS repository (module name: xsp). A couple of
+classes of this new server can be reused/extended to make an apache
+module/cgi using mono (MonoWorkerRequest and
+MonoApplicationHost). This server also uses a couple of plugins
+distributed with Mono to support gzip HTTP transfers.</p>
+
+<p>There is also a set of pages, controls and web services that you
+can use to test the server and see how ASP.NET looks like.</p>
+
+<p>As XSP is written in C# and uses System.Web classes to perform its
+job, it also works under MS runtime.  </p>
+
+<h3>mod_mono</h3>
+
+<p>This Apache module is available from our download page.</p>
+
+<p>The module requires the XSP program to be installed, as it reuses a
+lot of the functionality.  Please follow the mod_mono installation
+instructions available on the package.</p>
+ 
+<p>It does not work on Windows. </p>
+</body>
+</html>

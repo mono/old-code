@@ -1,0 +1,98 @@
+<?xml version="1.0" encoding="utf-8"?>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:monodoc="http://www.go-mono.org/xml/monodoc">
+<head>
+	<title>Gtk# - Range widgets</title>
+
+	<meta name ="DC.Description" content ="" />
+	<meta name ="DC.Contributor" content ="Johannes Roith" />
+	<meta name ="DC.Contributor" content ="Shane Landrum" />
+
+	<link rel="stylesheet" type="text/css" href="../../../style.css" />
+</head>
+<body>
+
+<p>The <a href="T:Gtk.Range">Gtk.Range</a> widget class is fairly
+complicated internally, but, like all the "base class" widgets, most
+of its complexity is only interesting if you want to hack on it. Also,
+almost all of the functions and events it defines are only really used
+in writing derived widgets. There are, however, a few useful methods
+that are defined for all Range widgets.
+</p>
+
+<a name="policy"><h3>Setting the Update Policy</h3></a>
+
+<p>
+The "update policy" of a range widget defines at what points during
+user interaction it will change the value field of its Adjustment and
+emit the <a
+href="E:Gtk.Adjustment.ValueChanged">Gtk.Adjustment.ValueChanged</a>
+event for this Adjustment. The update policies are held in <a
+href="T:Gtk.UpdateType">Gtk.UpdateType</a> and can have one of three
+values.
+</p>
+
+<p><pre class="code">
+Gtk.UpdateType.Continuous <i>(default)</i>
+</pre>
+
+The <a href="E:Gtk.Range.ValueChanged">Gtk.Range.ValueChanged</a>
+event is emitted continuously, i.e., whenever the slider is moved by
+even the tiniest amount.
+</p>
+
+<p>
+<pre class="code">
+Gtk.UpdateType.Discontinuous
+</pre>
+
+The "ValueChanged" event is only emitted once the slider has
+stopped moving and the user has released the mouse button. </p>
+
+<p><pre class="code">
+Gtk.UpdateType.Delayed
+</pre>
+The "ValueChanged" event is emitted when the user releases the
+mouse button, or if the slider stops moving for a short period of
+time. </p>
+
+<p>The update policy of a range widget can be set just like any other C#
+object property.
+
+<pre class="code">
+range1.UpdatePolicy = UpdateType  policy;
+</pre>
+</p>
+
+<a name="adjustments"><h3>Getting and Setting Adjustments</h3></a>
+
+<p>
+Getting and setting the adjustment for a range widget "on the fly" is
+done, predictably, with <a
+href="M:Gtk.Range.Adjustment">Gtk.Range.Adjustment</a>, which returns
+a <a href="T:Gtk.Adjustment">Gtk.Adjustment</a> that's related to the
+range widget.
+
+<pre class="code">
+range1.Adjustment = Adjustment adjustment;
+</pre>
+range1.Adjustment returns a pointer to the adjustment to which
+range1 is connected. 
+</p>
+
+<p>range1.Adjustment does absolutely nothing if you assign to it
+the adjustment that range is already using, regardless of whether
+you changed any of its fields or not. If you pass it a new
+Adjustment, it will unreference the old one if it exists (possibly
+destroying it), connect the appropriate signals to the new one, and
+call the private function range1.AdjustmentChanged(), which will
+(or at least, is supposed to...) recalculate the size and/or
+position of the slider and redraw if necessary. </p>
+
+<p>As mentioned in the section on adjustments, if you wish to reuse
+the same Adjustment, when you modify its values directly, you should
+call <a href="M:Gtk.Adjustment.ChangeValue">Gtk.Adjustment.ChangeValue</a> 
+to fire the <a href="E:Gtk.Adjustment.ValueChanged">Gtk.Adjustment.ValueChanged</a> event.</p>
+
+</body>
+</html>

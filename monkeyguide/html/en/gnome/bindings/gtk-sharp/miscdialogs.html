@@ -1,0 +1,75 @@
+<?xml version="1.0" encoding="utf-8"?>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:monodoc="http://www.go-mono.org/xml/monodoc">
+<head>
+	<title>Gtk# - Miscellaneous Widgets - Dialogs</title>
+
+	<meta name ="DC.Description" content ="" />
+	<meta name ="DC.Contributor" content ="Johannes Roith" />
+
+	<link rel="stylesheet" type="text/css" href="../../../style.css" />
+</head>
+<body>
+
+The Dialog widget is very simple, and is actually just a window
+with a few things pre-packed into it for you. The structure for a
+Dialog is: 
+<pre class="code">
+class Dialog
+{
+      Window window;
+    
+      Widget vbox1;
+      Widget action_area1;
+};
+</pre>
+So you see, it simply creates a window, and then packs a vbox into
+the top, which contains a separator and then an hbox called the
+"action_area". 
+<p>The Dialog widget can be used for pop-up messages to the user,
+and other similar tasks. There are two functions to create a new
+Dialog.</p>
+<pre class="code">
+Dialog dialog1 = new Dialog();
+Dialog dialog2 = new DialogWithButton( string title,
+                                       Window      parent,
+                                       DialogFlags  flags, 
+                                       string    first_button_text,
+                                       ... );
+</pre>
+The first function will create an empty dialog, and it is now up to
+you to use it. You could pack a button in the action_area by doing
+something like this: 
+<pre class="code">
+Button button = new Button("My Button");
+window1.ActionArea.PackStart(button, true, true, 0);
+button.Show();
+</pre>
+And you could add to the vbox area by packing, for instance, a
+label in it, try something like this: 
+<pre class="code">
+Label label1 = new Label ("Dialogs are groovy");
+window1.VBox.PackStart(label1, true, true 0);
+label1.Show();
+</pre>
+As an example in using the dialog box, you could put two buttons in
+the action_area, a Cancel button and an Ok button, and a label in
+the vbox area, asking the user a question or giving an error etc.
+Then you could attach a different signal to each of the buttons and
+perform the operation the user selects. 
+<p>If the simple functionality provided by the default vertical and
+horizontal boxes in the two areas doesn't give you enough control
+for your application, then you can simply pack another layout
+widget into the boxes provided. For example, you could pack a table
+into the vertical box.</p>
+<p>The more complicated DialogWithButtons() variant allows to set
+one or more of the following flags.</p>
+<pre class="code">
+Gtk.Dialog.Modal                // make the dialog modal.
+Gtk.Dialog.DestroyWithParent    // ensures that the dialog window is 
+                                // destroyed together with the specified parent.
+Gtk.Dialog.NoSeparator          // omits the separator between the vbox and the action_area.
+</pre>
+
+</body>
+</html>

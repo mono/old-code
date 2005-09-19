@@ -1,0 +1,133 @@
+<?xml version="1.0" encoding="utf-8"?>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:monodoc="http://www.go-mono.org/xml/monodoc">
+<head>
+	<title>Gtk# - Miscellaneous Widgets - FileSelection</title>
+
+	<meta name ="DC.Description" content ="" />
+	<meta name ="DC.Contributor" content ="Johannes Roith" />
+
+	<link rel="stylesheet" type="text/css" href="../../../style.css" />
+</head>
+<body>
+
+The file selection widget is a quick and
+simple way to display a File dialog box. It comes complete with Ok,
+Cancel, and Help buttons, a great way to cut down on programming
+time.
+<p>To create a new file selection box use:</p>
+<pre class="code">
+Widget fileselection1 = new FileSelection(string title);
+</pre>To set the filename, for example to bring up a specific
+directory, or give a default filename, use this function:
+<pre class="code">
+fileselection1.FileName = string filename;
+</pre>To grab the text that the user has entered or clicked on, use
+this function:
+<pre class="code">
+string filename = fileselection1.Filename
+</pre>There are also pointers to the widgets contained within the
+file selection widget. These are:
+<pre class="code">
+  dir_list
+  file_list
+  selection_entry
+  selection_text
+  main_vbox
+  ok_button
+  cancel_button
+  help_button
+</pre>Most likely you will want to use the ok_button,
+cancel_button, and help_button pointers in signaling their use.
+<p>Included here is an example stolen from testgtk.c, modified to
+run on its own. As you will see, there is nothing much to creating
+a file selection widget. While in this example the Help button
+appears on the screen, it does nothing as there is not a signal
+attached to it.</p>
+<p>
+<img src="filesel.png" border="0" />
+</p>
+<p>The source:</p>
+<pre class="code">
+<b>// filesel.cs - Gtk# Tutorial example</b>
+//
+// Author: Johannes Roith &gt;johannes@jroith.de&lt;
+//
+// (c) 2002 Johannes Roith
+
+namespace GtkSharpTutorial {
+
+
+        using Gtk;
+        using System;
+        using System.Drawing;
+
+
+        public class filesel
+        {
+
+                static FileSelection filew;
+
+                /* Get the selected filename and print it to the
+console */
+
+                static void file_ok_sel_event( object obj,
+EventArgs args )
+                {
+                    Console.WriteLine("{0}\n",filew.Filename);
+                }
+
+                static void delete_event (object obj,
+DeleteEventArgs args)
+                {
+                        Application.Quit();
+                }
+
+                static void cancel_event (object obj, EventArgs
+args)
+                {
+                        Application.Quit();
+                }
+
+                public static void Main(string[] args)
+                {
+ 
+                        Application.Init ();
+
+    
+                        /* Create a new file selection widget */
+                        filew = new FileSelection("File
+selection");
+    
+                        filew.DeleteEvent += delete_event;
+
+                        /* Connect the ok_button to file_ok_sel
+function */
+                        filew.OkButton.Clicked += file_ok_sel_event;
+   
+                        /* Connect the cancel_button to destroy the
+widget */
+
+                        filew.CancelButton.Clicked +=new
+EventHandler (cancel_event);
+
+
+                        /* Lets set the filename, as if this were a
+save dialog, and we are giving
+                         a default filename */
+
+                        filew.Filename = "penguin.png";
+    
+                        filew.Show();
+
+                        Application.Run();
+
+                }
+
+        }
+}
+
+</pre>
+
+</body>
+</html>

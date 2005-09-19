@@ -1,0 +1,463 @@
+<?xml version="1.0" encoding="utf-8"?>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:monodoc="http://www.go-mono.org/xml/monodoc">
+<head>
+	<title>A simple POP3 client</title>
+
+	<meta name = "DC.Description" content ="Some practical use of System.Net" />
+	<meta name = "DC.Contributor" content ="Johannes Roith" />
+	<meta name = "DC.Contributor" content ="Vikas G P" />
+
+	<link rel="stylesheet" type="text/css" href="../style.css" />
+</head>
+<body>
+
+<h1>A simple POP3 Client</h1>
+
+<h2>Introduction</h2>
+<p>Handbook writing can be very boring, if you have to use only simple, boring useless examples, and I'm sure, reading such stuff might be boring as well ;) . Therefor we will now create a practical example of a TcpClient: A simple Mail Client for POP3 servers.</p>
+
+<p>We will start with a simple console application in this chapter and build a working Mail Client with Gtk# later. The final Gtk# version will handle MIME, attachments and Html Mail.</p>
+
+<p>For now, let's look at the basic communication, that has to be done between client and server.</p>
+
+<h2>The POP3 protocol</h2>
+
+<p>The POP3 standard is a protocol to retreive Mails from a Server to your local computer. It is described in RFC 1939, avavilable <a href="http://www.ietf.org/rfc/rfc1939.txt">here (http://www.ietf.org/rfc/rfc1939.txt)</a>. I can highly recommend to read that document.</p>
+
+<p>Here is a short summary of POP3</p>
+
+After connecting to the server, the server will send a welcome message, that you have to read first. After that, you enter AUTHORIZATION state. The commands valid in this state are:
+
+<pre>
+	USER name
+	PASS string
+	QUIT
+</pre>
+
+If you were authorized, you enter tranaciton state. Valid commands are:
+
+<pre>
+	STAT
+	LIST [msg]
+	RETR msg
+	DELE msg
+	NOOP
+	RSET
+	QUIT
+</pre>
+
+<h2>Server response</h2>
+
+The Server will always respond like that:
+
+<pre>
++OK <i>optional values</i>
+
+<b>or</b>
+
+-ERR <i>optional values</i>
+</pre>
+
+<p>So, the first 3/4 bytes indicate, if the command was accepted and everytzing went from, well in fact the first byte is enough (+/-).</p>
+
+
+<p>I won't tell you how the server behaves exactly on each command, you can find out yourself now. You'll need a pop3 server, where you have a valid account on.</p>
+
+<p>Fire up telnet like: telnet yourserver.org 110</p>
+
+<p>(110 is the pop3 default port).</p>
+
+<p> You can now interactivly test the commands.</p>
+
+<pre>
+Trying 195.37.232.164...
+Connected to post.tcrz.net.
+Escape character is '^]'.
+
++OK post.tcrz.net POP3 server (Post.Office v3.5.3 release 223 with ZPOP version 1.0 ID# 127-60884U4000L300S0V35) ready Wed, 6 Aug 2003 12:59:32 +0200
+</pre>
+
+<p>The welcome message starts with +OK.</p>
+
+Then enter:
+
+<pre>
+user <i>username</i>
+</pre>
+
+Resonse:
+<pre>
++OK Password required for <i>username</i>
+</pre>
+
+You enter:
+
+<pre>
+pass <i>password</i>
+</pre>
+
+and you'll get:
+
+<pre>
++OK Maildrop has 0 messages (0 octets)
+</pre>
+
+<p>Or something similiar. +OK means, you have loged in sucessfully and are now in TRANSACTION state.</p>
+
+<p>We will now test the commands.</p>
+
+Enter:
+<pre>
+stat
+</pre>
+
+You will get:
+
+<pre>
++OK 2 300
+</pre>
+
+<p>Or similiar. The first number is the number of mails on the server. The second number the size of the mails.
+</p>
+
+Now, type:
+
+<pre>
+list
+</pre>
+
+If there are mails on the server, you'll get:
+
+<pre>
+TODO
+</pre>
+
+This is however difficult to read and parse and pretty useless. Instead you should use:
+
+<pre>
+list <i>mailnumber</i>
+</pre>
+
+You know the number of your mails, because of "stat", so you can now type 1 or 2 or 3, if stat has shown, you have 3 mails on the server.
+
+<p>[TODO]</p>
+<h2>Code</h2>
+Ok, I will just throw in the code for a working client, now. We will walk it through in detail right after that. 
+
+
+<pre class="code">
+// Simple POP3 Class
+// (C) 2003 by Johannes Roith
+
+// TODO: MIME support
+
+using System;
+using System.Net;
+using System.Net.Sockets;
+using System.Text;
+using System.IO;
+
+class MailClient {
+
+
+	public static void Main(string[] args) {
+
+		MailClient mclient = new MailClient(args[0], 110);
+		mclient.Authenticate(args[1], args[2]);
+
+		int number = mclient.GetNumberOfMails();
+		Console.WriteLine("You have " + number + " Mails.");
+
+		for (int i = 0; i &lt; number;i++) {
+
+			Console.WriteLine("\n---------------------------------------\n\n");
+
+			Message message = mclient.GetMessage(i);
+	
+			Console.WriteLine(message.From);
+			Console.WriteLine(message.To);
+			Console.WriteLine(message.Subject);
+			Console.WriteLine(message.Date);
+			Console.WriteLine(message.Body);
+
+
+			Console.WriteLine("\n---------------------------------------\n\n");
+		}
+	}
+
+
+	TcpClient client1;
+
+	public MailClient(string host, int port) {
+
+		client1 = new TcpClient();
+		client1.Connect(host, port);
+
+		// Read Welcome Message
+		NetworkStream stream = client1.GetStream();
+		byte[] carray = new byte[256];
+		int k = stream.Read(carray, 0, carray.Length);
+	
+	}
+	
+	private void Authenticate(string user, string password) {
+	
+		Send("user " + user + "\r\n");
+		Send("pass " + password + "\r\n");
+	
+	}
+	
+	public int GetNumberOfMails() {
+	
+		NetworkStream stream = client1.GetStream();
+	
+		byte[] data = System.Text.Encoding.ASCII.GetBytes("stat\r\n");
+		stream.Write(data, 0, data.Length);
+	
+	    	string response = "";
+	
+		byte[] carray = new byte[10000];
+	
+		// Status
+		int k = stream.Read(carray, 0, carray.Length);
+	
+	    	response = System.Text.Encoding.ASCII.GetString(carray, 0, k);
+	
+		string[] numpos = response.Split(' ');
+		int number = Convert.ToInt32(numpos[1]);
+		return number;
+		
+	}
+	
+	
+	public Message GetMessage(int id) {
+	
+	
+		NetworkStream stream;
+		byte[] data;
+		int k;
+	
+		stream = client1.GetStream();
+	
+	
+		data = System.Text.Encoding.ASCII.GetBytes("retr " + id + "\r\n");
+		stream.Write(data, 0, data.Length);
+	
+	    	string response = "";
+	
+		byte[] carray = new byte[10000];
+	
+		// Status
+		k = stream.Read(carray, 0, carray.Length);
+	    	response = System.Text.Encoding.ASCII.GetString(carray, 0, k);
+	
+	
+		string[] numpos = response.Split(' ');
+		int octets = Convert.ToInt32(numpos[1]);
+	
+	
+		carray = new byte[octets];
+	
+		// Actually Read the Content
+		k = stream.Read(carray, 0, carray.Length);
+	    	response = System.Text.Encoding.ASCII.GetString(carray, 0, k);
+	
+		int index = response.IndexOf("\r\n\r\n");
+	
+		string head = response.Substring(0, index);
+		string body = response.Substring(index, response.Length - index);
+	
+		string[] headerlines = head.Split('\n');
+	
+		Message message = new Message();
+	
+		message.Head = head;
+		message.Body = body;
+	
+		foreach (string line in headerlines) {
+	
+			index = line.IndexOf(":");
+	
+			if (index == -1)
+				continue;
+			string item = line.Substring(0, index);
+	
+			switch (item) {
+	
+				case "From":
+					message.From = line.Substring(index + 1,line.Length - (index + 1)).Trim();
+				break;
+	
+				case "To":
+					message.To = line.Substring(index + 1,line.Length - (index + 1)).Trim();
+				break;
+	
+				case "Subject":
+					message.Subject = line.Substring(index + 1,line.Length - (index + 1)).Trim();
+				break;
+	
+				case "Date":
+					message.Date = line.Substring(index + 1,line.Length - (index + 1)).Trim();
+				break;
+	
+			}
+		}
+	
+		return message;
+		
+	}
+	
+	private string Send(string str) {
+	
+		NetworkStream stream = client1.GetStream();
+	
+	
+		byte[] data = System.Text.Encoding.ASCII.GetBytes(str);
+		stream.Write(data, 0, data.Length);
+	
+	    	string response = "";
+	
+		byte[] carray = new byte[1024];
+	
+		int k = stream.Read(carray, 0, carray.Length);
+	    	response = System.Text.Encoding.ASCII.GetString(carray, 0, k);
+	
+		return response;
+	}
+
+}
+	
+class Message {
+	
+	public string From    = "";
+	public string To      = "";
+	public string Subject = "";
+	public string Date    = "";
+	
+	public string Head    = "";
+	public string Body    = "";
+	
+}
+
+</pre>
+
+<p>Before we take a closer look at the code, run the example.</p>
+
+<pre>
+mono pop3.exe <i>server user password</i>
+</pre>
+
+<h2>Code walktrough</h2>
+
+<!-- [Intro] -->
+
+The bulk of the code is in a class called <code>MailClient</code>. This class encapsulates the POP3 protocol and gives
+its users high-level methods like <code>GetNumberOfMails</code>, <code>GetMessage</code>, etc. Notice that we have
+defined the <code>Main</code> function too inside this class. In real applications the main function is usually
+defined in its own class, like <code>MailApp</code> or something. But since the <code>Main</code> here is very
+simple, we just define it inside the class. We'll now look at each of the methods in detail.
+
+<!-- [Constructor] -->
+<h3> Constructor </h3>
+<code>public MailClient(string host, int port);</code>
+
+<p>
+The constructor sets the member <code>client1</code> to a newly created <code>TcpClient</code> object and connects to
+the server and port specified as its argument. In this simple client, we do no error checking. But in the real world,
+many network related failures may happen -- name lookup failures, network being unreachable, connection being refused,
+etc. You should always check for the appropriate exceptions and/or return values to handle such errors.</p>
+
+
+<p>
+After we are connected, we create a <code>NetworkStream</code> object, obtained through the <code>GetStream</code>
+method of the <code>TcpClient</code>, to read from the server. We read the welcome  message from the server into a
+newly created byte array, and currently just discard it. We could use it for a purpose, like checking the validity of
+the message, etc.</p>
+
+<!-- [Authenticate] -->
+<h3>Authenticate</h3>
+<code>private void Authenticate(string user, string password);</code>
+<p>
+Now that we're connected to the server, the next task is to authenticate ourselves. Authentication is done in POP3 using
+the two commands <code>USER</code>, which specifies the name of the mailbox, and <code>PASS</code>, which gives the
+password to access it. The <code>Authenticate</code> method takes a user and a password string, and sends the two
+commands to the server using the <code>Send</code> method. As you can see, POP3 commands are terminated by the sequence
+CRLF (= "\r\n").</p>
+
+<!-- 	[Send] -->
+<h3>Send</h3>
+<code>private string Send(string str);</code>
+<p>
+The <code>Send</code> method simply takes a string, converts it into a byte array using
+<code>System.Text.Encoding.ASCII.GetBytes</code>, and sends it to the server. It then reads the response from the server
+and returns it as a string.</p>
+
+<!-- [GetNumberOfMails] -->
+<h3>GetNumberOfMails</h3>
+<code>public int GetNumberOfMails();</code>
+<p>
+Now before attempting to retrieve any messages, we would naturally like to know how many messages are there on the
+server. The POP3 command for this is called <code>STAT</code>. The server's reply will be of the form
+</p>
+
+<code>+OK n m</code>
+
+<p>
+where <code>n</code> is the number of messages, and <code>m</code> the number of bytes. The <code>GetNumberOfMails</code>
+method sends a <code>STAT</code> command, gets at the second field of the reply using <code>Split</code>,
+and returns it as an integer using <code>Convert.ToInt32</code>. It takes no arguments.</p>
+
+<!-- [Message class] -->
+<h3>The <code>Message</code> class</h3>
+To conveniently represent a message, we define a <code>Message</code> class. It just consists of a bunch of public 
+members representing the various parts of a message like the <code>From</code> and <code>To</code> addresses, the
+<code>Subject</code> line, the message <code>Body</code>, etc.
+
+<!-- [GetMessage] -->
+<h3>GetMessage</h3>
+<code>public Message GetMessage(int id);</code>
+<p>
+The POP3 server assigns a unique <em>id</em> to each message in a mailbox. These id's go from 1 to n, where n is the
+number of messages, as reported by the <code>STAT</code> command. The <code>GetMessage</code> method takes an
+<code>id</code> as its argument, and returns a <code>Message</code> class representing the message referred to by
+the <code>id</code>. The members of the returned <code>Message</code> object are filled in with the appropriate strings.
+</p>
+
+The method easily separates out into several pieces:
+
+<p>
+First, we send the <code>RETR</code> command together with the <code>id</code> as argument. <code>RETR</code> sends a
+multi-line response -- the first line is the status line as usual, and the succeeding lines are the header and body of the
+message. The response is terminated by a line containing only the '.' character, i.e., the message is terminated by the
+sequence <code>CRLF.CRLF</code>.</p>
+
+<p>
+We read the second field of the status line to see how many bytes the message consists of and then use the
+<code>Read</code> method to read that many bytes into a buffer. The response is then split into two pieces,
+<code>head</code> and <code>body</code>, at the separator "\r\n\r\n", i.e., a blank line. We also create a message object
+and set its <code>head</code> and <code>body</code> members to the newly split strings.</p>
+
+<p>
+Then we further split the head string into an array of strings, each element of the array containing a single line.
+We loop along this array looking for lines that start with either of "From:", "To:", "Subject:", or "Date:". If such a
+line is found, we set the appropriate field of the message object to the portion of the line after the ":", stripping all
+leading and trailing whitespace.</p>
+
+<p>
+Finally, we return the constructed <code>Message</code> object.</p>
+
+<!-- [Main] -->
+<h3>Main</h3>
+The <code>Main</code> method brings all of this together. It connects to the server specified as an argument on the
+command line, invokes the <code>GetNumberOfMails</code>, and prints the result. It then retrieves all the messages one
+by one, printing the header fields for each.
+the header fields for each.
+
+
+<!-- Finish -->
+<p>Given this basic framework, we can extend it to incorporate further processing stages, like MIME handling, HTML mail,
+etc.</p>
+
+</body>
+</html>

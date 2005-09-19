@@ -1,0 +1,78 @@
+<?xml version="1.0" encoding="utf-8"?>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:monodoc="http://www.go-mono.org/xml/monodoc">
+<head>
+	<title>Classes - Parameters - Reference Parameters</title>
+
+	<meta name ="DC.Description" content ="" />
+	<meta name ="DC.Contributor" content ="Johannes Roith" />
+
+	<link rel="stylesheet" type="text/css" href="../style.css" />
+
+	<meta name = "CVS.English.Version" content = "1.3" />
+</head>
+<body>
+<p>
+When passed as reference parameters, any change made to them will have effect. For example, if a <b>int</b> field
+is passed as a reference method, and inside the method receives a different value from the original, it really
+will have the value assigned by the method.
+</p>
+<p>
+Because coding is the best way for learning, let's try to modify the Swap method to receive the parameters
+as reference parameters; actually, the only change is the reverved keyword <b>ref</b> before the type of
+the argument.
+<pre class="code">
+ //
+ // parameters-value.cs
+ // A second implementation of the Swap method
+ //
+
+using System;
+ 
+ public class Tester {
+
+ 	// Interchange the values of a and b
+	// Pay attention on the ref keyword
+ 	public void Swap ( <b>ref</b> int a, <b>ref</b> int b )
+ 	{
+
+		int temp = a;
+		a = b;
+		b = a;
+	
+	}
+
+	public static void Main ()
+	{
+
+		Tester t = new Tester();
+		int a = 56;
+		int b = 45;
+
+		Console.WriteLine("a = {0} | b = {1}", a, b);
+		t.Swap(<b>ref</b> a, <b>ref</b> b);
+		Console.WriteLine("After Swap()");
+		Console.WriteLine("a = {0} | b = {1}", a, b);
+
+	}
+		
+		
+
+ }
+</pre>
+Note that the <b>ref</b> keyword -refering to <b>by reference</b>- is used both when declaring the method
+and when calling it.
+</p>
+<p>
+Now save, compile and run it. You should get this:
+<pre class="console">
+a = 56 | b = 45
+After Swap()
+a = 45 | b = 45
+</pre>
+Now their values were interchanged. Because the <b>ref</b> keyword, the parameters are passed as references,
+and the method works with their values directly.
+</p>
+
+</body>
+</html>

@@ -1,0 +1,110 @@
+<?xml version="1.0" encoding="utf-8"?>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:monodoc="http://www.go-mono.org/xml/monodoc">
+<head>
+	<title>XPath tutorial - Attributes</title>
+
+	<meta name = "DC.Description" content = "" />
+	<meta name = "DC.Contributor" content = "Johannes Roith" />
+
+	<link rel="stylesheet" type="text/css" href="../style.css" />
+</head>
+<body>
+Attributes are specified by @ prefix. 
+<h3>Example 1</h3>
+<b>XPath Expression:</b> Select all attributes @id 
+<pre class="code">
+//@id
+</pre>
+<b>XML:</b> 
+<pre class="code">
+&lt;?xml version="1.0"&gt;
+     &lt;<span class="element">AAA</span>&gt;
+          &lt;<span class="element">BBB</span> <span class="elementOn">id="b1"</span>/&gt;
+          &lt;<span class="element">BBB</span> <span class="elementOn">id="b2"</span>/&gt;
+          &lt;<span class="element">BBB</span> <span class="element">name="bbb"</span>/&gt;
+          &lt;<span class="element">BBB</span>/&gt;
+     &lt;/<span class="element">AAA</span>&gt;
+</pre>
+<h3>Example 2</h3>
+<p><b>XPath Expression:</b> Select BBB elements which have
+attribute id</p>
+<pre class="code">
+//BBB[@id]
+</pre>
+<b>XML:</b> 
+<pre class="code">
+&lt;?xml version="1.0"&gt;
+     &lt;<span class="element">AAA</span>&gt;
+          &lt;<span class="elementOn">BBB</span> <span class="element">id="b1"</span>/&gt;
+          &lt;<span class="elementOn">BBB</span> <span class="element">id="b2"</span>/&gt;
+          &lt;<span class="element">BBB</span> <span class="element">name="bbb"</span>/&gt;
+          &lt;<span class="element">BBB</span>/&gt;
+     &lt;/<span class="element">AAA</span>&gt;
+</pre>
+<h3>Example 3</h3>
+<p><b>XPath Expression:</b> Select BBB elements which have
+attribute name</p>
+<pre class="code">
+//BBB[@name]
+</pre>
+<b>XML:</b> 
+<pre class="code">
+&lt;?xml version="1.0"&gt;
+     &lt;<span class="element">AAA</span>&gt;
+          &lt;<span class="element">BBB</span> <span class="element">id="b1"</span>/&gt;
+          &lt;<span class="element">BBB</span> <span class="element">id="b2"</span>/&gt;
+          &lt;<span class="elementOn">BBB</span> <span class="element">name="bbb"</span>/&gt;
+          &lt;<span class="element">BBB</span>/&gt;
+     &lt;/<span class="element">AAA</span>&gt;
+</pre>
+<h3>Example 4</h3>
+<p><b>XPath Expression:</b> Select BBB elements which have any
+attribute</p>
+<pre class="code">
+//BBB[@*]
+</pre>
+<b>XML:</b> 
+<pre class="code">
+&lt;?xml version="1.0"&gt;
+     &lt;<span class="element">AAA</span>&gt;
+          &lt;<span class="elementOn">BBB</span> <span class="element">id="b1"</span>/&gt;
+          &lt;<span class="elementOn">BBB</span> <span class="element">id="b2"</span>/&gt;
+          &lt;<span class="elementOn">BBB</span> <span class="element">name="bbb"</span>/&gt;
+          &lt;<span class="element">BBB</span>/&gt;
+     &lt;/<span class="element">AAA</span>&gt;
+</pre>
+<h3>Example 5</h3>
+<p><b>XPath Expression:</b> Select BBB elements without an
+attribute</p>
+<pre class="code">
+//BBB[not(@*)]
+</pre>
+<b>XML:</b> 
+<pre class="code">
+&lt;?xml version="1.0"&gt;
+     &lt;<span class="element">AAA</span>&gt;
+          &lt;<span class="element">BBB</span> <span class="element">id="b1"</span>/&gt;
+          &lt;<span class="element">BBB</span> <span class="element">id="b2"</span>/&gt;
+          &lt;<span class="element">BBB</span> <span class="element">name="bbb"</span>/&gt;
+          &lt;<span class="elementOn">BBB</span>/&gt;
+     &lt;/<span class="element">AAA</span>&gt;
+</pre>
+<b>C# code:</b> 
+<pre class="code">
+<b>// BasicSyntax - /xpath/basicsyntax.cs
+// Copyright 2003 by Johannes Roith</b>
+
+using System;
+using System.Xml.XPath;
+
+class BasicSyntax {
+        static void Main() {
+                
+        }
+
+}
+</pre>
+
+</body>
+</html>

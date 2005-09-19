@@ -1,0 +1,53 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta name="generator" content=
+"HTML Tidy for Linux/x86 (vers 1st October 2003), see www.w3.org" />
+<title></title>
+</head>
+<body>
+<h1>mbas: Mono's VisualBasic.NET Compiler.</h1>
+MonoBASIC (mbas) is a CIL compiler for the VisualBasic.NET
+language, an extended version of Visual Basic. It's based on the
+MCS compiler and still in heavy development, though many language
+features are already supported. See mcs/mbas/
+<h3>What works</h3>
+<ul>
+<li>Classes, Fields and Methods. Properties are still being worked
+on.</li>
+<li>Module definition and Sub/Function functionality * Namespace
+Import, so can you reference, instantiate and call external
+assemblies</li>
+<li>Parameter passing between Sub's. ByVal and ByRef parameters are
+being worked on.</li>
+<li>Delegates</li>
+<li>Object creation</li>
+<li>Events - to a limited extent. You can declare a Class-Field as
+'WithEvents' and dynamic events (i.e AddHandler MyButton.Click,
+Button1_OnClick). Please beware: just after committing the code, I
+discovered that the handler field in the AddHandler call is
+case-sensitive, a remnant of mBas' mcs heritage)</li>
+<li>Statements supported are 'If..Then..Else' , 'While..End While'
+and assignment statements. Simple operators (+, -, *, /, &gt;,
+&lt;, =) should also work. Other statements (For..Next, etc.)
+should be quite trivial to implement.</li>
+</ul>
+A lot of this stuff is implemented rebuilding proper expressions
+and statements on top of the classes based on those of mcs (look at
+the grammar - mb-parser.jay - and compare it with cs-parser.jay, if
+interested), but some are getting deeply changed, to better conform
+to VB.NET semantics.
+<h3>TODO-list</h3>
+At this stage almost every element of the language must be still
+checked for conformance to MS' implementation. We'd like to
+implement the missing statements, exception handling, structures
+and actual event support (not necessarily in this order). Once we
+have all this stuff set up and reasonably bug-free, more work could
+be done on helper functions and Object-vars handling.
+<p>Also work on the supporting library (we don't currently depend
+on it as much as MS vbc-compiled programs, but especially for
+late-binding scenarios we will) is surely needed: it's in
+mcs/class/Microsoft.VisualBasic/</p>
+</body>
+</html>

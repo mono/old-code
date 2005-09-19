@@ -1,0 +1,200 @@
+<?xml version="1.0" encoding="utf-8"?>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:monodoc="http://www.go-mono.org/xml/monodoc">
+<head>
+	<title>Monodoc XML tag reference</title>
+
+	<meta name = "DC.Description" content = "People who contributed to this document" />
+	<meta name = "DC.Contributor" content = "Joshua Tauberer" />
+	<meta name = "DC.Contributor" content = "Shane Landrum" />
+
+	<link rel="stylesheet" type="text/css" href="style.css" />
+</head>
+
+<body>
+
+
+<p>This document explains how to document Mono classes using the ECMA-style XML format.  This format is used for the Mono class libraries as well as GTK#.</p>
+
+<p>See the directory monodoc/class in the subversion repository for examples.  I'm just going to list each tag's usage here one by one.  This is based on the ECMA DTD.</p>
+
+<p><b>Changes from the original specifications:</b></p>
+
+<blockquote>
+<p>If you generated your <B
+style="color:black;background-color:#ff9999">ECMA</B>-style docs
+before July 4, 2003, then you need to make sure your docs follow these
+new rules: Ref and out parameters are distinguished.  See the new
+Parameter/@RefType attribute.  Delegate parameters and return values
+are added with the tags Parameters and ReturnValue within the Type
+element.  Event types are added in the ReturnValue elements of event
+members.  For properties, the Parameters list should not include the
+implicit "value" parameter.  Email <B
+style="color:black;background-color:#99ff99">tauberer</B>@for.net if
+you need a lot of docs updated.</p>
+
+</blockquote>
+<p>When I preceed a name with an @ sign, I'm talking about an attribute of a tag (as in XPath).</p>
+<p>Tags for "free-form" documentation are listed at the end.</p>
+<p>The Monodoc browser does not currently honor all Excluded tags</p>
+
+<p><b>Type</b> - The top-level element for each XML file.</p>
+<blockquote>
+<p>@Name - The name of this type (eg "String").</p>
+
+<p>@FullName - The namespace + name of this type (eg "System.String").</p>
+<p>@FullNameSP - ?</p>
+<p>TypeSignature - A language-specific signature for the type.  Every type should have at least a C# signature.  Specify the language in @Language and put the signature in @Value.  (eg "public static class String : System.Object;")</p>
+<p>MemberOfLibrary - "BCL" for classes in corlib.</p>
+<p>AssemblyInfo - Describes the assembly that contains this type.</p>
+<blockquote>
+<p>AssemblyName - The name of the assembly (eg "mscorlib").</p>
+<p>AssemblyPublicKey - The public key (eg "00 00 00 00 00 00 00 00 04 00 00 00 00 00 00 00")</p>
+
+<p>AssemblyVersion - The version (eg "1.0.x.x").</p>
+<p>AssemblyCulture - The culture (eg "none").</p>
+<p>Attributes - The attributes on the assembly.  See the Attributes section below.</p>
+</blockquote>
+<p>Base - Describes this type's base type.</p>
+<blockquote>
+<p>BaseTypeName - The full class name of the base type.  (eg "System.ValueType")
+</p>
+<p>ExcludeBaseTypeName - ?</p>
+<p>ExcludeLibraryName - ?</p>
+
+</blockquote>
+<p>Interfaces - A list of the interfaces implemented by this type.</p>
+<blockquote>
+<p>Interface - An implemented interface.</p>
+<blockquote>
+<p>InterfaceName - The full class name of the interface.  (eg "System.ICloneable")</p>
+<p>Excluded - 0 if this interface isn't to be excluded from anything.</p>
+</blockquote>
+</blockquote>
+<p>Attributes - A list of the custom attributes on this type.  See below.</p>
+<p>ThreadingSafetyStatement - Statement about thread safety.  Optional.  Free-form documentation.</p>
+
+<p>Members - A list of zero or more Member tags.</p>
+<p>TypeExcluded - 0 if this type is not to be excluded from anything.</p>
+<p>Docs - Explained at the end.</p>
+<p>Parameters - If this type is a delegate, the delegate's parameters.  (See the Parameters explanation below.)</p>
+<p><u>ReturnValue</u> - If this type is a delegate, the delegate's return value.  (See the <u>ReturnValue</u> explanation below.)</p>
+</blockquote>
+<p><b>Attributes</b> - A list of the custom attributes on a type or member.  Contains zero or more Attribute tags.</p>
+
+<blockquote>
+<p>Attribute - An attribute on this type.</p>
+<blockquote>
+<p>AttributeName - A string that shows how the attribute was constructed for the type.  (eg "CLSCompliantAttribute(true)")</p>
+</blockquote>
+</blockquote>
+<p><b>Member</b> - Represents a member of a type.</p>
+<blockquote>
+  <p>@MemberName - The name of the member (eg "ToString")</p>
+
+<p>MemberSignature - Like <u>TypeSignature</u>, but for members. (eg "public static byte Parse(string s, <u>NumberStyles</u> style, IFormatProvider provider);")</p>
+<p>MemberType - The type of the member.  One of: Constructor, Method, Property, Field, Event.</p>
+<p>Attributes - See above.</p>
+<p>ReturnValue - Describes return value or value type of this member.  Applicable for methods, properties, fields, and events.  For events, this is the type of the event.</p>
+<blockquote>
+<p>ReturnType - The full class name of the return value or value type.
+<b>Generated files may not have<u>ReturnValue</u> tags for events.  This tag needs to be added for events so that Monodoc can display event types hyperlinked.</b></p>
+
+</blockquote>
+<p>Parameters - A list of zero or more parameters for this member.  Applicable for constructors, methods, and properties with indexers.  For properties, <b>do not</b> include the implict value parameter of the set accessor.  This is expressed in the <u>ReturnValue</u> section.  Use the parameters that go with the get accessor.</p>
+<blockquote>
+<p>Parameter - A parameter.</p>
+<blockquote>
+<p>@Name - The name of the parameter.</p>
+<p>@Type - The full type name of the parameter.  By-reference parameters (ref or out) should end with an ampersand.  (eg "System.String<u>]&amp;" for "ref string[</u>")</p>
+
+<p>@RefType - Either "ref" or "out", if this parameter is by-reference.  <b>This is not a part of the ECMA spec and so may not be in template files.  Monodoc will list out parameters as ref if <u>RefType</u> is not set to "out".</b></p>
+<p>Attributes - The attributes on this parameter.  See the Attributes section above.  Optional.</p>
+</blockquote>
+</blockquote>
+<p>MemberValue - The value of this member, if it is constant.  Optional.  (eg "255")</p>
+<p>Excluded - 0 if this member is not to be excluded from anything.</p>
+
+<p>ExcludedLibrary - ?</p>
+<p>Docs - Explained at the end.</p>
+</blockquote>
+<p><b>Docs</b> - This node contains a variety of sections of free-form documentation.  The purpose of each section is described here.  Each section can contain free-form documentation tags, which are documented after.  All sections are optional, and some can be repeated more than once (as indicated).</p>
+<blockquote>
+<p>summary - Summary description of the type/member.</p>
+<p>altmember - Put a full class name in its cref attribute (T:Full.Type.Name) to provide a see-also link.</p>
+<p>altcompliant - ?</p>
+<p>param - Describes a parameter to the method/property.  Repeat for each parameter.  Put the name of the parameter in the name attribute.</p>
+
+<p>returns - Describes the return value of the method.</p>
+<p>value - Describes the value of the property or field.</p>
+<p>exception - Describes an exception that can be thrown by the method or constructor.  Repeat for each exception.  Put the full class name of the exception in its cref attribute (eg "T:System.Exception"), and put the conditions in which the exception is thrown in the body of the tag.</p>
+<p>threadsafe - Currently ignored by Monodoc.</p>
+<p>remarks - General remarks about the class.</p>
+<p>example - An example usage of the type or member.  (No preformatting is applied here.)</p>
+<p>permission - Describes the permissions needed to access the type or member.  Repeat for each permission.  Put the full class name of the permission in its cref attribute, and put a description in the body of the tag.</p>
+</blockquote>
+<p><b>Free-Form Documentation</b>
+
+The following tags can be used in free-form documentation tags.  The description of each tag specifies what the tag transforms into.  The body of these tags can also contain free-form documentation tags.</p>
+<p>para - A paragraph.</p>
+<p>paramref - A reference to a parameter of the constructor/method/property.  Put the name of the parameter in @name.</p>
+<p>block - A subsection of documentation.  Specify the type of the subsection in @type: "note" for notes, "behaviors" for quirks of the member, "overrides" for notes to inheritors, and "usage" for usage notes.</p>
+<p>c - Monospaced font for code excerpts.  Use para tags to split lines if necessary.</p>
+<p>code - A block of code.  Specify the language in @lang.  Newlines are preserved.</p>
+<p>list, when @type = "table" - Tabular data.  Here's an example:</p>
+<pre>
+        &lt;list type="table"&gt;
+
+                &lt;listheader&gt;
+                        &lt;term&gt;First Col Header&lt;/term&gt;
+                        &lt;description&gt;Second Col Header&lt;/description&gt;
+                        &lt;description&gt;Third Col Header&lt;/description&gt;
+
+                &lt;/listheader&gt;
+                &lt;item&gt;
+                        &lt;term&gt;First Row First Col&lt;/term&gt;
+                        &lt;description&gt;First Row Second Col&lt;/description&gt;
+                        &lt;description&gt;First Row Third Col&lt;/description&gt;
+
+                &lt;/item&gt;
+                &lt;item&gt;
+                        &lt;term&gt;Second Row First Col&lt;/term&gt;
+                        &lt;description&gt;Second Row Second Col&lt;/description&gt;
+                        &lt;description&gt;Second Row Third Col&lt;/description&gt;
+
+                &lt;/item&gt;
+        &lt;/list&gt;</pre>
+<p>list, when @type = "bullet" or "number" - A bulletted or numbered list.  Here's an example.</p>
+<pre>
+        &lt;list type="bullet"&gt;
+                &lt;item&gt;&lt;term&gt;First item.&lt;/term&gt;&lt;/item&gt;
+
+                &lt;item&gt;&lt;term&gt;Second item.&lt;/term&gt;&lt;/item&gt;
+        &lt;/list&gt;</pre>
+<dl>
+<dt>see - A link to another page in the documentation.  Use the cref attribute to link to a type or member or the langword attribute to specify a language keyword.  The body of the tag is ignored.  Cref attributes have the form: a one-letter prefix (N, T, C, M, P, F, E), a colon, and a value. Here are some example crefs</dt>
+<dd><blockquote>
+<p>"N:" for Namespaces, example N:System</p>
+<p>"T:" for Types (classes, structs, interfaces, enumerations), example: T:System.Byte</p>
+
+<p>"C:" for Constructors, example: C:Gtk.Button()</p>
+<p>"M:" for Methods, example: M:System.String.Substring(System.Int32,System.Int32) (the argument list is optional)</p>
+<p>"P:" for Properties, example: P:System.AppDomain.CurrentDomain</p>
+<p>"F:" for Fields, example: F:Gtk.TreeIter.Zero</p>
+<p>"E:" for Events, example: E:Gtk.Button.Clicked</p>
+<p>Common langword usages: &lt;see langword="null"/&gt;, &lt;see langword="true"/&gt;.</p>
+</blockquote>
+
+</dd>
+</dl>
+<p>subscript - Subscript.</p>
+<p>superscript - Superscript.</p>
+<p>onequarter - Transforms to a 1/4 symbol.</p>
+<p>pi - Transforms to a pi symbol.</p>
+<p>theta - Transforms to a theta symbol.</p>
+<p>Other tags will be left unchanged.</p>
+
+
+
+</body>
+</html>

@@ -1,0 +1,311 @@
+<?xml version="1.0" encoding="utf-8"?>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:monodoc="http://www.go-mono.org/xml/monodoc">
+<head>
+	<title>NAnt tutorial</title>
+
+	<meta name ="DC.Description" content ="A tutorial about NAnt" />
+	<meta name ="DC.Contributor" content ="Nicolas Mommaerts" />
+
+	<link rel="stylesheet" type="text/css" href="../style.css" />
+</head>
+<body>
+
+<h1>NAnt</h1>
+
+<h2>Contents</h2>
+<ol>
+<li><a href="#intro">Introduction</a></li>
+<li><a href="#why">Why use NAnt?</a></li>
+<li><a href="#install">Install</a></li>
+<li><a href="#sample">Buildfile sample</a></li>
+<li><a href="#targets">Targets</a></li>
+<li><a href="#tasks">Tasks</a></li>
+<li><a href="#properties">Properties</a></li>
+<li><a href="#conclusion">Conclusion</a></li>
+<li><a href="#links">Links</a></li>
+<li><a href="#credits">Credits</a></li>
+</ol>
+
+<a id="intro"><h2>Introduction</h2></a>
+<p>
+NAnt is a free, platform independent build tool. It's basically a port of Ant using the .NET framework (with some minor differences). See also in the <a href="#links">links</a>.
+</p>
+
+<a id="why"><h2>Why use NAnt?</h2></a>
+<i>Copied from the NAnt documentation</i>
+<p>
+NAnt is different. Instead of a model where it is extended with shell-based commands, NAnt is extended using task
+classes.  Instead of writing shell commands, the configuration files are XML-based, calling out a target tree where
+various tasks get executed.  Each task is run by an object that implements a particular Task interface.
+</p>
+<p>
+Granted, this removes some of the expressive power that is inherent in being able to construct a shell command such as
+'find . -name foo -exec rm {}', but it gives you the ability to be cross-platform - to work anywhere and everywhere. And
+hey, if you really need to execute a shell command, NAnt has an task that allows different commands to be executed based
+on the OS it is executing on.
+</p>
+<p>
+For more information on why Ant and NAnt were developed read the 
+<a href="http://jakarta.apache.org/ant/manual/intro.html">Ant Introduction</a>. 
+</p>
+
+<a id="install"><h2>Install</h2></a>
+<p>
+NAnt 0.6.0 is distributed with mcs, but this tutorial will use the 0.8.4 cvs version since there are major differences
+between these 2 versions, and the 0.8 release is a lot more mature than the 0.6.0 release. Instructions on how to build
+NAnt from cvs are on the NAnt sourceforge homepage. On Linux, you'd find it handy to make an executable
+file named 'nant' somewhere in your system path that executes NAnt:
+<p><pre class="code">#!/bin/sh
+/usr/local/bin/mono /path/to/your/nant/install/dir/bin/NAnt.exe $*</pre>
+</p>
+</p>
+
+<a id="sample"><h2>Buildfile sample</h2></a>
+<p>
+NAnt always works with a buildfile, which is an XML file, defining the project properties, and the different targets.
+The best way to show you how this works, is with a sample buildfile. I'll keep the example simple, but still
+incorporating the most basic features of NAnt. If you read this tutorial, you should be able to figure out more complex
+build files by examining other build files (like the ones of NAnt itself) and by reading the task reference.
+</p>
+<p>
+<pre class="code">&lt;?xml version="1.0" ?&gt;
+&lt;project name="sample" default="targetB"&gt;
+&lt;echo message="This task is always called."/&gt;
+
+    &lt;!-- global project settings --&gt;
+    &lt;property name="project.version" value="1.0"/&gt;
+        
+    &lt;!-- targets --&gt;
+    &lt;target name="targetA"&gt;
+        &lt;tstamp/&gt;
+        &lt;echo message="The project version is=${project.version}"/&gt;
+    &lt;target/&gt;
+
+    &lt;target name="targetB"&gt;
+        &lt;echo message="Hello world."/&gt;
+    &lt;/target&gt;
+
+    &lt;target name="targetC" depends="targetB"&gt;
+        &lt;echo message="First targetB is called as you can see, since this target depends on targetB. A target can
+        depend on many targets."/&gt;
+    &lt;/target&gt;
+
+    &lt;target name="targetD" depends="targetB, targetA"&gt;
+        &lt;echo message="TargetB en targetA were called first."/&gt;
+    &lt;/target&gt;
+&lt;/project&gt;</pre>
+</p>
+
+<a id="targets"><h2>Targets</h2></a>
+<p>
+The buildfile is usually called projectname.build. When we execute NAnt.exe from within the directory where the build
+file is located, it automatically executes the default target from the projectname.build file. 
+This is how we specify the default target: 
+<p>
+<pre class="code">&lt;project name="sample" <b>default="targetB"</b>&gt;</pre>
+</p>
+<p>
+It is called like this:
+</p>
+<pre class="code">mono NAnt.exe</pre>
+<p>
+<i>If you use Linux and made the nant file like in the <a href="#install">install</a> step, you just type 'nant'.</i>
+</p>
+<p>
+Presuming the build file resides in the same directory from which the NAnt command is executed, you'll get this output:
+<p>
+<pre class="code">NAnt version 0.8.4 Copyright (C) 2001-2003 Gerry Shaw
+http://nant.sourceforge.net
+ 
+Buildfile: file:/home/nico/sample.build
+Target(s) specified: targetB
+     [echo] This task is always called.
+ 
+targetB:
+ 
+     [echo] Hello world.
+ 
+BUILD SUCCEEDED
+ 
+Total time: 0.2 seconds.
+</pre>
+</p>
+</p>
+If we want to execute
+a different target than the default target, we specify it when calling NAnt:
+<p>
+<pre class="code">mono NAnt.exe targetA</pre>
+</p>
+This produces the following output:
+<p>
+<pre class="code">NAnt version 0.8.4 Copyright (C) 2001-2003 Gerry Shaw
+http://nant.sourceforge.net
+ 
+Buildfile: file:/home/nico/sample.build
+Target(s) specified: targetA
+     [echo] This task is always called.
+ 
+targetA:
+ 
+   [tstamp] Friday, 07 November 2003 00:07:02.
+     [echo] Project version=1.0
+ 
+BUILD SUCCEEDED
+ 
+Total time: 0.2 seconds.
+</pre>
+</p>
+What is a target? A target is a collection of tasks which are executed from top to bottom. The most common ways a target will be executed is when you specify it when calling NAnt <i>(see previous)</i>, when it's the default target
+<i>(see previous)</i>, or when some other target is called that depends on the target. 
+</p>
+<p>
+When a target depends on another target, that target is called first. When we look at the following code,
+</p>
+<p>
+<pre class="code">&lt;target name="targetC" <b>depends="targetB"</b>&gt;</pre>
+</p>
+Output:
+<p>
+<pre class="code">NAnt version 0.8.4 Copyright (C) 2001-2003 Gerry Shaw
+http://nant.sourceforge.net
+ 
+Buildfile: file:/home/nico/sample.build
+Target(s) specified: targetC
+     [echo] This task is always called.
+ 
+targetB:
+ 
+     [echo] Hello world.
+ 
+targetC:
+ 
+     [echo] First targetB is called as you can see, since this target depends on targetB. A target can depend on many targets.
+ 
+BUILD SUCCEEDED
+ 
+Total time: 0.2 seconds.
+</pre>
+</p>
+<p>
+we see that targetC depends on targetB. This means that when targetC is called in any way, targetB is executed
+first. If targetB depends on another target, then that target is called first. Using <i>depends</i> a whole chain of targets
+can be executed. You can use this mechanism to be sure things are initialised before executing a specific target. For
+example if you copy some files to a directory, you can let that target depend on a target that creates that directory.
+This way you are sure the directory exists. A very common practice when using NAnt to develop programs, is to let the 
+deploy target that installs your code depend on the compile target.
+</p>
+<p>
+A target can depend on many targets like this:
+</p>
+<p>
+<pre class="code">&lt;target name="targetD" <b>depends="targetB, targetA"</b>&gt;</pre>
+</p>
+<p>
+If you'll execute this target, you'll see that targetB is called first, followed by targetA, and finally targetD.
+</p>
+<p>
+<pre class="code">NAnt version 0.8.4 Copyright (C) 2001-2003 Gerry Shaw
+http://nant.sourceforge.net
+ 
+Buildfile: file:/home/nico/sample.build
+Target(s) specified: targetD
+     [echo] This task is always called.
+ 
+targetB:
+ 
+     [echo] Hello world.
+ 
+targetA:
+ 
+   [tstamp] Friday, 07 November 2003 00:14:55.
+     [echo] Project version=1.0
+ 
+targetD:
+ 
+     [echo] TargetB en targetA were called first.
+ 
+BUILD SUCCEEDED
+ 
+Total time: 0.2 seconds.
+</pre>
+</p>
+
+<a id="tasks"><h2>Tasks</h2></a>
+<p>
+If we look at targetB:
+<p>
+<pre class="code">&lt;target name="targetB"&gt;
+        &lt;echo message="This target depends upon targetB, so targetA was be called first"/&gt;
+&lt;/target&gt;</pre>
+</p>
+We see it consists of a single task, echo. The echo task does what you'd expect from it, it shows a message. You can see
+a more detailed description of all the available tasks in the reference documentation or on the NAnt website. A target
+may contain several tasks,  you could for example create a task that builds all your source files and copies them to
+a certain directory.<br/>
+It is with these tasks that a buildfile is created, there are tasks for compiling, copying files, mailing, etc.
+You can even write your own tasks if you don't find the task you need in your project.<br />
+Most of the time tasks are grouped in a target, but you can specify tasks outside of a target <i>(This is not the case
+in Ant)</i>, in which case they will always be called, in the order they are specified. This is most useful for specifying properties.
+<br />
+We can see an example of this here:
+<p>
+<pre class="code">&lt;echo message="This task is always called."/&gt;</pre>
+</p>
+<p>
+You can clearly see in all the previous output that this task is always called when executing a target.
+</p>
+</p>
+
+<a id="properties"><h2>Properties</h2></a>
+<p>
+A property is like a variable which holds a value. It is defined
+like this:
+<p>
+<pre class="code">&lt;property name="project.version" value="1.0"/&gt;</pre>
+</p>
+Here we give the property project.version the value 1.0.<i>(Ant users be aware, properties are not always immutable, see
+the property part in the reference docs)</i><br />
+<br />
+If you want to reference the value of the property, put it between ${ } like this:
+<p>
+<pre class="code">&lt;echo message="The project version is=${project.version}"/&gt;</pre>
+</p>
+Usually properties that change alot like project version, or properties that are platform/installation dependent like
+paths are put in a seperate file. <i>(Ant users are used to putting these in a .properties file and include them
+with &lt;property file="build.properties"&gt;, this is not the same in NAnt as you'll see)</i><br />
+For this purpose we just create a second build file, although we don't name it .build but .properties (this isn't really
+necessary but it enables us to see in a glance if this is a real build file or a build file used to contain properties).
+<br /><br />An example of a build.properties file:
+<p>
+<pre class="code">&lt;project name="build-properties"&gt;
+    &lt;property name="project.version" value="1.0" /&gt;
+    &lt;property name="project.target" value="release" /&gt;
+    &lt;property name="project.platform" value="linux" /&gt;
+&lt;/project&gt;</pre>
+</p>
+<p>
+We include the .properties file like this:
+</p>
+<pre class="code">&lt;include buildfile="build.properties" /&gt;</pre>
+<p>
+You usually put this as the first line after the project definition in your build file.
+</p>
+</p>
+
+<a id="conclusion"><h2>Conclusion</h2></a>
+<p>
+This is the end of this tutorial, I hope you learned something from it. Remember that although
+this tutorial was very basic, NAnt lets you do very complex tasks. If you understand the concepts
+introduced to you in this tutorial, you'll be able to learn very quickly how to create build files
+yourself. The best way to learn this is, is to read the task reference and examine other build files.
+</p>
+
+<a id="links"><h2>Links</h2></a>
+<p>
+<a href="http://nant.sourceforge.net/">The official NAnt website</a>
+<br /><a href="http://jakarta.apache.org/ant">The official Ant website</a>
+</p>
+
+</body>
+</html>
