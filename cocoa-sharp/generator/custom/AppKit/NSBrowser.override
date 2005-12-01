@@ -1,0 +1,8 @@
+<overrides>
+	<method instance="false" sel="cellClass">
+		/* Remove CellClass() static for now; as its causing a compiler error */
+		/*public static Class CellClass () {
+            		return (Class)NSObject.NS2Net(NSBrowser__cellClass0(NSBrowser_classPtr));
+        	  } */
+	</method>
+</overrides>

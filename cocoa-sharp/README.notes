@@ -1,0 +1,24 @@
+This is the README for Cocoa# (Cocoa-sharp).
+
+Cocoa# is a Mono -> Cocoa bridge allowing for the development of Cocoa applications using Mono.  It is similar in nature to the PyObjC bridge.  This package is directed toward .Net/Mono developers seeking a wider audience for their products.
+
+There is not a lot of documentation at this point.  However, included on the disk image are examples that should get you started.  A well commented place to start is the CurrencyConverter.cs source file.
+
+More examples are available with the source code. Instructions for getting the source are available at http://www.mono-project.com/contributing/anoncvs.html.  Please note the module name is cocoa-sharp.
+
+It should also be made clear that this is a 0.1 version, as such performance may not be so great and there is a bunch of debugging output when you run a program.  This should get cleaned up in 0.2.
+
+Cocoa# is the work of the Cocoa# team.  Main contributors to the 0.1 code base are :
+
+	Urs Muff
+	Geoff Norton
+
+Others who helped include:
+	C.J. Collier
+	Adhamh Findlay
+	Andy Satori
+
+All questions about cocoa# should be directed to cocoa-sharp@lists.ximian.com.  
+
+Other resources include:
+	http://www.mono-project.com/contributing/cocoa-sharp.html (contains a simple howto)

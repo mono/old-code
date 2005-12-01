@@ -1,0 +1,9 @@
+Makefile
+Makefile.in
+Apple.*.dll
+lib*Glue.dylib
+Loader
+test-4
+Loader.app
+.DS_Store
+*.app

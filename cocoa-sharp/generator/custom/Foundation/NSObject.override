@@ -1,0 +1,24 @@
+<overrides>
+	<method sel="-release" >
+                public void release() {
+                        ObjCMessaging.objc_msgSend(Raw, "release", typeof(void));
+                        SetRaw(IntPtr.Zero,false);
+                }
+	</method>
+
+	<method sel="-class" >
+                public Class class_ {
+                        get { return new Class((IntPtr)ObjCMessaging.objc_msgSend(Raw, "class", typeof(IntPtr)),false); }
+                }
+	</method>
+	<method sel="+finalize">
+		public static void finalizeClass() {
+			ObjCMessaging.objc_msgSend(NSObject_classPtr, "finalize", typeof(void));
+		}
+	</method>
+	<method sel="-finalize">
+		public void finalize() {
+			ObjCMessaging.objc_msgSend(Raw, "finalize", typeof(void));
+		}
+	</method>
+</overrides>

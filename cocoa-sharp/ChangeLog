@@ -1,0 +1,92 @@
+2005-06-24  Geoff Norton  <gnorton@customerdna.com>
+
+	* ChangeLog: Start actually using me again and stop being lazy
+	* configure.in: Bump to v0.3 due to Tiger support from Bryan Berg
+	* cocoa-sharp.pc.in: Bump to v0.3 due to Tiger support from Bryan Berg
+
+2005-06-24		Bryan Berg	<bryan@imeem.com>
+
+	* generator/gen-out/WriteCS.cs
+		- Don't output frameworks unless the output option is true
+
+	* generator/generator.cs
+		- Add -frameworkdir: parameter to allow specification of paths
+		  to search for frameworks on the command line
+	
+	* generator/gen-out/Type.cs
+		- Don't add typedefs for types that are actually void
+		- Handle being able to parse "unsigned int[]" - treat it like a
+		  pointer
+
+	* generator/header-gen/Main.cs
+		- Add a few new hardcoded typedefs
+		- Remove two typedefs that we now generate enums for
+		- Fix the comment parsing regexp
+		- Don't use RemoveString() to get rid of comment blocks, it's
+		  broken; use a regexp
+		- Generate enums within @interface {} ... @end blocks instead
+		  of ignoring them - because of this we generate several more
+		  enums than usual
+		- Don't generate noname enums
+
+	* generator/macho-gen/MachOType.cs
+		- Handle MachO file format changes between 10.3 and 10.4,
+		  specifically - "type hinting"
+		- Handle '#' type correctly in MachO files
+
+	* generator/custom/AppKit/NSDatePickerCell.override
+		- Override a method with both static and instance selectors; 
+		  in C#, this isn't valid.
+
+	* generator/custom/AppKit/NSObject.override
+		- Override the name of the finalize selector's generated name,
+		  both for the + and - selectors
+
+	* generator/custom/AppKit/NSObjectController.override
+	* generator/custom/AppKit/NSPersistentDocument.override
+		- Override methods which the generator doesn't understand how
+		  to handle yet; once/if we generate CoreData.framework, we'll
+		  have the correct types for these.
+
+	* generator/custom/Foundation/NSCalendarUnit.cs
+	* generator/custom/Foundation/NSDateFormatterStyle.cs
+	* generator/custom/Foundation/NSDateFormatterPadPosition.cs
+	* generator/custom/Foundation/NSDateFormatterRoundingMode.cs
+	* generator/custom/Foundation/NSNumberFormatterStyle.cs
+	* generator/custom/AppKit/NSPointingDeviceType.cs
+	* generator/custom/WebKit/NPNVariable.addin
+	* generator/custom/WebKit/NPPVariable.addin
+	* generator/custom/WebKit/WebDragDestinationAction.cs
+	* generator/custom/WebKit/WebDragSourceAction.cs
+		- Override newly generated enums which have external constants  
+
+	* generator/mapping.xml
+		- Updated for new generator output
+
+2004-06-10	Urs C Muff	<umuff@quark.com>
+	genstubs.pl
+		- using '__' instead of '$_' for class names
+		- using 'import' instead of 'include' for double include guard (makes NSString_stub.m compile)
+		- don't output $class__alloc on NSObject, since NSObject already has a class method alloc
+
+2004-06-10	Geoff Norton	<gnorton@customerdna.com>
+	genstubs.pl:
+		- changed return type of $class * back to id
+		- removed Cocoa.h header
+		- added $class.h header
+		- added NSString.h header for NSLog error fix
+		- added \n to all NSLog
+		- fixed interface parsing
+		- fixed tab / space consistency
+		- fixed regex warning when methodType is undefined
+		- cleaned output to be more descriptive
+
+2004-06-09	C.J. Collier	<cjcollier@colliertech.org>
+
+	* genstubs.pl (parseMethod):
+	- noted why we are not supporting methods variable args
+	- moved declaration of $methodName to where it is first used
+	- updated $arg_rx to make argument name optional
+	- reformatted Urs' $argType and $argName definition
+	- changed the way the $methodName is assembled
+	- changed the NSLog() call based on what type of method this is

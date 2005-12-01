@@ -1,0 +1,4 @@
+<overrides>	
+	<method sel="+_updateInstancesForDatePreferencesChange">
+	</method>
+</overrides>

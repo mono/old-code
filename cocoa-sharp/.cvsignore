@@ -1,0 +1,13 @@
+Makefile.in
+Makefile
+.DS_Store
+missing
+install-sh
+configure
+autom4te.cache
+config.guess
+config.sub
+config.status
+config.log
+aclocal.m4
+libtool

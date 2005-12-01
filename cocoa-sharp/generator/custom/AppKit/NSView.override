@@ -1,0 +1,12 @@
+<overrides>
+	<method sel="-bounds">
+	// setSelector: setBounds:
+        // getSelector: bounds
+        public Apple.Foundation.NSRect bounds {
+            get { return (Apple.Foundation.NSRect)ObjCMessaging.objc_msgSend(Raw,"bounds",typeof(Apple.Foundation.NSRect)); }
+            set { ObjCMessaging.objc_msgSend(Raw,"setBounds:",typeof(void),typeof(Apple.Foundation.NSRect),value); }
+        }  
+	</method>
+	<method sel="-setBounds:">
+	</method>
+</overrides>

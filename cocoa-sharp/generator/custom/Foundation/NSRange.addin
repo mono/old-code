@@ -1,0 +1,10 @@
+        public uint location;
+        public uint length;
+        
+        public uint Max { get { return location + length; } }
+        public bool LocationInRange(uint loc) { return loc - location < length; }
+
+        public NSRange(uint location, uint length) {
+                this.location = location;
+                this.length = length;
+        }

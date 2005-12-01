@@ -1,0 +1,8 @@
+<overrides>
+	<method instance="true" sel="UIDelegate">
+		/* Remove UIDelegate() static for now; as its causing a compiler error */
+		/*public object UIDelegate () {
+	            return (object)NSObject.NS2Net(WebView_UIDelegate0(Raw));
+        	  } */
+	</method>
+</overrides>

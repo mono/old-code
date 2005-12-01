@@ -1,0 +1,23 @@
+{
+    IBClasses = (
+        {CLASS = BrowserDataSource; LANGUAGE = ObjC; SUPERCLASS = NSObject; }, 
+        {
+            ACTIONS = {userDidSearch = id; }; 
+            CLASS = Controller; 
+            LANGUAGE = ObjC; 
+            OUTLETS = {
+                backMenuItem = NSMenuItem; 
+                drawer = NSBrowser; 
+                forwardMenuItem = NSMenuItem; 
+                indexBrowser = id; 
+                outlineView = NSOutlineView; 
+                searchBox = NSSearchField; 
+                webView = WebView; 
+            }; 
+            SUPERCLASS = NSObject; 
+        }, 
+        {CLASS = IndexDataSource; LANGUAGE = ObjC; SUPERCLASS = NSObject; }, 
+        {CLASS = WebDelegate; LANGUAGE = ObjC; SUPERCLASS = NSObject; }
+    ); 
+    IBVersion = 1; 
+}

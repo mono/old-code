@@ -1,0 +1,25 @@
+<generator>
+    <framework>
+        <name>Foundation</name>
+        <namespace>Apple.Foundation</namespace>
+        <output>true</output>
+    </framework>
+    <framework>
+        <name>AppKit</name>
+        <namespace>Apple.AppKit</namespace>
+        <output>true</output>
+        <dependency>Apple.Foundation</dependency>
+    </framework>
+    <framework>
+        <name>WebKit</name>
+        <namespace>Apple.WebKit</namespace>
+        <output>true</output>
+        <dependency>Apple.Foundation</dependency>
+        <dependency>Apple.AppKit</dependency>
+    </framework>
+    <searchpath>/System/Library/Frameworks/%NAME%.framework/Headers</searchpath>
+    <searchpath>/Library/Frameworks/%NAME%.framework/Headers</searchpath>
+    <addinpath>generator/custom</addinpath>
+    <overridepath>generator/custom</overridepath>
+    <corepath>generator/custom</corepath>
+</generator>

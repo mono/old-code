@@ -1,0 +1,15 @@
+<?xml version="1.0"?>
+<node label="Mono Documentation" name="root:">
+  <node label="Mono Handbook" name="monohb"/>
+  <node label="Class Library" name="classlib"/>
+  <node label="Mono Libraries" name="classlib-mono"/>
+  <node label="Gnome Libraries" name="classlib-gnome"/>
+  <node label="Mozilla Libraries" name="classlib-gecko"/>
+  <node label="Novell Libraries" name="classlib-novell"/>
+  <node label="C# Language Specification" name="ecmaspec" />
+  <node label="C# Compiler Error Reference" name="cs-errors" />
+  <node label="Various" name="various">
+    <node label="DiaCanvas Libraries" name="classlib-diacanvas"/>
+    <node label="NUnit Libraries" name="classlib-nunit"/>
+  </node>
+</node>

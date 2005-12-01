@@ -1,0 +1,11 @@
+        public NSPoint origin;
+        public NSSize size;
+
+        public NSRect(NSPoint _origin, NSSize _size) {
+                this.origin = _origin;
+                this.size = _size;
+        }
+	public NSRect(float x, float y, float a, float b) { 
+                this.origin = new NSPoint(x, y);
+                this.size = new NSSize(a, b);
+        }
