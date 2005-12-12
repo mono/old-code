@@ -1,0 +1,1353 @@
+<Type Name="Element" FullName="Gst.Element">
+  <TypeSignature Language="C#" Value="public class Element : Gst.Object, IWrapper, IDisposable" Maintainer="auto" />
+  <AssemblyInfo>
+    <AssemblyName>gst-sharp</AssemblyName>
+    <AssemblyPublicKey>
+    </AssemblyPublicKey>
+    <AssemblyVersion>0.0.0.0</AssemblyVersion>
+    <AssemblyCulture>neutral</AssemblyCulture>
+    <Attributes />
+  </AssemblyInfo>
+  <ThreadSafetyStatement>Gtk# is thread aware, but not thread safe; See the <link location="node:gtk-sharp/programming/threads">Gtk# Thread Programming</link> for details.</ThreadSafetyStatement>
+  <Docs>
+    <summary>To be added</summary>
+    <remarks>To be added</remarks>
+  </Docs>
+  <Base>
+    <BaseTypeName>Gst.Object</BaseTypeName>
+  </Base>
+  <Interfaces>
+    <Interface>
+      <InterfaceName>GLib.IWrapper</InterfaceName>
+    </Interface>
+    <Interface>
+      <InterfaceName>System.IDisposable</InterfaceName>
+    </Interface>
+  </Interfaces>
+  <Attributes />
+  <Members>
+    <Member MemberName="OverrideError">
+      <MemberSignature Language="C#" Value="protected static void OverrideError (GLib.GType gtype);" />
+      <MemberType>Method</MemberType>
+      <ReturnValue>
+        <ReturnType>System.Void</ReturnType>
+      </ReturnValue>
+      <Parameters>
+        <Parameter Name="gtype" Type="GLib.GType" />
+      </Parameters>
+      <Docs>
+        <summary>To be added</summary>
+        <param name="gtype">a <see cref="T:GLib.GType" /></param>
+        <remarks>To be added</remarks>
+      </Docs>
+    </Member>
+    <Member MemberName="OverrideEos">
+      <MemberSignature Language="C#" Value="protected static void OverrideEos (GLib.GType gtype);" />
+      <MemberType>Method</MemberType>
+      <ReturnValue>
+        <ReturnType>System.Void</ReturnType>
+      </ReturnValue>
+      <Parameters>
+        <Parameter Name="gtype" Type="GLib.GType" />
+      </Parameters>
+      <Docs>
+        <summary>To be added</summary>
+        <param name="gtype">a <see cref="T:GLib.GType" /></param>
+        <remarks>To be added</remarks>
+      </Docs>
+    </Member>
+    <Member MemberName="OverrideStateChange">
+      <MemberSignature Language="C#" Value="protected static void OverrideStateChange (GLib.GType gtype);" />
+      <MemberType>Method</MemberType>
+      <ReturnValue>
+        <ReturnType>System.Void</ReturnType>
+      </ReturnValue>
+      <Parameters>
+        <Parameter Name="gtype" Type="GLib.GType" />
+      </Parameters>
+      <Docs>
+        <summary>To be added</summary>
+        <param name="gtype">a <see cref="T:GLib.GType" /></param>
+        <remarks>To be added</remarks>
+      </Docs>
+    </Member>
+    <Member MemberName="OverrideFoundTag">
+      <MemberSignature Language="C#" Value="protected static void OverrideFoundTag (GLib.GType gtype);" />
+      <MemberType>Method</MemberType>
+      <ReturnValue>
+        <ReturnType>System.Void</ReturnType>
+      </ReturnValue>
+      <Parameters>
+        <Parameter Name="gtype" Type="GLib.GType" />
+      </Parameters>
+      <Docs>
+        <summary>To be added</summary>
+        <param name="gtype">a <see cref="T:GLib.GType" /></param>
+        <remarks>To be added</remarks>
+      </Docs>
+    </Member>
+    <Member MemberName="OverrideNewPad">
+      <MemberSignature Language="C#" Value="protected static void OverrideNewPad (GLib.GType gtype);" />
+      <MemberType>Method</MemberType>
+      <ReturnValue>
+        <ReturnType>System.Void</ReturnType>
+      </ReturnValue>
+      <Parameters>
+        <Parameter Name="gtype" Type="GLib.GType" />
+      </Parameters>
+      <Docs>
+        <summary>To be added</summary>
+        <param name="gtype">a <see cref="T:GLib.GType" /></param>
+        <remarks>To be added</remarks>
+      </Docs>
+    </Member>
+    <Member MemberName="OverridePadRemoved">
+      <MemberSignature Language="C#" Value="protected static void OverridePadRemoved (GLib.GType gtype);" />
+      <MemberType>Method</MemberType>
+      <ReturnValue>
+        <ReturnType>System.Void</ReturnType>
+      </ReturnValue>
+      <Parameters>
+        <Parameter Name="gtype" Type="GLib.GType" />
+      </Parameters>
+      <Docs>
+        <summary>To be added</summary>
+        <param name="gtype">a <see cref="T:GLib.GType" /></param>
+        <remarks>To be added</remarks>
+      </Docs>
+    </Member>
+    <Member MemberName="StateGetName">
+      <MemberSignature Language="C#" Value="public static string StateGetName (Gst.ElementState state);" />
+      <MemberType>Method</MemberType>
+      <ReturnValue>
+        <ReturnType>System.String</ReturnType>
+      </ReturnValue>
+      <Parameters>
+        <Parameter Name="state" Type="Gst.ElementState" />
+      </Parameters>
+      <Docs>
+        <summary>To be added</summary>
+        <param name="state">a <see cref="T:System.Int32" /></param>
+        <returns>a <see cref="T:System.String" /></returns>
+        <remarks>To be added</remarks>
+      </Docs>
+    </Member>
+    <Member MemberName="DefaultError">
+      <MemberSignature Language="C#" Value="public static void DefaultError (GLib.Object objekt, Gst.Object orig, IntPtr error, string debug);" />
+      <MemberType>Method</MemberType>
+      <ReturnValue>
+        <ReturnType>System.Void</ReturnType>
+      </ReturnValue>
+      <Parameters>
+        <Parameter Name="objekt" Type="GLib.Object" />
+        <Parameter Name="orig" Type="Gst.Object" />
+        <Parameter Name="error" Type="System.IntPtr" />
+        <Parameter Name="debug" Type="System.String" />
+      </Parameters>
+      <Docs>
+        <summary>To be added</summary>
+        <param name="objekt">a <see cref="T:GLib.Object" /></param>
+        <param name="orig">a <see cref="T:Gst.Object" /></param>
+        <param name="error">a <see cref="T:System.IntPtr" /></param>
+        <param name="debug">a <see cref="T:System.String" /></param>
+        <remarks>To be added</remarks>
+      </Docs>
+    </Member>
+    <Member MemberName="MakeFromUri">
+      <MemberSignature Language="C#" Value="public static Gst.Element MakeFromUri (Gst.URIType type, string uri, string elementname);" />
+      <MemberType>Method</MemberType>
+      <ReturnValue>
+        <ReturnType>Gst.Element</ReturnType>
+      </ReturnValue>
+      <Parameters>
+        <Parameter Name="type" Type="Gst.URIType" />
+        <Parameter Name="uri" Type="System.String" />
+        <Parameter Name="elementname" Type="System.String" />
+      </Parameters>
+      <Docs>
+        <summary>To be added</summary>
+        <param name="type">a <see cref="T:System.Int32" /></param>
+        <param name="uri">a <see cref="T:System.String" /></param>
+        <param name="elementname">a <see cref="T:System.String" /></param>
+        <returns>a <see cref="T:Gst.Element" /></returns>
+        <remarks>To be added</remarks>
+      </Docs>
+    </Member>
+    <Member MemberName="Register">
+      <MemberSignature Language="C#" Value="public static bool Register (Gst.Plugin plugin, string name, uint rank, GLib.GType type);" />
+      <MemberType>Method</MemberType>
+      <ReturnValue>
+        <ReturnType>System.Boolean</ReturnType>
+      </ReturnValue>
+      <Parameters>
+        <Parameter Name="plugin" Type="Gst.Plugin" />
+        <Parameter Name="name" Type="System.String" />
+        <Parameter Name="rank" Type="System.UInt32" />
+        <Parameter Name="type" Type="GLib.GType" />
+      </Parameters>
+      <Docs>
+        <summary>To be added</summary>
+        <param name="plugin">a <see cref="T:Gst.Plugin" /></param>
+        <param name="name">a <see cref="T:System.String" /></param>
+        <param name="rank">a <see cref="T:System.UInt32" /></param>
+        <param name="type">a <see cref="T:GLib.GType" /></param>
+        <returns>a <see cref="T:System.Boolean" /></returns>
+        <remarks>To be added</remarks>
+      </Docs>
+    </Member>
+    <Member MemberName="Finalize">
+      <MemberSignature Language="C#" Value="protected override void Finalize ();" />
+      <MemberType>Method</MemberType>
+      <ReturnValue>
+        <ReturnType>System.Void</ReturnType>
+      </ReturnValue>
+      <Parameters />
+      <Docs>
+        <summary>To be added</summary>
+        <remarks>To be added</remarks>
+      </Docs>
+    </Member>
+    <Member MemberName="OnError">
+      <MemberSignature Language="C#" Value="protected virtual void OnError (Gst.Element source, IntPtr error, string debug);" />
+      <MemberType>Method</MemberType>
+      <ReturnValue>
+        <ReturnType>System.Void</ReturnType>
+      </ReturnValue>
+      <Parameters>
+        <Parameter Name="source" Type="Gst.Element" />
+        <Parameter Name="error" Type="System.IntPtr" />
+        <Parameter Name="debug" Type="System.String" />
+      </Parameters>
+      <Docs>
+        <summary>To be added</summary>
+        <param name="source">a <see cref="T:Gst.Element" /></param>
+        <param name="error">a <see cref="T:System.IntPtr" /></param>
+        <param name="debug">a <see cref="T:System.String" /></param>
+        <remarks>To be added</remarks>
+      </Docs>
+    </Member>
+    <Member MemberName="OnEos">
+      <MemberSignature Language="C#" Value="protected virtual void OnEos ();" />
+      <MemberType>Method</MemberType>
+      <ReturnValue>
+        <ReturnType>System.Void</ReturnType>
+      </ReturnValue>
+      <Parameters />
+      <Docs>
+        <summary>To be added</summary>
+        <remarks>To be added</remarks>
+      </Docs>
+    </Member>
+    <Member MemberName="OnStateChange">
+      <MemberSignature Language="C#" Value="protected virtual void OnStateChange (Gst.ElementState old, Gst.ElementState state);" />
+      <MemberType>Method</MemberType>
+      <ReturnValue>
+        <ReturnType>System.Void</ReturnType>
+      </ReturnValue>
+      <Parameters>
+        <Parameter Name="old" Type="Gst.ElementState" />
+        <Parameter Name="state" Type="Gst.ElementState" />
+      </Parameters>
+      <Docs>
+        <summary>To be added</summary>
+        <param name="old">a <see cref="T:System.Int32" /></param>
+        <param name="state">a <see cref="T:System.Int32" /></param>
+        <remarks>To be added</remarks>
+      </Docs>
+    </Member>
+    <Member MemberName="OnFoundTag">
+      <MemberSignature Language="C#" Value="protected virtual void OnFoundTag (Gst.Element source, Gst.TagList tag_list);" />
+      <MemberType>Method</MemberType>
+      <ReturnValue>
+        <ReturnType>System.Void</ReturnType>
+      </ReturnValue>
+      <Parameters>
+        <Parameter Name="source" Type="Gst.Element" />
+        <Parameter Name="tag_list" Type="Gst.TagList" />
+      </Parameters>
+      <Docs>
+        <summary>To be added</summary>
+        <param name="source">a <see cref="T:Gst.Element" /></param>
+        <param name="tag_list">a <see cref="T:Gst.TagList" /></param>
+        <remarks>To be added</remarks>
+      </Docs>
+    </Member>
+    <Member MemberName="OnNewPad">
+      <MemberSignature Language="C#" Value="protected virtual void OnNewPad (Gst.Pad pad);" />
+      <MemberType>Method</MemberType>
+      <ReturnValue>
+        <ReturnType>System.Void</ReturnType>
+      </ReturnValue>
+      <Parameters>
+        <Parameter Name="pad" Type="Gst.Pad" />
+      </Parameters>
+      <Docs>
+        <summary>To be added</summary>
+        <param name="pad">a <see cref="T:Gst.Pad" /></param>
+        <remarks>To be added</remarks>
+      </Docs>
+    </Member>
+    <Member MemberName="OnPadRemoved">
+      <MemberSignature Language="C#" Value="protected virtual void OnPadRemoved (Gst.Pad pad);" />
+      <MemberType>Method</MemberType>
+      <ReturnValue>
+        <ReturnType>System.Void</ReturnType>
+      </ReturnValue>
+      <Parameters>
+        <Parameter Name="pad" Type="Gst.Pad" />
+      </Parameters>
+      <Docs>
+        <summary>To be added</summary>
+        <param name="pad">a <see cref="T:Gst.Pad" /></param>
+        <remarks>To be added</remarks>
+      </Docs>
+    </Member>
+    <Member MemberName="GetCompatiblePad">
+      <MemberSignature Language="C#" Value="public Gst.Pad GetCompatiblePad (Gst.Pad pad);" />
+      <MemberType>Method</MemberType>
+      <ReturnValue>
+        <ReturnType>Gst.Pad</ReturnType>
+      </ReturnValue>
+      <Parameters>
+        <Parameter Name="pad" Type="Gst.Pad" />
+      </Parameters>
+      <Docs>
+        <summary>To be added</summary>
+        <param name="pad">a <see cref="T:Gst.Pad" /></param>
+        <returns>a <see cref="T:Gst.Pad" /></returns>
+        <remarks>To be added</remarks>
+      </Docs>
+    </Member>
+    <Member MemberName="ImplementsInterface">
+      <MemberSignature Language="C#" Value="public bool ImplementsInterface (GLib.GType iface_type);" />
+      <MemberType>Method</MemberType>
+      <ReturnValue>
+        <ReturnType>System.Boolean</ReturnType>
+      </ReturnValue>
+      <Parameters>
+        <Parameter Name="iface_type" Type="GLib.GType" />
+      </Parameters>
+      <Docs>
+        <summary>To be added</summary>
+        <param name="iface_type">a <see cref="T:GLib.GType" /></param>
+        <returns>a <see cref="T:System.Boolean" /></returns>
+        <remarks>To be added</remarks>
+      </Docs>
+    </Member>
+    <Member MemberName="Convert">
+      <MemberSignature Language="C#" Value="public bool Convert (Gst.Format src_format, long src_value, out Gst.Format dest_format, out long dest_value);" />
+      <MemberType>Method</MemberType>
+      <ReturnValue>
+        <ReturnType>System.Boolean</ReturnType>
+      </ReturnValue>
+      <Parameters>
+        <Parameter Name="src_format" Type="Gst.Format" />
+        <Parameter Name="src_value" Type="System.Int64" />
+        <Parameter Name="dest_format" Type="Gst.Format&amp;" RefType="out" />
+        <Parameter Name="dest_value" Type="System.Int64&amp;" RefType="out" />
+      </Parameters>
+      <Docs>
+        <summary>To be added</summary>
+        <param name="src_format">a <see cref="T:System.Int32" /></param>
+        <param name="src_value">a <see cref="T:System.Int64" /></param>
+        <param name="dest_format">a <see cref="T:Gst.Format" /></param>
+        <param name="dest_value">a <see cref="T:System.Int64" /></param>
+        <returns>a <see cref="T:System.Boolean" /></returns>
+        <remarks>To be added</remarks>
+      </Docs>
+    </Member>
+    <Member MemberName="Seek">
+      <MemberSignature Language="C#" Value="public bool Seek (Gst.SeekType seek_type, ulong offset);" />
+      <MemberType>Method</MemberType>
+      <ReturnValue>
+        <ReturnType>System.Boolean</ReturnType>
+      </ReturnValue>
+      <Parameters>
+        <Parameter Name="seek_type" Type="Gst.SeekType" />
+        <Parameter Name="offset" Type="System.UInt64" />
+      </Parameters>
+      <Docs>
+        <summary>To be added</summary>
+        <param name="seek_type">a <see cref="T:System.Int32" /></param>
+        <param name="offset">a <see cref="T:System.UInt64" /></param>
+        <returns>a <see cref="T:System.Boolean" /></returns>
+        <remarks>To be added</remarks>
+      </Docs>
+    </Member>
+    <Member MemberName="ProvidesClock">
+      <MemberSignature Language="C#" Value="public bool ProvidesClock ();" />
+      <MemberType>Method</MemberType>
+      <ReturnValue>
+        <ReturnType>System.Boolean</ReturnType>
+      </ReturnValue>
+      <Parameters />
+      <Docs>
+        <summary>To be added</summary>
+        <returns>a <see cref="T:System.Boolean" /></returns>
+        <remarks>To be added</remarks>
+      </Docs>
+    </Member>
+    <Member MemberName="SetTimeDelay">
+      <MemberSignature Language="C#" Value="public void SetTimeDelay (ulong time, ulong delay);" />
+      <MemberType>Method</MemberType>
+      <ReturnValue>
+        <ReturnType>System.Void</ReturnType>
+      </ReturnValue>
+      <Parameters>
+        <Parameter Name="time" Type="System.UInt64" />
+        <Parameter Name="delay" Type="System.UInt64" />
+      </Parameters>
+      <Docs>
+        <summary>To be added</summary>
+        <param name="time">a <see cref="T:System.UInt64" /></param>
+        <param name="delay">a <see cref="T:System.UInt64" /></param>
+        <remarks>To be added</remarks>
+      </Docs>
+    </Member>
+    <Member MemberName="RemoveGhostPad">
+      <MemberSignature Language="C#" Value="public void RemoveGhostPad (Gst.Pad pad);" />
+      <MemberType>Method</MemberType>
+      <ReturnValue>
+        <ReturnType>System.Void</ReturnType>
+      </ReturnValue>
+      <Parameters>
+        <Parameter Name="pad" Type="Gst.Pad" />
+      </Parameters>
+      <Docs>
+        <summary>To be added</summary>
+        <param name="pad">a <see cref="T:Gst.Pad" /></param>
+        <remarks>To be added</remarks>
+      </Docs>
+    </Member>
+    <Member MemberName="SetEos">
+      <MemberSignature Language="C#" Value="public void SetEos ();" />
+      <MemberType>Method</MemberType>
+      <ReturnValue>
+        <ReturnType>System.Void</ReturnType>
+      </ReturnValue>
+      <Parameters />
+      <Docs>
+        <summary>To be added</summary>
+        <remarks>To be added</remarks>
+      </Docs>
+    </Member>
+    <Member MemberName="ReleaseRequestPad">
+      <MemberSignature Language="C#" Value="public void ReleaseRequestPad (Gst.Pad pad);" />
+      <MemberType>Method</MemberType>
+      <ReturnValue>
+        <ReturnType>System.Void</ReturnType>
+      </ReturnValue>
+      <Parameters>
+        <Parameter Name="pad" Type="Gst.Pad" />
+      </Parameters>
+      <Docs>
+        <summary>To be added</summary>
+        <param name="pad">a <see cref="T:Gst.Pad" /></param>
+        <remarks>To be added</remarks>
+      </Docs>
+    </Member>
+    <Member MemberName="RemovePad">
+      <MemberSignature Language="C#" Value="public void RemovePad (Gst.Pad pad);" />
+      <MemberType>Method</MemberType>
+      <ReturnValue>
+        <ReturnType>System.Void</ReturnType>
+      </ReturnValue>
+      <Parameters>
+        <Parameter Name="pad" Type="Gst.Pad" />
+      </Parameters>
+      <Docs>
+        <summary>To be added</summary>
+        <param name="pad">a <see cref="T:Gst.Pad" /></param>
+        <remarks>To be added</remarks>
+      </Docs>
+    </Member>
+    <Member MemberName="LinkFiltered">
+      <MemberSignature Language="C#" Value="public bool LinkFiltered (Gst.Element dest, Gst.Caps filtercaps);" />
+      <MemberType>Method</MemberType>
+      <ReturnValue>
+        <ReturnType>System.Boolean</ReturnType>
+      </ReturnValue>
+      <Parameters>
+        <Parameter Name="dest" Type="Gst.Element" />
+        <Parameter Name="filtercaps" Type="Gst.Caps" />
+      </Parameters>
+      <Docs>
+        <summary>To be added</summary>
+        <param name="dest">a <see cref="T:Gst.Element" /></param>
+        <param name="filtercaps">a <see cref="T:Gst.Caps" /></param>
+        <returns>a <see cref="T:System.Boolean" /></returns>
+        <remarks>To be added</remarks>
+      </Docs>
+    </Member>
+    <Member MemberName="GetValist">
+      <MemberSignature Language="C#" Value="public void GetValist (string first_property_name, IntPtr var_args);" />
+      <MemberType>Method</MemberType>
+      <ReturnValue>
+        <ReturnType>System.Void</ReturnType>
+      </ReturnValue>
+      <Parameters>
+        <Parameter Name="first_property_name" Type="System.String" />
+        <Parameter Name="var_args" Type="System.IntPtr" />
+      </Parameters>
+      <Docs>
+        <summary>To be added</summary>
+        <param name="first_property_name">a <see cref="T:System.String" /></param>
+        <param name="var_args">a <see cref="T:System.IntPtr" /></param>
+        <remarks>To be added</remarks>
+      </Docs>
+    </Member>
+    <Member MemberName="SetProperty">
+      <MemberSignature Language="C#" Value="public void SetProperty (string property_name, GLib.Value value);" />
+      <MemberType>Method</MemberType>
+      <ReturnValue>
+        <ReturnType>System.Void</ReturnType>
+      </ReturnValue>
+      <Parameters>
+        <Parameter Name="property_name" Type="System.String" />
+        <Parameter Name="value" Type="GLib.Value" />
+      </Parameters>
+      <Docs>
+        <summary>To be added</summary>
+        <param name="property_name">a <see cref="T:System.String" /></param>
+        <param name="value">a <see cref="T:GLib.Value" /></param>
+        <remarks>To be added</remarks>
+      </Docs>
+    </Member>
+    <Member MemberName="Wait">
+      <MemberSignature Language="C#" Value="public bool Wait (ulong timestamp);" />
+      <MemberType>Method</MemberType>
+      <ReturnValue>
+        <ReturnType>System.Boolean</ReturnType>
+      </ReturnValue>
+      <Parameters>
+        <Parameter Name="timestamp" Type="System.UInt64" />
+      </Parameters>
+      <Docs>
+        <summary>To be added</summary>
+        <param name="timestamp">a <see cref="T:System.UInt64" /></param>
+        <returns>a <see cref="T:System.Boolean" /></returns>
+        <remarks>To be added</remarks>
+      </Docs>
+    </Member>
+    <Member MemberName="UnlinkPads">
+      <MemberSignature Language="C#" Value="public void UnlinkPads (string srcpadname, Gst.Element dest, string destpadname);" />
+      <MemberType>Method</MemberType>
+      <ReturnValue>
+        <ReturnType>System.Void</ReturnType>
+      </ReturnValue>
+      <Parameters>
+        <Parameter Name="srcpadname" Type="System.String" />
+        <Parameter Name="dest" Type="Gst.Element" />
+        <Parameter Name="destpadname" Type="System.String" />
+      </Parameters>
+      <Docs>
+        <summary>To be added</summary>
+        <param name="srcpadname">a <see cref="T:System.String" /></param>
+        <param name="dest">a <see cref="T:Gst.Element" /></param>
+        <param name="destpadname">a <see cref="T:System.String" /></param>
+        <remarks>To be added</remarks>
+      </Docs>
+    </Member>
+    <Member MemberName="SyncStateWithParent">
+      <MemberSignature Language="C#" Value="public bool SyncStateWithParent ();" />
+      <MemberType>Method</MemberType>
+      <ReturnValue>
+        <ReturnType>System.Boolean</ReturnType>
+      </ReturnValue>
+      <Parameters />
+      <Docs>
+        <summary>To be added</summary>
+        <returns>a <see cref="T:System.Boolean" /></returns>
+        <remarks>To be added</remarks>
+      </Docs>
+    </Member>
+    <Member MemberName="LinkPadsFiltered">
+      <MemberSignature Language="C#" Value="public bool LinkPadsFiltered (string srcpadname, Gst.Element dest, string destpadname, Gst.Caps filtercaps);" />
+      <MemberType>Method</MemberType>
+      <ReturnValue>
+        <ReturnType>System.Boolean</ReturnType>
+      </ReturnValue>
+      <Parameters>
+        <Parameter Name="srcpadname" Type="System.String" />
+        <Parameter Name="dest" Type="Gst.Element" />
+        <Parameter Name="destpadname" Type="System.String" />
+        <Parameter Name="filtercaps" Type="Gst.Caps" />
+      </Parameters>
+      <Docs>
+        <summary>To be added</summary>
+        <param name="srcpadname">a <see cref="T:System.String" /></param>
+        <param name="dest">a <see cref="T:Gst.Element" /></param>
+        <param name="destpadname">a <see cref="T:System.String" /></param>
+        <param name="filtercaps">a <see cref="T:Gst.Caps" /></param>
+        <returns>a <see cref="T:System.Boolean" /></returns>
+        <remarks>To be added</remarks>
+      </Docs>
+    </Member>
+    <Member MemberName="AddGhostPad">
+      <MemberSignature Language="C#" Value="public Gst.Pad AddGhostPad (Gst.Pad pad, string name);" />
+      <MemberType>Method</MemberType>
+      <ReturnValue>
+        <ReturnType>Gst.Pad</ReturnType>
+      </ReturnValue>
+      <Parameters>
+        <Parameter Name="pad" Type="Gst.Pad" />
+        <Parameter Name="name" Type="System.String" />
+      </Parameters>
+      <Docs>
+        <summary>To be added</summary>
+        <param name="pad">a <see cref="T:Gst.Pad" /></param>
+        <param name="name">a <see cref="T:System.String" /></param>
+        <returns>a <see cref="T:Gst.Pad" /></returns>
+        <remarks>To be added</remarks>
+      </Docs>
+    </Member>
+    <Member MemberName="WaitStateChange">
+      <MemberSignature Language="C#" Value="public void WaitStateChange ();" />
+      <MemberType>Method</MemberType>
+      <ReturnValue>
+        <ReturnType>System.Void</ReturnType>
+      </ReturnValue>
+      <Parameters />
+      <Docs>
+        <summary>To be added</summary>
+        <remarks>To be added</remarks>
+      </Docs>
+    </Member>
+    <Member MemberName="ReleaseLocks">
+      <MemberSignature Language="C#" Value="public bool ReleaseLocks ();" />
+      <MemberType>Method</MemberType>
+      <ReturnValue>
+        <ReturnType>System.Boolean</ReturnType>
+      </ReturnValue>
+      <Parameters />
+      <Docs>
+        <summary>To be added</summary>
+        <returns>a <see cref="T:System.Boolean" /></returns>
+        <remarks>To be added</remarks>
+      </Docs>
+    </Member>
+    <Member MemberName="SendEvent">
+      <MemberSignature Language="C#" Value="public bool SendEvent (Gst.Event evnt);" />
+      <MemberType>Method</MemberType>
+      <ReturnValue>
+        <ReturnType>System.Boolean</ReturnType>
+      </ReturnValue>
+      <Parameters>
+        <Parameter Name="evnt" Type="Gst.Event" />
+      </Parameters>
+      <Docs>
+        <summary>To be added</summary>
+        <param name="evnt">a <see cref="T:Gst.Event" /></param>
+        <returns>a <see cref="T:System.Boolean" /></returns>
+        <remarks>To be added</remarks>
+      </Docs>
+    </Member>
+    <Member MemberName="Yield">
+      <MemberSignature Language="C#" Value="public void Yield ();" />
+      <MemberType>Method</MemberType>
+      <ReturnValue>
+        <ReturnType>System.Void</ReturnType>
+      </ReturnValue>
+      <Parameters />
+      <Docs>
+        <summary>To be added</summary>
+        <remarks>To be added</remarks>
+      </Docs>
+    </Member>
+    <Member MemberName="Unlink">
+      <MemberSignature Language="C#" Value="public void Unlink (Gst.Element dest);" />
+      <MemberType>Method</MemberType>
+      <ReturnValue>
+        <ReturnType>System.Void</ReturnType>
+      </ReturnValue>
+      <Parameters>
+        <Parameter Name="dest" Type="Gst.Element" />
+      </Parameters>
+      <Docs>
+        <summary>To be added</summary>
+        <param name="dest">a <see cref="T:Gst.Element" /></param>
+        <remarks>To be added</remarks>
+      </Docs>
+    </Member>
+    <Member MemberName="Interrupt">
+      <MemberSignature Language="C#" Value="public bool Interrupt ();" />
+      <MemberType>Method</MemberType>
+      <ReturnValue>
+        <ReturnType>System.Boolean</ReturnType>
+      </ReturnValue>
+      <Parameters />
+      <Docs>
+        <summary>To be added</summary>
+        <returns>a <see cref="T:System.Boolean" /></returns>
+        <remarks>To be added</remarks>
+      </Docs>
+    </Member>
+    <Member MemberName="AddPad">
+      <MemberSignature Language="C#" Value="public void AddPad (Gst.Pad pad);" />
+      <MemberType>Method</MemberType>
+      <ReturnValue>
+        <ReturnType>System.Void</ReturnType>
+      </ReturnValue>
+      <Parameters>
+        <Parameter Name="pad" Type="Gst.Pad" />
+      </Parameters>
+      <Docs>
+        <summary>To be added</summary>
+        <param name="pad">a <see cref="T:Gst.Pad" /></param>
+        <remarks>To be added</remarks>
+      </Docs>
+    </Member>
+    <Member MemberName="GetCompatiblePadTemplate">
+      <MemberSignature Language="C#" Value="public Gst.PadTemplate GetCompatiblePadTemplate (Gst.PadTemplate compattempl);" />
+      <MemberType>Method</MemberType>
+      <ReturnValue>
+        <ReturnType>Gst.PadTemplate</ReturnType>
+      </ReturnValue>
+      <Parameters>
+        <Parameter Name="compattempl" Type="Gst.PadTemplate" />
+      </Parameters>
+      <Docs>
+        <summary>To be added</summary>
+        <param name="compattempl">a <see cref="T:Gst.PadTemplate" /></param>
+        <returns>a <see cref="T:Gst.PadTemplate" /></returns>
+        <remarks>To be added</remarks>
+      </Docs>
+    </Member>
+    <Member MemberName="GetRequestPad">
+      <MemberSignature Language="C#" Value="public Gst.Pad GetRequestPad (string name);" />
+      <MemberType>Method</MemberType>
+      <ReturnValue>
+        <ReturnType>Gst.Pad</ReturnType>
+      </ReturnValue>
+      <Parameters>
+        <Parameter Name="name" Type="System.String" />
+      </Parameters>
+      <Docs>
+        <summary>To be added</summary>
+        <param name="name">a <see cref="T:System.String" /></param>
+        <returns>a <see cref="T:Gst.Pad" /></returns>
+        <remarks>To be added</remarks>
+      </Docs>
+    </Member>
+    <Member MemberName="FoundTagsForPad">
+      <MemberSignature Language="C#" Value="public void FoundTagsForPad (Gst.Pad pad, ulong timestamp, Gst.TagList list);" />
+      <MemberType>Method</MemberType>
+      <ReturnValue>
+        <ReturnType>System.Void</ReturnType>
+      </ReturnValue>
+      <Parameters>
+        <Parameter Name="pad" Type="Gst.Pad" />
+        <Parameter Name="timestamp" Type="System.UInt64" />
+        <Parameter Name="list" Type="Gst.TagList" />
+      </Parameters>
+      <Docs>
+        <summary>To be added</summary>
+        <param name="pad">a <see cref="T:Gst.Pad" /></param>
+        <param name="timestamp">a <see cref="T:System.UInt64" /></param>
+        <param name="list">a <see cref="T:Gst.TagList" /></param>
+        <remarks>To be added</remarks>
+      </Docs>
+    </Member>
+    <Member MemberName="ClockWait">
+      <MemberSignature Language="C#" Value="public Gst.ClockReturn ClockWait (IntPtr id, out long jitter);" />
+      <MemberType>Method</MemberType>
+      <ReturnValue>
+        <ReturnType>Gst.ClockReturn</ReturnType>
+      </ReturnValue>
+      <Parameters>
+        <Parameter Name="id" Type="System.IntPtr" />
+        <Parameter Name="jitter" Type="System.Int64&amp;" RefType="out" />
+      </Parameters>
+      <Docs>
+        <summary>To be added</summary>
+        <param name="id">a <see cref="T:System.IntPtr" /></param>
+        <param name="jitter">a <see cref="T:System.Int64" /></param>
+        <returns>a <see cref="T:Gst.ClockReturn" /></returns>
+        <remarks>To be added</remarks>
+      </Docs>
+    </Member>
+    <Member MemberName="ErrorFull">
+      <MemberSignature Language="C#" Value="public void ErrorFull (int domain, int code, string message, string debug, string file, string function, int line);" />
+      <MemberType>Method</MemberType>
+      <ReturnValue>
+        <ReturnType>System.Void</ReturnType>
+      </ReturnValue>
+      <Parameters>
+        <Parameter Name="domain" Type="System.Int32" />
+        <Parameter Name="code" Type="System.Int32" />
+        <Parameter Name="message" Type="System.String" />
+        <Parameter Name="debug" Type="System.String" />
+        <Parameter Name="file" Type="System.String" />
+        <Parameter Name="function" Type="System.String" />
+        <Parameter Name="line" Type="System.Int32" />
+      </Parameters>
+      <Docs>
+        <summary>To be added</summary>
+        <param name="domain">a <see cref="T:System.Int32" /></param>
+        <param name="code">a <see cref="T:System.Int32" /></param>
+        <param name="message">a <see cref="T:System.String" /></param>
+        <param name="debug">a <see cref="T:System.String" /></param>
+        <param name="file">a <see cref="T:System.String" /></param>
+        <param name="function">a <see cref="T:System.String" /></param>
+        <param name="line">a <see cref="T:System.Int32" /></param>
+        <remarks>To be added</remarks>
+      </Docs>
+    </Member>
+    <Member MemberName="FoundTags">
+      <MemberSignature Language="C#" Value="public void FoundTags (Gst.TagList tag_list);" />
+      <MemberType>Method</MemberType>
+      <ReturnValue>
+        <ReturnType>System.Void</ReturnType>
+      </ReturnValue>
+      <Parameters>
+        <Parameter Name="tag_list" Type="Gst.TagList" />
+      </Parameters>
+      <Docs>
+        <summary>To be added</summary>
+        <param name="tag_list">a <see cref="T:Gst.TagList" /></param>
+        <remarks>To be added</remarks>
+      </Docs>
+    </Member>
+    <Member MemberName="GetStaticPad">
+      <MemberSignature Language="C#" Value="public Gst.Pad GetStaticPad (string name);" />
+      <MemberType>Method</MemberType>
+      <ReturnValue>
+        <ReturnType>Gst.Pad</ReturnType>
+      </ReturnValue>
+      <Parameters>
+        <Parameter Name="name" Type="System.String" />
+      </Parameters>
+      <Docs>
+        <summary>To be added</summary>
+        <param name="name">a <see cref="T:System.String" /></param>
+        <returns>a <see cref="T:Gst.Pad" /></returns>
+        <remarks>To be added</remarks>
+      </Docs>
+    </Member>
+    <Member MemberName="Link">
+      <MemberSignature Language="C#" Value="public bool Link (Gst.Element dest);" />
+      <MemberType>Method</MemberType>
+      <ReturnValue>
+        <ReturnType>System.Boolean</ReturnType>
+      </ReturnValue>
+      <Parameters>
+        <Parameter Name="dest" Type="Gst.Element" />
+      </Parameters>
+      <Docs>
+        <summary>To be added</summary>
+        <param name="dest">a <see cref="T:Gst.Element" /></param>
+        <returns>a <see cref="T:System.Boolean" /></returns>
+        <remarks>To be added</remarks>
+      </Docs>
+    </Member>
+    <Member MemberName="GetPad">
+      <MemberSignature Language="C#" Value="public Gst.Pad GetPad (string name);" />
+      <MemberType>Method</MemberType>
+      <ReturnValue>
+        <ReturnType>Gst.Pad</ReturnType>
+      </ReturnValue>
+      <Parameters>
+        <Parameter Name="name" Type="System.String" />
+      </Parameters>
+      <Docs>
+        <summary>To be added</summary>
+        <param name="name">a <see cref="T:System.String" /></param>
+        <returns>a <see cref="T:Gst.Pad" /></returns>
+        <remarks>To be added</remarks>
+      </Docs>
+    </Member>
+    <Member MemberName="SetPendingProperties">
+      <MemberSignature Language="C#" Value="public void SetPendingProperties ();" />
+      <MemberType>Method</MemberType>
+      <ReturnValue>
+        <ReturnType>System.Void</ReturnType>
+      </ReturnValue>
+      <Parameters />
+      <Docs>
+        <summary>To be added</summary>
+        <remarks>To be added</remarks>
+      </Docs>
+    </Member>
+    <Member MemberName="Query">
+      <MemberSignature Language="C#" Value="public bool Query (Gst.QueryType type, ref int format, out long value);" />
+      <MemberType>Method</MemberType>
+      <ReturnValue>
+        <ReturnType>System.Boolean</ReturnType>
+      </ReturnValue>
+      <Parameters>
+        <Parameter Name="type" Type="Gst.QueryType" />
+        <Parameter Name="format" Type="System.Int32&amp;" RefType="ref" />
+        <Parameter Name="value" Type="System.Int64&amp;" RefType="out" />
+      </Parameters>
+      <Docs>
+        <summary>To be added</summary>
+        <param name="type">a <see cref="T:System.Int32" /></param>
+        <param name="format">a <see cref="T:System.Int32" /></param>
+        <param name="value">a <see cref="T:System.Int64" /></param>
+        <returns>a <see cref="T:System.Boolean" /></returns>
+        <remarks>To be added</remarks>
+      </Docs>
+    </Member>
+    <Member MemberName="RequiresClock">
+      <MemberSignature Language="C#" Value="public bool RequiresClock ();" />
+      <MemberType>Method</MemberType>
+      <ReturnValue>
+        <ReturnType>System.Boolean</ReturnType>
+      </ReturnValue>
+      <Parameters />
+      <Docs>
+        <summary>To be added</summary>
+        <returns>a <see cref="T:System.Boolean" /></returns>
+        <remarks>To be added</remarks>
+      </Docs>
+    </Member>
+    <Member MemberName="DisableThreadsafeProperties">
+      <MemberSignature Language="C#" Value="public void DisableThreadsafeProperties ();" />
+      <MemberType>Method</MemberType>
+      <ReturnValue>
+        <ReturnType>System.Void</ReturnType>
+      </ReturnValue>
+      <Parameters />
+      <Docs>
+        <summary>To be added</summary>
+        <remarks>To be added</remarks>
+      </Docs>
+    </Member>
+    <Member MemberName="SetState">
+      <MemberSignature Language="C#" Value="public Gst.ElementStateReturn SetState (Gst.ElementState state);" />
+      <MemberType>Method</MemberType>
+      <ReturnValue>
+        <ReturnType>Gst.ElementStateReturn</ReturnType>
+      </ReturnValue>
+      <Parameters>
+        <Parameter Name="state" Type="Gst.ElementState" />
+      </Parameters>
+      <Docs>
+        <summary>To be added</summary>
+        <param name="state">a <see cref="T:System.Int32" /></param>
+        <returns>a <see cref="T:Gst.ElementStateReturn" /></returns>
+        <remarks>To be added</remarks>
+      </Docs>
+    </Member>
+    <Member MemberName="GetPadTemplate">
+      <MemberSignature Language="C#" Value="public Gst.PadTemplate GetPadTemplate (string name);" />
+      <MemberType>Method</MemberType>
+      <ReturnValue>
+        <ReturnType>Gst.PadTemplate</ReturnType>
+      </ReturnValue>
+      <Parameters>
+        <Parameter Name="name" Type="System.String" />
+      </Parameters>
+      <Docs>
+        <summary>To be added</summary>
+        <param name="name">a <see cref="T:System.String" /></param>
+        <returns>a <see cref="T:Gst.PadTemplate" /></returns>
+        <remarks>To be added</remarks>
+      </Docs>
+    </Member>
+    <Member MemberName="EnableThreadsafeProperties">
+      <MemberSignature Language="C#" Value="public void EnableThreadsafeProperties ();" />
+      <MemberType>Method</MemberType>
+      <ReturnValue>
+        <ReturnType>System.Void</ReturnType>
+      </ReturnValue>
+      <Parameters />
+      <Docs>
+        <summary>To be added</summary>
+        <remarks>To be added</remarks>
+      </Docs>
+    </Member>
+    <Member MemberName="AdjustTime">
+      <MemberSignature Language="C#" Value="public void AdjustTime (long diff);" />
+      <MemberType>Method</MemberType>
+      <ReturnValue>
+        <ReturnType>System.Void</ReturnType>
+      </ReturnValue>
+      <Parameters>
+        <Parameter Name="diff" Type="System.Int64" />
+      </Parameters>
+      <Docs>
+        <summary>To be added</summary>
+        <param name="diff">a <see cref="T:System.Int64" /></param>
+        <remarks>To be added</remarks>
+      </Docs>
+    </Member>
+    <Member MemberName="GetCompatiblePadFiltered">
+      <MemberSignature Language="C#" Value="public Gst.Pad GetCompatiblePadFiltered (Gst.Pad pad, Gst.Caps filtercaps);" />
+      <MemberType>Method</MemberType>
+      <ReturnValue>
+        <ReturnType>Gst.Pad</ReturnType>
+      </ReturnValue>
+      <Parameters>
+        <Parameter Name="pad" Type="Gst.Pad" />
+        <Parameter Name="filtercaps" Type="Gst.Caps" />
+      </Parameters>
+      <Docs>
+        <summary>To be added</summary>
+        <param name="pad">a <see cref="T:Gst.Pad" /></param>
+        <param name="filtercaps">a <see cref="T:Gst.Caps" /></param>
+        <returns>a <see cref="T:Gst.Pad" /></returns>
+        <remarks>To be added</remarks>
+      </Docs>
+    </Member>
+    <Member MemberName="SetValist">
+      <MemberSignature Language="C#" Value="public void SetValist (string first_property_name, IntPtr var_args);" />
+      <MemberType>Method</MemberType>
+      <ReturnValue>
+        <ReturnType>System.Void</ReturnType>
+      </ReturnValue>
+      <Parameters>
+        <Parameter Name="first_property_name" Type="System.String" />
+        <Parameter Name="var_args" Type="System.IntPtr" />
+      </Parameters>
+      <Docs>
+        <summary>To be added</summary>
+        <param name="first_property_name">a <see cref="T:System.String" /></param>
+        <param name="var_args">a <see cref="T:System.IntPtr" /></param>
+        <remarks>To be added</remarks>
+      </Docs>
+    </Member>
+    <Member MemberName="LinkPads">
+      <MemberSignature Language="C#" Value="public bool LinkPads (string srcpadname, Gst.Element dest, string destpadname);" />
+      <MemberType>Method</MemberType>
+      <ReturnValue>
+        <ReturnType>System.Boolean</ReturnType>
+      </ReturnValue>
+      <Parameters>
+        <Parameter Name="srcpadname" Type="System.String" />
+        <Parameter Name="dest" Type="Gst.Element" />
+        <Parameter Name="destpadname" Type="System.String" />
+      </Parameters>
+      <Docs>
+        <summary>To be added</summary>
+        <param name="srcpadname">a <see cref="T:System.String" /></param>
+        <param name="dest">a <see cref="T:Gst.Element" /></param>
+        <param name="destpadname">a <see cref="T:System.String" /></param>
+        <returns>a <see cref="T:System.Boolean" /></returns>
+        <remarks>To be added</remarks>
+      </Docs>
+    </Member>
+    <Member MemberName="GetProperty">
+      <MemberSignature Language="C#" Value="public GLib.Value GetProperty (string property_name);" />
+      <MemberType>Method</MemberType>
+      <ReturnValue>
+        <ReturnType>GLib.Value</ReturnType>
+      </ReturnValue>
+      <Parameters>
+        <Parameter Name="property_name" Type="System.String" />
+      </Parameters>
+      <Docs>
+        <summary>To be added</summary>
+        <param name="property_name">a <see cref="T:System.String" /></param>
+        <returns>a <see cref="T:GLib.Value" /></returns>
+        <remarks>To be added</remarks>
+      </Docs>
+    </Member>
+    <Member MemberName="SetProperty">
+      <MemberSignature Language="C#" Value="public void SetProperty (string property_name, string value);" />
+      <MemberType>Method</MemberType>
+      <ReturnValue>
+        <ReturnType>System.Void</ReturnType>
+      </ReturnValue>
+      <Parameters>
+        <Parameter Name="property_name" Type="System.String" />
+        <Parameter Name="value" Type="System.String" />
+      </Parameters>
+      <Docs>
+        <summary>To be added</summary>
+        <param name="property_name">a <see cref="T:System.String" /></param>
+        <param name="value">a <see cref="T:System.String" /></param>
+        <remarks>To be added</remarks>
+      </Docs>
+    </Member>
+    <Member MemberName=".ctor">
+      <MemberSignature Language="C#" Value="protected Element (GLib.GType gtype);" />
+      <MemberType>Constructor</MemberType>
+      <ReturnValue />
+      <Parameters>
+        <Parameter Name="gtype" Type="GLib.GType" />
+      </Parameters>
+      <Docs>
+        <summary>To be added</summary>
+        <param name="gtype">a <see cref="T:GLib.GType" /></param>
+        <returns>a <see cref="T:Gst.Element" /></returns>
+        <remarks>To be added</remarks>
+      </Docs>
+    </Member>
+    <Member MemberName=".ctor">
+      <MemberSignature Language="C#" Value="public Element (IntPtr raw);" />
+      <MemberType>Constructor</MemberType>
+      <ReturnValue />
+      <Parameters>
+        <Parameter Name="raw" Type="System.IntPtr" />
+      </Parameters>
+      <Docs>
+        <summary>To be added</summary>
+        <param name="raw">a <see cref="T:System.IntPtr" /></param>
+        <returns>a <see cref="T:Gst.Element" /></returns>
+        <remarks>To be added</remarks>
+      </Docs>
+    </Member>
+    <Member MemberName="GType">
+      <MemberSignature Language="C#" Value="public static GLib.GType GType { get; };" />
+      <MemberType>Property</MemberType>
+      <ReturnValue>
+        <ReturnType>GLib.GType</ReturnType>
+      </ReturnValue>
+      <Parameters />
+      <Docs>
+        <summary>To be added</summary>
+        <returns>a <see cref="T:GLib.GType" /></returns>
+        <remarks>To be added</remarks>
+      </Docs>
+    </Member>
+    <Member MemberName="Factory">
+      <MemberSignature Language="C#" Value="public Gst.ElementFactory Factory { get; };" />
+      <MemberType>Property</MemberType>
+      <ReturnValue>
+        <ReturnType>Gst.ElementFactory</ReturnType>
+      </ReturnValue>
+      <Parameters />
+      <Docs>
+        <summary>To be added</summary>
+        <returns>a <see cref="T:Gst.ElementFactory" /></returns>
+        <remarks>To be added</remarks>
+      </Docs>
+    </Member>
+    <Member MemberName="Clock">
+      <MemberSignature Language="C#" Value="public Gst.Clock Clock { set; get; };" />
+      <MemberType>Property</MemberType>
+      <ReturnValue>
+        <ReturnType>Gst.Clock</ReturnType>
+      </ReturnValue>
+      <Parameters />
+      <Docs>
+        <summary>To be added</summary>
+        <returns>a <see cref="T:Gst.Clock" /></returns>
+        <remarks>To be added</remarks>
+      </Docs>
+    </Member>
+    <Member MemberName="Scheduler">
+      <MemberSignature Language="C#" Value="public Gst.Scheduler Scheduler { set; get; };" />
+      <MemberType>Property</MemberType>
+      <ReturnValue>
+        <ReturnType>Gst.Scheduler</ReturnType>
+      </ReturnValue>
+      <Parameters />
+      <Docs>
+        <summary>To be added</summary>
+        <returns>a <see cref="T:Gst.Scheduler" /></returns>
+        <remarks>To be added</remarks>
+      </Docs>
+    </Member>
+    <Member MemberName="Index">
+      <MemberSignature Language="C#" Value="public Gst.Index Index { set; get; };" />
+      <MemberType>Property</MemberType>
+      <ReturnValue>
+        <ReturnType>Gst.Index</ReturnType>
+      </ReturnValue>
+      <Parameters />
+      <Docs>
+        <summary>To be added</summary>
+        <returns>a <see cref="T:Gst.Index" /></returns>
+        <remarks>To be added</remarks>
+      </Docs>
+    </Member>
+    <Member MemberName="Time">
+      <MemberSignature Language="C#" Value="public ulong Time { set; get; };" />
+      <MemberType>Property</MemberType>
+      <ReturnValue>
+        <ReturnType>System.UInt64</ReturnType>
+      </ReturnValue>
+      <Parameters />
+      <Docs>
+        <summary>To be added</summary>
+        <returns>a <see cref="T:System.UInt64" /></returns>
+        <remarks>To be added</remarks>
+      </Docs>
+    </Member>
+    <Member MemberName="LockedState">
+      <MemberSignature Language="C#" Value="public bool LockedState { set; };" />
+      <MemberType>Property</MemberType>
+      <ReturnValue>
+        <ReturnType>System.Boolean</ReturnType>
+      </ReturnValue>
+      <Docs>
+        <summary>To be added</summary>
+        <returns>a <see cref="T:System.Boolean" /></returns>
+        <remarks>To be added</remarks>
+      </Docs>
+    </Member>
+    <Member MemberName="IsLockedState">
+      <MemberSignature Language="C#" Value="public bool IsLockedState { get; };" />
+      <MemberType>Property</MemberType>
+      <ReturnValue>
+        <ReturnType>System.Boolean</ReturnType>
+      </ReturnValue>
+      <Parameters />
+      <Docs>
+        <summary>To be added</summary>
+        <returns>a <see cref="T:System.Boolean" /></returns>
+        <remarks>To be added</remarks>
+      </Docs>
+    </Member>
+    <Member MemberName="ManagingBin">
+      <MemberSignature Language="C#" Value="public Gst.Bin ManagingBin { get; };" />
+      <MemberType>Property</MemberType>
+      <ReturnValue>
+        <ReturnType>Gst.Bin</ReturnType>
+      </ReturnValue>
+      <Parameters />
+      <Docs>
+        <summary>To be added</summary>
+        <returns>a <see cref="T:Gst.Bin" /></returns>
+        <remarks>To be added</remarks>
+      </Docs>
+    </Member>
+    <Member MemberName="State">
+      <MemberSignature Language="C#" Value="public Gst.ElementState State { get; };" />
+      <MemberType>Property</MemberType>
+      <ReturnValue>
+        <ReturnType>Gst.ElementState</ReturnType>
+      </ReturnValue>
+      <Parameters />
+      <Docs>
+        <summary>To be added</summary>
+        <returns>a <see cref="T:Gst.ElementState" /></returns>
+        <remarks>To be added</remarks>
+      </Docs>
+    </Member>
+    <Member MemberName="IsIndexable">
+      <MemberSignature Language="C#" Value="public bool IsIndexable { get; };" />
+      <MemberType>Property</MemberType>
+      <ReturnValue>
+        <ReturnType>System.Boolean</ReturnType>
+      </ReturnValue>
+      <Parameters />
+      <Docs>
+        <summary>To be added</summary>
+        <returns>a <see cref="T:System.Boolean" /></returns>
+        <remarks>To be added</remarks>
+      </Docs>
+    </Member>
+    <Member MemberName="PadTemplateList">
+      <MemberSignature Language="C#" Value="public GLib.List PadTemplateList { get; };" />
+      <MemberType>Property</MemberType>
+      <ReturnValue>
+        <ReturnType>GLib.List</ReturnType>
+      </ReturnValue>
+      <Parameters />
+      <Docs>
+        <summary>To be added</summary>
+        <returns>a <see cref="T:GLib.List" /></returns>
+        <remarks>To be added</remarks>
+      </Docs>
+    </Member>
+    <Member MemberName="Error">
+      <MemberSignature Language="C#" Value="public event Gst.ErrorHandler Error;" />
+      <MemberType>Event</MemberType>
+      <ReturnValue>
+        <ReturnType>Gst.ErrorHandler</ReturnType>
+      </ReturnValue>
+      <Parameters />
+      <Docs>
+        <summary>To be added</summary>
+        <remarks>To be added</remarks>
+      </Docs>
+    </Member>
+    <Member MemberName="Eos">
+      <MemberSignature Language="C#" Value="public event EventHandler Eos;" />
+      <MemberType>Event</MemberType>
+      <ReturnValue>
+        <ReturnType>System.EventHandler</ReturnType>
+      </ReturnValue>
+      <Parameters />
+      <Docs>
+        <summary>To be added</summary>
+        <remarks>To be added</remarks>
+      </Docs>
+    </Member>
+    <Member MemberName="StateChange">
+      <MemberSignature Language="C#" Value="public event Gst.StateChangeHandler StateChange;" />
+      <MemberType>Event</MemberType>
+      <ReturnValue>
+        <ReturnType>Gst.StateChangeHandler</ReturnType>
+      </ReturnValue>
+      <Parameters />
+      <Docs>
+        <summary>To be added</summary>
+        <remarks>To be added</remarks>
+      </Docs>
+    </Member>
+    <Member MemberName="FoundTag">
+      <MemberSignature Language="C#" Value="public event Gst.FoundTagHandler FoundTag;" />
+      <MemberType>Event</MemberType>
+      <ReturnValue>
+        <ReturnType>Gst.FoundTagHandler</ReturnType>
+      </ReturnValue>
+      <Parameters />
+      <Docs>
+        <summary>To be added</summary>
+        <remarks>To be added</remarks>
+      </Docs>
+    </Member>
+    <Member MemberName="NewPad">
+      <MemberSignature Language="C#" Value="public event Gst.NewPadHandler NewPad;" />
+      <MemberType>Event</MemberType>
+      <ReturnValue>
+        <ReturnType>Gst.NewPadHandler</ReturnType>
+      </ReturnValue>
+      <Parameters />
+      <Docs>
+        <summary>To be added</summary>
+        <remarks>To be added</remarks>
+      </Docs>
+    </Member>
+    <Member MemberName="PadRemoved">
+      <MemberSignature Language="C#" Value="public event Gst.PadRemovedHandler PadRemoved;" />
+      <MemberType>Event</MemberType>
+      <ReturnValue>
+        <ReturnType>Gst.PadRemovedHandler</ReturnType>
+      </ReturnValue>
+      <Parameters />
+      <Docs>
+        <summary>To be added</summary>
+        <remarks>To be added</remarks>
+      </Docs>
+    </Member>
+    <Member MemberName="SetProperty">
+      <MemberSignature Language="C#" Value="public void SetProperty (string property_name, double value);" />
+      <MemberType>Method</MemberType>
+      <ReturnValue>
+        <ReturnType>System.Void</ReturnType>
+      </ReturnValue>
+      <Parameters>
+        <Parameter Name="property_name" Type="System.String" />
+        <Parameter Name="value" Type="System.Double" />
+      </Parameters>
+      <Docs>
+        <summary>To be added</summary>
+        <param name="property_name">a <see cref="T:System.String" /></param>
+        <param name="value">a <see cref="T:System.Double" /></param>
+        <remarks>To be added</remarks>
+      </Docs>
+    </Member>
+    <Member MemberName="SetProperty">
+      <MemberSignature Language="C#" Value="public void SetProperty (string property_name, bool value);" />
+      <MemberType>Method</MemberType>
+      <ReturnValue>
+        <ReturnType>System.Void</ReturnType>
+      </ReturnValue>
+      <Parameters>
+        <Parameter Name="property_name" Type="System.String" />
+        <Parameter Name="value" Type="System.Boolean" />
+      </Parameters>
+      <Docs>
+        <summary>To be added</summary>
+        <param name="property_name">a <see cref="T:System.String" /></param>
+        <param name="value">a <see cref="T:System.Boolean" /></param>
+        <remarks>To be added</remarks>
+      </Docs>
+    </Member>
+  </Members>
+</Type>

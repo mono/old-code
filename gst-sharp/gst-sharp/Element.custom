@@ -1,0 +1,37 @@
+//
+// Element.custom
+//
+// This code is inserted after the automatically generated code.
+//
+
+                [DllImport("gstreamer-0.8")]
+                static extern void gst_element_get_property(IntPtr raw, IntPtr property_name, ref GLib.Value value);
+
+                public new GLib.Value GetProperty (string property_name) {
+			IntPtr property_name_as_native = GLib.Marshaller.StringToPtrGStrdup (property_name);
+                        GLib.Value val = new GLib.Value (this, property_name);
+                        gst_element_get_property (Handle, property_name_as_native, ref val);
+			GLib.Marshaller.Free (property_name_as_native);
+                        return val;
+                }
+
+		public void SetProperty (string property_name, string value) {
+			IntPtr property_name_as_native = GLib.Marshaller.StringToPtrGStrdup (property_name);
+			GLib.Value val = new GLib.Value (value);
+			gst_element_set_property (Handle, property_name_as_native, ref val);
+			GLib.Marshaller.Free (property_name_as_native);
+		}
+
+		public void SetProperty (string property_name, double value) {
+			IntPtr property_name_as_native = GLib.Marshaller.StringToPtrGStrdup (property_name);
+			GLib.Value val = new GLib.Value (value);
+			gst_element_set_property (Handle, property_name_as_native, ref val);
+			GLib.Marshaller.Free (property_name_as_native);
+		}
+
+		public void SetProperty (string property_name, bool value) {
+			IntPtr property_name_as_native = GLib.Marshaller.StringToPtrGStrdup (property_name);
+			GLib.Value val = new GLib.Value (value);
+			gst_element_set_property (Handle, property_name_as_native, ref val);
+			GLib.Marshaller.Free (property_name_as_native);
+		}

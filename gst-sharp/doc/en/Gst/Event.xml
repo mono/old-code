@@ -1,0 +1,300 @@
+<Type Name="Event" FullName="Gst.Event">
+  <TypeSignature Language="C#" Value="public sealed struct Event" Maintainer="auto" />
+  <AssemblyInfo>
+    <AssemblyName>gst-sharp</AssemblyName>
+    <AssemblyPublicKey>
+    </AssemblyPublicKey>
+    <AssemblyVersion>0.0.0.0</AssemblyVersion>
+    <AssemblyCulture>neutral</AssemblyCulture>
+    <Attributes />
+  </AssemblyInfo>
+  <ThreadSafetyStatement>Gtk# is thread aware, but not thread safe; See the <link location="node:gtk-sharp/programming/threads">Gtk# Thread Programming</link> for details.</ThreadSafetyStatement>
+  <Docs>
+    <summary>To be added</summary>
+    <remarks>To be added</remarks>
+  </Docs>
+  <Base>
+    <BaseTypeName>System.ValueType</BaseTypeName>
+  </Base>
+  <Interfaces />
+  <Attributes />
+  <Members>
+    <Member MemberName="Zero">
+      <MemberSignature Language="C#" Value="public static Gst.Event Zero;" />
+      <MemberType>Field</MemberType>
+      <ReturnValue>
+        <ReturnType>Gst.Event</ReturnType>
+      </ReturnValue>
+      <Parameters>
+      </Parameters>
+      <Docs>
+        <summary>To be added</summary>
+        <remarks>To be added</remarks>
+      </Docs>
+    </Member>
+    <Member MemberName="Data">
+      <MemberSignature Language="C#" Value="public Gst.Data Data;" />
+      <MemberType>Field</MemberType>
+      <ReturnValue>
+        <ReturnType>Gst.Data</ReturnType>
+      </ReturnValue>
+      <Parameters>
+      </Parameters>
+      <Docs>
+        <summary>To be added</summary>
+        <remarks>To be added</remarks>
+      </Docs>
+    </Member>
+    <Member MemberName="EventType">
+      <MemberSignature Language="C#" Value="public Gst.EventType EventType;" />
+      <MemberType>Field</MemberType>
+      <ReturnValue>
+        <ReturnType>Gst.EventType</ReturnType>
+      </ReturnValue>
+      <Parameters>
+      </Parameters>
+      <Docs>
+        <summary>To be added</summary>
+        <remarks>To be added</remarks>
+      </Docs>
+    </Member>
+    <Member MemberName="Timestamp">
+      <MemberSignature Language="C#" Value="public ulong Timestamp;" />
+      <MemberType>Field</MemberType>
+      <ReturnValue>
+        <ReturnType>System.UInt64</ReturnType>
+      </ReturnValue>
+      <Parameters>
+      </Parameters>
+      <Docs>
+        <summary>To be added</summary>
+        <remarks>To be added</remarks>
+      </Docs>
+    </Member>
+    <Member MemberName="SeekType">
+      <MemberSignature Language="C#" Value="public Gst.SeekType SeekType;" />
+      <MemberType>Field</MemberType>
+      <ReturnValue>
+        <ReturnType>Gst.SeekType</ReturnType>
+      </ReturnValue>
+      <Parameters>
+      </Parameters>
+      <Docs>
+        <summary>To be added</summary>
+        <remarks>To be added</remarks>
+      </Docs>
+    </Member>
+    <Member MemberName="GstReserved">
+      <MemberSignature Language="C#" Value="public IntPtr [] GstReserved;" />
+      <MemberType>Field</MemberType>
+      <ReturnValue>
+        <ReturnType>System.IntPtr[]</ReturnType>
+      </ReturnValue>
+      <Parameters>
+      </Parameters>
+      <Docs>
+        <summary>To be added</summary>
+        <remarks>To be added</remarks>
+      </Docs>
+    </Member>
+    <Member MemberName="New">
+      <MemberSignature Language="C#" Value="public static Gst.Event New (IntPtr raw);" />
+      <MemberType>Method</MemberType>
+      <ReturnValue>
+        <ReturnType>Gst.Event</ReturnType>
+      </ReturnValue>
+      <Parameters>
+        <Parameter Name="raw" Type="System.IntPtr" />
+      </Parameters>
+      <Docs>
+        <summary>To be added</summary>
+        <param name="raw">a <see cref="T:System.IntPtr" /></param>
+        <returns>a <see cref="T:Gst.Event" /></returns>
+        <remarks>To be added</remarks>
+      </Docs>
+    </Member>
+    <Member MemberName="New">
+      <MemberSignature Language="C#" Value="public static Gst.Event New (Gst.EventType type);" />
+      <MemberType>Method</MemberType>
+      <ReturnValue>
+        <ReturnType>Gst.Event</ReturnType>
+      </ReturnValue>
+      <Parameters>
+        <Parameter Name="type" Type="Gst.EventType" />
+      </Parameters>
+      <Docs>
+        <summary>To be added</summary>
+        <param name="type">a <see cref="T:System.Int32" /></param>
+        <returns>a <see cref="T:Gst.Event" /></returns>
+        <remarks>To be added</remarks>
+      </Docs>
+    </Member>
+    <Member MemberName="NewDiscontinuousValist">
+      <MemberSignature Language="C#" Value="public static Gst.Event NewDiscontinuousValist (bool new_media, Gst.Format format1, IntPtr var_args);" />
+      <MemberType>Method</MemberType>
+      <ReturnValue>
+        <ReturnType>Gst.Event</ReturnType>
+      </ReturnValue>
+      <Parameters>
+        <Parameter Name="new_media" Type="System.Boolean" />
+        <Parameter Name="format1" Type="Gst.Format" />
+        <Parameter Name="var_args" Type="System.IntPtr" />
+      </Parameters>
+      <Docs>
+        <summary>To be added</summary>
+        <param name="new_media">a <see cref="T:System.Boolean" /></param>
+        <param name="format1">a <see cref="T:System.Int32" /></param>
+        <param name="var_args">a <see cref="T:System.IntPtr" /></param>
+        <returns>a <see cref="T:Gst.Event" /></returns>
+        <remarks>To be added</remarks>
+      </Docs>
+    </Member>
+    <Member MemberName="NewSeek">
+      <MemberSignature Language="C#" Value="public static Gst.Event NewSeek (Gst.SeekType type, long offset);" />
+      <MemberType>Method</MemberType>
+      <ReturnValue>
+        <ReturnType>Gst.Event</ReturnType>
+      </ReturnValue>
+      <Parameters>
+        <Parameter Name="type" Type="Gst.SeekType" />
+        <Parameter Name="offset" Type="System.Int64" />
+      </Parameters>
+      <Docs>
+        <summary>To be added</summary>
+        <param name="type">a <see cref="T:System.Int32" /></param>
+        <param name="offset">a <see cref="T:System.Int64" /></param>
+        <returns>a <see cref="T:Gst.Event" /></returns>
+        <remarks>To be added</remarks>
+      </Docs>
+    </Member>
+    <Member MemberName="NewSegmentSeek">
+      <MemberSignature Language="C#" Value="public static Gst.Event NewSegmentSeek (Gst.SeekType type, long start, long stop);" />
+      <MemberType>Method</MemberType>
+      <ReturnValue>
+        <ReturnType>Gst.Event</ReturnType>
+      </ReturnValue>
+      <Parameters>
+        <Parameter Name="type" Type="Gst.SeekType" />
+        <Parameter Name="start" Type="System.Int64" />
+        <Parameter Name="stop" Type="System.Int64" />
+      </Parameters>
+      <Docs>
+        <summary>To be added</summary>
+        <param name="type">a <see cref="T:System.Int32" /></param>
+        <param name="start">a <see cref="T:System.Int64" /></param>
+        <param name="stop">a <see cref="T:System.Int64" /></param>
+        <returns>a <see cref="T:Gst.Event" /></returns>
+        <remarks>To be added</remarks>
+      </Docs>
+    </Member>
+    <Member MemberName="NewSize">
+      <MemberSignature Language="C#" Value="public static Gst.Event NewSize (Gst.Format format, long value);" />
+      <MemberType>Method</MemberType>
+      <ReturnValue>
+        <ReturnType>Gst.Event</ReturnType>
+      </ReturnValue>
+      <Parameters>
+        <Parameter Name="format" Type="Gst.Format" />
+        <Parameter Name="value" Type="System.Int64" />
+      </Parameters>
+      <Docs>
+        <summary>To be added</summary>
+        <param name="format">a <see cref="T:System.Int32" /></param>
+        <param name="value">a <see cref="T:System.Int64" /></param>
+        <returns>a <see cref="T:Gst.Event" /></returns>
+        <remarks>To be added</remarks>
+      </Docs>
+    </Member>
+    <Member MemberName="NewTag">
+      <MemberSignature Language="C#" Value="public static Gst.Event NewTag (Gst.TagList list);" />
+      <MemberType>Method</MemberType>
+      <ReturnValue>
+        <ReturnType>Gst.Event</ReturnType>
+      </ReturnValue>
+      <Parameters>
+        <Parameter Name="list" Type="Gst.TagList" />
+      </Parameters>
+      <Docs>
+        <summary>To be added</summary>
+        <param name="list">a <see cref="T:Gst.TagList" /></param>
+        <returns>a <see cref="T:Gst.Event" /></returns>
+        <remarks>To be added</remarks>
+      </Docs>
+    </Member>
+    <Member MemberName="MasksContains">
+      <MemberSignature Language="C#" Value="public static bool MasksContains (Gst.EventMask masks, Gst.EventMask mask);" />
+      <MemberType>Method</MemberType>
+      <ReturnValue>
+        <ReturnType>System.Boolean</ReturnType>
+      </ReturnValue>
+      <Parameters>
+        <Parameter Name="masks" Type="Gst.EventMask" />
+        <Parameter Name="mask" Type="Gst.EventMask" />
+      </Parameters>
+      <Docs>
+        <summary>To be added</summary>
+        <param name="masks">a <see cref="T:Gst.EventMask" /></param>
+        <param name="mask">a <see cref="T:Gst.EventMask" /></param>
+        <returns>a <see cref="T:System.Boolean" /></returns>
+        <remarks>To be added</remarks>
+      </Docs>
+    </Member>
+    <Member MemberName="DiscontGetValue">
+      <MemberSignature Language="C#" Value="public bool DiscontGetValue (Gst.Format format, out long value);" />
+      <MemberType>Method</MemberType>
+      <ReturnValue>
+        <ReturnType>System.Boolean</ReturnType>
+      </ReturnValue>
+      <Parameters>
+        <Parameter Name="format" Type="Gst.Format" />
+        <Parameter Name="value" Type="System.Int64&amp;" RefType="out" />
+      </Parameters>
+      <Docs>
+        <summary>To be added</summary>
+        <param name="format">a <see cref="T:System.Int32" /></param>
+        <param name="value">a <see cref="T:System.Int64" /></param>
+        <returns>a <see cref="T:System.Boolean" /></returns>
+        <remarks>To be added</remarks>
+      </Docs>
+    </Member>
+    <Member MemberName="TagGetList">
+      <MemberSignature Language="C#" Value="public Gst.TagList TagGetList ();" />
+      <MemberType>Method</MemberType>
+      <ReturnValue>
+        <ReturnType>Gst.TagList</ReturnType>
+      </ReturnValue>
+      <Parameters />
+      <Docs>
+        <summary>To be added</summary>
+        <returns>a <see cref="T:Gst.TagList" /></returns>
+        <remarks>To be added</remarks>
+      </Docs>
+    </Member>
+    <Member MemberName="GType">
+      <MemberSignature Language="C#" Value="public static GLib.GType GType { get; };" />
+      <MemberType>Property</MemberType>
+      <ReturnValue>
+        <ReturnType>GLib.GType</ReturnType>
+      </ReturnValue>
+      <Parameters />
+      <Docs>
+        <summary>To be added</summary>
+        <returns>a <see cref="T:GLib.GType" /></returns>
+        <remarks>To be added</remarks>
+      </Docs>
+    </Member>
+    <Member MemberName="src">
+      <MemberSignature Language="C#" Value="public Gst.Object src { set; get; };" />
+      <MemberType>Property</MemberType>
+      <ReturnValue>
+        <ReturnType>Gst.Object</ReturnType>
+      </ReturnValue>
+      <Parameters />
+      <Docs>
+        <summary>To be added</summary>
+        <returns>a <see cref="T:Gst.Object" /></returns>
+        <remarks>To be added</remarks>
+      </Docs>
+    </Member>
+  </Members>
+</Type>

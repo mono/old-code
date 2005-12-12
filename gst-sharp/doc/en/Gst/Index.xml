@@ -1,0 +1,337 @@
+<Type Name="Index" FullName="Gst.Index">
+  <TypeSignature Language="C#" Value="public class Index : Gst.Object, IWrapper, IDisposable" Maintainer="auto" />
+  <AssemblyInfo>
+    <AssemblyName>gst-sharp</AssemblyName>
+    <AssemblyPublicKey>
+    </AssemblyPublicKey>
+    <AssemblyVersion>0.0.0.0</AssemblyVersion>
+    <AssemblyCulture>neutral</AssemblyCulture>
+    <Attributes />
+  </AssemblyInfo>
+  <ThreadSafetyStatement>Gtk# is thread aware, but not thread safe; See the <link location="node:gtk-sharp/programming/threads">Gtk# Thread Programming</link> for details.</ThreadSafetyStatement>
+  <Docs>
+    <summary>To be added</summary>
+    <remarks>To be added</remarks>
+  </Docs>
+  <Base>
+    <BaseTypeName>Gst.Object</BaseTypeName>
+  </Base>
+  <Interfaces>
+    <Interface>
+      <InterfaceName>GLib.IWrapper</InterfaceName>
+    </Interface>
+    <Interface>
+      <InterfaceName>System.IDisposable</InterfaceName>
+    </Interface>
+  </Interfaces>
+  <Attributes />
+  <Members>
+    <Member MemberName="OverrideEntryAdded">
+      <MemberSignature Language="C#" Value="protected static void OverrideEntryAdded (GLib.GType gtype);" />
+      <MemberType>Method</MemberType>
+      <ReturnValue>
+        <ReturnType>System.Void</ReturnType>
+      </ReturnValue>
+      <Parameters>
+        <Parameter Name="gtype" Type="GLib.GType" />
+      </Parameters>
+      <Docs>
+        <summary>To be added</summary>
+        <param name="gtype">a <see cref="T:GLib.GType" /></param>
+        <remarks>To be added</remarks>
+      </Docs>
+    </Member>
+    <Member MemberName="Finalize">
+      <MemberSignature Language="C#" Value="protected override void Finalize ();" />
+      <MemberType>Method</MemberType>
+      <ReturnValue>
+        <ReturnType>System.Void</ReturnType>
+      </ReturnValue>
+      <Parameters />
+      <Docs>
+        <summary>To be added</summary>
+        <remarks>To be added</remarks>
+      </Docs>
+    </Member>
+    <Member MemberName="OnEntryAdded">
+      <MemberSignature Language="C#" Value="protected virtual void OnEntryAdded (Gst.IndexEntry entry);" />
+      <MemberType>Method</MemberType>
+      <ReturnValue>
+        <ReturnType>System.Void</ReturnType>
+      </ReturnValue>
+      <Parameters>
+        <Parameter Name="entry" Type="Gst.IndexEntry" />
+      </Parameters>
+      <Docs>
+        <summary>To be added</summary>
+        <param name="entry">a <see cref="T:Gst.IndexEntry" /></param>
+        <remarks>To be added</remarks>
+      </Docs>
+    </Member>
+    <Member MemberName="AddId">
+      <MemberSignature Language="C#" Value="public Gst.IndexEntry AddId (int id, string description);" />
+      <MemberType>Method</MemberType>
+      <ReturnValue>
+        <ReturnType>Gst.IndexEntry</ReturnType>
+      </ReturnValue>
+      <Parameters>
+        <Parameter Name="id" Type="System.Int32" />
+        <Parameter Name="description" Type="System.String" />
+      </Parameters>
+      <Docs>
+        <summary>To be added</summary>
+        <param name="id">a <see cref="T:System.Int32" /></param>
+        <param name="description">a <see cref="T:System.String" /></param>
+        <returns>a <see cref="T:Gst.IndexEntry" /></returns>
+        <remarks>To be added</remarks>
+      </Docs>
+    </Member>
+    <Member MemberName="SetGroup">
+      <MemberSignature Language="C#" Value="public bool SetGroup (int groupnum);" />
+      <MemberType>Method</MemberType>
+      <ReturnValue>
+        <ReturnType>System.Boolean</ReturnType>
+      </ReturnValue>
+      <Parameters>
+        <Parameter Name="groupnum" Type="System.Int32" />
+      </Parameters>
+      <Docs>
+        <summary>To be added</summary>
+        <param name="groupnum">a <see cref="T:System.Int32" /></param>
+        <returns>a <see cref="T:System.Boolean" /></returns>
+        <remarks>To be added</remarks>
+      </Docs>
+    </Member>
+    <Member MemberName="SetFilter">
+      <MemberSignature Language="C#" Value="public void SetFilter (Gst.IndexFilter filter);" />
+      <MemberType>Method</MemberType>
+      <ReturnValue>
+        <ReturnType>System.Void</ReturnType>
+      </ReturnValue>
+      <Parameters>
+        <Parameter Name="filter" Type="Gst.IndexFilter" />
+      </Parameters>
+      <Docs>
+        <summary>To be added</summary>
+        <param name="filter">a <see cref="T:Gst.IndexFilter" /></param>
+        <remarks>To be added</remarks>
+      </Docs>
+    </Member>
+    <Member MemberName="AddObject">
+      <MemberSignature Language="C#" Value="public Gst.IndexEntry AddObject (int id, string key, GLib.GType type, IntPtr objekt);" />
+      <MemberType>Method</MemberType>
+      <ReturnValue>
+        <ReturnType>Gst.IndexEntry</ReturnType>
+      </ReturnValue>
+      <Parameters>
+        <Parameter Name="id" Type="System.Int32" />
+        <Parameter Name="key" Type="System.String" />
+        <Parameter Name="type" Type="GLib.GType" />
+        <Parameter Name="objekt" Type="System.IntPtr" />
+      </Parameters>
+      <Docs>
+        <summary>To be added</summary>
+        <param name="id">a <see cref="T:System.Int32" /></param>
+        <param name="key">a <see cref="T:System.String" /></param>
+        <param name="type">a <see cref="T:GLib.GType" /></param>
+        <param name="objekt">a <see cref="T:System.IntPtr" /></param>
+        <returns>a <see cref="T:Gst.IndexEntry" /></returns>
+        <remarks>To be added</remarks>
+      </Docs>
+    </Member>
+    <Member MemberName="GetWriterId">
+      <MemberSignature Language="C#" Value="public bool GetWriterId (Gst.Object writer, out int id);" />
+      <MemberType>Method</MemberType>
+      <ReturnValue>
+        <ReturnType>System.Boolean</ReturnType>
+      </ReturnValue>
+      <Parameters>
+        <Parameter Name="writer" Type="Gst.Object" />
+        <Parameter Name="id" Type="System.Int32&amp;" RefType="out" />
+      </Parameters>
+      <Docs>
+        <summary>To be added</summary>
+        <param name="writer">a <see cref="T:Gst.Object" /></param>
+        <param name="id">a <see cref="T:System.Int32" /></param>
+        <returns>a <see cref="T:System.Boolean" /></returns>
+        <remarks>To be added</remarks>
+      </Docs>
+    </Member>
+    <Member MemberName="GetAssocEntry">
+      <MemberSignature Language="C#" Value="public Gst.IndexEntry GetAssocEntry (int id, Gst.IndexLookupMethod method, Gst.AssocFlags flags, Gst.Format format, long value);" />
+      <MemberType>Method</MemberType>
+      <ReturnValue>
+        <ReturnType>Gst.IndexEntry</ReturnType>
+      </ReturnValue>
+      <Parameters>
+        <Parameter Name="id" Type="System.Int32" />
+        <Parameter Name="method" Type="Gst.IndexLookupMethod" />
+        <Parameter Name="flags" Type="Gst.AssocFlags" />
+        <Parameter Name="format" Type="Gst.Format" />
+        <Parameter Name="value" Type="System.Int64" />
+      </Parameters>
+      <Docs>
+        <summary>To be added</summary>
+        <param name="id">a <see cref="T:System.Int32" /></param>
+        <param name="method">a <see cref="T:System.Int32" /></param>
+        <param name="flags">a <see cref="T:System.Int32" /></param>
+        <param name="format">a <see cref="T:System.Int32" /></param>
+        <param name="value">a <see cref="T:System.Int64" /></param>
+        <returns>a <see cref="T:Gst.IndexEntry" /></returns>
+        <remarks>To be added</remarks>
+      </Docs>
+    </Member>
+    <Member MemberName="AddFormat">
+      <MemberSignature Language="C#" Value="public Gst.IndexEntry AddFormat (int id, Gst.Format format);" />
+      <MemberType>Method</MemberType>
+      <ReturnValue>
+        <ReturnType>Gst.IndexEntry</ReturnType>
+      </ReturnValue>
+      <Parameters>
+        <Parameter Name="id" Type="System.Int32" />
+        <Parameter Name="format" Type="Gst.Format" />
+      </Parameters>
+      <Docs>
+        <summary>To be added</summary>
+        <param name="id">a <see cref="T:System.Int32" /></param>
+        <param name="format">a <see cref="T:System.Int32" /></param>
+        <returns>a <see cref="T:Gst.IndexEntry" /></returns>
+        <remarks>To be added</remarks>
+      </Docs>
+    </Member>
+    <Member MemberName="SetResolver">
+      <MemberSignature Language="C#" Value="public void SetResolver (Gst.IndexResolver resolver);" />
+      <MemberType>Method</MemberType>
+      <ReturnValue>
+        <ReturnType>System.Void</ReturnType>
+      </ReturnValue>
+      <Parameters>
+        <Parameter Name="resolver" Type="Gst.IndexResolver" />
+      </Parameters>
+      <Docs>
+        <summary>To be added</summary>
+        <param name="resolver">a <see cref="T:Gst.IndexResolver" /></param>
+        <remarks>To be added</remarks>
+      </Docs>
+    </Member>
+    <Member MemberName="Commit">
+      <MemberSignature Language="C#" Value="public void Commit (int id);" />
+      <MemberType>Method</MemberType>
+      <ReturnValue>
+        <ReturnType>System.Void</ReturnType>
+      </ReturnValue>
+      <Parameters>
+        <Parameter Name="id" Type="System.Int32" />
+      </Parameters>
+      <Docs>
+        <summary>To be added</summary>
+        <param name="id">a <see cref="T:System.Int32" /></param>
+        <remarks>To be added</remarks>
+      </Docs>
+    </Member>
+    <Member MemberName=".ctor">
+      <MemberSignature Language="C#" Value="protected Index (GLib.GType gtype);" />
+      <MemberType>Constructor</MemberType>
+      <ReturnValue />
+      <Parameters>
+        <Parameter Name="gtype" Type="GLib.GType" />
+      </Parameters>
+      <Docs>
+        <summary>To be added</summary>
+        <param name="gtype">a <see cref="T:GLib.GType" /></param>
+        <returns>a <see cref="T:Gst.Index" /></returns>
+        <remarks>To be added</remarks>
+      </Docs>
+    </Member>
+    <Member MemberName=".ctor">
+      <MemberSignature Language="C#" Value="public Index (IntPtr raw);" />
+      <MemberType>Constructor</MemberType>
+      <ReturnValue />
+      <Parameters>
+        <Parameter Name="raw" Type="System.IntPtr" />
+      </Parameters>
+      <Docs>
+        <summary>To be added</summary>
+        <param name="raw">a <see cref="T:System.IntPtr" /></param>
+        <returns>a <see cref="T:Gst.Index" /></returns>
+        <remarks>To be added</remarks>
+      </Docs>
+    </Member>
+    <Member MemberName=".ctor">
+      <MemberSignature Language="C#" Value="public Index ();" />
+      <MemberType>Constructor</MemberType>
+      <ReturnValue />
+      <Parameters />
+      <Docs>
+        <summary>To be added</summary>
+        <returns>a <see cref="T:Gst.Index" /></returns>
+        <remarks>To be added</remarks>
+      </Docs>
+    </Member>
+    <Member MemberName=".ctor">
+      <MemberSignature Language="C#" Value="public Index (Gst.Index index);" />
+      <MemberType>Constructor</MemberType>
+      <ReturnValue />
+      <Parameters>
+        <Parameter Name="index" Type="Gst.Index" />
+      </Parameters>
+      <Docs>
+        <summary>To be added</summary>
+        <param name="index">a <see cref="T:Gst.Index" /></param>
+        <returns>a <see cref="T:Gst.Index" /></returns>
+        <remarks>To be added</remarks>
+      </Docs>
+    </Member>
+    <Member MemberName="GType">
+      <MemberSignature Language="C#" Value="public static GLib.GType GType { get; };" />
+      <MemberType>Property</MemberType>
+      <ReturnValue>
+        <ReturnType>GLib.GType</ReturnType>
+      </ReturnValue>
+      <Parameters />
+      <Docs>
+        <summary>To be added</summary>
+        <returns>a <see cref="T:GLib.GType" /></returns>
+        <remarks>To be added</remarks>
+      </Docs>
+    </Member>
+    <Member MemberName="Group">
+      <MemberSignature Language="C#" Value="public int Group { get; };" />
+      <MemberType>Property</MemberType>
+      <ReturnValue>
+        <ReturnType>System.Int32</ReturnType>
+      </ReturnValue>
+      <Parameters />
+      <Docs>
+        <summary>To be added</summary>
+        <returns>a <see cref="T:System.Int32" /></returns>
+        <remarks>To be added</remarks>
+      </Docs>
+    </Member>
+    <Member MemberName="Certainty">
+      <MemberSignature Language="C#" Value="public Gst.IndexCertainty Certainty { set; get; };" />
+      <MemberType>Property</MemberType>
+      <ReturnValue>
+        <ReturnType>Gst.IndexCertainty</ReturnType>
+      </ReturnValue>
+      <Parameters />
+      <Docs>
+        <summary>To be added</summary>
+        <returns>a <see cref="T:Gst.IndexCertainty" /></returns>
+        <remarks>To be added</remarks>
+      </Docs>
+    </Member>
+    <Member MemberName="EntryAdded">
+      <MemberSignature Language="C#" Value="public event Gst.EntryAddedHandler EntryAdded;" />
+      <MemberType>Event</MemberType>
+      <ReturnValue>
+        <ReturnType>Gst.EntryAddedHandler</ReturnType>
+      </ReturnValue>
+      <Parameters />
+      <Docs>
+        <summary>To be added</summary>
+        <remarks>To be added</remarks>
+      </Docs>
+    </Member>
+  </Members>
+</Type>

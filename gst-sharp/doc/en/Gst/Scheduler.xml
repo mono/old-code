@@ -1,0 +1,366 @@
+<Type Name="Scheduler" FullName="Gst.Scheduler">
+  <TypeSignature Language="C#" Value="public class Scheduler : Gst.Object, IWrapper, IDisposable" Maintainer="auto" />
+  <AssemblyInfo>
+    <AssemblyName>gst-sharp</AssemblyName>
+    <AssemblyPublicKey>
+    </AssemblyPublicKey>
+    <AssemblyVersion>0.0.0.0</AssemblyVersion>
+    <AssemblyCulture>neutral</AssemblyCulture>
+    <Attributes />
+  </AssemblyInfo>
+  <ThreadSafetyStatement>Gtk# is thread aware, but not thread safe; See the <link location="node:gtk-sharp/programming/threads">Gtk# Thread Programming</link> for details.</ThreadSafetyStatement>
+  <Docs>
+    <summary>To be added</summary>
+    <remarks>To be added</remarks>
+  </Docs>
+  <Base>
+    <BaseTypeName>Gst.Object</BaseTypeName>
+  </Base>
+  <Interfaces>
+    <Interface>
+      <InterfaceName>GLib.IWrapper</InterfaceName>
+    </Interface>
+    <Interface>
+      <InterfaceName>System.IDisposable</InterfaceName>
+    </Interface>
+  </Interfaces>
+  <Attributes />
+  <Members>
+    <Member MemberName="Finalize">
+      <MemberSignature Language="C#" Value="protected override void Finalize ();" />
+      <MemberType>Method</MemberType>
+      <ReturnValue>
+        <ReturnType>System.Void</ReturnType>
+      </ReturnValue>
+      <Parameters />
+      <Docs>
+        <summary>To be added</summary>
+        <remarks>To be added</remarks>
+      </Docs>
+    </Member>
+    <Member MemberName="PadLink">
+      <MemberSignature Language="C#" Value="public void PadLink (Gst.Pad srcpad, Gst.Pad sinkpad);" />
+      <MemberType>Method</MemberType>
+      <ReturnValue>
+        <ReturnType>System.Void</ReturnType>
+      </ReturnValue>
+      <Parameters>
+        <Parameter Name="srcpad" Type="Gst.Pad" />
+        <Parameter Name="sinkpad" Type="Gst.Pad" />
+      </Parameters>
+      <Docs>
+        <summary>To be added</summary>
+        <param name="srcpad">a <see cref="T:Gst.Pad" /></param>
+        <param name="sinkpad">a <see cref="T:Gst.Pad" /></param>
+        <remarks>To be added</remarks>
+      </Docs>
+    </Member>
+    <Member MemberName="Show">
+      <MemberSignature Language="C#" Value="public void Show ();" />
+      <MemberType>Method</MemberType>
+      <ReturnValue>
+        <ReturnType>System.Void</ReturnType>
+      </ReturnValue>
+      <Parameters />
+      <Docs>
+        <summary>To be added</summary>
+        <remarks>To be added</remarks>
+      </Docs>
+    </Member>
+    <Member MemberName="Reset">
+      <MemberSignature Language="C#" Value="public void Reset ();" />
+      <MemberType>Method</MemberType>
+      <ReturnValue>
+        <ReturnType>System.Void</ReturnType>
+      </ReturnValue>
+      <Parameters />
+      <Docs>
+        <summary>To be added</summary>
+        <remarks>To be added</remarks>
+      </Docs>
+    </Member>
+    <Member MemberName="AddScheduler">
+      <MemberSignature Language="C#" Value="public void AddScheduler (Gst.Scheduler sched2);" />
+      <MemberType>Method</MemberType>
+      <ReturnValue>
+        <ReturnType>System.Void</ReturnType>
+      </ReturnValue>
+      <Parameters>
+        <Parameter Name="sched2" Type="Gst.Scheduler" />
+      </Parameters>
+      <Docs>
+        <summary>To be added</summary>
+        <param name="sched2">a <see cref="T:Gst.Scheduler" /></param>
+        <remarks>To be added</remarks>
+      </Docs>
+    </Member>
+    <Member MemberName="Iterate">
+      <MemberSignature Language="C#" Value="public bool Iterate ();" />
+      <MemberType>Method</MemberType>
+      <ReturnValue>
+        <ReturnType>System.Boolean</ReturnType>
+      </ReturnValue>
+      <Parameters />
+      <Docs>
+        <summary>To be added</summary>
+        <returns>a <see cref="T:System.Boolean" /></returns>
+        <remarks>To be added</remarks>
+      </Docs>
+    </Member>
+    <Member MemberName="ClockWait">
+      <MemberSignature Language="C#" Value="public Gst.ClockReturn ClockWait (Gst.Element element, IntPtr id, out long jitter);" />
+      <MemberType>Method</MemberType>
+      <ReturnValue>
+        <ReturnType>Gst.ClockReturn</ReturnType>
+      </ReturnValue>
+      <Parameters>
+        <Parameter Name="element" Type="Gst.Element" />
+        <Parameter Name="id" Type="System.IntPtr" />
+        <Parameter Name="jitter" Type="System.Int64&amp;" RefType="out" />
+      </Parameters>
+      <Docs>
+        <summary>To be added</summary>
+        <param name="element">a <see cref="T:Gst.Element" /></param>
+        <param name="id">a <see cref="T:System.IntPtr" /></param>
+        <param name="jitter">a <see cref="T:System.Int64" /></param>
+        <returns>a <see cref="T:Gst.ClockReturn" /></returns>
+        <remarks>To be added</remarks>
+      </Docs>
+    </Member>
+    <Member MemberName="Error">
+      <MemberSignature Language="C#" Value="public void Error (Gst.Element element);" />
+      <MemberType>Method</MemberType>
+      <ReturnValue>
+        <ReturnType>System.Void</ReturnType>
+      </ReturnValue>
+      <Parameters>
+        <Parameter Name="element" Type="Gst.Element" />
+      </Parameters>
+      <Docs>
+        <summary>To be added</summary>
+        <param name="element">a <see cref="T:Gst.Element" /></param>
+        <remarks>To be added</remarks>
+      </Docs>
+    </Member>
+    <Member MemberName="RemoveElement">
+      <MemberSignature Language="C#" Value="public void RemoveElement (Gst.Element element);" />
+      <MemberType>Method</MemberType>
+      <ReturnValue>
+        <ReturnType>System.Void</ReturnType>
+      </ReturnValue>
+      <Parameters>
+        <Parameter Name="element" Type="Gst.Element" />
+      </Parameters>
+      <Docs>
+        <summary>To be added</summary>
+        <param name="element">a <see cref="T:Gst.Element" /></param>
+        <remarks>To be added</remarks>
+      </Docs>
+    </Member>
+    <Member MemberName="UseClock">
+      <MemberSignature Language="C#" Value="public void UseClock (Gst.Clock clock);" />
+      <MemberType>Method</MemberType>
+      <ReturnValue>
+        <ReturnType>System.Void</ReturnType>
+      </ReturnValue>
+      <Parameters>
+        <Parameter Name="clock" Type="Gst.Clock" />
+      </Parameters>
+      <Docs>
+        <summary>To be added</summary>
+        <param name="clock">a <see cref="T:Gst.Clock" /></param>
+        <remarks>To be added</remarks>
+      </Docs>
+    </Member>
+    <Member MemberName="Setup">
+      <MemberSignature Language="C#" Value="public void Setup ();" />
+      <MemberType>Method</MemberType>
+      <ReturnValue>
+        <ReturnType>System.Void</ReturnType>
+      </ReturnValue>
+      <Parameters />
+      <Docs>
+        <summary>To be added</summary>
+        <remarks>To be added</remarks>
+      </Docs>
+    </Member>
+    <Member MemberName="PadUnlink">
+      <MemberSignature Language="C#" Value="public void PadUnlink (Gst.Pad srcpad, Gst.Pad sinkpad);" />
+      <MemberType>Method</MemberType>
+      <ReturnValue>
+        <ReturnType>System.Void</ReturnType>
+      </ReturnValue>
+      <Parameters>
+        <Parameter Name="srcpad" Type="Gst.Pad" />
+        <Parameter Name="sinkpad" Type="Gst.Pad" />
+      </Parameters>
+      <Docs>
+        <summary>To be added</summary>
+        <param name="srcpad">a <see cref="T:Gst.Pad" /></param>
+        <param name="sinkpad">a <see cref="T:Gst.Pad" /></param>
+        <remarks>To be added</remarks>
+      </Docs>
+    </Member>
+    <Member MemberName="Interrupt">
+      <MemberSignature Language="C#" Value="public bool Interrupt (Gst.Element element);" />
+      <MemberType>Method</MemberType>
+      <ReturnValue>
+        <ReturnType>System.Boolean</ReturnType>
+      </ReturnValue>
+      <Parameters>
+        <Parameter Name="element" Type="Gst.Element" />
+      </Parameters>
+      <Docs>
+        <summary>To be added</summary>
+        <param name="element">a <see cref="T:Gst.Element" /></param>
+        <returns>a <see cref="T:System.Boolean" /></returns>
+        <remarks>To be added</remarks>
+      </Docs>
+    </Member>
+    <Member MemberName="SchedulingChange">
+      <MemberSignature Language="C#" Value="public void SchedulingChange (Gst.Element element);" />
+      <MemberType>Method</MemberType>
+      <ReturnValue>
+        <ReturnType>System.Void</ReturnType>
+      </ReturnValue>
+      <Parameters>
+        <Parameter Name="element" Type="Gst.Element" />
+      </Parameters>
+      <Docs>
+        <summary>To be added</summary>
+        <param name="element">a <see cref="T:Gst.Element" /></param>
+        <remarks>To be added</remarks>
+      </Docs>
+    </Member>
+    <Member MemberName="StateTransition">
+      <MemberSignature Language="C#" Value="public Gst.ElementStateReturn StateTransition (Gst.Element element, int transition);" />
+      <MemberType>Method</MemberType>
+      <ReturnValue>
+        <ReturnType>Gst.ElementStateReturn</ReturnType>
+      </ReturnValue>
+      <Parameters>
+        <Parameter Name="element" Type="Gst.Element" />
+        <Parameter Name="transition" Type="System.Int32" />
+      </Parameters>
+      <Docs>
+        <summary>To be added</summary>
+        <param name="element">a <see cref="T:Gst.Element" /></param>
+        <param name="transition">a <see cref="T:System.Int32" /></param>
+        <returns>a <see cref="T:Gst.ElementStateReturn" /></returns>
+        <remarks>To be added</remarks>
+      </Docs>
+    </Member>
+    <Member MemberName="RemoveScheduler">
+      <MemberSignature Language="C#" Value="public void RemoveScheduler (Gst.Scheduler sched2);" />
+      <MemberType>Method</MemberType>
+      <ReturnValue>
+        <ReturnType>System.Void</ReturnType>
+      </ReturnValue>
+      <Parameters>
+        <Parameter Name="sched2" Type="Gst.Scheduler" />
+      </Parameters>
+      <Docs>
+        <summary>To be added</summary>
+        <param name="sched2">a <see cref="T:Gst.Scheduler" /></param>
+        <remarks>To be added</remarks>
+      </Docs>
+    </Member>
+    <Member MemberName="AutoClock">
+      <MemberSignature Language="C#" Value="public void AutoClock ();" />
+      <MemberType>Method</MemberType>
+      <ReturnValue>
+        <ReturnType>System.Void</ReturnType>
+      </ReturnValue>
+      <Parameters />
+      <Docs>
+        <summary>To be added</summary>
+        <remarks>To be added</remarks>
+      </Docs>
+    </Member>
+    <Member MemberName="Yield">
+      <MemberSignature Language="C#" Value="public bool Yield (Gst.Element element);" />
+      <MemberType>Method</MemberType>
+      <ReturnValue>
+        <ReturnType>System.Boolean</ReturnType>
+      </ReturnValue>
+      <Parameters>
+        <Parameter Name="element" Type="Gst.Element" />
+      </Parameters>
+      <Docs>
+        <summary>To be added</summary>
+        <param name="element">a <see cref="T:Gst.Element" /></param>
+        <returns>a <see cref="T:System.Boolean" /></returns>
+        <remarks>To be added</remarks>
+      </Docs>
+    </Member>
+    <Member MemberName="AddElement">
+      <MemberSignature Language="C#" Value="public void AddElement (Gst.Element element);" />
+      <MemberType>Method</MemberType>
+      <ReturnValue>
+        <ReturnType>System.Void</ReturnType>
+      </ReturnValue>
+      <Parameters>
+        <Parameter Name="element" Type="Gst.Element" />
+      </Parameters>
+      <Docs>
+        <summary>To be added</summary>
+        <param name="element">a <see cref="T:Gst.Element" /></param>
+        <remarks>To be added</remarks>
+      </Docs>
+    </Member>
+    <Member MemberName=".ctor">
+      <MemberSignature Language="C#" Value="protected Scheduler (GLib.GType gtype);" />
+      <MemberType>Constructor</MemberType>
+      <ReturnValue />
+      <Parameters>
+        <Parameter Name="gtype" Type="GLib.GType" />
+      </Parameters>
+      <Docs>
+        <summary>To be added</summary>
+        <param name="gtype">a <see cref="T:GLib.GType" /></param>
+        <returns>a <see cref="T:Gst.Scheduler" /></returns>
+        <remarks>To be added</remarks>
+      </Docs>
+    </Member>
+    <Member MemberName=".ctor">
+      <MemberSignature Language="C#" Value="public Scheduler (IntPtr raw);" />
+      <MemberType>Constructor</MemberType>
+      <ReturnValue />
+      <Parameters>
+        <Parameter Name="raw" Type="System.IntPtr" />
+      </Parameters>
+      <Docs>
+        <summary>To be added</summary>
+        <param name="raw">a <see cref="T:System.IntPtr" /></param>
+        <returns>a <see cref="T:Gst.Scheduler" /></returns>
+        <remarks>To be added</remarks>
+      </Docs>
+    </Member>
+    <Member MemberName="GType">
+      <MemberSignature Language="C#" Value="public static GLib.GType GType { get; };" />
+      <MemberType>Property</MemberType>
+      <ReturnValue>
+        <ReturnType>GLib.GType</ReturnType>
+      </ReturnValue>
+      <Parameters />
+      <Docs>
+        <summary>To be added</summary>
+        <returns>a <see cref="T:GLib.GType" /></returns>
+        <remarks>To be added</remarks>
+      </Docs>
+    </Member>
+    <Member MemberName="Clock">
+      <MemberSignature Language="C#" Value="public Gst.Clock Clock { set; get; };" />
+      <MemberType>Property</MemberType>
+      <ReturnValue>
+        <ReturnType>Gst.Clock</ReturnType>
+      </ReturnValue>
+      <Parameters />
+      <Docs>
+        <summary>To be added</summary>
+        <returns>a <see cref="T:Gst.Clock" /></returns>
+        <remarks>To be added</remarks>
+      </Docs>
+    </Member>
+  </Members>
+</Type>

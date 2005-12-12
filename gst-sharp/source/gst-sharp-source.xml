@@ -1,0 +1,34 @@
+<gapi-parser-input>
+  <api filename="../gst-sharp/gst-api.raw">
+    <library name="gstreamer-0.8">
+      <namespace name="Gst">
+        <dir>gstreamer-0.8.8/gst</dir>
+        <dir>gstreamer-0.8.8/gst/autoplug</dir>
+        <dir>gstreamer-0.8.8/gst/elements</dir>
+        <dir>gstreamer-0.8.8/gst/registries</dir>
+        <dir>gstreamer-0.8.8/gst/schedulers</dir>
+        <exclude>gstreamer-0.8.8/gst/gstinterface.h</exclude>
+      </namespace>
+    </library>
+    <library name="gstplay-0.8">
+      <namespace name="Gst">
+        <dir>gst-plugins-0.8.7/gst-libs/gst/play</dir>
+      </namespace>
+    </library>
+    <library name="gstgconf-0.8">
+      <namespace name="Gst">
+        <dir>gst-plugins-0.8.7/gst-libs/gst/gconf</dir>
+      </namespace>
+    </library>
+    <library name="gstinterfaces-0.8">
+      <namespace name="Gst">
+        <dir>gst-plugins-0.8.7/gst-libs/gst/colorbalance</dir>
+        <dir>gst-plugins-0.8.7/gst-libs/gst/mixer/</dir>
+        <dir>gst-plugins-0.8.7/gst-libs/gst/navigation</dir>
+        <dir>gst-plugins-0.8.7/gst-libs/gst/propertyprobe</dir>
+        <dir>gst-plugins-0.8.7/gst-libs/gst/tuner</dir>
+        <dir>gst-plugins-0.8.7/gst-libs/gst/xoverlay</dir>
+      </namespace>
+    </library>
+  </api>
+</gapi-parser-input>

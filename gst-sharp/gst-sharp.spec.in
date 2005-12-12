@@ -1,0 +1,66 @@
+%define 	name	gst-sharp
+%define		release	1
+
+Name: 		%name
+Version: 	@VERSION@
+Release: 	%release
+Summary: 	GStreamer .NET bindings
+
+Group: 		Applications/Multimedia
+License: 	LGPL
+URL:		http://gstreamer.net/
+Vendor:         The gst-sharp team.
+Source:		%name-@VERSION@.tar.gz
+BuildRoot:      %{_tmppath}/%{name}-%{version}-%{release}-root-%(%{__id_u} -n)
+
+Requires: 	mono-core >= @MONO_REQUIRED_VERSION@
+Requires: 	gtk-sharp >= @GTKSHARP_REQUIRED_VERSION@
+Requires: 	gstreamer >= @GSTREAMER_REQUIRED_VERSION@
+Requires: 	gstreamer-plugins >= @GSTREAMER_PLUGINS_REQUIRED_VERSION@
+ExclusiveArch:	%{ix86}
+
+BuildRequires:	pkgconfig
+BuildRequires:  mono-runtime-devel >= @MONO_REQUIRED_VERSION@
+BuildRequires:  gstreamer-devel >= @GSTREAMER_REQUIRED_VERSION@
+BuildRequires:  gstreamer-plugins-devel >= @GSTREAMER_PLUGINS_REQUIRED_VERSION@
+BuildRequires:  gtk-sharp-gapi >= @GTKSHARP_REQUIRED_VERSION@
+Prereq:		/sbin/ldconfig
+
+%description
+.NET bindings for for GStreamer, the streaming media framework.
+
+%prep
+%setup
+
+%build
+%configure \
+  --enable-debug \
+  --sysconfdir=%{_sysconfdir} \
+  --prefix=%{_prefix} \
+  --mandir=%{_mandir}
+make
+
+%install  
+MAKE=${MAKE:-make}
+DESTDIR=${DESTDIR:-"$RPM_BUILD_ROOT"}
+# export DESTDIR
+case "${RPM_COMMAND:-all}" in
+install|all)
+	${MAKE} install DESTDIR=${DESTDIR} GACUTIL_FLAGS="/package gst-sharp /root ${DESTDIR}/usr/lib"
+	;;
+esac
+
+%clean
+rm -fr $RPM_BUILD_ROOT
+
+%files
+%defattr(-, root, root, -)
+%doc AUTHORS COPYING NEWS README
+%{_libdir}/pkgconfig/gst-sharp.pc
+%{_libdir}/mono/gac/gst-sharp/*
+%{_libdir}/mono/gst-sharp/gst-sharp.dll
+%{_datadir}/gapi/*
+
+%changelog
+* Wed May 05 2004 Owen Fraser-Green <owen@discobabe.net>
+- Initial version

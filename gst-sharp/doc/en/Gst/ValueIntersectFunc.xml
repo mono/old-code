@@ -1,0 +1,37 @@
+<Type Name="ValueIntersectFunc" FullName="Gst.ValueIntersectFunc">
+  <TypeSignature Language="C#" Value="public sealed delegate int ValueIntersectFunc (GLib.Value dest, GLib.Value value1, GLib.Value value2);" Maintainer="auto" />
+  <AssemblyInfo>
+    <AssemblyName>gst-sharp</AssemblyName>
+    <AssemblyPublicKey>
+    </AssemblyPublicKey>
+    <AssemblyVersion>0.0.0.0</AssemblyVersion>
+    <AssemblyCulture>neutral</AssemblyCulture>
+    <Attributes />
+  </AssemblyInfo>
+  <ThreadSafetyStatement>Gtk# is thread aware, but not thread safe; See the <link location="node:gtk-sharp/programming/threads">Gtk# Thread Programming</link> for details.</ThreadSafetyStatement>
+  <Docs>
+    <summary>To be added</summary>
+    <remarks>To be added</remarks>
+  </Docs>
+  <Base>
+    <BaseTypeName>System.Delegate</BaseTypeName>
+  </Base>
+  <Interfaces>
+    <Interface>
+      <InterfaceName>System.ICloneable</InterfaceName>
+    </Interface>
+    <Interface>
+      <InterfaceName>System.Runtime.Serialization.ISerializable</InterfaceName>
+    </Interface>
+  </Interfaces>
+  <Attributes />
+  <Members />
+  <ReturnValue>
+    <ReturnType>System.Int32</ReturnType>
+  </ReturnValue>
+  <Parameters>
+    <Parameter Name="dest" Type="GLib.Value" />
+    <Parameter Name="value1" Type="GLib.Value" />
+    <Parameter Name="value2" Type="GLib.Value" />
+  </Parameters>
+</Type>

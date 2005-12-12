@@ -1,0 +1,106 @@
+<Type Name="TagSetter" FullName="Gst.TagSetter">
+  <TypeSignature Language="C#" Value="public abstract interface TagSetter" Maintainer="auto" />
+  <AssemblyInfo>
+    <AssemblyName>gst-sharp</AssemblyName>
+    <AssemblyPublicKey>
+    </AssemblyPublicKey>
+    <AssemblyVersion>0.0.0.0</AssemblyVersion>
+    <AssemblyCulture>neutral</AssemblyCulture>
+    <Attributes />
+  </AssemblyInfo>
+  <ThreadSafetyStatement>Gtk# is thread aware, but not thread safe; See the <link location="node:gtk-sharp/programming/threads">Gtk# Thread Programming</link> for details.</ThreadSafetyStatement>
+  <Docs>
+    <summary>To be added</summary>
+    <remarks>To be added</remarks>
+  </Docs>
+  <Base />
+  <Interfaces>
+    <Interface>
+      <InterfaceName>GLib.IWrapper</InterfaceName>
+    </Interface>
+  </Interfaces>
+  <Attributes />
+  <Members>
+    <Member MemberName="AddValist">
+      <MemberSignature Language="C#" Value="public virtual void AddValist (Gst.TagMergeMode mode, string tag, IntPtr var_args);" />
+      <MemberType>Method</MemberType>
+      <ReturnValue>
+        <ReturnType>System.Void</ReturnType>
+      </ReturnValue>
+      <Parameters>
+        <Parameter Name="mode" Type="Gst.TagMergeMode" />
+        <Parameter Name="tag" Type="System.String" />
+        <Parameter Name="var_args" Type="System.IntPtr" />
+      </Parameters>
+      <Docs>
+        <summary>To be added</summary>
+        <param name="mode">a <see cref="T:System.Int32" /></param>
+        <param name="tag">a <see cref="T:System.String" /></param>
+        <param name="var_args">a <see cref="T:System.IntPtr" /></param>
+        <remarks>To be added</remarks>
+      </Docs>
+    </Member>
+    <Member MemberName="Merge">
+      <MemberSignature Language="C#" Value="public virtual void Merge (Gst.TagList list, Gst.TagMergeMode mode);" />
+      <MemberType>Method</MemberType>
+      <ReturnValue>
+        <ReturnType>System.Void</ReturnType>
+      </ReturnValue>
+      <Parameters>
+        <Parameter Name="list" Type="Gst.TagList" />
+        <Parameter Name="mode" Type="Gst.TagMergeMode" />
+      </Parameters>
+      <Docs>
+        <summary>To be added</summary>
+        <param name="list">a <see cref="T:Gst.TagList" /></param>
+        <param name="mode">a <see cref="T:System.Int32" /></param>
+        <remarks>To be added</remarks>
+      </Docs>
+    </Member>
+    <Member MemberName="AddValistValues">
+      <MemberSignature Language="C#" Value="public virtual void AddValistValues (Gst.TagMergeMode mode, string tag, IntPtr var_args);" />
+      <MemberType>Method</MemberType>
+      <ReturnValue>
+        <ReturnType>System.Void</ReturnType>
+      </ReturnValue>
+      <Parameters>
+        <Parameter Name="mode" Type="Gst.TagMergeMode" />
+        <Parameter Name="tag" Type="System.String" />
+        <Parameter Name="var_args" Type="System.IntPtr" />
+      </Parameters>
+      <Docs>
+        <summary>To be added</summary>
+        <param name="mode">a <see cref="T:System.Int32" /></param>
+        <param name="tag">a <see cref="T:System.String" /></param>
+        <param name="var_args">a <see cref="T:System.IntPtr" /></param>
+        <remarks>To be added</remarks>
+      </Docs>
+    </Member>
+    <Member MemberName="MergeMode">
+      <MemberSignature Language="C#" Value="public virtual Gst.TagMergeMode MergeMode { set; get; };" />
+      <MemberType>Property</MemberType>
+      <ReturnValue>
+        <ReturnType>Gst.TagMergeMode</ReturnType>
+      </ReturnValue>
+      <Parameters />
+      <Docs>
+        <summary>To be added</summary>
+        <returns>a <see cref="T:Gst.TagMergeMode" /></returns>
+        <remarks>To be added</remarks>
+      </Docs>
+    </Member>
+    <Member MemberName="List">
+      <MemberSignature Language="C#" Value="public virtual Gst.TagList List { get; };" />
+      <MemberType>Property</MemberType>
+      <ReturnValue>
+        <ReturnType>Gst.TagList</ReturnType>
+      </ReturnValue>
+      <Parameters />
+      <Docs>
+        <summary>To be added</summary>
+        <returns>a <see cref="T:Gst.TagList" /></returns>
+        <remarks>To be added</remarks>
+      </Docs>
+    </Member>
+  </Members>
+</Type>

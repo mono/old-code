@@ -1,0 +1,70 @@
+<Type Name="Init" FullName="Gst.Init">
+  <TypeSignature Language="C#" Value="public class Init" Maintainer="auto" />
+  <AssemblyInfo>
+    <AssemblyName>gst-sharp</AssemblyName>
+    <AssemblyPublicKey>
+    </AssemblyPublicKey>
+    <AssemblyVersion>0.0.0.0</AssemblyVersion>
+    <AssemblyCulture>neutral</AssemblyCulture>
+    <Attributes />
+  </AssemblyInfo>
+  <ThreadSafetyStatement>Gtk# is thread aware, but not thread safe; See the <link location="node:gtk-sharp/programming/threads">Gtk# Thread Programming</link> for details.</ThreadSafetyStatement>
+  <Docs>
+    <summary>To be added</summary>
+    <remarks>To be added</remarks>
+  </Docs>
+  <Base>
+    <BaseTypeName>System.Object</BaseTypeName>
+  </Base>
+  <Interfaces />
+  <Attributes />
+  <Members>
+    <Member MemberName="Check">
+      <MemberSignature Language="C#" Value="public static bool Check (out int argc, string [] argv);" />
+      <MemberType>Method</MemberType>
+      <ReturnValue>
+        <ReturnType>System.Boolean</ReturnType>
+      </ReturnValue>
+      <Parameters>
+        <Parameter Name="argc" Type="System.Int32&amp;" RefType="out" />
+        <Parameter Name="argv" Type="System.String[]" />
+      </Parameters>
+      <Docs>
+        <summary>To be added</summary>
+        <param name="argc">a <see cref="T:System.Int32" /></param>
+        <param name="argv">a <see cref="T:System.String" /></param>
+        <returns>a <see cref="T:System.Boolean" /></returns>
+        <remarks>To be added</remarks>
+      </Docs>
+    </Member>
+    <Member MemberName="WithPoptTable">
+      <MemberSignature Language="C#" Value="public static int WithPoptTable (string [] argv, Gst.PoptOption gboolean);" />
+      <MemberType>Method</MemberType>
+      <ReturnValue>
+        <ReturnType>System.Int32</ReturnType>
+      </ReturnValue>
+      <Parameters>
+        <Parameter Name="argv" Type="System.String[]" />
+        <Parameter Name="gboolean" Type="Gst.PoptOption" />
+      </Parameters>
+      <Docs>
+        <summary>To be added</summary>
+        <param name="argv">a <see cref="T:System.String" /></param>
+        <param name="gboolean">a <see cref="T:Gst.PoptOption" /></param>
+        <returns>a <see cref="T:System.Int32" /></returns>
+        <remarks>To be added</remarks>
+      </Docs>
+    </Member>
+    <Member MemberName=".ctor">
+      <MemberSignature Language="C#" Value="public Init ();" />
+      <MemberType>Constructor</MemberType>
+      <ReturnValue />
+      <Parameters />
+      <Docs>
+        <summary>To be added</summary>
+        <returns>a <see cref="T:Gst.Init" /></returns>
+        <remarks>To be added</remarks>
+      </Docs>
+    </Member>
+  </Members>
+</Type>

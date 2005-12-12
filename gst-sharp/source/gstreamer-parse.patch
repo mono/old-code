@@ -1,0 +1,193 @@
+diff -ur gstreamer-0.8.7.orig/gst/elements/gstmultifilesrc.c gstreamer-0.8.7/gst/elements/gstmultifilesrc.c
+--- gstreamer-0.8.7.orig/gst/elements/gstmultifilesrc.c	2004-08-24 11:19:17.000000000 +0200
++++ gstreamer-0.8.7/gst/elements/gstmultifilesrc.c	2004-10-30 14:42:26.106321811 +0200
+@@ -115,7 +115,9 @@
+ 
+ 
+ 
+-  g_object_class_install_property (G_OBJECT_CLASS (klass), ARG_LOCATIONS, g_param_spec_pointer ("locations", "locations", "locations", G_PARAM_READWRITE));     /* CHECKME */
++  g_object_class_install_property (G_OBJECT_CLASS (klass), ARG_LOCATIONS, 
++      g_param_spec_pointer ("locations", "locations", 
++          "locations", G_PARAM_READWRITE));     /* CHECKME */
+   g_object_class_install_property (G_OBJECT_CLASS (klass), ARG_HAVENEWMEDIA,
+       g_param_spec_boolean ("newmedia", "newmedia",
+           "generate new media events?", FALSE, G_PARAM_READWRITE));
+Only in gstreamer-0.8.7/gst/elements: gstmultifilesrc.c~
+diff -ur gstreamer-0.8.7.orig/gst/elements/gstpipefilter.c gstreamer-0.8.7/gst/elements/gstpipefilter.c
+--- gstreamer-0.8.7.orig/gst/elements/gstpipefilter.c	2004-08-24 11:19:17.000000000 +0200
++++ gstreamer-0.8.7/gst/elements/gstpipefilter.c	2004-10-30 14:45:26.621757318 +0200
+@@ -112,7 +112,9 @@
+   gobject_class->set_property = gst_pipefilter_set_property;
+   gobject_class->get_property = gst_pipefilter_get_property;
+ 
+-  g_object_class_install_property (G_OBJECT_CLASS (klass), ARG_COMMAND, g_param_spec_string ("command", "command", "command", NULL, G_PARAM_READWRITE));        /* CHECKME */
++  g_object_class_install_property (G_OBJECT_CLASS (klass), ARG_COMMAND,
++      g_param_spec_string ("command", "command", "command",
++          NULL, G_PARAM_READWRITE));        /* CHECKME */
+ 
+   gstelement_class->change_state = gst_pipefilter_change_state;
+ }
+Only in gstreamer-0.8.7/gst/elements: gstpipefilter.c.orig
+diff -ur gstreamer-0.8.7.orig/gst/gstatomic_impl.h gstreamer-0.8.7/gst/gstatomic_impl.h
+--- gstreamer-0.8.7.orig/gst/gstatomic_impl.h	2004-08-05 16:25:55.000000000 +0200
++++ gstreamer-0.8.7/gst/gstatomic_impl.h	2004-10-30 14:45:26.621757318 +0200
+@@ -383,7 +383,6 @@
+ 
+ /***** S/390 *****/
+ #elif defined(HAVE_CPU_S390) && defined(__GNUC__)
+-typedef struct { volatile int counter; } atomic_t __attribute__ ((aligned (4)));
+ 
+ GST_INLINE_FUNC void 	gst_atomic_int_init 	(GstAtomicInt *aint, gint val) { aint->counter = val; }
+ GST_INLINE_FUNC void 	gst_atomic_int_destroy 	(GstAtomicInt *aint) { } 
+diff -ur gstreamer-0.8.7.orig/gst/gstpad.c gstreamer-0.8.7/gst/gstpad.c
+--- gstreamer-0.8.7.orig/gst/gstpad.c	2004-09-26 18:20:23.000000000 +0200
++++ gstreamer-0.8.7/gst/gstpad.c	2004-10-30 14:45:26.627756968 +0200
+@@ -227,7 +227,7 @@
+       gst_marshal_VOID__OBJECT, G_TYPE_NONE, 1, GST_TYPE_PAD);
+   gst_real_pad_signals[REAL_FIXATE] =
+       g_signal_new ("fixate", G_TYPE_FROM_CLASS (klass), G_SIGNAL_RUN_LAST,
+-      G_STRUCT_OFFSET (GstRealPadClass, appfixatefunc),
++      G_STRUCT_OFFSET (GstRealPadClass, fixate),
+       _gst_real_pad_fixate_accumulator, NULL,
+       gst_marshal_BOXED__BOXED, GST_TYPE_CAPS, 1,
+       GST_TYPE_CAPS | G_SIGNAL_TYPE_STATIC_SCOPE);
+Only in gstreamer-0.8.7/gst: gstpad.c.orig
+diff -ur gstreamer-0.8.7.orig/gst/gstpad.h gstreamer-0.8.7/gst/gstpad.h
+--- gstreamer-0.8.7.orig/gst/gstpad.h	2004-07-15 18:20:11.000000000 +0200
++++ gstreamer-0.8.7/gst/gstpad.h	2004-10-30 14:45:26.628756909 +0200
+@@ -212,11 +212,10 @@
+ 
+   /* signal callbacks */
+   void		(*caps_nego_failed)	(GstPad *pad, GstCaps *caps);
+-
+   void 		(*linked)		(GstPad *pad, GstPad *peer);
+   void 		(*unlinked)		(GstPad *pad, GstPad *peer);
+-  GstPadFixateFunction		 appfixatefunc;
+-
++  GstCaps*      (*fixate)               (GstPad *pad, const GstCaps *caps);
++  
+   gpointer _gst_reserved[GST_PADDING];
+ };
+ 
+Only in gstreamer-0.8.7/gst: gstpad.h.orig
+diff -ur gstreamer-0.8.7.orig/gst/gstprobe.c gstreamer-0.8.7/gst/gstprobe.c
+--- gstreamer-0.8.7.orig/gst/gstprobe.c	2004-05-09 16:59:28.000000000 +0200
++++ gstreamer-0.8.7/gst/gstprobe.c	2004-10-30 14:45:26.686753518 +0200
+@@ -147,22 +147,6 @@
+ }
+ 
+ /**
+- * gst_probe_dispatcher_set_active:
+- * @disp: the dispatcher to activate
+- * @active: boolean to indicate activation or deactivation
+- *
+- * Activate or deactivate the given dispatcher
+- * dispatchers.
+- */
+-void
+-gst_probe_dispatcher_set_active (GstProbeDispatcher * disp, gboolean active)
+-{
+-  g_return_if_fail (disp);
+-
+-  disp->active = active;
+-}
+-
+-/**
+  * gst_probe_dispatcher_add_probe:
+  * @disp: the dispatcher to add the probe to
+  * @probe: the probe to add to the dispatcher
+diff -ur gstreamer-0.8.7.orig/gst/gstprobe.h gstreamer-0.8.7/gst/gstprobe.h
+--- gstreamer-0.8.7.orig/gst/gstprobe.h	2004-03-15 16:08:32.000000000 +0100
++++ gstreamer-0.8.7/gst/gstprobe.h	2004-10-30 14:45:26.686753518 +0200
+@@ -63,7 +63,6 @@
+ void			gst_probe_dispatcher_destroy 		(GstProbeDispatcher *disp);
+ void			gst_probe_dispatcher_init 		(GstProbeDispatcher *disp);
+ 
+-void			gst_probe_dispatcher_set_active		(GstProbeDispatcher *disp, gboolean active);
+ void			gst_probe_dispatcher_add_probe		(GstProbeDispatcher *disp, GstProbe *probe);
+ void			gst_probe_dispatcher_remove_probe	(GstProbeDispatcher *disp, GstProbe *probe);
+ 
+diff -ur gstreamer-0.8.7.orig/gst/gstqueue.h gstreamer-0.8.7/gst/gstqueue.h
+--- gstreamer-0.8.7.orig/gst/gstqueue.h	2004-07-29 16:19:55.000000000 +0200
++++ gstreamer-0.8.7/gst/gstqueue.h	2004-10-30 14:45:26.687753460 +0200
+@@ -41,11 +41,11 @@
+ #define GST_IS_QUEUE_CLASS(obj) \
+   (G_TYPE_CHECK_CLASS_TYPE((klass),GST_TYPE_QUEUE))
+ 
+-enum {
++typedef enum {
+   GST_QUEUE_NO_LEAK		= 0,
+   GST_QUEUE_LEAK_UPSTREAM	= 1,
+   GST_QUEUE_LEAK_DOWNSTREAM	= 2
+-};
++} GstQueueLeaky;
+ 
+ typedef struct _GstQueue GstQueue;
+ typedef struct _GstQueueSize GstQueueSize;
+diff -ur gstreamer-0.8.7.orig/gst/gsttrace.c gstreamer-0.8.7/gst/gsttrace.c
+--- gstreamer-0.8.7.orig/gst/gsttrace.c	2004-05-11 14:23:53.000000000 +0200
++++ gstreamer-0.8.7/gst/gsttrace.c	2004-10-30 14:45:26.687753460 +0200
+@@ -289,7 +289,7 @@
+     GstAllocTrace *trace = (GstAllocTrace *) walk->data;
+ 
+     GST_DEBUG ("set flags on %p\n", trace);
+-    gst_alloc_trace_set_flags (trace, flags);
++    trace->flags = flags;
+ 
+     walk = g_list_next (walk);
+   }
+@@ -358,18 +358,3 @@
+   }
+   g_print ("\n");
+ }
+-
+-/**
+- * gst_alloc_trace_set_flags:
+- * @trace: the GstAllocTrace 
+- * @flags: flags to set 
+- *
+- * Enable the given features on the given GstAllocTrace object.
+- */
+-void
+-gst_alloc_trace_set_flags (GstAllocTrace * trace, GstAllocTraceFlags flags)
+-{
+-  g_return_if_fail (trace != NULL);
+-
+-  trace->flags = flags;
+-}
+diff -ur gstreamer-0.8.7.orig/gst/gsttrace.h gstreamer-0.8.7/gst/gsttrace.h
+--- gstreamer-0.8.7.orig/gst/gsttrace.h	2004-07-04 12:25:51.000000000 +0200
++++ gstreamer-0.8.7/gst/gsttrace.h	2004-10-30 14:45:26.703752524 +0200
+@@ -78,11 +78,10 @@
+ typedef struct _GstAllocTrace 	GstAllocTrace;
+ 
+ struct _GstAllocTrace {
+-  gchar		*name;
+-  gint		 flags;
+-
+-  gint		 live;
+-  GSList	*mem_live;
++  gchar		     *name;
++  GstAllocTraceFlags flags;
++  gint		     live;
++  GSList	     *mem_live;
+ };
+ 
+ gboolean		gst_alloc_trace_available	(void);
+@@ -95,7 +94,6 @@
+ 
+ GstAllocTrace*		gst_alloc_trace_get		(const gchar *name);
+ void			gst_alloc_trace_print		(const GstAllocTrace *trace);
+-void			gst_alloc_trace_set_flags	(GstAllocTrace *trace, GstAllocTraceFlags flags);
+ 
+ 
+ #ifndef GST_DISABLE_ALLOC_TRACE
+@@ -160,7 +158,6 @@
+                                                                                                                     
+ #define		gst_alloc_trace_get(name)	(NULL)
+ #define		gst_alloc_trace_print(trace)
+-#define		gst_alloc_trace_set_flags(trace,flags)
+ 
+ #define         gst_trace_add_entry(trace,seq,data,msg)
+ 
+Only in gstreamer-0.8.7/gst: gsttrace.h.orig

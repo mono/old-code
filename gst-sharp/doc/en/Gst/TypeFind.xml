@@ -1,0 +1,139 @@
+<Type Name="TypeFind" FullName="Gst.TypeFind">
+  <TypeSignature Language="C#" Value="public sealed struct TypeFind" Maintainer="auto" />
+  <AssemblyInfo>
+    <AssemblyName>gst-sharp</AssemblyName>
+    <AssemblyPublicKey>
+    </AssemblyPublicKey>
+    <AssemblyVersion>0.0.0.0</AssemblyVersion>
+    <AssemblyCulture>neutral</AssemblyCulture>
+    <Attributes />
+  </AssemblyInfo>
+  <ThreadSafetyStatement>Gtk# is thread aware, but not thread safe; See the <link location="node:gtk-sharp/programming/threads">Gtk# Thread Programming</link> for details.</ThreadSafetyStatement>
+  <Docs>
+    <summary>To be added</summary>
+    <remarks>To be added</remarks>
+  </Docs>
+  <Base>
+    <BaseTypeName>System.ValueType</BaseTypeName>
+  </Base>
+  <Interfaces />
+  <Attributes />
+  <Members>
+    <Member MemberName="Zero">
+      <MemberSignature Language="C#" Value="public static Gst.TypeFind Zero;" />
+      <MemberType>Field</MemberType>
+      <ReturnValue>
+        <ReturnType>Gst.TypeFind</ReturnType>
+      </ReturnValue>
+      <Parameters>
+      </Parameters>
+      <Docs>
+        <summary>To be added</summary>
+        <remarks>To be added</remarks>
+      </Docs>
+    </Member>
+    <Member MemberName="GstReserved">
+      <MemberSignature Language="C#" Value="public IntPtr [] GstReserved;" />
+      <MemberType>Field</MemberType>
+      <ReturnValue>
+        <ReturnType>System.IntPtr[]</ReturnType>
+      </ReturnValue>
+      <Parameters>
+      </Parameters>
+      <Docs>
+        <summary>To be added</summary>
+        <remarks>To be added</remarks>
+      </Docs>
+    </Member>
+    <Member MemberName="New">
+      <MemberSignature Language="C#" Value="public static Gst.TypeFind New (IntPtr raw);" />
+      <MemberType>Method</MemberType>
+      <ReturnValue>
+        <ReturnType>Gst.TypeFind</ReturnType>
+      </ReturnValue>
+      <Parameters>
+        <Parameter Name="raw" Type="System.IntPtr" />
+      </Parameters>
+      <Docs>
+        <summary>To be added</summary>
+        <param name="raw">a <see cref="T:System.IntPtr" /></param>
+        <returns>a <see cref="T:Gst.TypeFind" /></returns>
+        <remarks>To be added</remarks>
+      </Docs>
+    </Member>
+    <Member MemberName="Register">
+      <MemberSignature Language="C#" Value="public static bool Register (Gst.Plugin plugin, string name, uint rank, Gst.TypeFindFunction func, string extensions, Gst.Caps possible_caps);" />
+      <MemberType>Method</MemberType>
+      <ReturnValue>
+        <ReturnType>System.Boolean</ReturnType>
+      </ReturnValue>
+      <Parameters>
+        <Parameter Name="plugin" Type="Gst.Plugin" />
+        <Parameter Name="name" Type="System.String" />
+        <Parameter Name="rank" Type="System.UInt32" />
+        <Parameter Name="func" Type="Gst.TypeFindFunction" />
+        <Parameter Name="extensions" Type="System.String" />
+        <Parameter Name="possible_caps" Type="Gst.Caps" />
+      </Parameters>
+      <Docs>
+        <summary>To be added</summary>
+        <param name="plugin">a <see cref="T:Gst.Plugin" /></param>
+        <param name="name">a <see cref="T:System.String" /></param>
+        <param name="rank">a <see cref="T:System.UInt32" /></param>
+        <param name="func">a <see cref="T:Gst.TypeFindFunction" /></param>
+        <param name="extensions">a <see cref="T:System.String" /></param>
+        <param name="possible_caps">a <see cref="T:Gst.Caps" /></param>
+        <returns>a <see cref="T:System.Boolean" /></returns>
+        <remarks>To be added</remarks>
+      </Docs>
+    </Member>
+    <Member MemberName="Suggest">
+      <MemberSignature Language="C#" Value="public void Suggest (uint probability, Gst.Caps caps);" />
+      <MemberType>Method</MemberType>
+      <ReturnValue>
+        <ReturnType>System.Void</ReturnType>
+      </ReturnValue>
+      <Parameters>
+        <Parameter Name="probability" Type="System.UInt32" />
+        <Parameter Name="caps" Type="Gst.Caps" />
+      </Parameters>
+      <Docs>
+        <summary>To be added</summary>
+        <param name="probability">a <see cref="T:System.UInt32" /></param>
+        <param name="caps">a <see cref="T:Gst.Caps" /></param>
+        <remarks>To be added</remarks>
+      </Docs>
+    </Member>
+    <Member MemberName="Peek">
+      <MemberSignature Language="C#" Value="public byte Peek (long offset, uint size);" />
+      <MemberType>Method</MemberType>
+      <ReturnValue>
+        <ReturnType>System.Byte</ReturnType>
+      </ReturnValue>
+      <Parameters>
+        <Parameter Name="offset" Type="System.Int64" />
+        <Parameter Name="size" Type="System.UInt32" />
+      </Parameters>
+      <Docs>
+        <summary>To be added</summary>
+        <param name="offset">a <see cref="T:System.Int64" /></param>
+        <param name="size">a <see cref="T:System.UInt32" /></param>
+        <returns>a <see cref="T:System.Byte" /></returns>
+        <remarks>To be added</remarks>
+      </Docs>
+    </Member>
+    <Member MemberName="Length">
+      <MemberSignature Language="C#" Value="public ulong Length { get; };" />
+      <MemberType>Property</MemberType>
+      <ReturnValue>
+        <ReturnType>System.UInt64</ReturnType>
+      </ReturnValue>
+      <Parameters />
+      <Docs>
+        <summary>To be added</summary>
+        <returns>a <see cref="T:System.UInt64" /></returns>
+        <remarks>To be added</remarks>
+      </Docs>
+    </Member>
+  </Members>
+</Type>

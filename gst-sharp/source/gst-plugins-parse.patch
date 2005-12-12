@@ -1,0 +1,172 @@
+diff -ur gst-plugins-0.8.5.orig/gst-libs/gst/colorbalance/colorbalancechannel.h gst-plugins-0.8.5/gst-libs/gst/colorbalance/colorbalancechannel.h
+--- gst-plugins-0.8.5.orig/gst-libs/gst/colorbalance/colorbalancechannel.h	2004-10-30 14:46:48.589966876 +0200
++++ gst-plugins-0.8.5/gst-libs/gst/colorbalance/colorbalancechannel.h	2004-10-30 14:47:33.107366739 +0200
+@@ -39,15 +39,18 @@
+ #define GST_IS_COLOR_BALANCE_CHANNEL_CLASS(klass) \
+   (G_TYPE_CHECK_CLASS_TYPE ((klass), GST_TYPE_COLOR_BALANCE_CHANNEL))
+ 
+-typedef struct _GstColorBalanceChannel {
++typedef struct _GstColorBalanceChannel GstColorBalanceChannel;
++typedef struct _GstColorBalanceChannelClass GstColorBalanceChannelClass;
++
++struct _GstColorBalanceChannel {
+   GObject parent;
+ 
+   gchar  *label;
+   gint    min_value,
+ 	  max_value;
+-} GstColorBalanceChannel;
++};
+ 
+-typedef struct _GstColorBalanceChannelClass {
++struct _GstColorBalanceChannelClass {
+   GObjectClass parent;
+ 
+   /* signals */
+@@ -55,7 +58,7 @@
+ 			  gint                    value);
+ 
+   gpointer _gst_reserved[GST_PADDING];
+-} GstColorBalanceChannelClass;
++};
+ 
+ GType	gst_color_balance_channel_get_type (void);
+ 
+diff -ur gst-plugins-0.8.5.orig/gst-libs/gst/tuner/tunerchannel.h gst-plugins-0.8.5/gst-libs/gst/tuner/tunerchannel.h
+--- gst-plugins-0.8.5.orig/gst-libs/gst/tuner/tunerchannel.h	2004-10-30 14:46:48.591966760 +0200
++++ gst-plugins-0.8.5/gst-libs/gst/tuner/tunerchannel.h	2004-10-30 14:47:33.108366681 +0200
+@@ -49,7 +49,10 @@
+ #define GST_TUNER_CHANNEL_HAS_FLAG(channel, flag) \
+   ((channel)->flags & flag)
+ 
+-typedef struct _GstTunerChannel {
++typedef struct _GstTunerChannel GstTunerChannel;
++typedef struct _GstTunerChannelClass GstTunerChannelClass;
++
++struct _GstTunerChannel {
+   GObject              parent;
+ 
+   gchar               *label;
+@@ -59,9 +62,9 @@
+ 		       max_frequency;
+   gint                 min_signal,
+ 		       max_signal;
+-} GstTunerChannel;
++};
+ 
+-typedef struct _GstTunerChannelClass {
++struct _GstTunerChannelClass {
+   GObjectClass parent;
+ 
+   /* signals */
+@@ -71,7 +74,7 @@
+ 			     gint             signal);
+ 
+   gpointer _gst_reserved[GST_PADDING];
+-} GstTunerChannelClass;
++};
+ 
+ GType		gst_tuner_channel_get_type	(void);
+ 
+diff -ur gst-plugins-0.8.5.orig/gst-libs/gst/tuner/tunernorm.h gst-plugins-0.8.5/gst-libs/gst/tuner/tunernorm.h
+--- gst-plugins-0.8.5.orig/gst-libs/gst/tuner/tunernorm.h	2004-10-30 14:46:48.591966760 +0200
++++ gst-plugins-0.8.5/gst-libs/gst/tuner/tunernorm.h	2004-10-30 14:47:33.108366681 +0200
+@@ -37,18 +37,21 @@
+ #define GST_IS_TUNER_NORM_CLASS(klass) \
+   (G_TYPE_CHECK_CLASS_TYPE ((klass), GST_TYPE_TUNER_NORM))
+ 
+-typedef struct _GstTunerNorm {
++typedef struct _GstTunerNorm GstTunerNorm;
++typedef struct _GstTunerNormClass GstTunerNormClass;
++
++struct _GstTunerNorm {
+   GObject parent;
+ 
+   gchar  *label;
+   gfloat  fps;
+-} GstTunerNorm;
++};
+ 
+-typedef struct _GstTunerNormClass {
++struct _GstTunerNormClass {
+   GObjectClass parent;
+ 
+   gpointer _gst_reserved[GST_PADDING];
+-} GstTunerNormClass;
++};
+ 
+ GType		gst_tuner_norm_get_type		(void);
+ 
+--- gst-plugins-0.8.7/gst-libs/gst/colorbalance/colorbalance.h	2004-04-28 18:09:22.000000000 +0200
++++ gst-plugins-0.8.7.new/gst-libs/gst/colorbalance/colorbalance.h	2005-01-25 22:24:56.696850147 +0100
+@@ -46,14 +46,15 @@
+ #define GST_COLOR_BALANCE_TYPE(klass) (klass->balance_type)
+ 
+ typedef struct _GstColorBalance GstColorBalance;
+-  
++typedef struct _GstColorBalanceClass GstColorBalanceClass;
++
+ typedef enum
+ {
+   GST_COLOR_BALANCE_HARDWARE,
+   GST_COLOR_BALANCE_SOFTWARE
+ } GstColorBalanceType;
+ 
+-typedef struct _GstColorBalanceClass {
++struct _GstColorBalanceClass {
+   GTypeInterface klass;
+ 
+   GstColorBalanceType balance_type;
+@@ -73,7 +74,7 @@
+ 			  gint                    value);
+ 
+   gpointer _gst_reserved[GST_PADDING];
+-} GstColorBalanceClass;
++};
+ 
+ GType	gst_color_balance_get_type	(void);
+ 
+--- gst-plugins-0.8.7.new/gst-libs/gst/tuner/tuner.h	2004-03-15 20:25:26.000000000 +0100
++++ gst-plugins-0.8.7/gst-libs/gst/tuner/tuner.h	2005-01-25 22:32:25.591791027 +0100
+@@ -43,8 +43,9 @@
+   (G_TYPE_INSTANCE_GET_INTERFACE ((inst), GST_TYPE_TUNER, GstTunerClass))
+ 
+ typedef struct _GstTuner GstTuner;
++typedef struct _GstTunerClass GstTunerClass;
+ 
+-typedef struct _GstTunerClass {
++struct _GstTunerClass {
+   GTypeInterface klass;
+ 
+   /* virtual functions */
+@@ -80,7 +81,7 @@
+ 			     gint             signal);
+ 
+   gpointer _gst_reserved[GST_PADDING];
+-} GstTunerClass;
++};
+ 
+ GType		gst_tuner_get_type		(void);
+ 
+--- gst-plugins-0.8.7/gst-libs/gst/xoverlay/xoverlay.h	2004-03-15 20:25:26.000000000 +0100
++++ gst-plugins-0.8.7.new/gst-libs/gst/xoverlay/xoverlay.h	2005-01-25 22:34:42.945324380 +0100
+@@ -42,8 +42,9 @@
+   (G_TYPE_INSTANCE_GET_INTERFACE ((inst), GST_TYPE_X_OVERLAY, GstXOverlayClass))
+ 
+ typedef struct _GstXOverlay GstXOverlay;
++typedef struct _GstXOverlayClass GstXOverlayClass;
+ 
+-typedef struct _GstXOverlayClass {
++struct _GstXOverlayClass {
+   GTypeInterface klass;
+ 
+   /* virtual functions */
+@@ -63,7 +64,7 @@
+ 			   guint height);
+ 
+   gpointer _gst_reserved[GST_PADDING];
+-} GstXOverlayClass;
++};
+ 
+ GType	gst_x_overlay_get_type		(void);
+ 

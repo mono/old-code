@@ -1,0 +1,115 @@
+<Type Name="Query" FullName="Gst.Query">
+  <TypeSignature Language="C#" Value="public class Query" Maintainer="auto" />
+  <AssemblyInfo>
+    <AssemblyName>gst-sharp</AssemblyName>
+    <AssemblyPublicKey>
+    </AssemblyPublicKey>
+    <AssemblyVersion>0.0.0.0</AssemblyVersion>
+    <AssemblyCulture>neutral</AssemblyCulture>
+    <Attributes />
+  </AssemblyInfo>
+  <ThreadSafetyStatement>Gtk# is thread aware, but not thread safe; See the <link location="node:gtk-sharp/programming/threads">Gtk# Thread Programming</link> for details.</ThreadSafetyStatement>
+  <Docs>
+    <summary>To be added</summary>
+    <remarks>To be added</remarks>
+  </Docs>
+  <Base>
+    <BaseTypeName>System.Object</BaseTypeName>
+  </Base>
+  <Interfaces />
+  <Attributes />
+  <Members>
+    <Member MemberName="TypeRegister">
+      <MemberSignature Language="C#" Value="public static Gst.QueryType TypeRegister (string nick, string description);" />
+      <MemberType>Method</MemberType>
+      <ReturnValue>
+        <ReturnType>Gst.QueryType</ReturnType>
+      </ReturnValue>
+      <Parameters>
+        <Parameter Name="nick" Type="System.String" />
+        <Parameter Name="description" Type="System.String" />
+      </Parameters>
+      <Docs>
+        <summary>To be added</summary>
+        <param name="nick">a <see cref="T:System.String" /></param>
+        <param name="description">a <see cref="T:System.String" /></param>
+        <returns>a <see cref="T:Gst.QueryType" /></returns>
+        <remarks>To be added</remarks>
+      </Docs>
+    </Member>
+    <Member MemberName="TypeGetByNick">
+      <MemberSignature Language="C#" Value="public static Gst.QueryType TypeGetByNick (string nick);" />
+      <MemberType>Method</MemberType>
+      <ReturnValue>
+        <ReturnType>Gst.QueryType</ReturnType>
+      </ReturnValue>
+      <Parameters>
+        <Parameter Name="nick" Type="System.String" />
+      </Parameters>
+      <Docs>
+        <summary>To be added</summary>
+        <param name="nick">a <see cref="T:System.String" /></param>
+        <returns>a <see cref="T:Gst.QueryType" /></returns>
+        <remarks>To be added</remarks>
+      </Docs>
+    </Member>
+    <Member MemberName="TypesContains">
+      <MemberSignature Language="C#" Value="public static bool TypesContains (out Gst.QueryType types, Gst.QueryType type);" />
+      <MemberType>Method</MemberType>
+      <ReturnValue>
+        <ReturnType>System.Boolean</ReturnType>
+      </ReturnValue>
+      <Parameters>
+        <Parameter Name="types" Type="Gst.QueryType&amp;" RefType="out" />
+        <Parameter Name="type" Type="Gst.QueryType" />
+      </Parameters>
+      <Docs>
+        <summary>To be added</summary>
+        <param name="types">a <see cref="T:Gst.QueryType" /></param>
+        <param name="type">a <see cref="T:System.Int32" /></param>
+        <returns>a <see cref="T:System.Boolean" /></returns>
+        <remarks>To be added</remarks>
+      </Docs>
+    </Member>
+    <Member MemberName="TypeGetDetails">
+      <MemberSignature Language="C#" Value="public static Gst.QueryTypeDefinition TypeGetDetails (Gst.QueryType type);" />
+      <MemberType>Method</MemberType>
+      <ReturnValue>
+        <ReturnType>Gst.QueryTypeDefinition</ReturnType>
+      </ReturnValue>
+      <Parameters>
+        <Parameter Name="type" Type="Gst.QueryType" />
+      </Parameters>
+      <Docs>
+        <summary>To be added</summary>
+        <param name="type">a <see cref="T:System.Int32" /></param>
+        <returns>a <see cref="T:Gst.QueryTypeDefinition" /></returns>
+        <remarks>To be added</remarks>
+      </Docs>
+    </Member>
+    <Member MemberName="TypeGetDefinitions">
+      <MemberSignature Language="C#" Value="public static GLib.List TypeGetDefinitions ();" />
+      <MemberType>Method</MemberType>
+      <ReturnValue>
+        <ReturnType>GLib.List</ReturnType>
+      </ReturnValue>
+      <Parameters />
+      <Docs>
+        <summary>To be added</summary>
+        <returns>a <see cref="T:GLib.List" /></returns>
+        <remarks>To be added</remarks>
+      </Docs>
+    </Member>
+    <Member MemberName=".ctor">
+      <MemberSignature Language="C#" Value="public Query ();" />
+      <MemberType>Constructor</MemberType>
+      <ReturnValue />
+      <Parameters />
+      <Docs>
+        <summary>To be added</summary>
+        <returns>a <see cref="T:Gst.Query" /></returns>
+        <remarks>To be added</remarks>
+      </Docs>
+    </Member>
+  </Members>
+</Type>

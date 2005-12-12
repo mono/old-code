@@ -1,0 +1,84 @@
+The contents of this directory are (basically) the first step
+in creating .NET bindings, to libraries based on GObject.
+
+QUICK INSTRUCTIONS
+------------------
+
+    Edit the .metadata file(s), then do a:
+
+        make get-source-code
+        make api
+
+   You only have to do a "make get-source-code" once!  After
+    you have run "make get-source-code" once, do the following...
+
+
+    Edit the .metadata file(s), then do a:
+
+        make api
+
+
+    Note, these instructions only generate XML files in the
+    "gst-sharp" directory.  To turn those XML files (in the
+    "gst-sharp" directory) into C# code; and then turn that C# code
+    into a .DLL, you'll need to perform extra steps, which are NOT
+    described in this document.
+
+    (If you are going to create a new .NET binding, then you will need
+    to do more than just this.)
+
+
+WHO USES THE SOURCES DIRECTORY
+------------------------------
+
+    This directory is essentially the "starting point" in the creation
+    of a .NET binding.  Most people can safely ignore it.  (If all
+    you want to do is build Gst#, then you can ignore what's in this
+    directory.)
+
+    This directory is not part of the normal "build process" for Gst#.
+    But is instead used by people wishing to update an existing .NET
+    binding; or to create a new .NET binding (for a GObject based library).
+
+
+WHAT'S REQUIRED
+---------------
+
+    Before you can do anything here, you need to get the source
+    code to the various libraries (which you are generating .NET
+    bindings for).  And then do a little configuring.  The current
+    version supported by Gst# is
+
+        gstreamer-0.8.1
+
+SETTING THINGS UP
+-----------------
+
+    To set things up, you need to get the source code to the libraries listed
+    above.  There are two (alternate) methods of doing this.
+
+        Method 1)
+            Download it.  Unpack the source code (if necessary).  Then
+            do the extra cofiguration stuff listed above.
+
+        Method 2)
+            Run:
+                make get-source-code
+
+
+    (Method 2 is probably the easiest way to do it for most people. It
+    automatically goes and downloads everything you need.  And
+    configures everything for you.)
+
+
+EDITING .METADATA FILES
+-----------------------
+
+    Part of updating a .NET binding involves editing a .metadata file.  
+    (Assuming you already have the required source code, to the
+    libraries...) once you update a binding, you then run:
+
+        make api
+
+    ...to create the new updated XML file(s) that will be placed in
+    the "gst-sharp" directory.
