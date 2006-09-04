@@ -1,9 +1,0 @@
-<gapi-parser-input>
-  <api filename="dbus-api.xml">
-    <library name="dbus-glib-1">
-      <namespace name="DBus">
-        <dir>.</dir>
-      </namespace>
-    </library>
-  </api>
-</gapi-parser-input>

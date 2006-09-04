@@ -1,2 +1,0 @@
-// from npapi.h
-NP_ABI_MASK = 0x11000000,

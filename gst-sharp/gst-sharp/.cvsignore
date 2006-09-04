@@ -1,9 +1,0 @@
-*.dll
-generated
-generated-stamp
-Makefile
-Makefile.in
-*-api.xml
-AssemblyInfo.cs
-gst-sharp.dll.config
-gtk-sharp.pub

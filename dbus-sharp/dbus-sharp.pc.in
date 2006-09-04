@@ -1,6 +1,0 @@
-prefix=@prefix@
-
-
-Name: DBus#
-Description: DBus# - DBus .NET Bindings
-Version: @VERSION@

@@ -1,8 +1,0 @@
-
-	public float width;
-	public float height;
-	
-	public NSSize(float a, float b) {
-		width = a;
-		height = b;
-	}

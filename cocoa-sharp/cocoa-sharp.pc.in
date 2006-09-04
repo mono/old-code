@@ -1,9 +1,0 @@
-prefix=@prefix@
-exec_prefix=${prefix}
-libdir=${exec_prefix}/lib
-
-
-Name: Cocoa#
-Description: Cocoa# - Apple Cocoa .NET Binding
-Version: 0.3
-Libs: -r:${libdir}/mono/@PACKAGE@/Apple.Foundation.dll -r:${libdir}/mono/@PACKAGE@/Apple.AppKit.dll -r:${libdir}/mono/@PACKAGE@/Apple.WebKit.dll

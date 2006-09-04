@@ -1,6 +1,0 @@
-<overrides>
-	<method sel="-managedObjectContext">
-	</method>
-	<method sel="-setManagedObjectContext:">
-	</method>
-</overrides>

@@ -1,6 +1,0 @@
-*.dll
-*.exe
-generated
-Makefile
-Makefile.in
-
