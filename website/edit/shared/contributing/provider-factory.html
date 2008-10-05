@@ -1,0 +1,207 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
+
+<html>
+<head>
+	<title>Provider Factory</title>
+
+	<meta name="Robots" content="INDEX, FOLLOW">
+	<meta http-equiv="Content-Language" content="en">
+	<meta http-equiv="Content-Type" content="text/html; CHARSET=UTF-8">
+	<meta name="keywords" content="mono">
+	<meta name="description" content="Brian Ritchie contributed a Provider Factory and Data Tools for Mono ADO.NET which gives us a foundation for abstract data provider access within Mono">
+	<meta name="author" content="Jonathan Duncan">
+	<meta name="date" content="14-Apr-2004">
+	<meta name="modified-by" content="Jonathan Duncan">
+	<meta name="modified" content="09-Dec-2004">
+
+	<style type="text/css" media="all"><!--  @import url(/inc/mono-main.css); --></style>
+	<style type="text/css" media="all"><!--  @import url(/inc/mono-orange.css); --></style>  <!-- blue=About, green=Using, orange=Contributing -->
+
+<!-- **************************************** -->
+<!--  BEGIN SCRIPT HEADER HERE -->
+        <script type="text/javascript">
+        <!--
+        //var pageName;  DISABLED
+        //var pageName = "FAQ";  ENABLED
+        var pageName = "Roadmap and Plans";
+        -->
+        </script>
+<!--#include virtual="/inc/script_header.inc"-->
+<!--  END SCRIPT HEADER HERE -->
+<!-- **************************************** -->
+</head>
+<body>
+
+<div id="thePage"> <!-- Start The Page -->
+	    <!-- **************************************** -->
+	    <!--  BEGIN RIGHT CONTENT HERE -->
+	    <!--#include virtual="/inc/header_orange.html"-->  <!-- blue=About, green=Using, orange=Contributing -->
+	    <!--  END RIGHT CONTENT HERE -->
+	    <!-- **************************************** -->
+	<div id="pageBodyTier2"> <!-- Start Body -->
+		<div id="leftNav"> <!-- Start Left Nav -->
+				<div id="leftNavTop"></div>
+					<!-- **************************************** -->
+					<!--  BEGIN LEFT NAV SUB HERE -->
+					<!--#include virtual="/inc/leftnav_orange.inc"-->
+					<!--  END LEFT NAV HERE -->
+					<!-- **************************************** -->
+
+					<!-- **************************************** -->
+					<!--  BEGIN SEARCH BOX HERE -->
+					<!--#include virtual="/inc/searchbox.inc"-->
+					<!--  END SEARCH BOX HERE -->
+					<!-- **************************************** -->
+		</div> <!-- End Left Nav -->
+		<div id="bodyContentTier2"> <!-- Start Body Content -->
+			<h1>Provider Factory</h1>
+			<ul class="head">
+				<li><a href="#details">details</a></li>
+				<li><a href="#model">object model</a></li>
+				<li><a href="#connection">creating a connection</a></li>
+				<li><a href="#configuration">about configuration files</a></li>
+			</ul>
+
+			<p>Brian Ritchie contributed a Provider Factory and Data Tools for Mono ADO.NET
+which gives us a foundation for abstract data provider access within Mono</p>
+
+
+			<a name="details"></a>
+			<h2>Here are the details:</h2>
+			<ul>
+				<li>The Provider information is seperate from the connection string information.<br>
+				    This allows the list of providers to be stored in the machine.config file.</li>
+				<li>Provider and ProviderCollection objects are available to access <br>
+					the list of providers and modify them at runtime.</li>
+				<li>The ProviderFactory object is used to create new connections, commands,<br>
+				    dataadapters, parameters, etc.</li>
+			</ul>
+
+
+			<a name="model"></a>
+			<h2>Overview of the ProviderFactory object model:</h2>
+			<ul>
+				<li><b>ProviderFactory</b>: used to create new Connections, Commands,<br>
+				DataAdapters, or Commands. All objects are returned using <br>
+				the provider interfaces such as IDbConnection, IDbCommand,<br>
+				IDbDataAdapter, or IDataParamter</li>
+			<p>
+				<li><b>DataTools</b>: static methods for doing <br>
+				common tasks like filling a DataSet <br>
+				with the contents of a select statement.</li>
+			<p>
+				<li><b>ProviderCollection</b>: list of providers configured <br>
+				in the system. Initially loaded from app.config, but can <br>
+				be modified at run-time.</li>
+			<p>
+				<li><b>Provider</b>: represents a given provider (factory) <br>
+				and holds information needed to <br>
+				create the types.</li>
+			<p>
+				<li><b>ProviderSectionHandler</b>: works behind the <br>
+				scenes to load the list of <br>
+				providers from the app.config into a ProviderCollection.</li>
+			</ul>
+
+
+			<a name="connection"></a>
+			<h2>C# source code samples for creating a connection:</h2>
+<pre>
+ // Create connection using enhanced connection string
+ // The factory attribute specifies which provider
+ // to use. The factory attribute is parsed out, the
+ // object is created, and then the rest of the
+ // connection string is passed into the provider. The
+ // providers are defined in
+ // the app.config (or machine.config).
+ IDbConnection conn;
+ string connectionString =
+	"factory=System.Data.SqlClient;" +
+	"server=speedy;database=pubs;uid=sa";
+ conn = ProviderFactory.CreateConnection(connectionString);
+
+ // Create connection specifying provider
+ // and standard connection string
+ IDbConnection conn;
+ string provider = "System.Data.SqlClient";
+ string connectionString = "server=speedy;database=pubs;uid=sa";
+ conn = ProviderFactory.CreateConnection(provider,connectionString);
+
+ // Create connection using connection string stored
+ // in app.config under &lt;appSettings&gt;
+ IDbConnection conn;
+ string appSetting = "PubsConnStr";
+ conn = ProviderFactory.CreateConnectionFromConfig(appSetting);
+</pre>
+
+<p>C# Sample for Creating a DataAdapter and filling a DataSet.</p>
+
+<pre>
+// Create Connection
+IDbConnection conn =
+ProviderFactory.CreateConnectionFromConfig("PubsConnStr");
+
+// Select command
+IDbCommand cmd=conn.CreateCommand();
+cmd.Text="select * from author";
+
+// Data Adapter
+DataSet ds=new DataSet();
+IDbDataAdapter adapter=ProviderFactory.CreateDataAdapter(cmd);
+adapter.Fill(ds, "Table1");
+</pre>
+
+<p>Creating a DataAdapter and filling a DataSet. <br>
+The super lazy method for people like me.</p>
+<pre>
+// Create Connection
+IDbConnection conn =
+ProviderFactory.CreateConnectionFromConfig("TdsPubsConnStr");
+
+// Data Adapter
+DataSet ds=DataTools.FillDataSet(conn, "select * from author");
+</pre>
+
+<p>Here's some sample code on displaying a list <br>
+   of configured ADO.NET providers:</p>
+<pre>
+Console.WriteLine("Configured Providers:");
+foreach (Provider p in ProviderFactory.Providers)
+	Console.WriteLine(p.Description);
+</pre>
+
+<p>A Super lazy overload to the FillDataSet method (in <br>
+DataTools.cs) that will fill a dataset in one line of code.</p>
+
+<pre>
+DataSet ds=DataTools.FillDataSet("PubsConnStr", "select * from authors");
+</pre>
+
+
+			<a name="configuration"></a>
+			<h2>About Configuration Files</h2>
+<p>Information about <a href="http://msdn.microsoft.com/library/en-us/vbcon/html/vboriintroductiontoapplicationsettingstorage.asp?frame=true">app.config</a> files
+can be found at <a href="http://msdn.microsoft.com/">MSDN</a>.</p>
+
+<p>See the mcs/class/Mono.Data/app.config for sample configuration file in<br>
+mcs source.  Basically, if your application is named blah.exe, <br>
+you would create an app.config file named blah.exe.config</p>
+
+<p>Here's a <a href="sample_app_config.html">sample app.config file</a> showing the provider <br>
+declarations along with sample connection strings:</p>
+
+
+
+		</div> <!-- End Body Content -->
+		<div class="clear"></div>
+	</div> <!-- End Body -->
+
+	<!-- **************************************** -->
+	<!--  BEGIN FOOTER HERE -->
+	<!--#include virtual="/inc/footer.inc"-->
+	<!--  END FOOTER HERE -->
+	<!-- **************************************** -->
+</div> <!-- End The Page -->
+
+</body>
+</html>

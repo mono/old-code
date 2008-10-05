@@ -1,0 +1,413 @@
+<?xml version="1.0" encoding="utf-8"?> <!-- -*-nxml-*- -->
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+	<title>Mono 1.0 Features and Known Issues.</title>
+	<link rel="stylesheet" type="text/css" href="/inc/mono.css"/>
+	<script src='/inc/prettyprint.js' type='text/javascript'></script>
+</head>   
+
+<html>
+<body onload='paintColors();'>
+
+<h1>Mono 1.0 Features</h1>
+
+<br/>
+
+<h2>CLI runtime engine.</h2>
+
+  <p>
+    The Mono runtime engine implements the ECMA Common Language
+    Infrastructure specification to the best of our knowledge and is
+    able to execute code produced by the Microsoft .NET Framework. 
+  </p>
+
+  <p>
+    The Mono runtime engine is available for various architectures and
+    operating systems: x86, x86-64, PowerPC, SPARC, S390, StrongARM,
+    HPPA on Linux, Windows, HP-UX, Solaris, MacOS and BSD operating systems.
+  </p>
+
+  <p>
+    In addition an advanced native optimizing compiler is available
+    for x86, SPARC, s390 and PowerPC available in both an
+    ahead-of-time (AOT) compilation mode to reduce startup time and
+    take advantage of all available optimizations and a Just-in-Time
+    (JIT) compilation mode.
+  </p>
+
+  <p>
+    The Mono runtime engine uses the Boehm conservative Garbage
+    Collector (bundled with the release).
+  </p>
+
+  <h3>Known Issues</h3>
+
+  <p>
+
+    Code Access Security (CAS) is not supported in Mono 1.0
+  </p>
+    
+<h2>Java runtime engine.</h2>
+
+  <p>
+    The Mono 1.0 release bundles the <a
+    href="http://www.ikvm.net">IKVM</a> Java virtual machine and the
+    tools required to get Java and .NET interoperability.
+  </p>
+
+  <h3>Known Issues</h3>
+
+  <p>
+    The Java functionality is limited by the features supported by the
+    <a href="http://www.gnu.org/software/classpath/classpath.html">GNU
+    Classpath</a> libraries. 
+  </p>
+
+<h2>Class Libraries.</h2>
+
+  <p>
+    The class libraries as shipped with Mono implement the .NET 1.1
+    profile.  Binaries produced with Mono will run only with the .NET
+    1.1 framework or later versions on Windows systems.
+  </p>
+
+  <p>
+    These are the libraries that make up the Mono 1.0 release:
+  </p>
+
+  <ul>
+    <li>mscorlib.dll</li>
+    <li>System.dll</li>
+    <li>System.Data.dll</li>
+
+    <li>System.DirectoryServices.dll</li>
+    <li>System.Drawing.Design.dll</li>
+    <li>System.Drawing.dll</li>
+    <li>System.Runtime.Remoting.dll</li>
+    <li>System.Runtime.Serialization.Formatters.Soap.dll</li>
+    <li>System.Security.dll</li>
+
+    <li>System.Web.dll</li>
+    <li>System.Web.Services.dll</li>
+    <li>System.Xml.dll</li>
+    <li>Microsoft.VisualC.dll</li>
+    <li>Microsoft.VisualBasic.dll</li>
+    <li>cscompmgd.dll</li>
+
+    <li>IBM.Data.DB2.dll</li>
+    <li>System.Data.OracleClient.dll</li>
+  </ul>
+
+  <p>
+    Please read the section on <a href="#issues">known issues</a> with
+    the above libraries for details.
+  </p>
+
+<h2>The Gtk# 1.0 GUI programming toolkit.</h2>
+
+  <p>
+    Gtk# is a cross platform GUI programming toolkit available for
+    Linux, Windows and MacOS X systems and is the recommended platform
+    for doing desktop application development at Novell.
+  </p>
+
+  <p>
+    Gtk# provides access to any of the Mono supported languages to the
+    the libraries that make up the GNOME 2.2 platform, and it is fully
+    is compatible with new versions of GNOME.
+  </p>
+
+  <ul>
+
+    <li>art-sharp.dll: LibArt 2D graphics engine.</li>
+    <li>atk-sharp.dll: Accessibility toolkit.</li>
+    <li>gdk-sharp.dll: Low-level windowing interface.</li>
+    <li>glade-sharp.dll: Glade GUI designer support.</li>
+    <li>glib-sharp.dll: GLib integration.</li>
+    <li>gtk-sharp.dll: The GUI toolkit.</li>
+
+    <li>pango-sharp.dll: Unicode text rendering.</li>
+    <li>rsvg-sharp.dll: SVG rendering library.</li>
+  </ul>
+
+  <p>
+    All of the above are available for Mono and the Microsoft .NET
+    Framework to develop cross platform applications.  In addition on
+    Linux and MacOS X the following are also available:
+  </p>
+
+  <ul>
+
+    <li>gconf-sharp.dll: Gnome Configuration integration.</li>
+    <li>gnome-sharp.dll: GNOME UI libraries.</li>
+    <li>gecko-sharp.dll: Mozilla integration.</li>
+    <li>vte-sharp.dll: Terminal Emulator Widget.</li>
+    <li>gtkhtml-sharp.dll: The lightweight HTML rendering engine</li>
+  </ul>
+
+  <p>
+    Work is underway to make these APIs available to Windows .NET
+    developers as well.
+  </p>
+
+  <h3>Known Issues: MacOS X</h3>
+
+  <h4>Gtk# applications fail to start with `Cannot open font file for font Verdana 12'</h4>
+
+  <p>This is only an issue if you are executing GTK+
+  applications remotely from MacOS X.  To solve this, use the
+  following workaround:</p>
+
+  
+  <xmp class="shell">
+    $ export GDK_USE_XFT=0
+  </xmp>
+  
+
+   <h2>Mono and Novell specific Libraries.</h2>
+
+   <p>
+     The following are the libraries the that this release includes,
+     with a short description of their functionality.  Refer to the
+     documentation for more information on them:
+   </p>
+
+   <ul>
+
+     <li>Commons.Xml.Relaxng.dll: XmlReaders and validators for RelaxNG.</li>
+     <li>Mono.Cairo.dll: Integration with <a href="http://www.cairographics.org">CairoGraphics</a></li>
+     <li>Mono.CSharp.Debugger.dll: API to generate debugging information.</li>
+     <li>Mono.Data.SqliteClient.dll: Sqlite database provider.</li>
+     <li>Mono.Data.SybaseClient.dll: Sybase database provider.</li>
+     <li>Mono.Data.TdsClient.dll: MS SQL server provider.</li>
+
+     <li>Mono.Data.Tds.dll: MS SQL server provider.</li>
+     <li>Mono.GetOptions.dll: GetOptions convenience library.</li>
+     <li>Mono.Http.dll: Http loadable extensions for Web applications.</li>
+     <li>Mono.Posix.dll: Access to Unix APIs and System calls.</li>
+     <li>Mono.Security.dll: Cryptographic library extensions.</li>
+     <li>Mono.Security.Win32.dll: Win32 support for cryptographic libraries.</li>
+
+     <li>Novell.Directory.Ldap.dll: Novell eDirectory and LDAP integration.</li>
+   </ul>
+
+   <h2>Third Party Libraries.</h2>
+
+   <p>
+     We are distributing the following third-party libraries and
+     components with Mono 1.0 as they are useful to developers:
+   </p>
+
+   <ul>
+
+     <li>ByteFX.Data.dll: MySQL client access library (LGPL)</li>
+     <li>SharpZipLib.dll: Zip, Tar, Bzip compression library.</li>
+     <li>PEAPI: Generation of CIL images</li>
+     <li>NUnit: to build Unit testing.</li>
+     <li>Npgsql.dll: Postgresql client access library (LGPL)</li>
+   </ul>
+
+   <h2>GNU Classpath for the CLI.</h2>
+
+   <p>
+     We bundle a version of the GNU Classpath with this release of
+     Mono to support the execution of Java applications.   The support
+     of Java is limited in what is supported by GNU Classpath. 
+   </p>
+
+   <h2>C# 1.0 Compiler</h2>
+
+   <p>
+
+     The compiler implements the ECMA C# 1.0 implementation with
+     support for CLS compliance compilation.  In addition it has
+     support for implicit method group conversions and
+     iterators.   These features are turned on by default. 
+   </p>
+
+   <p>
+     Although there are known parsing errors and compilation errors for some
+     extreme corner cases, we are not aware of the compiler generating
+     incorrect code at the time of the release.
+   </p>
+
+   <h2>IL assembler/disassembler</h2>
+
+   <ul>
+     <li>The Assembler does not support v-table fixups, local thread storage nor unmanaged exports.
+     <li>The disasembler (monodis) is not complete and will be replaced with a command-line compatible one in the future (ildasm).
+   </ul>
+
+   
+<h2>.NET 1.1 profile known issues</h2>
+
+  <p>
+    This is not a comprehensive list, nor does it list all of the
+    differences with the .NET Framework, refer to the documentation. 
+  </p>
+
+  <h3>Known Issues: General</h3>
+
+  <p>
+    The Code Access Security (CAS) APIs are available, but they are
+    non-functional in the above libraries.
+  </p>
+
+  <p>
+    COM support has been stubbed out, and will throw
+    `NotImplementedExceptions' if used. 
+  </p>
+
+  <h3>IBM DB2 and OracleClient</h3>
+
+  <p>
+    These are both managed wrappers for proprietary client libraries,
+    so their availability is limited to the platforms where their
+    client libraries are distributed.
+  </p>
+
+  <h3>System.Data</h3>
+  <p>
+    Currently we support TDS protocol version 7.0, some features in
+    the Framework require version 8.0.
+  </p>
+
+  <h3>System.Drawing</h3>
+
+  <ul>
+    <li>
+
+      Metafiles and Printing are not supported.
+    </li>
+    <li>
+      Pen does not support dash caps, different end caps and compound array.
+    </li>
+    <li>
+      CustomLineCap and AdjustableArrowCap are not
+      supported.
+    </li>
+
+    <li>
+      In TextureBrush, ImageAttributes are not supported.
+    </li>
+
+    <li>
+      TextureBrush and LinearGradientBrush have
+      problems in handling transformation matrix because
+      of a known Cairo bug. Cairo does not tile a pattern
+      well, if it is transformed at the same time.
+    </li>
+
+    <li>
+      PathGradientBrush support is not complete.
+    </li> 
+  </ul>
+  
+  <h3>Known Issues: System.Reflection.Emit</h3>
+  
+  <ul>
+
+    <li>AssemblyBuilder.DefineUnmanagedResource is not implemented.</li>
+    <li>ILGenerator.UsingNamespace is not implemented.</li>
+    <li>EnumBuilder.GetMethodImpl will always return null.</li>
+  </ul>
+
+  <h3>Known Issues: System.Runtime.InteropServices</h3>
+  <ul>
+
+    <li>ExtensibleClassFactory is not implemented.</li>
+    <li>GetManagedThunkForUnmanagedMethodPtr is not implemented.</li>
+    <li>GetThreadFromFiberCookie is not implemented.</li>
+    <li>GetUnmanagedThunkForManagedMethodPtr is not implemented.</li>
+    <li>NumParamBytes is not implemented.</li>
+    <li>ReadByte (object,ofs) is not implemented.</li>
+
+    <li>ReadInt* (object, ofs) is not implemented.</li>
+    <li>ReleaseThreadCache is not implemented.</li>
+    <li>UnsafeAddrOfPinnedArrayElement is not implemented.</li>
+    <li>WriteByte (object, ofs) is not implemented.</li>
+    <li>WriteInt* (object, ofs)     is not implemented.</li>
+  </ul>
+
+  <h3>Known Issues: System.Security.Cryptography.X509Certificates</h3>
+  <ul>
+    <li>X509Certificates.CreateFromSignedFile: minimally implemented.</li>
+  </ul>
+
+  <h3>Known Issues: System.Threading</h3>
+  <ul>
+
+    <li>CompressedStack is not implemented.</li>
+  </ul>
+
+  <h3>Known Issues: System.Web</h3>
+  <p>
+    The behavior of Trace.axd in Mono 1.0 does not match the .NET
+    behavior and we recommend that you do not store passwords on
+    Trace.axd files.   If this feature is important to you please see <a
+    href="http://bugzilla.ximian.com/show_bug.cgi?id=60739">Bug #60739</a>
+    for a patch.
+  </p>
+
+  <ul>
+    <li>HttpClientCertificate: No support at all for client certificates.</li>
+    <li> HttpBrowserCapabilities: Not all properties supported browscap.ini file</li>
+    <li>HttpClientCertificate: We are not supporting client certificates</li>
+    <li>ISAPIRuntime: We won't implement any of these.</li>
+  </ul>
+
+  <h3>Known Issues: System.Web.Security</h3>
+  <ul>
+    <li>FileAuthorizationModule: Init not implemented</li>
+    <li>FormsAuthenticationModule: Encrypt ticket</li>
+    <li>PassportAuthenticationModule: Not implemeted.</li>
+    <li>PassportIdentity: Not implemented.</li>
+
+    <li>WindowsAuthenticationModule: Not implemented.</li>
+  </ul>
+
+  <h3>Known Issues: System.Web.UI</h3>
+  <ul>
+    <li>Control: MapPathSecure and BuildProfileTree</li>
+    <li>PartialCachingControl: CreateControl is not implemented</li>
+
+  </ul>
+
+  <h3>Known Issues: System.Web.UI.WebControls</h3>
+  <ul>
+    <li>BaseValidator: we don't do client side validation</li>
+    <li>XmlBuilder: SetTagInnerText not implemented.</li>
+    <li>Xml : check permissions when accesing file and executing xsl transformation</li>
+
+  </ul>
+
+  <h3>Known Issues: System.Xml.*</h3>
+  <ul>
+    <li>XmlValidatingReader: XDR is not supported.</li>
+    <li>XmlSerializationWriter: XML generated not identical in corner cases.</li>
+  </ul>
+
+  <h3>IBM DB2 and OracleClient</h3>
+
+  <p>
+    These are both managed wrappers for proprietary client libraries,
+    so their availability is limited to the platforms where their
+    client libraries are distributed.
+  </p>
+
+  <h3>Microsoft.VisualBasic</h3>
+
+  <p>
+    The Microsoft VisualBasic runtime is included and will allow
+    applications that were compiled using Microsoft's Visual Basic
+    compiler to execute with Mono.  The following are the known
+    problems with it:
+  </p>
+
+  <ul>
+    <li>COM interoperability functions are not implemented.</li>
+    <li>System.Drawing and Windows.Forms helper routines are not implemented.</li>
+    <li>Filesystem class is not complete (7 methods missing).</li>
+  </ul>
+</body>
+</html>

@@ -1,0 +1,12 @@
+@The Mono Hackers Hall of Fame welcomes Todd Berman
+<p>The <a href="/contributing/hall.html">Mono Hackers Hall Of Fame</a>
+	continues to show our appreciation to the excellent
+	contributors that make <b>mono::</b> a successful free
+	software project.
+
+	Todd Berman is a steady contributor to Mono.  He has worked
+	everywhere: from the Class Libraries, to the early implementation of
+	the GAC and most recently has lead the effort to develop, port and
+	maintain MonoDevelop an IDE for the Mono environment.  His help has
+	been key to the development of Mono.
+</p>

@@ -1,0 +1,325 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
+
+<html>
+<head>
+	<title>Documentation</title>
+
+	<meta name="Robots" content="INDEX, FOLLOW">
+	<meta http-equiv="Content-Language" content="en">
+	<meta http-equiv="Content-Type" content="text/html; CHARSET=UTF-8">
+	<meta name="keywords" content="mono">
+	<meta name="description" content="Mono developer guidelines for writing documentation">
+	<meta name="author" content="Jonathan Duncan">
+	<meta name="date" content="14-Apr-2004">
+	<meta name="modified-by" content="Jonathan Duncan">
+	<meta name="modified" content="09-Dec-2004">
+
+	<style type="text/css" media="all"><!--  @import url(/inc/mono-main.css); --></style>
+	<style type="text/css" media="all"><!--  @import url(/inc/mono-orange.css); --></style>  <!-- blue=About, green=Using, orange=Contributing -->
+
+<!-- **************************************** -->
+<!--  BEGIN SCRIPT HEADER HERE -->
+<!--#include virtual="/inc/script_header.inc"-->
+<!--  END SCRIPT HEADER HERE -->
+<!-- **************************************** -->
+
+</head>
+<body>
+
+<div id="thePage"> <!-- Start The Page -->
+	    <!-- **************************************** -->
+	    <!--  BEGIN RIGHT CONTENT HERE -->
+	    <!--#include virtual="/inc/header_orange.html"-->  <!-- blue=About, green=Using, orange=Contributing -->
+	    <!--  END RIGHT CONTENT HERE -->
+	    <!-- **************************************** -->
+	<div id="pageBodyTier2"> <!-- Start Body -->
+		<div id="leftNav"> <!-- Start Left Nav -->
+				<div id="leftNavTop"></div>
+					<!-- **************************************** -->
+					<!--  BEGIN LEFT NAV SUB HERE -->
+					<!--#include virtual="/inc/leftnav_orange.inc"-->
+					<!--  END LEFT NAV HERE -->
+					<!-- **************************************** -->
+
+					<!-- **************************************** -->
+					<!--  BEGIN SEARCH BOX HERE -->
+					<!--#include virtual="/inc/searchbox.inc"-->
+					<!--  END SEARCH BOX HERE -->
+					<!-- **************************************** -->
+		</div> <!-- End Left Nav -->
+		<div id="bodyContentTier2"> <!-- Start Body Content -->
+			<h1>Documentation</h1>
+			<ul class="head">
+				<li>&gt;&nbsp; <a href="#documentation">Documentation</a></li>
+				<li>&gt;&nbsp; <a href="#classdoc">Class Library documentation</a></li>
+			</ul>
+
+<!-- **************************************** -->
+<!--  Documentation -->				
+<!-- **************************************** -->
+			<a name="documentation"></a>
+			<h2>Documentation</h2>
+				<p>Although most of the concepts from Microsoft.NET can
+				be applied to the completed Mono platform, we do need to
+				have a complete set of free documentation written specifically
+				for Mono.</p>
+			
+				<p>The documentation license we have chosen is the GNU Free
+				Documentation License (FDL), the standard for most documents
+				in the free software world. </p>
+			
+				<p>We need documentation on a number of topics:</p>
+			
+				<ul>
+					<li>The development tools (compilers, assembler tools,
+							  language reference, design time features): these
+						          live in the `monodoc' CVS module.
+					
+					<li>Frequently Asked Question compilations.
+					
+					<li>HOWTO documents.
+					
+					<li>The Class Libraries (Both the original .NET class
+						 	  libraries as well as the class libraries produced by
+							  the project).
+					
+					<li>Tutorials on Mono and the specifics of running it
+							  (The <a href="http://www.monohispano.org">Mono
+							  Hispano</a> team has produced lots of <a
+							  href="http://www.monohispano.org/tutoriales.php">tutorials
+							  in spanish</a>
+					
+					<li>A guide to Mono as compared to the Microsoft.NET
+							  Framework SDK
+				</ul>
+
+
+<!-- **************************************** -->
+<!--  Class Library documentation -->				
+<!-- **************************************** -->
+			<a name="classdoc"></a>
+			<h2>Class Library documentation</h2>
+				<p>We are moving to a new setup for documenting the class libraries, 
+				and you can read about it <a href="classlib-doc.html">here</a>.</p>
+			
+				<p>There are two classes of documentation: free documentation for
+				existing .NET classes and documentation for the classes that
+				we have developed on top of .NET.</p>
+			
+				<p>There is a large body of documentation that came from the ECMA
+				standarization effort that has been checked into CVS.  It does
+				not contain everything Mono and .NET have, so they need to be
+				updated and augmented.</p>
+			
+			<p><b>Gtk# documentation</b></p>
+			
+				<p>We also have a large body of class libraries that are specific
+				to Mono, for example the documentation for Gtk#.</p>  
+			
+				<p>We have checked in stub documentation for Gtk# into the CVS
+				repository (on gtk-sharp/doc) and we need volunteers to help
+				populate the documentation for it.  Since Gtk# is a wrapper
+				for Gtk, plenty of documentation exists in the <a
+				href="http://developer.gnome.org/doc/API">Gnome developer
+				site</a>.</p>
+			
+				<p>To get started:</p>
+			
+				<p>You need to download Gtk# from the CVS repository.  The module
+		        name is `gtk-sharp'.  You can obtain a copy from both the CVS
+		        repository or the anonymous CVS repository.</p>
+		
+		        <p>To pull your copy type:</p>
+		
+<pre>
+	cvs co gtk-sharp
+</pre>
+		        <p>Documentation lives in gtk-sharp/doc/en.  The "en" indicates the
+		        English language, the first one we are targeting.  We can later
+		        do translations, but for now we are focusing on a single
+		        language.</p>
+		
+		        <p>In that directory you will find the documentation organized by
+		        namespaces.  One directory per namespace.  In the directories
+		        you will find one XML file per class that needs to be
+		        documented.  The mission is to fill in the data with useful
+		        information.  Feel free to grab liberally information from the
+		        Gtk documentation from:</p>
+		
+		       	<p><a href="http://developer.gnome.org/doc/API/">http://developer.gnome.org/doc/API/</a></p>
+		
+		        <p>Of course, the API does not apply directly.  It only applies at
+		        a foundational level, so you can not really just copy and
+		        paste.  Summaries, and remarks sections can probably be lifted
+		        with little or no effort.</p>
+		
+		        <p>Gtk# uses properties to represent get/set operations in the C
+		        API, so you can also use some bits from there.</p>
+		
+		        <p>Most of the documentation contains already place holders for
+		        text, we use the internationally approved phrase for this
+		        purpose, `To be added'.  So the quest is to remove all of the
+		        "To be added" strings with information with resembles as closely
+		        as possible the toolkit reality.</p>
+		
+		<p><b>The pieces to be filled.</b></p>
+		
+		        <p>Summaries are one or two line descriptions of the element
+		        (class, struct, interface, method, field, event, delegate), and
+		        its used to render summary pages.  So it has to be short.</p>
+		        
+		        <p>The "remarks" section is used to describe in detail the element.</p>
+		
+		<p><b>Tags.</b></p>
+		        
+		        <p>As you document Gtk# you will have a number of tags that you can
+		        use inside the summary and remarks sections, these are:</p>
+				
+				<dl>
+					<dt><code>&lt;para&gt; &lt;/para&gt;</code></dt>
+					<dd>
+						Used to separate paragraphs.
+					</dd>
+					<br><br>
+				
+					
+					<dt><code>&lt;paramref name="param_name"/&gt;</code></dt>
+					<dd>
+						Used to reference a formal parameter to a function.
+					</dd>
+					<br><br>
+					
+					<dt><code>&lt;see cref="T:SomeTypeName"/&gt;</code></dt>
+					<dd>
+						Use this to reference a type, this will include an hyper link to the page for type SomeTypeName.<br>
+						For example, to reference "System.Enum", do:<br>
+						<code>&lt;see cref="T:System.Enum"/&gt;</code>
+					</dd>
+					<br><br>
+					
+					<dt><code>&lt;see cref="P:SomeTypeName.Property"/&gt;</code></dt>
+					<dd>
+						Use this to reference a property, this will include an hyper link to the page for the property `Property' of type
+						`SomeTypeName'.<br>
+						For example, to reference the BaseType property in System.Type, do:<br>
+						<code>&lt;see cref="P:System.Type.BaseType"/&gt;</code>
+					</dd>
+					<br><br>
+					
+					<dt><code>&lt;see cref="M:SomeTypeName.Method(type,type)"/&gt;</code></dt>
+					<dd>
+						Use this to reference a method, this will include an hyper link to the page for the method `Method' of type 
+						`SomeTypeName'.<br>
+						For example, to reference the ToString method in System.Object, do:<br>
+						<code>&lt;see cref="M:System.Object.ToString()"/&gt;</code>
+					</dd>
+					<br><br>
+					
+					<dt><code>&lt;see langword="keyword"/&gt;</code></dt>
+					<dd>
+						Use this to link to a keyword in the C# language<br>
+						For example to link to `true', do:<br>
+						<code>&lt;see langword="true"/&gt;</code>
+					</dd>
+					<br><br>
+					
+					<dt><code>&lt;example&gt; ... &lt;/example&gt;</code></dt>
+					<dd>
+						Use example to insert an example. The example can contain explanatory text and code.
+					</dd>
+					<br><br>
+					
+					<dt><code>&lt;code lang="C#"&gt; ... &lt;/code&gt;</code></dt>
+					<dd>
+						Use this to provide a sample C# program, typically used within the &lt;example&gt; tags.<br><br>
+						
+						When providing examples, try to provide a full example,
+			        	we would like to be able to have a button to compile and
+			        	run samples embedded into the documentation, or pop up
+			        	an editor to let the user play with the sample.<br><br>
+						
+						You can link to an example like this:<br>
+						<code>&lt;code lang="C#" source="file.cs"&gt; &lt;/code&gt;</code>
+					</dd>
+					<br><br>
+					
+					<dt><code>&lt;item&gt;</code></dt>
+					<dt><code>&lt;list type="bullet"&gt;  &lt;/list&gt;</code></dt>
+					<dd>
+						Use this to create lists.  Lists contains &lt;item&gt; elements which have to contain &lt;term&gt; containers:<br>
+						<code>
+						&lt;list type="table"&gt; &lt;/lits&gt;<br>
+				        &nbsp;&nbsp;    &lt;listheader&gt;<br>
+				        &nbsp;&nbsp;&nbsp;&nbsp;      &lt;term&gt;YOUR FIRST COLUMN&lt;/term&gt;<br>
+				        &nbsp;&nbsp;&nbsp;&nbsp;      &lt;description&gt;YOUR DESCRIPTION&lt;/description&gt;<br>
+				        &nbsp;&nbsp;    &lt;/listheader&gt;
+						</code><br><br>
+						
+						For two-column tables. Inside use:<br>
+						<code>
+						&lt;item&gt;<br>
+						&nbsp;&nbsp;	&lt;term&gt;First&lt;/term&gt;<br>
+						&nbsp;&nbsp;	&lt;description&gt;First descritpion&lt;/description&gt;<br>
+						&lt;/item&gt;<br>
+						&lt;item&gt;<br>
+						&nbsp;&nbsp;	&lt;term&gt;Second&lt;/term&gt;<br>
+						&nbsp;&nbsp;	&lt;description&gt;Second descirption&lt;/description&gt;<br>
+						&lt;/item&gt;
+						</code>
+					</dd>
+				</dl>
+		
+
+		
+		<p><b>Words of warning.</b></p>
+		
+		        <p>A few words of warning and advice for class documentors:</p>
+		
+		        <p>A well-documented API can ease hours of frustration; as Mono
+		        matures, robust and complete class library documentation will
+		        become increasingly important.  As you write API documentation,
+		        whether it is embedded in source files or in external Monodoc XML,
+		        please keep the following in mind:</p>
+		
+		        <p>Plagarism, even if it's unintentional, is a Bad Thing(TM).
+		        Microsoft's .NET Framework Class Library documentation is an
+		        excellent resource for understanding the behavior and properties of
+		        a type, and a lot of hard work went in to creating this (copyrighted)
+		        resource.  Please don't copy from Microsoft's reference when
+		        documenting a type.</p>
+			
+		        <p>To avoid this, I (<a href="mailto:jbarn@httcb.net">jbarn@httcb.net</a>)
+		        suggest that you read the complete Microsoft documentation for a type,
+		        ponder it for a while, and write the Mono documentation in your own
+		        words.  While it's certainly okay to refer to the Microsoft
+		        documentation to clarify your understanding of behavior or properties,
+		        please don't open the Microsoft docs and refer to them for each member
+		        you document.</p>
+			
+				<p>The best way of documenting is to read our source code
+				implementation and explain in your own words what our implementation
+				does, and what the user can do with it.</p>
+			
+		        <p>There's a lot of domain expertise among the class library contributors;
+		        let's put the same personal stamp on the class library documentation
+		        that we have on the class libraries themselves.</p>
+
+
+
+			
+			
+			
+
+		</div> <!-- End Body Content -->
+		<div class="clear"></div>
+	</div> <!-- End Body -->
+
+	<!-- **************************************** -->
+	<!--  BEGIN FOOTER HERE -->
+	<!--#include virtual="/inc/footer.inc"-->
+	<!--  END FOOTER HERE -->
+	<!-- **************************************** -->
+</div> <!-- End The Page -->
+
+</body>
+</html>

@@ -1,0 +1,151 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
+
+<html>
+<head>
+	<title>Porting and Hardware Architecture</title>
+
+	<meta name="Robots" content="INDEX, FOLLOW">
+	<meta http-equiv="Content-Language" content="en">
+	<meta http-equiv="Content-Type" content="text/html; CHARSET=UTF-8">
+	<meta name="keywords" content="mono">
+	<meta name="description" content="Porting issues in Mono">
+	<meta name="author" content="Jonathan Duncan">
+	<meta name="date" content="14-Apr-2004">
+	<meta name="modified-by" content="Jonathan Duncan">
+	<meta name="modified" content="09-Dec-2004">
+
+	<style type="text/css" media="all"><!--  @import url(/inc/mono-main.css); --></style>
+	<style type="text/css" media="all"><!--  @import url(/inc/mono-orange.css); --></style>  <!-- blue=About, green=Using, orange=Contributing -->
+
+<!-- **************************************** -->
+<!--  BEGIN SCRIPT HEADER HERE -->
+<!--#include virtual="/inc/script_header.inc"-->
+<!--  END SCRIPT HEADER HERE -->
+<!-- **************************************** -->
+
+</head>
+<body>
+
+<div id="thePage"> <!-- Start The Page -->
+	    <!-- **************************************** -->
+	    <!--  BEGIN RIGHT CONTENT HERE -->
+	    <!--#include virtual="/inc/header_orange.html"-->  <!-- blue=About, green=Using, orange=Contributing -->
+	    <!--  END RIGHT CONTENT HERE -->
+	    <!-- **************************************** -->
+	<div id="pageBodyTier2"> <!-- Start Body -->
+		<div id="leftNav"> <!-- Start Left Nav -->
+				<div id="leftNavTop"></div>
+					<!-- **************************************** -->
+					<!--  BEGIN LEFT NAV SUB HERE -->
+					<!--#include virtual="/inc/leftnav_orange.inc"-->
+					<!--  END LEFT NAV HERE -->
+					<!-- **************************************** -->
+
+					<!-- **************************************** -->
+					<!--  BEGIN SEARCH BOX HERE -->
+					<!--#include virtual="/inc/searchbox.inc"-->
+					<!--  END SEARCH BOX HERE -->
+					<!-- **************************************** -->
+		</div> <!-- End Left Nav -->
+		<div id="bodyContentTier2"> <!-- Start Body Content -->
+			<h1>Porting and Hardware Architecture</h1>
+			<ul class="head">
+				<li>&gt;&nbsp; <a href="#endian">Endian, 64 bits and unaligned access issues</a></li>
+				<li>&gt;&nbsp; <a href="#bytecode">Generating assembly bytecodes for the target processor</a></li>
+				<li>&gt;&nbsp; <a href="#interpreter">Getting the interpreter to work</a></li>
+				<li>&gt;&nbsp; <a href="#jitport">The final step: porting the JIT</a></li>
+			</ul>
+
+<!-- **************************************** -->
+<!--  Endian, 64 bits and unaligned access issues -->				
+<!-- **************************************** -->
+<a name="endian"></a>
+<h2>Endian, 64 bits and unaligned access issues</h2>
+
+	<p>The first thing to do is to check that the metadata handling
+	library works on your target processor. You may use the disassembler
+	on simple programs and check that you get sensible results
+	(assuming it compiles at all on your system :-).</p>
+
+	<p>The main issue is to write macros that read unaligned
+	little endian shorts/ints/longs/float/doubles: look into
+	mono/metadata/endian.h. There may be other spots in the code that are
+	unsafe at reading/writing to some datatypes that require special
+	alignment, but there should be few such issues and they need to be fixed.</p>
+
+	<p>Once this stuff is sorted out, you should be able to run the interpreter
+	on simple programs that don't require delegates, P/Invoke functions etc..</p>
+
+
+<!-- **************************************** -->
+<!--  Generating assembly bytecodes for the target processor -->				
+<!-- **************************************** -->
+<a name="bytecode"></a>
+<h2>Generating assembly bytecodes for the target processor</h2>
+
+	<p>Next, you need to provide the support code for generating assembly bytecode
+	for your target platform (in mono/arch/{ppc,sparc,alpha,*}).
+	The code should be more or less like the code in x86-codegen.h:
+	macros that produce fast in-line code. You don't need to provide
+	code to create every possible code, at first, just the code to
+	create trampolines and execute them is fine (you'll need to research
+	how the call convention works on your platform): that would be, for
+	example, the prolog and epilog code in a function, code to pass function
+	parameters and deal with the return value and so on.</p>
+
+	<p>libffi in gcc or the xptcall sources in mozilla may be helpful to
+	understand how the calling convention works, if you can't find a specification.
+	You'd need a processor manual to know how to create the assembly binary data.
+	This requires a lot of reading if you're not familiar with the assembly for your
+	target platform. Manuals for many processors are available as PDF files on the
+	web site of the respective vendors. Note that some processors require you to
+	flush the I-cache before executing the code: have a look at how the same thing is
+	done in GNU lightning.</p>
+
+
+<!-- **************************************** -->
+<!--  Getting the interpreter to work -->				
+<!-- **************************************** -->
+<a name="interpreter"></a>
+<h2>Getting the interpreter to work</h2>
+
+	<p>Once you can generate binary code, you can start working on a
+	mono_create_trampoline() function for your platform: this function will receive
+	a MonoMethod that describes the arguments and the return type of a C function
+	and will create the code to call such function. When this function is complete
+	you'll be able to run more sample programs, that use System.IO, P/Invoke
+	functions etc.</p>
+
+	<p>To support delegates you'll need to write a mono_create_method_pointer()
+	function that creates a native function: this can be used to call the
+	method using the runtime's calling convention (it's basically the reverse
+	of mono_create_trampoline()).</p>
+
+
+<!-- **************************************** -->
+<!--  The final step: porting the JIT -->				
+<!-- **************************************** -->
+<a name="jitport"></a>
+<h2>The final step: porting the JIT</h2>
+
+	<p>At this point you'd need to have a more complete code generation header file
+	and you can start writing the machine description file for the monoburg
+	system. This code (jit/tesjit.c) will require some machine specific tweaks,
+	but hopefully all you have to do is create the grammar that emit assembly
+	code from the IR tree. Work is at the early stages also for x86 on this stuff
+	as we are still testing various solutions: you'd want to read about burg-like
+	code-generator generators (the LCC book is a good starting point).</p>
+
+		</div> <!-- End Body Content -->
+		<div class="clear"></div>
+	</div> <!-- End Body -->
+
+	<!-- **************************************** -->
+	<!--  BEGIN FOOTER HERE -->
+	<!--#include virtual="/inc/footer.inc"-->
+	<!--  END FOOTER HERE -->
+	<!-- **************************************** -->
+</div> <!-- End The Page -->
+
+</body>
+</html>

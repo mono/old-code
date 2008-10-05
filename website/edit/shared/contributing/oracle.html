@@ -1,0 +1,265 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
+
+<html>
+<head>
+	<title>Oracle</title>
+
+	<meta name="Robots" content="INDEX, FOLLOW">
+	<meta http-equiv="Content-Language" content="en">
+	<meta http-equiv="Content-Type" content="text/html; CHARSET=UTF-8">
+	<meta name="keywords" content="mono">
+	<meta name="description" content="ADO.NET Data Provider for Oracle databases">
+	<meta name="author" content="Jonathan Duncan">
+	<meta name="date" content="14-Apr-2004">
+	<meta name="modified-by" content="Jonathan Duncan">
+	<meta name="modified" content="09-Dec-2004">
+
+	<style type="text/css" media="all"><!--  @import url(/inc/mono-main.css); --></style>
+	<style type="text/css" media="all"><!--  @import url(/inc/mono-orange.css); --></style>  <!-- blue=About, green=Using, orange=Contributing -->
+
+<!-- **************************************** -->
+<!--  BEGIN SCRIPT HEADER HERE -->
+        <script type="text/javascript">
+        <!--
+        //var pageName;  DISABLED
+        //var pageName = "FAQ";  ENABLED
+        var pageName = "Roadmap and Plans";
+        -->
+        </script>
+<!--#include virtual="/inc/script_header.inc"-->
+<!--  END SCRIPT HEADER HERE -->
+<!-- **************************************** -->
+
+</head>
+<body>
+
+<div align="center" id="thePage"> <!-- Start The Page -->  <!-- the align center is to overcome an IE bug -->
+	    <!-- **************************************** -->
+	    <!--  BEGIN RIGHT CONTENT HERE -->
+	    <!--#include virtual="/inc/header_orange.html"-->  <!-- blue=About, green=Using, orange=Contributing -->
+	    <!--  END RIGHT CONTENT HERE -->
+	    <!-- **************************************** -->
+	<div id="pageBodyTier2"> <!-- Start Body -->
+		<div id="leftNav"> <!-- Start Left Nav -->
+				<div id="leftNavTop"></div>
+					<!-- **************************************** -->
+					<!--  BEGIN LEFT NAV SUB HERE -->
+					<!--#include virtual="/inc/leftnav_orange.inc"-->
+					<!--  END LEFT NAV HERE -->
+					<!-- **************************************** -->
+
+					<!-- **************************************** -->
+					<!--  BEGIN SEARCH BOX HERE -->
+					<!--#include virtual="/inc/searchbox.inc"-->
+					<!--  END SEARCH BOX HERE -->
+					<!-- **************************************** -->
+		</div> <!-- End Left Nav -->
+		<div id="bodyContentTier2"> <!-- Start Body Content -->
+			<h1>Oracle</h1>
+			<ul class="head">
+				<li><a href="#info">Info</a></li>
+				<li><a href="#current">Current Status</a></li>
+				<li><a href="#action">Action plan</a></li>
+				<li><a href="#testing">Testing</a></li>
+			</ul>
+
+
+<!-- **************************************** -->
+<!--  Info -->
+<!-- **************************************** -->
+<a name="info"></a>
+<h2>Info</h2>
+<ul>
+	<li>ADO.NET Data Provider for <a href="http://www.oracle.com/">Oracle</a> databases</li>
+
+	<li>Exists in namespace System.Data.OracleClient and assembly System.Data.OracleClient</li>
+
+	<li>Works on Windows and Linux</li>
+
+	<li>Works with Oracle 8i and 9i.</li>
+
+	<li>Uses the Oracle CLI (Call Level Interface) which is a C library (API) for the Oracle Client
+		software</li>
+
+	<li>Internally, the OracleClient provider has OCI abstracted to an object-oriented programming model</li>
+
+	<li>Created by Daniel Morgan and Tim Coleman</li>
+
+	<li>Bugs with Mono or the data provider should be reported
+	in Mono's Bugzilla <a href="http://bugzilla.ximian.com/">here</a>.  If you
+	do not have Bugzilla user account, it is free
+	and easy to
+	create one <a href="http://bugzilla.ximian.com/createaccount.cgi">here</a>.</li>
+</ul>
+
+
+<!-- **************************************** -->
+<!--  Current Status -->
+<!-- **************************************** -->
+<a name="current"></a>
+<h2>Current Status</h2>
+<ul>
+	<li>OracleConnection can connect and disconnect to an Oracle 8i or 9i database on
+	Windows and Linux via OCI (Oracle Call-level Interface)</li>
+
+	<li>Can have multiple connections with different transactions where each transaction is
+	separated from the others, so a rollback or commit in one transaction
+	does not affect the other.</li>
+
+	<li>Can execute simple DML SQL statements, such as,
+	INSERT a row into the EMP table via the OracleCommand's ExecuteNonQuery method</li>
+
+	<li>Can retrieve data via ExecuteReader and OracleDataReader.  Currently,
+	supports character, numeric, some date data types.  ExecuteScalar
+	also works.</li>
+
+	<li>Simple input parameters (character and numeric data) can now
+	be used in SQL queries.  Output parameters do not yet work.</li>
+
+	<li>OracleException and Error handling exists now.</li>
+
+	<li>Message handling needs to be added for non-critical messages
+	received from Oracle</li>
+
+	<li>Handling of various data types need to be added.</li>
+
+	<li>Data Adapter exists, and a DataSet can be filled using it.</li>
+
+	<li>Lots of missing functionality and bugs.</li>
+
+	<li>Works with SQL# command-line and Gtk# GUI versions.</li>
+</ul>
+
+
+<!-- **************************************** -->
+<!--  Action plan< -->
+<!-- **************************************** -->
+<a name="action"></a>
+<h2>Action plan</h2>
+<ul>
+	<li>Be able to retrieve results via a data reader (WORKING)</li>
+	<li>Parameters support (IN PROGRESS)</li>
+	<li>transactions (WORKING)</li>
+	<li>Stored Procedures, Functions, and Packages support</li>
+	<li>Be able to fill a DataTable in a DataSet via a data adapter (IN PROGRESS)</li>
+	<li>Support for Oracle 8i on Linux and Windows (WORKING)</li>
+	<li>Support for Oracle 9i on Linux and Windows (WORKING)</li>
+	<li>Support for Oracle 10g on Linux and Windows [TODO].  Please let us
+	know on mono-list if Mono OracleClient works with Oracle 10g or not.  If not, what errors do you get</li>
+	<li>Support Large OBjects</li>
+	<li>Support all the data types</li>
+	<li>Implement Connection pooling</li>
+	<li>Security</li>
+</ul>
+
+
+<!-- **************************************** -->
+<!--  Testing -->
+<!-- **************************************** -->
+<a name="testing"></a>
+<h2>Testing</h2>
+
+<p><b>Prerequisites</b></p>
+<ul>
+	<li>Have a working mono and mcs</li>
+
+	<li>Have access to an Oracle 8i or 9i database or download it from
+	<a href="http://www.oracle.com/">Oracle</a>.  If you are connecting
+	remotely to an Oracle database, you need the Oracle client software.
+	Registration to the <a href="http://technet.oracle.com/">Oracle Technology Network</a> is free.  If installing on Linux,
+	I suggest you do a lot of searching to see how others installed Oracle on Linux.</li>
+
+	<li>Make sure System.Data.OracleClient.dll assembly is built.</li>
+
+	<li>Take a look at TestOracleClient.cs found at mcs/class/System.Data.OracleClient/Test</li>
+
+	<li>The Data Source is an Oracle TNSNAME</li>
+</ul>
+
+<p><b>Connection String Format</b></p>
+<ul>
+	<li>Has a connection string format:
+<pre>
+"Data Source=tnsname;User ID=userid;Password=password"
+</pre>
+	</li>
+</ul>
+
+<p><b>C# Example</b></p>
+<pre>
+ using System;
+ using System.Data;
+ using System.Data.OracleClient;
+
+ public class Test
+ {
+    public static void Main (string[] args)
+    {
+       string connectionString =
+          "Data Source=testdb;" +
+          "User ID=scott;" +
+          "Password=tiger;";
+       OracleConnection dbcon = null;
+       dbcon = new OracleConnection (connectionString);
+       dbcon.Open ();
+       OracleCommand dbcmd = dbcon.CreateCommand ();
+       string sql = "SELECT ename, job FROM scott.emp";
+       dbcmd.CommandText = sql;
+       OracleDataReader reader = dbcmd.ExecuteReader ();
+       while (reader.Read ()) {
+          string employeeName = (string) reader["ename"];
+          string job = (string) reader["job"];
+          Console.WriteLine ("Employee Name: {0}  Job: {1}",
+		                    employeeName, job);
+       }
+       // clean up
+       reader.Close ();
+       reader = null;
+       dbcmd.CommandText = sql;
+       dbcmd.ExecuteNonQuery ();
+       dbcmd.Dispose ();
+       dbcmd = null;
+       dbcon.Close ();
+       dbcon = null;
+    }
+ }
+</pre>
+<ul>
+	<li>Building C# Example:
+	<ul>
+		<li>Save the example to a file, such as, TestExample.cs</li>
+		<li>Build on Linux:
+<pre>
+	mcs TestExample.cs -r System.Data.dll \
+	    -r System.Data.OracleClient.dll
+</pre>
+		</li>
+		<li>Build on Windows:
+<pre>
+	mcs TestExample.cs  /r:System.Data.dll \
+	    /r:System.Data.OracleClient.dll
+</pre>
+		</li>
+	</ul>
+	</li>
+	<li>Running the Example:
+<pre>
+mono TestExample.exe
+</pre>
+	</li>
+</ul>
+
+
+		</div> <!-- End Body Content -->
+		<div class="clear"></div>
+	</div> <!-- End Body -->
+
+	<!-- **************************************** -->
+	<!--  BEGIN FOOTER HERE -->
+	<!--#include virtual="/inc/footer.inc"-->
+	<!--  END FOOTER HERE -->
+	<!-- **************************************** -->
+</div> <!-- End The Page -->
+
+</body>
+</html>

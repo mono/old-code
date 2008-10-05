@@ -1,0 +1,124 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
+
+<html>
+<head>
+	<title>Drawing</title>
+
+	<meta name="Robots" content="INDEX, FOLLOW">
+	<meta http-equiv="Content-Language" content="en">
+	<meta http-equiv="Content-Type" content="text/html; CHARSET=UTF-8">
+	<meta name="keywords" content="mono">
+	<meta name="description" content="Drawing APIs">
+	<meta name="author" content="Jonathan Duncan">
+	<meta name="date" content="14-Apr-2004">
+	<meta name="modified-by" content="Jonathan Duncan">
+	<meta name="modified" content="09-Dec-2004">
+
+	<style type="text/css" media="all"><!--  @import url(/inc/mono-main.css); --></style>
+	<style type="text/css" media="all"><!--  @import url(/inc/mono-orange.css); --></style>  <!-- blue=About, green=Using, orange=Contributing -->
+
+<!-- **************************************** -->
+<!--  BEGIN SCRIPT HEADER HERE -->
+        <script type="text/javascript">
+        <!--
+        //var pageName;  DISABLED
+        //var pageName = "FAQ";  ENABLED
+        var pageName = "Roadmap and Plans";
+        -->
+        </script>
+<!--#include virtual="/inc/script_header.inc"-->
+<!--  END SCRIPT HEADER HERE -->
+<!-- **************************************** -->
+
+</head>
+<body>
+
+<div id="thePage"> <!-- Start The Page -->
+	    <!-- **************************************** -->
+	    <!--  BEGIN RIGHT CONTENT HERE -->
+	    <!--#include virtual="/inc/header_orange.html"-->  <!-- blue=About, green=Using, orange=Contributing -->
+	    <!--  END RIGHT CONTENT HERE -->
+	    <!-- **************************************** -->
+	<div id="pageBodyTier2"> <!-- Start Body -->
+		<div id="leftNav"> <!-- Start Left Nav -->
+				<div id="leftNavTop"></div>
+					<!-- **************************************** -->
+					<!--  BEGIN LEFT NAV SUB HERE -->
+					<!--#include virtual="/inc/leftnav_orange.inc"-->
+					<!--  END LEFT NAV HERE -->
+					<!-- **************************************** -->
+
+					<!-- **************************************** -->
+					<!--  BEGIN SEARCH BOX HERE -->
+					<!--#include virtual="/inc/searchbox.inc"-->
+					<!--  END SEARCH BOX HERE -->
+					<!-- **************************************** -->
+		</div> <!-- End Left Nav -->
+		<div id="bodyContentTier2"> <!-- Start Body Content -->
+			<h1>Drawing</h1>
+			<ul class="head">
+				<li><a href="#system">System.Drawing</a></li>
+				<li><a href="#cairo">Mono.Cairo</a></li>
+			</ul>
+			
+			<p>Mono provides two mechanism to draw.  The first exposes the
+	Microsoft System.Drawing API and the second exposes the <a
+	href="http://www.cairographics.org">Cairo</a> API.</p>
+			
+			<a name="system"></a>
+			<h2>System.Drawing</h2>
+<p>
+	The System.Drawing implementation in Mono is designed to be
+	compatible with the Microsoft API.  The imaging model is very
+	similar to the PDF 1.4 composition-based imaging model.</p>
+<p>
+	Our implementation is a C# wrapper around the GDI+ C API (also
+	called the <a
+	href="http://msdn.microsoft.com/library/default.asp?url=/library/en-us/gdicpp/GDIPlus/GDIPlusReference.asp">"GDI+
+	Flat API"</a>).</p>
+<p>
+	This means that the C# code is the same for Windows and UNIX
+	systems.  The following graph explains the situation:</p>
+<p>
+	<center>
+	<img src="/img/system-drawing.png">
+	</center>
+<p>
+	In Windows Mono uses the GDI+ library that is included with
+	the operating system (<tt>GDIPLUS.DLL</tt>, while in UNIX we
+	provide an implementation of this API in the
+	<tt>libgdiplus.so</tt> shared library.  Our
+	<tt>libgdiplus.so</tt> has the same C Flat API as the
+	<tt>GDIPLUS.DLL</tt>.  Our implementation uses Cairo to do
+	the heavy lifting.</p>
+<p>
+	The implementation of GDI+ lives in the libgdiplus cvs module
+	and requires <a
+	href="http://www.cairographics.org">Cairo</a> to be installed
+	to get the package built.</p>
+<p>
+	The C# code that implement System.Drawing is the same for
+	Windows and UNIX builds.</p>
+<p>
+	Since this is an implementation of an existing Microsoft API
+	no architectural changes go here.</p>
+			
+			
+			<a name="cairo"></a>
+			<h2>Mono.Cairo</h2>
+			<p>The Mono.Cairo.dll assembly exposes the Cairo API to managed applications. The mapping is a pretty straightforward one, and the programming model is very close to the C API.</p>
+			<p>This API is still unstable due to the nature of the underlying API being used and will be revisited as Cairo evolves.</p>
+
+		</div> <!-- End Body Content -->
+		<div class="clear"></div>
+	</div> <!-- End Body -->
+
+	<!-- **************************************** -->
+	<!--  BEGIN FOOTER HERE -->
+	<!--#include virtual="/inc/footer.inc"-->
+	<!--  END FOOTER HERE -->
+	<!-- **************************************** -->
+</div> <!-- End The Page -->
+
+</body>
+</html>

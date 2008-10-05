@@ -1,0 +1,35 @@
+table.member {
+	margin-bottom: 15px;
+	width: 350px;
+}
+
+td.memberpicture {
+	background-color: #8aafd3;
+	margin: 0px;
+	border-width: 0px;
+}
+
+td.memberinfo {
+	background-color: #8aafd3;
+	font-size: larger;
+	color: White;
+}
+
+td.memberinfo a {	
+	font-size: larger;
+}
+
+td.memberdetailcategory {
+	font-weight: bold;
+	background-color: #c6e1fc;
+	width: 100px;
+}
+
+td.memberdetail {
+	background-color: #c6e1fc;
+}
+
+td.memberdetail ol {
+	list-style-type: upper-roman;
+	margin-left: -12px;
+}

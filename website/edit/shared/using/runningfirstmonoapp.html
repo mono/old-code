@@ -1,0 +1,112 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
+
+<html>
+<head>
+	<title>Running your first Mono application</title>
+
+	<meta name="Robots" content="INDEX, FOLLOW">
+	<meta http-equiv="Content-Language" content="en">
+	<meta http-equiv="Content-Type" content="text/html; CHARSET=UTF-8">
+	<meta name="keywords" content="mono">
+	<meta name="description" content="Tips on how to run a Mono application">
+	<meta name="author" content="Jonathan Duncan">
+	<meta name="date" content="14-Apr-2004">
+	<meta name="modified-by" content="Jonathan Duncan">
+	<meta name="modified" content="14-Apr-2004">
+
+	<style type="text/css" media="all"><!--  @import url(/inc/mono-main.css); --></style>
+	<style type="text/css" media="all"><!--  @import url(/inc/mono-green.css); --></style>  <!-- blue=About, green=Using, orange=Contributing -->
+
+	<!-- **************************************** -->
+	<!--  BEGIN SCRIPT HEADER HERE -->
+        <script type="text/javascript">
+        <!--
+        //var pageName;  DISABLED
+        //var pageName = "FAQ";  ENABLED
+        var pageName = "Quick Start";
+        -->
+        </script>
+	<!--#include virtual="/inc/script_header.inc"-->
+	<!--  END SCRIPT HEADER HERE -->
+	<!-- **************************************** -->
+
+</head>
+<body>
+
+<div id="thePage"> <!-- Start The Page -->
+	    <!-- **************************************** -->
+	    <!--  BEGIN RIGHT CONTENT HERE -->
+	    <!--#include virtual="/inc/header_green.html"-->  <!-- blue=About, green=Using, orange=Contributing -->
+	    <!--  END RIGHT CONTENT HERE -->
+	    <!-- **************************************** -->
+	<div id="pageBodyTier2"> <!-- Start Body -->
+		<div id="leftNav"> <!-- Start Left Nav -->
+				<div id="leftNavTop"></div>
+					<!-- **************************************** -->
+					<!--  BEGIN LEFT NAV SUB HERE -->
+					<!--#include virtual="/inc/leftnav_green.inc"-->
+					<!--  END LEFT NAV HERE -->
+					<!-- **************************************** -->
+
+					<!-- **************************************** -->
+					<!--  BEGIN SEARCH BOX HERE -->
+					<!--#include virtual="/inc/searchbox.inc"-->
+					<!--  END SEARCH BOX HERE -->
+					<!-- **************************************** -->
+		</div> <!-- End Left Nav -->
+		<div id="bodyContentTier2"> <!-- Start Body Content -->
+			<h1>Running your first Mono&#8482; application</h1>
+
+			<p>The normal way to run an application you have compiled with Mono would be to invoke it through the Mono runtime, like this:</p>
+<pre>
+mono myprogram.exe
+</pre>
+
+
+			<p>However, there are two things you can do to make it more  convenient to run Mono applications on Linux. The first is to use a shell  script instead of the EXE file. For example, if you had  "myprogram.exe" you could create a shell script called  "myprogram" that had the contents:</p>
+<pre>
+#!/bin/sh
+/usr/bin/mono /usr/bin/myprogram.exe "$@"
+</pre>
+
+			<p>When you run "myprogram," the shell will replace $@ with any arguments you  provided.</p>
+
+			<p>If you installed mono to a different location, substitute that for  /usr/bin/mono. You can check with the "which mono" command.</p>
+
+			<p>You can also make a systemwide change, and use binfmt to register  the exe files as non-native binaries. Then, when trying to launch an  exe file, the kernel will run the mono interpreter to handle the  command. Binfmt can also be used to launch Windows executables using WINE,  or Java .class files using a JVM. To register exe with the kernel:</p>
+
+			<ol>
+				<li>Become root and turn on the binfmt module in your kernel with this command:
+<pre>
+modprobe binfmt
+</pre>
+				In addition, you may want to add that command to your /etc/rc.local boot script, so that it will be executed on boot.</li>
+				<li>Add the line below to your /etc/fstab file:
+<pre>
+binfmt_misc /proc/sys/fs/binfmt_misc binfmt_misc none
+</pre></li>
+				<li>Then, have your system run the following command on boot:
+<pre>
+echo ':CLR:M::MZ::/usr/bin/mono:' > /proc/sys/fs/binfmt_misc/register
+</pre></li>
+				<li>Be sure to mark your .exe files as executable in the filesystem as well:
+<pre>
+chmod +x myprogram.exe
+</pre></li>
+			</ol>
+
+			<p>Note that this doesn't change your kernel, just the modules that it loads  when you boot your system. In other words, you can still upgrade your kernel without worrying about losing these changes. Similarly, you can upgrade your  Mono runtime without affecting any of the invocation methods listed in this section.</p>
+
+		</div> <!-- End Body Content -->
+		<div class="clear"></div>
+	</div> <!-- End Body -->
+
+	<!-- **************************************** -->
+	<!--  BEGIN FOOTER HERE -->
+	<!--#include virtual="/inc/footer.inc"-->
+	<!--  END FOOTER HERE -->
+	<!-- **************************************** -->
+</div> <!-- End The Page -->
+
+</body>
+</html>

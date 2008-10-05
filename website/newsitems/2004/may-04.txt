@@ -1,0 +1,13 @@
+@Mono Beta 1 available 
+
+	<table>
+	<tr>
+	  <td>
+	    <img
+	    src="http://www.go-mono.com/images/beta1-anim.gif"></td>
+	  <td>Mono Beta 1 has been released.  See our <a
+	   href="http://www.mono-project.com/using/relnotes/1.0-beta1.html">Release
+	   Notes</a>, or go directly to the <a href="http://www.mono-project.com/downloads/index.html">download</a> page. 
+	  </td>
+	</tr>
+	</table>

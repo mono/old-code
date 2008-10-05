@@ -1,0 +1,288 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
+
+<html>
+<head>
+	<title>The Mono Runtime</title>
+
+	<meta name="Robots" content="INDEX, FOLLOW">
+	<meta http-equiv="Content-Language" content="en">
+	<meta http-equiv="Content-Type" content="text/html; CHARSET=UTF-8">
+	<meta name="keywords" content="mono">
+	<meta name="description" content="Technical details of the Mono Runtime">
+	<meta name="author" content="Jonathan Duncan">
+	<meta name="date" content="14-Apr-2004">
+	<meta name="modified-by" content="Jonathan Duncan">
+	<meta name="modified" content="14-Apr-2004">
+
+	<style type="text/css" media="all"><!--  @import url(/inc/mono-main.css); --></style>
+	<style type="text/css" media="all"><!--  @import url(/inc/mono-green.css); --></style>  <!-- blue=About, green=Using, orange=Contributing -->
+
+<!-- **************************************** -->
+<!--  BEGIN SCRIPT HEADER HERE -->
+        <script type="text/javascript">
+        <!--
+        //var pageName;  DISABLED
+        //var pageName = "FAQ";  ENABLED
+        var pageName = "Developing with Mono";
+        -->
+        </script>
+<!--#include virtual="/inc/script_header.inc"-->
+<!--  END SCRIPT HEADER HERE -->
+<!-- **************************************** -->
+
+</head>
+<body>
+
+<div id="thePage"> <!-- Start The Page -->
+	    <!-- **************************************** -->
+	    <!--  BEGIN RIGHT CONTENT HERE -->
+	    <!--#include virtual="/inc/header_green.html"-->  <!-- blue=About, green=Using, orange=Contributing -->
+	    <!--  END RIGHT CONTENT HERE -->
+	    <!-- **************************************** -->
+	<div id="pageBodyTier2"> <!-- Start Body -->
+		<div id="leftNav"> <!-- Start Left Nav -->
+				<div id="leftNavTop"></div>
+					<!-- **************************************** -->
+					<!--  BEGIN LEFT NAV SUB HERE -->
+					<!--#include virtual="/inc/leftnav_green.inc"-->
+					<!--  END LEFT NAV HERE -->
+					<!-- **************************************** -->
+
+					<!-- **************************************** -->
+					<!--  BEGIN SEARCH BOX HERE -->
+					<!--#include virtual="/inc/searchbox.inc"-->
+					<!--  END SEARCH BOX HERE -->
+					<!-- **************************************** -->
+		</div> <!-- End Left Nav -->
+		<div id="bodyContentTier2"> <!-- Start Body Content -->
+			<h1>The Mono Runtime</h1>
+			<ul class="head">
+				<li><a href="#monorun">The Mono runtime</a></li>
+				<li><a href="#com">COM and XPCOM</a></li>
+			</ul>
+
+<!-- **************************************** -->
+<!--  The Mono runtime -->
+<!-- **************************************** -->
+			<a name="monorun"></a>
+			<h2>The Mono runtime</h2>
+				<p>The Mono runtime engine implements a Just-in-Time compiler engine for the CIL
+				virtual machine, the class loader, the garbage collector,
+				threading system and metadata access libraries.</p>
+
+				<p>We currently support two runtimes:</p>
+
+				<ul>
+					<li><b>mono:</b> Our Just-in-Time and Ahead-of-Time code
+							  generator for maximum performance.  This supports
+							  x86, PowerPC and SPARC cpus.
+
+					<li><b>mint:</b> The Mono interpreter.  This is an
+							  easy-to-port runtime engine.
+				</ul>
+
+				<p>We are using the Boehm conservative garbage collector.</p>
+
+				<p>The Mono runtime can be used as a stand-alone process, or it
+				can be <a href="embedded-api.html">embedded into applications</a> (see
+				the documentation in mono/samples/embed for more details).</p>
+
+				<p>Embedding the Mono runtime allows applications to be extended
+				in C# while reusing all of the existing C and C++ code. </p>
+
+				<p>Paolo Molaro did a presentation on the current JIT engine and
+				the new JIT engine.  You can find his <a
+				href="http://primates.ximian.com/~lupus/slides/jit/">slides
+				here</a></p>
+
+			<p><b>Current JIT Engine: technical details (<b>updated, June 28th, 2003</b>)</b></p>
+
+				<p>We have re-written our JIT compiler. We wanted to support a
+				number of features that were missing:</p>
+
+				<ul>
+					<li><p>Ahead-of-time compilation.</p>
+
+						<p>The idea is to allow developers to pre-compile their code
+						to native code to reduce startup time, and the working
+						set that is used at runtime in the just-in-time compiler.</p>
+
+						<p>Although in Mono this has not been a visible problem, we
+						wanted to pro-actively address this problem.</p>
+
+						<p>When an assembly (a Mono/.NET executable) is installed in
+						the system, it would then be possible to pre-compile the
+						code, and have the JIT compiler tune the generated code
+						to the particular CPU on which the software is
+						installed. </p>
+
+						<p>This is done in the Microsoft.NET world with a tool
+						called ngen.exe</p>
+
+					<li><p>Have a good platform for doing code optimizations. </p>
+
+						<p>The design called for a good architecture that would
+						enable various levels of optimizations: some
+						optimizations are better performed on high-level
+						intermediate representations, some on medium-level and
+						some at low-level representations.</p>
+
+						<p>Also it should be possible to conditionally turn these on
+						or off.  Some optimizations are too expensive to be used
+						in just-in-time compilation scenarios, but these
+						expensive optimizations can be turned on for
+						ahead-of-time compilations or when using profile-guided
+						optimizations on a subset of the executed methods.</p>
+
+					<li><p>Reduce the effort required to port the Mono code
+					             generator to new architectures.</p>
+
+						<p>For Mono to gain wide adoption in the UNIX world, it is
+						necessary that the JIT engine works in most of today's
+						commercial hardware platforms. </p>
+				</ul>
+
+				<p>The JIT engine implements a number of optimizations:</p>
+
+				<ul>
+					<li>Opcode cost estimates (our architecture allows
+						us to generate different code paths depending
+						on the target CPU dynamically).
+
+					<li>Inlining.
+
+					<li>Constant folding, copy propagation, dead code elimination.
+
+						Although compilers typically do
+						constant folding, the combination of inlining with
+						constant folding gives some very good results.
+
+					<li>Linear scan register allocation.  In the past,
+						register allocation was our achilles heel, but now
+						we have left this problem behind.
+
+					<li>SSA-based framework.  Various optimizations are
+						implemented on top of this framework
+				</ul>
+
+				<p>There are a couple of books that deal with this technique: "A
+				Retargetable C Compiler" and "Advanced Compiler Design and
+				Implementation" are good references.  You can also get a
+			        technical description of <a
+ href="http://research.microsoft.com/copyright/accept.asp?path=http://www.research.microsoft.com/~drh/pubs/iburg.pdf&amp;pub=ACM">lbrug</a>.</p>
+
+				<p>The new JIT engines uses three intermediate representations:
+				the source is the CIL which is transformed into a forest of
+				trees; This is fed into a BURS instruction selector that
+				generates the final low-level intermediate representation.</p>
+
+				<p>The instruction selector is documented in the following
+				papers:</p>
+
+				<ul>
+					<li><a href="http://research.microsoft.com/copyright/accept.asp?path=http://www.research.microsoft.com/~drh/pubs/interface.pdf&amp;pub=wiley">A code generation interface for ANSI C</a>
+
+
+					<li><a href="http://research.microsoft.com/copyright/accept.asp?path=http://www.research.microsoft.com/~drh/pubs/iburg.pdf&amp;pub=ACM">Engineering efficient code generators using tree matching and dynamic programming.</a>
+
+				</ul>
+
+			<p><b>Garbage Collection</b></p>
+
+				<p>We are using the Boehm conservative GC.  We might consider
+				adopting other GC engines in the future, like the Intel ORP GC
+				engine.  The Intel ORP GC engine as it provides a precise
+				garbage collector engine, similar to what is available on the
+				.NET environment.</p>
+
+				<ul>
+					<li>Garbage collection list and FAQ:<br>
+							  <a href="http://www.iecc.com/gclist/">http://www.iecc.com/gclist/</a>
+
+					<li>"GC points in a Threaded Environment":<br>
+							  <a href="http://research.sun.com/techrep/1998/abstract-70.html">
+							  http://research.sun.com/techrep/1998/abstract-70.html</a>
+
+					<li>"A Generational Mostly-concurrent Garbage Collector":<br>
+							  <a href="http://research.sun.com/techrep/2000/abstract-88.html">
+							  http://research.sun.com/techrep/2000/abstract-88.html</a>
+
+					<li>Details on The Microsoft .NET Garbage Collection Implementation:<br>
+							  <a href="http://msdn.microsoft.com/library/default.asp?url=/library/en-us/dnmag00/html/GCI.asp">http://msdn.microsoft.com/library/default.asp?url=/library/en-us/dnmag00/html/GCI.asp</a><br>
+							  <a href="http://msdn.microsoft.com/library/default.asp?url=/library/en-us/dnmag00/html/GCI2.asp">http://msdn.microsoft.com/library/default.asp?url=/library/en-us/dnmag00/html/GCI2.asp</a>
+				</ul>
+
+			<p><b>IO and threading</b></p>
+
+				<p>The ECMA runtime and the .NET runtime assume an IO model and a
+				threading model that is very similar to the Win32 API.  </p>
+
+				<p>Dick Porter has developed WAPI: the Mono abstraction layer
+				that allows our runtime to execute code that depend on this
+				behaviour.</p>
+
+			<p><b>Useful links</b></p>
+
+				<p>Paolo Molaro found a few interesting links:</p>
+
+				<ul>
+					<li>On compilation of stack-based languages:<br>
+							<a href="http://www.complang.tuwien.ac.at/projects/rafts.html">
+							http://www.complang.tuwien.ac.at/projects/rafts.html</a>
+
+					<li>A paper on fast JIT compilation of a stack-based language:<br>
+							  <a href="http://www.research.microsoft.com/~cwfraser/pldi99codegen.pdf">
+							  http://www.research.microsoft.com/~cwfraser/pldi99codegen.pdf</a>
+
+					<li>Vmgen generates much of the code for efficient virtual machine (VM)
+							  interpreters from simple descriptions of the VM instructions:<br>
+							  <a href="http://www.complang.tuwien.ac.at/anton/vmgen/">
+							  http://www.complang.tuwien.ac.at/anton/vmgen</a>
+				</ul>
+
+			<p><b>PInvoke</b></p>
+
+				<p>PInvoke is the mechanism we are using to wrap UNIX API calls
+				as well as talking to system libraries.</p>
+
+				<p>Initially we used libffi, but it was fairly slow, so we have
+				reused parts of the JIT work to create efficient PInvoke
+				trampolines.</p>
+
+			<p><b>Remoting</b></p>
+
+				<p>Mono has support for remoting and proxy objects, just like
+				.NET does.  The runtime provides these facilities.</p>
+
+			<p><b>Porting</b></p>
+
+				<p>If you are interested in porting the Mono runtime to other
+				platforms, you might find the pre-compiled <a
+				href="http://www.go-mono.com/archive/mono-tests.tar.gz">Mono regression test
+				suite</a> useful to debug your implementation.</p>
+
+
+<!-- **************************************** -->
+<!--  COM and XPCOM -->
+<!-- **************************************** -->
+			<a name="com"></a>
+			<h2>COM and XPCOM</h2>
+				<p>We plan on adding support for XPCOM on UNIX and COM on Microsoft Windows later in our development process.</p>
+
+
+
+
+
+		</div> <!-- End Body Content -->
+		<div class="clear"></div>
+	</div> <!-- End Body -->
+
+	<!-- **************************************** -->
+	<!--  BEGIN FOOTER HERE -->
+	<!--#include virtual="/inc/footer.inc"-->
+	<!--  END FOOTER HERE -->
+	<!-- **************************************** -->
+</div> <!-- End The Page -->
+
+</body>
+</html>

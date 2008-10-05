@@ -1,0 +1,7 @@
+<p>
+<h1><a href="@BASEDIR@@ENTRY_PERMALINK@" class="entryTitle">@ENTRY_CAPTION@</a></h1>
+<div class='blogentry'>@ENTRY_BODY@</div>
+<p>
+<div class='footer'>Posted by @COPYRIGHT@ on <a href="@BASEDIR@@ENTRY_PERMALINK@">@ENTRY_DATECAPTION@</a></div><p>
+<hr/>
+@ENTRY_NAVIGATION@

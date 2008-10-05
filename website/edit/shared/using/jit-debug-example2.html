@@ -1,0 +1,18 @@
+<html>
+<head>
+<title>Debugging with GDB: example 2</title>
+<style type="text/css" media="all"><!--  @import url(/inc/mono-main.css); --></style>
+</head>
+
+<body>
+<div id="bodyContentTier2">
+<pre>
+(gdb) p print_method_from_ip (0x0817f490)
+IP 0x817f490 at offset 0x28 of method (wrapper managed-to-native) System.String:GetHashCode () (0x817f468 0x817f4a4)
+$1 = void
+(gdb) p print_method_from_ip (0x0817f42a)
+IP 0x817f42a at offset 0x52 of method System.Collections.Hashtable:GetHash (object) (0x817f3d8 0x817f43b)
+$2 = void
+</pre>
+</div>
+</body>

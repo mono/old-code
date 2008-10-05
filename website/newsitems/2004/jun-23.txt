@@ -1,0 +1,10 @@
+@The Mono Hackers Hall of Fame welcomes John Luke, Dan Morgan and Tim Coleman
+<p>
+	The <a href="http://www.mono-project.com/contributing/hall.html">Mono Hackers Hall Of Fame</a>
+	continues to show our appreciation to the excellent
+	contributors that make <b>mono::</b> a successful free
+	software project.
+<p>
+	John Luke, Dan Morgan and Tim Coleman are now part of the Mono
+	Hackers Hall of Fame.
+<p>

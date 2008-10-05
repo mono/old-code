@@ -1,0 +1,4 @@
+@Release of Mono 1.0 Beta 3
+
+<img src="http://www.mono-project.com/img/beta3.gif" align="left" alt="Mono 1.0 Beta 3 is here !">
+Mono Beta 3 has been released.  Available for download on <a href="http://www.mono-project.com/downloads/index.html">download</a> page. <br><br><br><br><br>

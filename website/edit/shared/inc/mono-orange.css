@@ -1,0 +1,55 @@
+/*
+
+This Style Sheet was created by Jonathan Duncan for Novell, Inc.
+Author address: jduncan@novell.com
+Created: 14-Apr-2004
+Modified-by: Jonathan Duncan
+Modified: 14-Apr-2004
+
+*/
+
+
+
+/*************/
+/* Elements */
+/*************/
+body {
+	background: #ffc56e; /* #ffa929 */
+}
+
+
+
+/*************/
+/* Divisions */
+/*************/
+#pageHeader {
+	background: transparent url(/img/mono_headspace_o.gif) top left repeat-x;
+}
+
+
+#leftNavTop {
+	background-color: #D17A08; /* #c67000 */
+}
+#searchBoxTop {
+	background-color: #D17A08; /* #c67000 */
+}
+ul#menu li a:hover {
+	color: #ffc56e; /* #ffa929 */
+}
+
+#bodyContent h1 {
+	color: #c67000;
+}
+#bodyContent a:hover {
+	color: #c67000;
+}
+#bodyContentTier2 h1 {
+	color: #c67000;
+}
+#bodyContentTier2 a:hover {
+	color: #c67000;
+}
+
+#footer {
+	color: #a6650b;
+}

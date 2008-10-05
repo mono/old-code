@@ -1,0 +1,117 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
+
+<html>
+<head>
+	<title>FAQ</title>
+
+	<meta name="Robots" content="INDEX, FOLLOW">
+	<meta http-equiv="Content-Language" content="en">
+	<meta http-equiv="Content-Type" content="text/html; CHARSET=UTF-8">
+	<meta name="keywords" content="mono">
+	<meta name="description" content="Frequently Asked Questions">
+	<meta name="author" content="Jonathan Duncan">
+	<meta name="date" content="14-Apr-2004">
+	<meta name="modified-by" content="Jonathan Duncan">
+	<meta name="modified" content="12-Aug-2004">
+
+	<style type="text/css" media="all"><!--  @import url(/inc/mono-main.css); --></style>
+	<style type="text/css" media="all"><!--  @import url(/inc/mono-blue.css); --></style>  <!-- blue=About, green=Using, orange=Contributing -->
+
+	<!-- **************************************** -->
+	<!--  BEGIN SCRIPT HEADER HERE -->
+        <script type="text/javascript">
+        <!--
+        //var pageName;  DISABLED
+        //var pageName = "FAQ";  ENABLED
+        var pageName = "FAQ";
+        -->
+        </script>
+	<!--#include virtual="/inc/script_header.inc"-->
+	<!--  END SCRIPT HEADER HERE -->
+	<!-- **************************************** -->
+
+</head>
+<body>
+
+<div id="thePage"> <!-- Start The Page -->
+	    <!-- **************************************** -->
+	    <!--  BEGIN RIGHT CONTENT HERE -->
+	    <!--#include virtual="/inc/header_blue.html"-->  <!-- blue=About, green=Using, orange=Contributing -->
+	    <!--  END RIGHT CONTENT HERE -->
+	    <!-- **************************************** -->
+	<div id="pageBodyTier2"> <!-- Start Body -->
+		<div id="leftNav"> <!-- Start Left Nav -->
+				<div id="leftNavTop"></div>
+					<!-- **************************************** -->
+					<!--  BEGIN LEFT NAV SUB HERE -->
+					<!--#include virtual="/inc/leftnav_blue.inc"-->
+					<!--  END LEFT NAV HERE -->
+					<!-- **************************************** -->
+
+					<!-- **************************************** -->
+					<!--  BEGIN SEARCH BOX HERE -->
+					<!--#include virtual="/inc/searchbox.inc"-->
+					<!--  END SEARCH BOX HERE -->
+					<!-- **************************************** -->
+		</div> <!-- End Left Nav -->
+		<div id="bodyContentTier2"> <!-- Start Body Content -->
+			<h1>Frequently Asked Questions</h1>
+			<ul class="head">
+				<li><a href="#licensing">Licensing</a></li>
+				<li><a href="#patents">Patents</a></li>
+				<li><a href="#etc">Miscellaneous Questions</a></li>
+
+			</ul>
+			<a name="licensing"></a>
+			<h2>Licensing</h2>
+			<p><a name="q128"></a><b>Question 128:</b> Will I be able to write proprietary applications that run with Mono?</p>
+			<p>Yes.  The licensing scheme is planned to allow proprietary developers to write applications with Mono.</p>
+
+			<p><a name="q129"></a><b>Question 129:</b> What license or licenses are you using for the Mono Project?</p>
+			<p>The C# Compiler is released under the terms of the <a href="http://www.opensource.org/licenses/gpl-license.html">GNU General Public License</a> (GPL).  The runtime libraries are under the <a href="http://www.gnu.org/copyleft/library.html#TOC1">GNU Library GPL 2.0</a> (LGPL 2.0).  And the class libraries are released under the terms of the <a href="http://www.opensource.org/licenses/mit-license.html">MIT X11</a> license.</p>
+			<p>The Mono runtime and the Mono C# Compiler are also available under a proprietary license for those who can not use the LGPL and the GPL in their code.</p>
+			<p>For licensing details, contact <a href="mailto:mono-licensing@novell.com">mono-licensing@novell.com</a></p>
+
+			<p><a name="q130"></a><b>Question 130:</b> I would like to contribute code to Mono under a particular license. What licenses will you accept?</p>
+			<p>We will have to evaluate the licenses for compatibility first, but as a general rule, we will accept the code under the same terms of the "container" module.</p>
+
+			<a name="patents"></a>
+			<h2>Patents</h2>
+			<p><a name="q131"></a><b>Question 131:</b> Could patents be used to completely disable Mono (either submarine patents filed now, or changes made by Microsoft specifically to create patent problems)?</p>
+			<p>First some background information.</p>
+			<p>The .NET Framework is divided in two parts: the ECMA/ISO covered technologies and the other technologies developed on top of it like ADO.NET, ASP.NET and Windows.Forms.</p>
+			<p>Mono implements the ECMA/ISO covered parts, as well as being a project that aims to implement the higher level blocks like ASP.NET, ADO.NET and Windows.Forms.</p>
+			<p>The Mono project has gone beyond both of those components and has developed and integrated third party class libraries, the most important being: Debugging APIs, integration with the Gnome platform (Accessibility, Pango rendering, Gdk/Gtk, Glade, GnomeUI), Mozilla, OpenGL, extensive database support (Microsoft only supports a couple of providers out of the box, while Mono has support for 11 different providers), our POSIX integration libraries and finally the embedded API (used to add scripting to applications and host the CLI, or for example as an embedded runtime in Apache).</p>
+			<p>The core of the .NET Framework, and what has been patented by Microsoft falls under the ECMA/ISO submission.  Jim Miller at Microsoft has made a statement on the patents covering ISO/ECMA, (he is one of the inventors listed in the patent): <a href="http://web.archive.org/web/20030609164123/http://mailserver.di.unipi.it/pipermail/dotnet-sscli/msg00218.html">here</a>.
+
+			<p>Basically a grant is given to anyone who want to implement those components for free and for any purpose.</p>
+			<p>The controversial elements are the ASP.NET, ADO.NET and Windows.Forms subsets.  Those are convenient for people who need full compatibility with the Windows platform, but are not required for the open source Mono platform, nor integration with today's Mono's rich support of Linux.</p>
+			<p>The Mono strategy for dealing with these technologies is as follows: (1) work around the patent by using a different implementation technique that retains the API, but changes the mechanism; if that is not possible, we would (2) remove the pieces of code that were covered by those patents, and also (3) find prior art that would render the patent useless.</p>
+			<p>Not providing a patented capability would weaken the interoperability, but it would still provide the free software / open source software community with good development tools, which is the primary reason for developing Mono.</p>
+			<p>The patents do not apply in countries where software patents are not allowed.</p>
+			<p>For Linux server and desktop development, we only need the ECMA components, and things that we have developed (like Gtk#) or Apache integration.</p>
+
+			<p><a name="q132"></a><b>Question 132:</b> Is Mono only an implementation of the .NET Framework?</p>
+			<p>Mono implements both the .NET Framework, as well as plenty of class libraries that are either UNIX specific, <a href="http://www.gnome.org">Gnome</a> specific, or that are not part of the .NET Framework but people find useful.</p>
+
+<!--
+			<p>The following map shows the relationship between the components:</p>
+			<p><img src="/img/monocomponentsmap.png"></p>
+-->
+
+			<h2>Credits</h2>
+			<p>The FAQ contains material contributed by Miguel de Icaza, Jaime Anguiano, Lluis Sánchez.</p>
+
+		</div> <!-- End Body Content -->
+		<div class="clear"></div>
+	</div> <!-- End Body -->
+
+	<!-- **************************************** -->
+	<!--  BEGIN FOOTER HERE -->
+	<!--#include virtual="/inc/footer.inc"-->
+	<!--  END FOOTER HERE -->
+	<!-- **************************************** -->
+</div> <!-- End The Page -->
+
+</body>
+</html>

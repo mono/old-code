@@ -1,0 +1,165 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
+
+<html>
+<head>
+	<title>Java</title>
+
+	<meta name="Robots" content="INDEX, FOLLOW">
+	<meta http-equiv="Content-Language" content="en">
+	<meta http-equiv="Content-Type" content="text/html; CHARSET=UTF-8">
+	<meta name="keywords" content="mono">
+	<meta name="description" content="Overview of the goal to support the Java language in Mono">
+	<meta name="author" content="Jonathan Duncan">
+	<meta name="date" content="14-Apr-2004">
+	<meta name="modified-by" content="Jonathan Duncan">
+	<meta name="modified" content="09-Dec-2004">
+
+	<style type="text/css" media="all"><!--  @import url(/inc/mono-main.css); --></style>
+	<style type="text/css" media="all"><!--  @import url(/inc/mono-orange.css); --></style>  <!-- blue=About, green=Using, orange=Contributing -->
+
+<!-- **************************************** -->
+<!--  BEGIN SCRIPT HEADER HERE -->
+        <script type="text/javascript">
+        <!--
+        //var pageName;  DISABLED
+        //var pageName = "FAQ";  ENABLED
+        var pageName = "Roadmap and Plans";
+        -->
+        </script>
+<!--#include virtual="/inc/script_header.inc"-->
+<!--  END SCRIPT HEADER HERE -->
+<!-- **************************************** -->
+</head>
+<body>
+
+<div id="thePage"> <!-- Start The Page -->
+	    <!-- **************************************** -->
+	    <!--  BEGIN RIGHT CONTENT HERE -->
+	    <!--#include virtual="/inc/header_orange.html"-->  <!-- blue=About, green=Using, orange=Contributing -->
+	    <!--  END RIGHT CONTENT HERE -->
+	    <!-- **************************************** -->
+	<div id="pageBodyTier2"> <!-- Start Body -->
+		<div id="leftNav"> <!-- Start Left Nav -->
+				<div id="leftNavTop"></div>
+					<!-- **************************************** -->
+					<!--  BEGIN LEFT NAV SUB HERE -->
+					<!--#include virtual="/inc/leftnav_orange.inc"-->
+					<!--  END LEFT NAV HERE -->
+					<!-- **************************************** -->
+
+					<!-- **************************************** -->
+					<!--  BEGIN SEARCH BOX HERE -->
+					<!--#include virtual="/inc/searchbox.inc"-->
+					<!--  END SEARCH BOX HERE -->
+					<!-- **************************************** -->
+		</div> <!-- End Left Nav -->
+		<div id="bodyContentTier2"> <!-- Start Body Content -->
+			<h1>Java</h1>
+			<ul class="head">
+				<li><a href="#goal">Goal</a></li>
+				<li><a href="#native">Native compiler</a></li>
+				<li><a href="#translator">The translator</a></li>
+				<li><a href="#libraries">Libraries</a></li>
+				<li><a href="#jilc">JILC - Java to IL Compiler</a></li>
+			</ul>
+
+<!-- **************************************** -->
+<!--  Goal -->
+<!-- **************************************** -->
+			<a name="goal"></a>
+			<h2>Goal</h2>
+			<p><b>This is an outline on how to support Java, actual
+			implementations of ideas like this can be found <a href="http://radio.weblogs.com/0109845/">here</a></b></p>
+
+
+			<p>It would be interesting to support the Java language as part
+			of the Mono project.</p>
+
+			<p>You have to think of Java as various pieces: Java the
+			language and Java the virtual machine. </p>
+
+			<p>It is possible to compile Java to .NET, as shown by the
+			Microsoft J# compiler.   We could then allow the migration of
+			Java applications to the Mono runtime. </p>
+
+
+<!-- **************************************** -->
+<!--  Native compiler -->
+<!-- **************************************** -->
+			<a name="native"></a>
+			<h2>Native compiler</h2>
+			<p>Although a native compiler can be built, and probably should be
+			built using an existing compiler, a short term solution is to
+			build a translator from Java class files to the ECMA CIL images.</p>
+
+			<p>This has the advantage that we can use an existing and tested
+			Java compiler to generate the code, and then we can use an automated
+			code compiler that compiles Java VM bytecodes to CIL bytecodes.</p>
+
+
+<!-- **************************************** -->
+<!--  The translator -->
+<!-- **************************************** -->
+			<a name="translator"></a>
+			<h2>The translator</h2>
+			<p>It would be interesting to write a semantic translator that
+			converts java byte codes into CIL opcodes.  This is possible
+			because the Java byte codes are a subset of the CIL ones.</p>
+
+			<p>A semantic tree needs to be constructed (very much in the
+			spirit of what is done in mono_analize_stack in
+			<tt>mono/mono/jit/jit.c</tt>.  Once such a semantic tree is
+			constructed, we could generate the equivalent Java code.</p>
+
+			<p>This has a number of interesting side effects: people can
+			continue to use their existing Java compilers to compile their
+			code, and a simple tool that converts their .class files into
+			a .NET assembly can be used.</p>
+
+
+<!-- **************************************** -->
+<!--  Libraries -->
+<!-- **************************************** -->
+			<a name="libraries"></a>
+			<h2>Libraries</h2>
+			<p>We could translate the GNU Classpath libraries with the above
+			tools to provide the Java runtime required to host into the
+			Mono runtime.  Some special treatment would be required for
+			core data types like integers, arrays and strings, and of
+			course reuse where possible existing classes from .NET to make
+			them compatible.</p>
+
+<!-- **************************************** -->
+<!--  JILC - Java to IL Compiler -->
+<!-- **************************************** -->
+			<a name="jilc"></a>
+			<h2>JILC - Java to IL Compiler</h2>
+			<p>This is an attempt to make the java bytecode available for the
+			.NET environment.</p>
+
+			<p>The project attempts to generate the IL code / bytecode from the
+			compiled java class files. It has reached the stage of code-generation.
+			The issues that needs to be addressed is the mapping of java objects
+			to the IL objects, eg: java.lang.String to System.String.</p>
+
+			<p>Gaurav Vaish and Abhaya Agarwal are currently leading this project.
+			The project is currently hosted at <a href="http://sourceforge.net/projects/jilc">SourceForge.Net</a>.
+			The official home page of the project is
+			<a href="http://jilc.sourceforge.net">http://jilc.sourceforge.net</a>.</p>
+
+
+
+
+		</div> <!-- End Body Content -->
+		<div class="clear"></div>
+	</div> <!-- End Body -->
+
+	<!-- **************************************** -->
+	<!--  BEGIN FOOTER HERE -->
+	<!--#include virtual="/inc/footer.inc"-->
+	<!--  END FOOTER HERE -->
+	<!-- **************************************** -->
+</div> <!-- End The Page -->
+
+</body>
+</html>

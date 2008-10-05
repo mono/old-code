@@ -1,0 +1,97 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
+
+<html>
+<head>
+	<title>Ideas</title>
+
+	<meta name="Robots" content="INDEX, FOLLOW">
+	<meta http-equiv="Content-Language" content="en">
+	<meta http-equiv="Content-Type" content="text/html; CHARSET=UTF-8">
+	<meta name="keywords" content="mono">
+	<meta name="description" content="Ideas">
+	<meta name="author" content="Jonathan Duncan">
+	<meta name="date" content="14-Apr-2004">
+	<meta name="modified-by" content="Jonathan Duncan">
+	<meta name="modified" content="14-Apr-2004">
+
+	<style type="text/css" media="all"><!--  @import url(/inc/mono-main.css); --></style>
+	<style type="text/css" media="all"><!--  @import url(/inc/mono-green.css); --></style>  <!-- blue=About, green=Using, orange=Contributing -->
+
+<!-- **************************************** -->
+<!--  BEGIN SCRIPT HEADER HERE -->
+        <script type="text/javascript">
+        <!--
+        //var pageName;  DISABLED
+        //var pageName = "FAQ";  ENABLED
+        var pageName = "Ideas";
+        -->
+        </script>
+<!--#include virtual="/inc/script_header.inc"-->
+<!--  END SCRIPT HEADER HERE -->
+<!-- **************************************** -->
+
+</head>
+<body>
+
+<div id="thePage"> <!-- Start The Page -->
+	    <!-- **************************************** -->
+	    <!--  BEGIN RIGHT CONTENT HERE -->
+	    <!--#include virtual="/inc/header_green.html"-->  <!-- blue=About, green=Using, orange=Contributing -->
+	    <!--  END RIGHT CONTENT HERE -->
+	    <!-- **************************************** -->
+	<div id="pageBodyTier2"> <!-- Start Body -->
+		<div id="leftNav"> <!-- Start Left Nav -->
+				<div id="leftNavTop"></div>
+					<!-- **************************************** -->
+					<!--  BEGIN LEFT NAV SUB HERE -->
+					<!--#include virtual="/inc/leftnav_green.inc"-->
+					<!--  END LEFT NAV HERE -->
+					<!-- **************************************** -->
+
+					<!-- **************************************** -->
+					<!--  BEGIN SEARCH BOX HERE -->
+					<!--#include virtual="/inc/searchbox.inc"-->
+					<!--  END SEARCH BOX HERE -->
+					<!-- **************************************** -->
+		</div> <!-- End Left Nav -->
+		<div id="bodyContentTier2"> <!-- Start Body Content -->
+                <h1>Ideas</h1>
+<p>There are many pending classes that need to be implemented.  Those have the highest impact in the Mono project: the sooner they are done, the sooner we can start using this platform to create new and exciting applications.</p>
+<p>That being said, if you are not very excited about working on class libraries, here is a list of other related projects or tools that might be useful to the Mono project.</p>
+<p>Here are a few ideas of tools, classes and projects that you could start. More are forthcoming.</p>
+
+<a name="runtime"></a>
+<h3>Runtime</h3>
+
+<a name="classes"></a>
+<h3>Classes</h3>
+
+	<ul>
+		<li>Implement a JXTA protocol implementation:<a href="http://www.jxta.org">http://www.jxta.org</a></li>
+		<li>Implement a Mail API, similar to Camel or JavaMail (Camel has significant architecture features that are required on a real mailer).<br/>You can check the current C <a href="http://cvs.gnome.org/bonsai/rview.cgi?dir=evolution%2Fcamel">Camel implementation</a>.<br/>Such an implementation could be used both with Microsoft .NET and Mono.</li>
+		<li>Interfacing to Multimedia systems.  You might want to look into the Quicktime API.  I know <a href="mailto:vladimir@ximian.com">Vladimir</a> has researched the problem before</li>
+	</ul>
+
+<a name="projects"></a>
+<h3>Projects</h3>
+
+<p>This list of projects ideas is outdated</p>
+
+<ul>
+<li>Once <a href="http://remoting-corba.sourceforge.net/">CORBA</a> is done, implement the Bonobo interfaces to allow people to use Bonobo components in Mono and Mono components with Bonobo.  The best of both worlds!</li>
+<li>A naming space for Mono.  An object naming space is a very powerful tool.  Bonobo implements a moniker system that is more powerful than the original moniker concept that was pioneered by COM/OLE in the Microsoft world.<br/>Our implementation builds on a concept, and we have made it simpler, more powerful, more extensible and a much better mechanism than the equivalent monikers on Windows.<br/>Implementing Mono monikers would benefit both Windows users using .NET and Mono users on Unix and Windows.<br/>Here is <a href="http://primates.ximian.com/~miguel/monikers.html">an overview of the moniker system</a> in Bonobo.</li>
+</ul>
+
+		</div> <!-- End Body Content -->
+		<div class="clear"></div>
+	</div> <!-- End Body -->
+
+	<!-- **************************************** -->
+	<!--  BEGIN FOOTER HERE -->
+	<!--#include virtual="/inc/footer.inc"-->
+	<!--  END FOOTER HERE -->
+	<!-- **************************************** -->
+</div> <!-- End The Page -->
+
+</body>
+</html>

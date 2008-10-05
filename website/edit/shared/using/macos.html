@@ -1,0 +1,220 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
+
+<html>
+<head>
+	<title>Mono on MacOS X</title>
+
+	<meta name="Robots" content="INDEX, FOLLOW">
+	<meta http-equiv="Content-Language" content="en">
+	<meta http-equiv="Content-Type" content="text/html; CHARSET=UTF-8">
+	<meta name="keywords" content="mono">
+	<meta name="description" content="How to install Mono">
+	<meta name="author" content="Jonathan Duncan">
+	<meta name="date" content="14-Apr-2004">
+	<meta name="modified-by" content="Jonathan Duncan">
+	<meta name="modified" content="23-Aug-2004">
+
+	<style type="text/css" media="all"><!--  @import url(/inc/mono-main.css); --></style>
+	<style type="text/css" media="all"><!--  @import url(/inc/mono-green.css); --></style>  <!-- blue=About, green=Using, orange=Contributing -->
+
+	<!-- **************************************** -->
+	<!--  BEGIN SCRIPT HEADER HERE -->
+        <script type="text/javascript">
+        <!--
+        //var pageName;  DISABLED
+        //var pageName = "FAQ";  ENABLED
+        var pageName = "Quick Start";
+        -->
+        </script>
+	<!--#include virtual="/inc/script_header.inc"-->
+	<!--  END SCRIPT HEADER HERE -->
+	<!-- **************************************** -->
+
+</head>
+<body>
+
+<div id="thePage"> <!-- Start The Page -->
+	    <!-- **************************************** -->
+	    <!--  BEGIN RIGHT CONTENT HERE -->
+	    <!--#include virtual="/inc/header_green.html"-->  <!-- blue=About, green=Using, orange=Contributing -->
+	    <!--  END RIGHT CONTENT HERE -->
+	    <!-- **************************************** -->
+	<div id="pageBody"> <!-- Start Body -->
+		<div id="leftNav"> <!-- Start Left Nav -->
+				<div id="leftNavTop"></div>
+					<!-- **************************************** -->
+					<!--  BEGIN LEFT NAV SUB HERE -->
+					<!--#include virtual="/inc/leftnav_green.inc"-->
+					<!--  END LEFT NAV HERE -->
+					<!-- **************************************** -->
+
+					<!-- **************************************** -->
+					<!--  BEGIN SEARCH BOX HERE -->
+					<!--#include virtual="/inc/searchbox.inc"-->
+					<!--  END SEARCH BOX HERE -->
+					<!-- **************************************** -->
+		</div> <!-- End Left Nav -->
+		<div id="bodyContent"> <!-- Start Body Content -->
+			<h1>Mono on MacOS X</h1>
+<p>Erik Dasque<br><i>Last update: Jul 15th, 2004</i></p>
+
+			<ul class="head">
+				<li><a href="#intro">Introduction to Mono on MacOS X</a></li>
+				<li><a href="#pkgs">Installing Mono on MacOS X</a></li>
+				<li><a href="#gtk-sharp">Installing Gtk# on MacOS X</a></li>
+				<li><a href="#launching">Running Mono applications on MacOS X</a></li>
+				<li><a href="#development">Developing Mono applications on MacOS X</a></li>
+				<li><a href="#cocoa-sharp">Cocoa#</a></li>
+				<li><a href="#questions">MacOS X specific questions</a></li>
+				<li><a href="#misc">Miscellaneous</a></li>
+			</ul>
+
+			<a name="intro"></a>
+			<h2>Introduction to Mono on MacOS X</h2>
+			<p>Mono 1.0 includes support for MacOS X 10.3 (Panther). The Mac/Mono community is very enthusiastic and thriving. This page describes some of the differencies and idiosyncrasies of Mono on MacOS X including packaging, application development, MacOS specific projects.</p>
+
+
+			<a name="pkgs"></a>
+			<h2>Installing Mono on MacOS X 10.3</h2>
+			<p>Visit <a href="/downloads/index.html">the download page</a> to find the latest MacOS X package. Run it and follow the instructions it supplies. This includes Mono-core, C# compiler and man pages.<p>This package installs as a framework to /Library/Framework (the same way the Java packages are installed). Symlinks are created for the executables in /usr/bin. If you'd like to access the mono <i>manpages</i> you'll have to add /Library/Framework/Mono/Versions/Current/man to your <i>manpath</i>.<p>The MacOS X Mono package does not include <a href="http://www.mono-project.com/using/gtk-sharp.html">Gtk#</a>, XSP or mod_mono. These will have to be compiled from source (note that a MacOS X specific bug prevents XSP from working for now).</p>
+
+			<a name="gtk-sharp"></a>
+			<h2>Installing Gtk# on MacOS X 10.3</h2>
+			<p>While MacOS X has its own GUI toolkit (Aqua/Cocoa), it also includes support for X11 (Quartz accelerated). <a href="http://www.mono-project.com/using/gtk-sharp.html">Gtk#</a>, Mono's cross platform graphical toolkit runs on MacOS X but packages are not yet available for it or its dependencies (which are numerous).
+
+<p>Today, if you want to run or develop Gtk# applications, <a href="http://fink.sourceforge.net">Fink</a> is the best way to install all necessary dependencies (gnome-desktop and all others).
+
+Installing GTK# on MacOS is still a little effort intensive (instructions from <i>Geoff Norton</i>):
+
+<ol>
+<li>Install Mono 1.0
+<li>Install <a href="http://fink.sourceforge.net">Fink</a>
+<li>Update fink to CVS (fink selfupdate-cvs)
+<li>Update fink to unstable
+<li>Install the following fink packages (you can keep using Apple X11, <a href="http://fink.sourceforge.net/faq/usage-packages.php?phpLang=en#apple-x11-wants-xfree86">just read this document</a>:
+<blockquote>fink install    pango1-xft2 pango1-xft2-dev pango1-xft2-shlibs 
+                 gtk+2 gtk+2-dev gtk+2-shlibs libart2 libart2-shlibs  
+libgnomecanvas2 
+                 libgnomecanvas2-dev libgnomecanvas2-shlibs libgnomeui2  
+libgnomeui2-dev libgnomeui2-shlibs 
+                 libgnomeprintui2.2 libgnomeprintui2.2-dev  
+libgnomeprintui2.2-shlibs 
+                 libglade2 libglade2-shlibs libgda libgda-dev  
+libgda-shlibs librsvg2 librsvg2-shlibs 
+                 gtkhtml3 gtkhtml3-dev gtkhtml3-shlibs vte vte-dev  
+vte-shlibs 
+                 xft2-dev libgnomedb libgnomedb-dev libgnomedb-shlibs</blockquote>
+<i>*NB: Select the SSL or non-ssl deps as required</i><br>
+<li>Have a coffee / nap while fink installs and/or fails because only the australian mirror has files.
+<li>Configure GTK# as per the following:
+PKG_CONFIG_PATH=/sw/lib/pkgconfig:/usr/X11R6/lib/pkgconfig \
+PATH=/usr/bin:$PATH \
+./configure --prefix=/Library/Frameworks/Mono.framework/Versions/1.0
+<li>Run make in Gtk# dir
+         *NB: You'll get a error making samples; its ok
+<li>Install Gtk#: make install
+         *NB: After gacing the assemblies will now install
+</ol>
+<p>NOTE: To run Gtk# apps you need to export the following environment variable:</p>
+                 <pre>export DYLIB_LIBRARY_PATH=/sw/lib:/Library/Frameworks/Mono.framework/Versions/1.0/lib/</pre>
+
+	<a name="launching"></a>
+			<h2>Running Mono applications on MacOS X</h2>
+			<p>Running applications on MacOS X is very similar to linux systems:
+<ul>
+<li>from Terminal.app : <pre>mono myprogram.exe</pre>
+<li>for GTK# applications, it's easiest to run them the same way but using <i>xterm</i> from X11.app
+</ul>
+<p>
+A MacOS X specific Mono launcher was in development but its status is unclear today
+</p>
+	<a name="development"></a>
+			<h2>Developing applications on MacOS X</h2>
+			<p>On MacOS X, developing applications is a similar experience to developing on Linux and the <a href="/using/monodevelop.html">following instructions apply</a></p>
+<p>Additionaly, the <a href="cocoa-sharp.html">Cocoa#</a> project is creating a number of framework and integrating Mono within the Apple XCode development chain that allow MacOS X developers to develop applications that leverage MacOS X native UI and class libraries.
+
+<p>MonoDevelop MacOS X installation instructions follow (from Geoff Norton as well):
+<p>_WARNING_:  These are not for the feint of heart
+<ol>
+<li>The reason for 2 packages from CVS?  The stable generator in gtk# v1.0  
+generates uncompilable code; I'm not 100% certain this is a OSX only  
+problem; but fairly confident in that assesment (it might be a gtk  
+versioning problem)
+
+<li>Install Gtk# and make sure it is working.
+<li>Install the following fink packages:
+<pre>fink install gtksourceview gtksourceview-dev gtksourceview-shlibs  
+mozilla-dev</pre>
+<li>Install monodoc-1.0 from source:
+<pre>
+PKG_CONFIG_PATH=/sw/lib/pkgconfig:/usr/X11R6/lib/pkgconfig PATH=/usr/bin:$PATH 
+./configure --prefix=/Library/Frameworks/Mono.framework/Versions/1.0
+make
+sudo make install
+</pre>
+<li>Install gecko-sharp
+<pre>PKG_CONFIG_PATH=/sw/lib/pkgconfig:/usr/X11R6/lib/pkgconfig PATH=/usr/bin:$PATH
+./configure --prefix=/Library/Frameworks/Mono.framework/Versions/1.0
+make
+sudo make install
+</pre>
+<li>Install gtksourceview-sharp
+<pre>PKG_CONFIG_PATH=/Library/Frameworks/Mono.framework/Versions/1.0/lib/ 
+pkgconfig:/sw/lib/pkgconfig:/usr/X11R6/lib/pkgconfig  
+PATH=/usr/bin:$PATH:/Library/Frameworks/Mono.framework/Versions/1.0/bin  
+./configure.sh --prefix=/Library/Frameworks/Mono.framework/Versions/1.0
+make
+sudo make install
+</pre>
+<li>Install svn
+<li>Install monodevelop
+<pre>
+svn co svn+ssh://mono-cvs.ximian.com/svn/monodevelop/trunk/MonoDevelop
+export PATH=/Library/Frameworks/Mono.framework/Versions/1.0/bin/:$PATH
+export CFLAGS="-I/Library/Frameworks/Mono.framework/Versions/1.0/include/"
+ACLOCAL_FLAGS="-I /Library/Frameworks/Mono.framework/Versions/1.0/share/aclocal -I /sw/share/aclocal"  
+PKG_CONFIG_PATH=/sw/lib/pkgconfig:/usr/X11R6/lib/pkgconfig ./autogen.sh  --prefix=/Library/Frameworks/Mono.framework/Versions/1.0
+make
+sudo make install</pre>
+
+<li>Run monodevelop witht he following command:
+<pre>export DYLIB_LIBRARY_PATH=/sw/lib:/Library/Frameworks/Mono.framework/Versions/1.0/lib/:/Library/Frameworks/Mono.framework/Versions/1.0/lib/ 
+cd monodevelop/bin/
+MOZILLA_FIVE_HOME=/sw/lib/mozilla/
+./monodevelop
+</pre></li>
+</ol>
+	<a name="cocoa-sharp"></a>
+			<h2>Cocoa#</h2>
+<p><a href="http://www.mono-project.com/using/cocoa-sharp.html">The CocoaSharp (Cocoa#) project</a> is an effort to bring Mono and the MacOS X Cocoa toolkits together in a two way bridge, allowing Mac developers that leverage the Mono runtime libraries, while retaining a native Mac look and feel. This bridge will also allow Mono based applications to have access to the Cocoa libraries directly.</p>
+<p>This project is currently in developement and contributes much of the MacOS/Mono efforts in packaging Mono and related tools for MacOS X. Its mailing list can be found <a href="http://lists.ximian.com/mailman/listinfo/cocoa-sharp">here</a></p>
+
+
+	<a name="questions"></a>
+			<h2>MacOS X</h2>
+	<a name="misc"></a>
+			<h2>Miscellaneous</h2>
+
+			<ul>
+<li>Mono's new <a href="/contributing/winforms.html">System.Windows.Forms</a> is an effort to deliver a fully managed implementation of the GUI toolkit that will be supported by different GUI back-ends including MacOS Quartz.
+<li>There are no MacOS X packages available at this time for Monodoc, Gtk#, XSP, mod_mono or Monodevelop</ul>
+
+
+		</div> <!-- End Body Content -->
+		<!-- **************************************** -->
+		<!--  BEGIN RIGHT NAV HERE -->
+		<!--#include virtual="/inc/rightnav_green.inc"-->
+		<!--  END SEARCH BOX HERE -->
+		<!-- **************************************** -->
+		<div class="clear"></div>
+	</div> <!-- End Body -->
+
+	<!-- **************************************** -->
+	<!--  BEGIN FOOTER HERE -->
+	<!--#include virtual="/inc/footer.inc"-->
+	<!--  END FOOTER HERE -->
+	<!-- **************************************** -->
+</div> <!-- End The Page -->
+
+</body>
+</html>

@@ -1,0 +1,385 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
+
+<html>
+<head>
+	<title>Embedding Mono</title>
+
+	<meta name="Robots" content="INDEX, FOLLOW">
+	<meta http-equiv="Content-Language" content="en">
+	<meta http-equiv="Content-Type" content="text/html; CHARSET=UTF-8">
+	<meta name="keywords" content="mono">
+	<meta name="description" content="Describes how to embed the Mono runtime in your application">
+	<meta name="author" content="Jonathan Duncan">
+	<meta name="date" content="14-Apr-2004">
+	<meta name="modified-by" content="Jonathan Duncan">
+	<meta name="modified" content="14-Apr-2004">
+
+	<style type="text/css" media="all"><!--  @import url(/inc/mono-main.css); --></style>
+	<style type="text/css" media="all"><!--  @import url(/inc/mono-green.css); --></style>  <!-- blue=About, green=Using, orange=Contributing -->
+
+<!-- **************************************** -->
+<!--  BEGIN SCRIPT HEADER HERE -->
+        <script type="text/javascript">
+        <!--
+        //var pageName;  DISABLED
+        //var pageName = "FAQ";  ENABLED
+        var pageName = "Developing with Mono";
+        -->
+        </script>
+<!--#include virtual="/inc/script_header.inc"-->
+<!--  END SCRIPT HEADER HERE -->
+<!-- **************************************** -->
+</head>
+<body>
+
+<div id="thePage"> <!-- Start The Page -->
+	    <!-- **************************************** -->
+	    <!--  BEGIN RIGHT CONTENT HERE -->
+	    <!--#include virtual="/inc/header_green.html"-->  <!-- blue=About, green=Using, orange=Contributing -->
+	    <!--  END RIGHT CONTENT HERE -->
+	    <!-- **************************************** -->
+	<div id="pageBodyTier2"> <!-- Start Body -->
+		<div id="leftNav"> <!-- Start Left Nav -->
+				<div id="leftNavTop"></div>
+					<!-- **************************************** -->
+					<!--  BEGIN LEFT NAV SUB HERE -->
+					<!--#include virtual="/inc/leftnav_green.inc"-->
+					<!--  END LEFT NAV HERE -->
+					<!-- **************************************** -->
+
+					<!-- **************************************** -->
+					<!--  BEGIN SEARCH BOX HERE -->
+					<!--#include virtual="/inc/searchbox.inc"-->
+					<!--  END SEARCH BOX HERE -->
+					<!-- **************************************** -->
+		</div> <!-- End Left Nav -->
+		<div id="bodyContentTier2"> <!-- Start Body Content -->
+			<h1>Embedding Mono</h1>
+			<ul class="head">
+				<li><a href="#prelim">Embedding the Mono runtime, preliminary version</a></li>
+				<li><a href="#embed">Embedding the runtime</a></li>
+				<li><a href="#ccode">Exposing C code to the CIL universe</a></li>
+				<li><a href="#methods">Invoking Methods in the CIL universe</a></li>
+				<li><a href="#samples">Samples</a></li>
+			</ul>
+
+<!-- **************************************** -->
+<!--  Embedding the Mono runtime, preliminary version -->
+<!-- **************************************** -->
+			<a name="prelim"></a>
+			<h2>Embedding the Mono runtime, preliminary version</h2>
+
+				<p>This document describes how to embed the Mono runtime in your
+				application, and how to invoke CIL methods from C, and how to
+				invoke C code from CIL</p>
+
+				<p>Slides for Paolo's presentation at .NET ONE on the embedding
+				API are available here: <a
+				href="http://primates.ximian.com/~lupus/slides/embed">Hosting the Mono
+				Runtime</a>.  You can also get his <a
+				href="http://primates.ximian.com/~lupus/slides/embed/Mono-0.01.tar.gz">sample
+				Mono module for Perl</a></p>
+
+				<p>Authors: Paolo Molaro, Miguel de Icaza.</p>
+
+
+<!-- **************************************** -->
+<!--  Embedding the runtime -->
+<!-- **************************************** -->
+			<a name="embed"></a>
+			<h2>Embedding the runtime</h2>
+
+				<p>Embedding the runtime consists of various steps: </p>
+
+				<ul>
+					<li>Compiling and linking the Mono runtime</li>
+
+					<li>Initializing the Mono runtime</li>
+
+					<li>Optionally expose C code to the C#/CIL universe.</li>
+				</ul>
+
+				<p>These are discussed in detail next.</p>
+
+			<p><b>Compiling and Linking</b></p>
+
+				<p>To embed the runtime, you have to link your code against the
+				Mono runtime libraries.  To do this, you want to pass the
+				flags returned by pkg-config to your compiler:</p>
+
+<pre>
+	pkg-config --cflags --libs mono
+</pre>
+
+				<p>Like this:</p>
+
+<pre>
+	gcc sample.c `pkg-config --cflags --libs mono`
+</pre>
+
+				<p>You can separate the compilation flags from the linking flags, for
+				instance, you can use the following macros in your makefile:</p>
+
+<pre>
+	CFLAGS=`pkg-config --cflags mono`
+	LDFLAGS=`pkg-config --libs mono`
+</pre>
+
+			<p><b>Initializing the Mono runtime</b></p>
+
+				<p>To initialize the runtime, call mono_jit_init, like this:</p>
+
+<pre>
+	MonoDomain *domain;
+	domain = mono_jit_init ("domain-name");
+</pre>
+
+				<p>That will return a MonoDomain where your code will be
+				executed.  You can create multiple domains.  Each domain is
+				isolated from the other domains and code in one domain will
+				not interfere with code in other domains.  This is useful if
+				you want to host different applications in your program.</p>
+
+				<p>Now, it is necessary to transfer control to Mono, and setup
+				the threading infrastructure, you do this like this:</p>
+
+<pre>
+void *user_data = NULL;
+mono_runtime_exec_managed_code (domain, main_thread_handler, user_data);
+</pre>
+
+				<p>Where your main_thread_handler can load your assembly and execute it:</p>
+
+<pre>
+static void main_thread_handler (gpointer user_data)
+{
+	MonoAssembly *assembly;
+
+	assembly = mono_domain_assembly_open (domain, "file.dll");
+	if (!assembly)
+		error ();
+</pre>
+
+				<p>In the above example, the contents of `file.dll' will be
+				loaded into the domain.  This only loads the code, but it will
+				not execute anything yet.  You can replace `file.dll' with
+				another transport file, like `file.exe'</p>
+
+				<p>To start executing code, you must invoke a method in the
+				assembly, or if you have provided a static Main method (an
+				entry point), you can use the convenience function:</p>
+
+<pre>
+	retval = mono_jit_exec (domain, assembly, argc - 1, argv + 1);
+</pre>
+
+				<p>If you want to invoke a different method, look at the
+				`Invoking Methods in the CIL universe' section later on.</p>
+
+			<p><b>Shutting down the runtime</b></p>
+
+				<p>To shutdown the Mono runtime, you have to clean up all the
+				domains that were created, use this function:</p>
+
+<pre>
+	mono_jit_cleanup (domain);
+</pre>
+
+			<p><b>Applications that use threads.</b></p>
+
+				<p>The Boehm GC system needs to catch your calls to the pthreads
+				layer, so in each file where you use pthread.h you should
+				include the &lt;gc/gc.h&gt; file.  </p>
+
+				<p>If you can not do this for any reasons, just remember that you
+				can not store pointers to Mono Objects on the stack, you can
+				store them safely in the heap, or in global variables though</p>
+
+
+<!-- **************************************** -->
+<!--  Exposing C code to the CIL universe -->
+<!-- **************************************** -->
+			<a name="ccode"></a>
+			<h2>Exposing C code to the CIL universe</h2>
+
+				<p>The Mono runtime provides two mechanisms to expose C code to
+				the CIL universe: internal calls and native C code.   Internal
+				calls are tightly integrated with the runtime, and have the
+				least overhead, as they use the same data types that the
+				runtime uses.</p>
+
+				<p>The other option is to use the Platform Invoke (P/Invoke) to
+				call C code from the CIL universe, using the standard P/Invoke
+				mechanisms.</p>
+
+				<p>To register an internal call, use this call in the C code:</p>
+
+<pre>
+	mono_add_internal_call ("Hello::Sample", sample);
+</pre>
+
+				<p>Now, you need to declare this on the C# side:</p>
+
+<pre>
+	using System;
+	using System.Runtime.CompilerServices;
+</pre>
+
+
+<pre>
+	class Hello {
+		[MethodImplAttribute(MethodImplOptions.InternalCall)]
+		extern static string Sample ();
+	}
+</pre>
+
+				<p>Since this routine returns a string, here is the C definition:</p>
+
+<pre>
+	static MonoString*
+	Sample ()
+	{
+		return mono_string_new (mono_domain_get (), "Hello!");
+	}
+</pre>
+
+				<p>Notice that we have to return a `MonoString', and we use the
+				`mono_string_new' API call to obtain this from a string.</p>
+
+
+<!-- **************************************** -->
+<!--  Invoking Methods in the CIL universe -->
+<!-- **************************************** -->
+			<a name="methods"></a>
+			<h2>Invoking Methods in the CIL universe</h2>
+
+				<p>Calling a method in the CIL universe from C requires a number of steps:</p>
+
+				<ul>
+					<li>Obtaining the MonoMethod handle to the method.</li>
+
+					<li>The method invocation.</li>
+				</ul>
+
+			<p><b>Obtaining a MonoMethod</b></p>
+
+				<p>To get a MonoMethod there are several ways.</p>
+
+				<p>You can get a MonoClass (the structure representing a type)
+				using <a href="embedded-api-example1.html', 700, 100, 'scroll">mono_class_from_name</a></p>
+
+
+				<p>and then loop in the returned class method array until you get
+				the one you're looking for. There are examples of such
+				searches as static functions in several C files in
+				metadata/*.c: we need to expose one through the API and remove
+				the duplicates.</p>
+
+				<p>The other, simpler, way is to use the functions in
+				debug-helpers.h: there are examples of their use in monograph,
+				mint and the jit as well.  You basically use a string
+				description of the method, like:</p>
+
+<pre>
+	"System.Object:GetHashCode()"
+</pre>
+
+				<p>and create a MonoMethodDesc out of it with <a href="embedded-api-example2.html', 700, 100, 'scroll">mono_method_desc_new</a></p>
+
+
+				<p>You can then use <a href="embedded-api-example3.html', 700, 100, 'scroll">these methods</a> to search for the
+				method in a class or in an image.  You would
+				typically do this just once at the start of the program and
+				store the result for reuse somewhere.</p>
+
+			<p><b>Invoking a Method</b></p>
+
+				<p>There are two functions to call a managed method:</p>
+
+<pre>
+	MonoObject*
+	mono_runtime_invoke         (MonoMethod *method, void *obj,
+	                             void **params,
+	                             MonoObject **exc);
+	and
+	MonoObject*
+	mono_runtime_invoke_array   (MonoMethod *method, void *obj,
+	                             MonoArray *params,
+	                             MonoObject **exc);
+</pre>
+
+				<p>obj is the 'this' pointer, it should be NULL for static
+				methods, a MonoObject* for object instances and a pointer to
+				the value type for value types.</p>
+
+				<p>The params array contains the arguments to the method with the
+				same convention: MonoObject* pointers for object instances and
+				pointers to the value type otherwise. The _invoke_array
+				variant takes a C# object[] as the params argument (MonoArray
+				*params): in this case the value types are boxed inside the
+				respective reference representation.</p>
+
+				<p><p>From unmanaged code you'll usually use the
+				mono_runtime_invoke() variant.
+
+				Note that this function doesn't handle virtual methods for
+				you, it will exec the exact method you pass: we still need to
+				expose a function to lookup the derived class implementation
+				of a virtual method (there are examples of this in the code,
+				though).</p>
+
+				<p>You can pass NULL as the exc argument if you don't want to
+				catch exceptions, otherwise, *exc will be set to the exception
+				thrown, if any.  if an exception is thrown, you can't use the
+				MonoObject* result from the function.</p>
+
+				<p>If the method returns a value type, it is boxed in an object
+				reference.
+
+				We have plans for providing an additional method that returns
+				an unmanaged->managed thunk like this:</p>
+
+<pre>
+	void* mono_method_get_unmanaged_thunk (MonoMethod *method);
+</pre>
+
+				<p>You'll be able to store the returned pointer in a function
+				pointer with the proper signature and
+				<a href="embedded-api-example4.html', 700, 100, 'scroll">call that directly from C:</a></p>
+
+
+				<p>It may not be possible to manage exceptions in that case,
+				though. I need to think more about it.</p>
+
+			<p><b>Threading issues</b></p>
+
+				<p>If your application creates threads on its own, and you want them to
+				be able to call code into the CIL universe with Mono, you have to
+				register the thread with Mono before issuing the call.</p>
+
+				<p>To do so, call the mono_thread_attach() function before you execute
+				any managed code from the thread</p>
+
+
+<!-- **************************************** -->
+<!--  Samples -->
+<!-- **************************************** -->
+			<a name="samples"></a>
+			<h2>Samples</h2>
+				<p>See the sample programs in mono/sample/embed for examples of embedding the Mono runtime in your application.</p>
+
+
+
+		</div> <!-- End Body Content -->
+		<div class="clear"></div>
+	</div> <!-- End Body -->
+
+	<!-- **************************************** -->
+	<!--  BEGIN FOOTER HERE -->
+	<!--#include virtual="/inc/footer.inc"-->
+	<!--  END FOOTER HERE -->
+	<!-- **************************************** -->
+</div> <!-- End The Page -->
+
+</body>
+</html>

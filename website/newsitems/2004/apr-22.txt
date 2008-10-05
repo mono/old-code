@@ -1,0 +1,6 @@
+@Apr 22nd, 2004: XSP 0.12 released.
+
+	A new release of XSP is available. It fixes a bug that made Web Services
+	unusable from client proxies. You can download it from <a
+	href="/archive/xsp-0.12.tar.gz">here</a>.
+

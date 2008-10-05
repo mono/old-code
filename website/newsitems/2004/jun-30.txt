@@ -1,0 +1,9 @@
+@Mono 1.0 released
+
+
+	    <img
+	    src="http://www.mono-project.com/img/logos/mono1.gif" alt="Mono 1.-0 released" align="left">
+	  Novell and the Mono project developer community are proud to announce the release of Mono version 1.0, an open source implementation of the .NET framework for use on Linux, Unix, MacOS X and Windows system.<p> See our <a
+	   href="http://www.mono-project.com/using/relnotes/1.0.html">Release
+	   Notes</a>, or go directly to the <a href="http://www.mono-project.com/downloads/index.html">download</a> page. In addition to Mono 1.0, we're pleased to unveil the new Mono project web site. Update your bookmarks !
+<br><br><br><br>

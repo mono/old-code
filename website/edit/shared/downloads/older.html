@@ -1,0 +1,1383 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
+
+<html>
+<head>
+	<title>Older releases for download</title>
+
+	<meta name="Robots" content="INDEX, FOLLOW" />
+	<meta http-equiv="Content-Language" content="en" />
+	<meta http-equiv="Content-Type" content="text/html; CHARSET=UTF-8" />
+	<meta name="keywords" content="mono" />
+	<meta name="description" content="mono" />
+	<meta name="author" content="Jonathan Duncan" />
+	<meta name="date" content="14-Apr-2004" />
+	<meta name="modified-by" content="Kevin Breit" />
+	<meta name="modified" content="30-Jun-2004" />
+
+	<style type="text/css" media="all"><!--  @import url(/inc/mono-main.css); --></style>
+	<style type="text/css" media="all"><!--  @import url(/inc/mono-green.css); --></style>  <!-- blue=About, green=Using, orange=Contributing -->
+
+	<style type="text/css" media="all">
+	<!--
+	/* Any table with class download: */
+	table.download {
+		border-collapse: collapse; 
+		border-style: none; /* no borders on the table, just on it's td's */
+		/* margin-bottom: 25px; */
+	}
+	
+	/* Anything inside a td of class tablehead inside a table of class download */
+	table.download td.tablehead {
+		border-left-style: none;
+		border-right-style: none;
+		border-top: 1px solid #cccccc;  /* For FireFox (looks fine in IE with just a "bordercolor" in the table) */
+		border-bottom: 1px solid #cccccc;  /* For FireFox (looks fine in IE with just a "bordercolor" in the table) */
+		padding: 10px 10px 10px 10px;
+		background-color: #efefef;
+	}
+	
+	/* td's of class "tablefoot", inside tables of class "download" (and anything inside them) */
+	table.download td.tablefoot {
+		border-style: none;
+		height: 25px;
+	}
+	
+	/* Paragraphs inside a td of class tablehead inside a table of class download */
+	/*table.download td.tablehead p {
+		margin: 10px 0px 10px 10px;
+	}*/
+	
+	/* td's with class "left", inside tables with class "download" (and anything inside them) */
+	table.download td.left {
+		border-left-style: none;
+		border-color: #cccccc;
+		width: 33.33%;
+	}
+	
+	/* td's with class "right", inside tables with class "download" (and anything inside them) */
+	table.download td.right {
+		border-right-style: none;
+		border-color: #cccccc;
+		padding: 10px 10px 10px 10px;
+	}
+	
+	/* Unordered Lists inside td's inside tables with class download */
+	table.download td ul {
+		margin: 0px 0px 0px -28px;
+*		margin: 0px 0px 0px 11px;  /* IE/Win specific */
+		list-style-image: url("/img/graydash.gif");
+		list-style-position: outside;
+	}
+	
+	table.download td p {
+		margin: 0 0 0 0;
+	}
+	
+	p { 
+	   margin-bottom: 25px;
+	}
+	
+	-->
+	</style>
+
+	<!-- **************************************** -->
+	<!--  BEGIN SCRIPT HEADER HERE -->
+	<!--#include virtual="/inc/script_header.inc"-->
+	<!--  END SCRIPT HEADER HERE -->
+	<!-- **************************************** -->
+
+</head>
+<body>
+
+<div align="center" id="thePage"> <!-- Start The Page -->  <!-- the align center is to overcome an IE bug -->
+	    <!-- **************************************** -->
+	    <!--  BEGIN RIGHT CONTENT HERE -->
+	    <!--#include virtual="/inc/header_green.html"-->  <!-- blue=About, green=Using, orange=Contributing -->
+	    <!--  END RIGHT CONTENT HERE -->
+	    <!-- **************************************** -->
+	<div id="pageBodyTier2"> <!-- Start Body -->
+		<div id="leftNav"> <!-- Start Left Nav -->
+				<div id="leftNavTop"></div>
+					<!-- **************************************** -->
+					<!--  BEGIN LEFT NAV MENU HERE -->
+					<!--#include virtual="/inc/leftnav_green.inc"-->
+					<!--  END LEFT NAV MENU HERE -->
+					<!-- **************************************** -->
+
+					<!-- **************************************** -->
+					<!--  BEGIN SEARCH BOX HERE -->
+					<!--#include virtual="/inc/searchbox.inc"-->
+					<!--  END SEARCH BOX HERE -->
+					<!-- **************************************** -->
+		</div> <!-- End Left Nav -->
+		<div id="bodyContentTier2"> <!-- Start Body Content -->
+			<h1>Older releases for downloads</h1>
+	Please refer to our <a href="/using/runtime.html">Runtime</a>
+	description for more details on this part of the project.
+
+	Optional packages are `libgdiplus' (if you want to do
+	graphics).  The package `mcs' contains the C# source code to
+	the compilers and class libraries.
+
+	To run ASP.NET applications you need xsp and if you want to
+	optionally integrate with Apache, get mod_mono.   
+
+	Online API documentation for Mono is available in the `monodoc' package. 
+	Gtk-sharp is package to build GUI applications with the Gtk toolkit.
+			
+	<p>The software is also available on the `Mono' channel in Red Carpet, which you can download <a href="ftp://ftp.novell.com/pub/ximian/redcarpet2">here</a>.</p>
+
+	<p>Packagers can find RPM Spec files and other resources in
+	the <a href="http://www.go-mono.com/packagers/">packagers
+	page</a>.
+
+	<ul>
+		<li>Current Stable Version: <a href="index.html#stable">Mono 1.0.6</a>
+		<li>Current Development Version: <a href="index.html#unstable">Mono 1.1.4</a>
+	</ul>
+<!-- ********************************** -->
+<!--  1.0.5 Release -->
+<!-- ********************************** -->
+
+			<table class="download" width="100%" cellpadding="0" cellspacing="0" border="1" bordercolor="#cccccc">
+				<tr>
+					<td class="tablehead" colspan="2">
+						<p>Stable: <b>1.0.5</b><br>
+ 						<a
+ 						href="http://go-mono.com/archive/1.0.5">Release
+ 						notes December 8th, 2004</a></p>
+					</td>
+				</tr>
+				<tr>
+					<td valign="top" class="left">
+						<p><img src="/img/mono_icon_source.gif" align="absmiddle">&nbsp;&nbsp;<b>Source Code</b></p>
+					</td>
+					<td valign="top" class="right">
+						<ul>
+						<li><a href="http://www.go-mono.com/archive/1.0.5/mono-1.0.5.tar.gz">Mono Runtime 1.0.5</a></li>
+						<li><a href="http://www.go-mono.com/archive/1.0.5/mcs-1.0.5.tar.gz">Mono Class Libraries and C# Compiler 1.0.5</a></li>
+						<li><a href="http://www.go-mono.com/archive/1.0.5/libgdiplus-1.0.5.tar.gz">libgdiplus 1.0.5</a></li>
+						<li><a href="http://www.go-mono.com/archive/1.0.4/gtk-sharp-1.0.4.tar.gz">Gtk# 1.0.4</a></li>
+						<li><a href="http://www.go-mono.com/archive/1.0.5/monodoc-1.0.5.tar.gz">MonoDoc 1.0.5</a></li>
+						<li><a href="http://www.go-mono.com/archive/1.0.5/monodevelop-0.5.1.tar.gz">MonoDevelop 0.5.1</a></li>
+						<li><a href="http://www.go-mono.com/archive/1.0.5/mod_mono-1.0.5.tar.gz">Apache Mono module 1.0.5 (mod_mono)</a></li>							  
+						</ul>
+						<ul>
+						<li><a href="http://www.go-mono.com/archive/1.0.5/xsp-1.0.5.tar.gz">XSP web server 1.0.5</a></li>					
+					</td>
+				</tr>
+				<tr>
+					<td valign="top" class="left">
+						<p><img src="/img/mono_icon_redhat.gif" align="absmiddle">&nbsp;&nbsp;<b>Red Hat 9.0/x86</b></p>
+					</td>
+					<td valign="top" class="right">
+						<ul>
+						<li><a href="http://www.go-mono.com/archive/1.0.5/redhat-9-i386">Packages</a></li>
+						</ul>
+					</td>
+				</tr>
+				<tr>
+					<td valign="top" class="left">
+						<p><img src="/img/mono_icon_redhat.gif" align="absmiddle">&nbsp;&nbsp;<b>Fedora Core 1/x86</b></p>
+					</td>
+					<td valign="top" class="right">
+						<ul>
+						<li><a href="http://www.go-mono.com/archive/1.0.5/fedora-1-i386">Packages</a><br></li>
+						</ul>
+					    <p>For YUM repository, please use:<br>
+					    <code>http://www.go-mono.com/archive/1.0.5/fedora-1-i386/</code></p>
+					</td>
+				</tr>
+				<tr>
+					<td valign="top" class="left">
+						<p><img src="/img/mono_icon_redhat.gif" align="absmiddle">&nbsp;&nbsp;<b>Fedora Core 2/x86</b></p>
+					</td>
+					<td valign="top" class="right">
+						<ul>
+						<li><a href="http://www.go-mono.com/archive/1.0.5/fedora-2-i386">Packages</a><br></li>
+						</ul>
+					    <p>For YUM repository, please use:<br>
+					    <code>http://www.go-mono.com/archive/1.0.5/fedora-2-i386/</code></p>
+					</td>
+				</tr>
+						<tr>
+					<td valign="top" class="left">
+						<p><img src="/img/mono_icon_redhat.gif" align="absmiddle">&nbsp;&nbsp;<b>Fedora Core 3/x86</b></p>
+					</td>
+					<td valign="top" class="right">
+						<ul>
+						<li><a href="http://www.go-mono.com/archive/1.0.5/fedora-3-i386">Packages</a><br></li>
+						</ul>
+					    <p>For YUM repository, please use:<br>
+					    <code>http://www.go-mono.com/archive/1.0.5/fedora-3-i386/</code></p>
+					</td>
+				</tr>	
+				<tr>
+					<td valign="top" class="left">
+						<p><img src="/img/mono_icon_suse.gif" align="absmiddle">&nbsp;&nbsp;<b>SUSE LINUX<br>Enterprise Server 8 for x86</b></p>
+					</td>
+					<td valign="top" class="right">
+						<ul>
+						<li><a href="http://www.go-mono.com/archive/1.0.5/sles-8-i386/">Packages</a></li>
+						</ul>
+					</td>
+				</tr>
+				<tr>
+					<td valign="top" class="left">
+						<p><img src="/img/mono_icon_suse.gif" align="absmiddle">&nbsp;&nbsp;<b>SUSE LINUX<br>Enterprise Server 9 for x86</b></p>
+					</td>
+					<td valign="top" class="right">
+						<ul>
+						<li><a href="http://www.go-mono.com/archive/1.0.5/sles-9-i586/">Packages</a></li>
+						</ul>
+					</td>
+				</tr>
+				<tr>
+					<td valign="top" class="left">
+						<p><img src="/img/mono_icon_suse.gif" align="absmiddle">&nbsp;&nbsp;<b>SUSE LINUX 9.0<br>for x86</b></p>
+					</td>
+					<td valign="top" class="right">
+						<ul>
+						<li><a href="http://www.go-mono.com/archive/1.0.5/suse-90-i586/">Packages</a></li>
+						</ul>
+					</td>
+				</tr>
+				<tr>
+					<td valign="top" class="left">
+						<p><img src="/img/mono_icon_suse.gif" align="absmiddle">&nbsp;&nbsp;<b>SUSE LINUX 9.1<br>for x86</b></p>
+					</td>
+					<td valign="top" class="right">
+						<ul>
+						<li><a href="http://www.go-mono.com/archive/1.0.5/suse-91-i586/">Packages</a></li>
+						</ul>
+					</td>
+				</tr>
+				<tr>
+					<td valign="top" class="left">
+						<p><img src="/img/mono_icon_suse.gif" align="absmiddle">&nbsp;&nbsp;<b>SUSE LINUX 9.2<br>for x86</b></p>
+					</td>
+					<td valign="top" class="right">
+						<ul>
+						<li><a href="http://www.go-mono.com/archive/1.0.5/suse-92-i586/">Packages</a></li>
+						</ul>
+					</td>
+				</tr>
+				<tr>
+					<td valign="top" class="left">
+						<p><img src="/img/mono_icon_suse.gif" align="absmiddle">&nbsp;&nbsp;<b>Novell Linux Desktop 9<br>for x86</b></p>
+					</td>
+					<td valign="top" class="right">
+						<ul>
+						<li><a href="http://www.go-mono.com/archive/1.0.5/nld-9-i586/">Packages</a></li>
+						</ul>
+					</td>
+				</tr>
+				<tr>
+					<td valign="top" class="left">
+						<p><img src="/img/mono_icon_windows.gif" align="absmiddle">&nbsp;&nbsp;<b>Windows Installer</b><br>Windows 2000 and above</p>
+					</td>
+					<td valign="top" class="right">
+						<ul>
+						<li><a
+					href="http://www.go-mono.com/archive/1.0.5/windows/mono-1.0.5-gtksharp-1.0.5-win32-0.1.exe">Mono
+					Setup (includes Gtk# and
+					XSP)</a></li>
+						</ul>
+					</td>
+				</tr>
+				<tr>
+					<td valign="top" class="left">
+						<p><img src="/img/mono_icon_mac.gif" align="absmiddle">&nbsp;&nbsp;<b>Mac OS X</b></p>
+					</td>
+					<td valign="top" class="right">
+						<ul>
+
+						<li><a
+						href="http://www.go-mono.com/archive/1.0.5/macos/MonoFramework-1.0.5.dmg">MonoFramework-1.0.5.dmg</a>
+						in /Library/Framework,
+						for MacOS X 10.3
+						(Panther) only.
+						</li>
+						
+						</ul>
+					</td>
+				</tr>
+			</table><br><br>			
+		
+<!-- ********************************** -->
+<!--  1.0.4 Release -->
+<!-- ********************************** -->
+
+			<table class="download" width="100%" cellpadding="0" cellspacing="0" border="1" bordercolor="#cccccc">
+				<tr>
+					<td class="tablehead" colspan="2">
+						<p><b>1.0.4</b><br>
+ 						<a href="http://go-mono.com/archive/1.0.4">Release notes October 29th, 2004</a></p>
+					</td>
+				</tr>
+				<tr>
+					<td valign="top" class="left">
+						<p><img src="/img/mono_icon_source.gif" align="absmiddle">&nbsp;&nbsp;<b>Source Code</b></p>
+					</td>
+					<td valign="top" class="right">
+						<ul>
+						<li><a href="http://www.go-mono.com/archive/1.0.4/mono-1.0.4.tar.gz">Mono Runtime 1.0.4</a></li>
+						<li><a href="http://www.go-mono.com/archive/1.0.4/mcs-1.0.4.tar.gz">Mono Class Libraries and C# Compiler 1.0.4</a></li>
+						<li><a href="http://www.go-mono.com/archive/1.0.4/libgdiplus-1.0.4.tar.gz">libgdiplus 1.0.4</a></li>
+						<li><a href="http://www.go-mono.com/archive/1.0.4/gtk-sharp-1.0.4.tar.gz">Gtk# 1.0.4</a></li>
+						<li><a href="http://www.go-mono.com/archive/1.0.4/monodoc-1.0.4.tar.gz">MonoDoc 1.0.4</a></li>
+						<li><a href="http://www.go-mono.com/archive/1.0.4/monodevelop-0.5.1.tar.gz">MonoDevelop 0.5.1</a></li>
+						<li><a href="http://www.go-mono.com/archive/1.0.4/mod_mono-1.0.4.tar.gz">Apache Mono module 1.0.4 (mod_mono)</a></li>							  
+						</ul>
+						<ul>
+						<li><a href="http://www.go-mono.com/archive/1.0.4/xsp-1.0.4.tar.gz">XSP web server 1.0.4</a></li>					
+					</td>
+				</tr>
+				<tr>
+					<td valign="top" class="left">
+						<p><img src="/img/mono_icon_redhat.gif" align="absmiddle">&nbsp;&nbsp;<b>Red Hat 9.0/x86</b></p>
+					</td>
+					<td valign="top" class="right">
+						<ul>
+						<li><a href="http://www.go-mono.com/archive/1.0.4/redhat-9-i386">Packages</a></li>
+						</ul>
+					</td>
+				</tr>
+				<tr>
+					<td valign="top" class="left">
+						<p><img src="/img/mono_icon_redhat.gif" align="absmiddle">&nbsp;&nbsp;<b>Fedora Core 1/x86</b></p>
+					</td>
+					<td valign="top" class="right">
+						<ul>
+						<li><a href="http://www.go-mono.com/archive/1.0.4/fedora-1-i386">Packages</a><br></li>
+						</ul>
+					    <p>For YUM repository, please use:<br>
+					    <code>http://www.go-mono.com/archive/1.0.4/fedora-1-i386/</code></p>
+					</td>
+				</tr>
+				<tr>
+					<td valign="top" class="left">
+						<p><img src="/img/mono_icon_redhat.gif" align="absmiddle">&nbsp;&nbsp;<b>Fedora Core 2/x86</b></p>
+					</td>
+					<td valign="top" class="right">
+						<ul>
+						<li><a href="http://www.go-mono.com/archive/1.0.4/fedora-2-i386">Packages</a><br></li>
+						</ul>
+					    <p>For YUM repository, please use:<br>
+					    <code>http://www.go-mono.com/archive/1.0.4/fedora-2-i386/</code></p>
+					</td>
+				</tr>				
+				<tr>
+					<td valign="top" class="left">
+						<p><img src="/img/mono_icon_suse.gif" align="absmiddle">&nbsp;&nbsp;<b>SUSE LINUX<br>Enterprise Server 8 for x86</b></p>
+					</td>
+					<td valign="top" class="right">
+						<ul>
+						<li><a href="http://www.go-mono.com/archive/1.0.4/sles-8-i386/">Packages</a></li>
+						</ul>
+					</td>
+				</tr>
+				<tr>
+					<td valign="top" class="left">
+						<p><img src="/img/mono_icon_suse.gif" align="absmiddle">&nbsp;&nbsp;<b>SUSE LINUX<br>Enterprise Server 9 for x86</b></p>
+					</td>
+					<td valign="top" class="right">
+						<ul>
+						<li><a href="http://www.go-mono.com/archive/1.0.4/sles-9-i586/">Packages</a></li>
+						</ul>
+					</td>
+				</tr>
+				<tr>
+					<td valign="top" class="left">
+						<p><img src="/img/mono_icon_suse.gif" align="absmiddle">&nbsp;&nbsp;<b>SUSE LINUX 9.0<br>for x86</b></p>
+					</td>
+					<td valign="top" class="right">
+						<ul>
+						<li><a href="http://www.go-mono.com/archive/1.0.4/suse-90-i586/">Packages</a></li>
+						</ul>
+					</td>
+				</tr>
+				<tr>
+					<td valign="top" class="left">
+						<p><img src="/img/mono_icon_suse.gif" align="absmiddle">&nbsp;&nbsp;<b>SUSE LINUX 9.1<br>for x86</b></p>
+					</td>
+					<td valign="top" class="right">
+						<ul>
+						<li><a href="http://www.go-mono.com/archive/1.0.4/suse-91-i586/">Packages</a></li>
+						</ul>
+					</td>
+				</tr>
+<!-- 				<tr> -->
+<!-- 					<td valign="top" class="left"> -->
+<!-- 						<p><img src="/img/slackware.jpg" align="absmiddle">&nbsp;&nbsp;<b>Slackware 10</b></p> -->
+<!-- 					</td> -->
+<!-- 					<td valign="top" class="right"> -->
+<!-- 						<ul> -->
+<!-- 							<li><a href="http://www.slackcare.com/download.php?view.105">Packages</a> (External)</li> -->
+<!-- 						</ul> -->
+<!-- 					</td> -->
+<!-- 				</tr> -->
+				<tr>
+					<td valign="top" class="left">
+						<p><img src="/img/mono_icon_windows.gif" align="absmiddle">&nbsp;&nbsp;<b>Windows Installer</b><br>Windows 2000 and above</p>
+					</td>
+					<td valign="top" class="right">
+						<ul>
+						<li><a
+					href="http://www.go-mono.com/archive/1.0.4/windows/mono-1.0.4-gtksharp-1.0.4-win32-0.1.exe">Mono
+					Setup (includes Gtk# and
+					XSP)</a></li>
+						</ul>
+					</td>
+				</tr>
+				<tr>
+					<td valign="top" class="left">
+						<p><img src="/img/mono_icon_mac.gif" align="absmiddle">&nbsp;&nbsp;<b>Mac OS X</b></p>
+					</td>
+					<td valign="top" class="right">
+						<ul>
+
+						<li><a
+						href="http://www.go-mono.com/archive/1.0.4/macos/MonoFramework-1.0.4.dmg">MonoFramework-1.0.4.dmg</a>
+						in /Library/Framework,
+						for MacOS X 10.3
+						(Panther) only.
+						</li>
+						
+						</ul>
+					</td>
+				</tr>
+			</table><br><br>			
+
+<!-- ********************************** -->
+<!--  1.0.2 Release -->
+<!-- ********************************** -->
+
+			<table class="download" width="100%" cellpadding="0" cellspacing="0" border="1" bordercolor="#cccccc">
+				<tr>
+					<td class="tablehead" colspan="2">
+						<p><b>1.0.2</b><br>
+ 						<a href="http://go-mono.com/archive/1.0.2">Release notes September 21st, 2004</a></p>
+					</td>
+				</tr>
+				<tr>
+					<td valign="top" class="left">
+						<p><img src="/img/mono_icon_source.gif" align="absmiddle">&nbsp;&nbsp;<b>Source Code</b></p>
+					</td>
+					<td valign="top" class="right">
+						<ul>
+						<li><a href="http://www.go-mono.com/archive/1.0.2/mono-1.0.2.tar.gz">Mono Runtime 1.0.2</a></li>
+						<li><a href="http://www.go-mono.com/archive/1.0.2/mcs-1.0.2.tar.gz">Mono Class Libraries and C# Compiler 1.0.2</a></li>
+						<li><a href="http://www.go-mono.com/archive/1.0.2/libgdiplus-1.0.2.tar.gz">libgdiplus 1.0.2</a></li>
+						<li><a href="http://www.go-mono.com/archive/1.0.2/gtk-sharp-1.0.2.tar.gz">Gtk# 1.0.2</a></li>
+						<li><a href="http://www.go-mono.com/archive/1.0.2/monodoc-1.0.2.tar.gz">MonoDoc 1.0.2</a></li>
+						<li><a href="http://www.go-mono.com/archive/1.0.2/monodevelop-0.5.1.tar.gz">MonoDevelop 0.5.1</a></li>
+						<li><a href="http://www.go-mono.com/archive/1.0.2/mod_mono-1.0.2.tar.gz">Apache Mono module 1.0.2 (mod_mono)</a></li>							  
+						</ul>
+						<ul>
+						<li><a href="http://www.go-mono.com/archive/1.0.2/xsp-1.0.2.tar.gz">XSP web server 1.0.2</a></li>					
+					</td>
+				</tr>
+				<tr>
+					<td valign="top" class="left">
+						<p><img src="/img/mono_icon_redhat.gif" align="absmiddle">&nbsp;&nbsp;<b>Red Hat 9.0/x86</b></p>
+					</td>
+					<td valign="top" class="right">
+						<ul>
+						<li><a href="http://www.go-mono.com/archive/1.0.2/redhat-9-i386">Packages</a></li>
+						</ul>
+					</td>
+				</tr>
+				<tr>
+					<td valign="top" class="left">
+						<p><img src="/img/mono_icon_redhat.gif" align="absmiddle">&nbsp;&nbsp;<b>Fedora Core 1/x86</b></p>
+					</td>
+					<td valign="top" class="right">
+						<ul>
+						<li><a href="http://www.go-mono.com/archive/1.0.2/fedora-1-i386">Packages</a><br></li>
+						</ul>
+					    <p>For YUM repository, please use:<br>
+					    <code>http://www.go-mono.com/archive/1.0.2/fedora-1-i386/</code></p>
+					</td>
+				</tr>
+				<tr>
+					<td valign="top" class="left">
+						<p><img src="/img/mono_icon_redhat.gif" align="absmiddle">&nbsp;&nbsp;<b>Fedora Core 2/x86</b></p>
+					</td>
+					<td valign="top" class="right">
+						<ul>
+						<li><a href="http://www.go-mono.com/archive/1.0.2/fedora-2-i386">Packages</a><br></li>
+						</ul>
+					    <p>For YUM repository, please use:<br>
+					    <code>http://www.go-mono.com/archive/1.0.2/fedora-2-i386/</code></p>
+					</td>
+				</tr>				
+				<tr>
+					<td valign="top" class="left">
+						<p><img src="/img/mono_icon_suse.gif" align="absmiddle">&nbsp;&nbsp;<b>SUSE LINUX<br>Enterprise Server 8 for x86</b></p>
+					</td>
+					<td valign="top" class="right">
+						<ul>
+						<li><a href="http://www.go-mono.com/archive/1.0.2/sles-8-i386/">Packages</a></li>
+						</ul>
+					</td>
+				</tr>
+				<tr>
+					<td valign="top" class="left">
+						<p><img src="/img/mono_icon_suse.gif" align="absmiddle">&nbsp;&nbsp;<b>SUSE LINUX<br>Enterprise Server 9 for x86</b></p>
+					</td>
+					<td valign="top" class="right">
+						<ul>
+						<li><a href="http://www.go-mono.com/archive/1.0.2/sles-9-i586/">Packages</a></li>
+						</ul>
+					</td>
+				</tr>
+				<tr>
+					<td valign="top" class="left">
+						<p><img src="/img/mono_icon_suse.gif" align="absmiddle">&nbsp;&nbsp;<b>SUSE LINUX 9.0<br>for x86</b></p>
+					</td>
+					<td valign="top" class="right">
+						<ul>
+						<li><a href="http://www.go-mono.com/archive/1.0.2/suse-90-i586/">Packages</a></li>
+						</ul>
+					</td>
+				</tr>
+				<tr>
+					<td valign="top" class="left">
+						<p><img src="/img/mono_icon_suse.gif" align="absmiddle">&nbsp;&nbsp;<b>SUSE LINUX 9.1<br>for x86</b></p>
+					</td>
+					<td valign="top" class="right">
+						<ul>
+						<li><a href="http://www.go-mono.com/archive/1.0.2/suse-91-i586/">Packages</a></li>
+						</ul>
+					</td>
+				</tr>
+<!-- 				<tr> -->
+<!-- 					<td valign="top" class="left"> -->
+<!-- 						<p><img src="/img/slackware.jpg" align="absmiddle">&nbsp;&nbsp;<b>Slackware 10</b></p> -->
+<!-- 					</td> -->
+<!-- 					<td valign="top" class="right"> -->
+<!-- 						<ul> -->
+<!-- 							<li><a href="http://www.slackcare.com/download.php?view.105">Packages</a> (External)</li> -->
+<!-- 						</ul> -->
+<!-- 					</td> -->
+<!-- 				</tr> -->
+				<tr>
+					<td valign="top" class="left">
+						<p><img src="/img/mono_icon_windows.gif" align="absmiddle">&nbsp;&nbsp;<b>Windows Installer</b><br>Windows 2000 and above</p>
+					</td>
+					<td valign="top" class="right">
+						<ul>
+						<li><a
+					href="http://www.go-mono.com/archive/1.0.2/windows/mono-1.0.2-gtksharp-1.0.2-win32-0.7.exe">Mono
+					Setup (includes Gtk# and
+					XSP)</a></li>
+						</ul>
+					</td>
+				</tr>
+				<tr>
+					<td valign="top" class="left">
+						<p><img src="/img/mono_icon_mac.gif" align="absmiddle">&nbsp;&nbsp;<b>Mac OS X</b></p>
+					</td>
+					<td valign="top" class="right">
+						<ul>
+
+						<li><a
+						href="http://www.go-mono.com/archive/1.0.2/macos/MonoFramework-1.0.2.dmg">MonoFramework-1.0.2.dmg</a>
+						in /Library/Framework,
+						for MacOS X 10.3
+						(Panther) only.
+						</li>
+						
+						</ul>
+					</td>
+				</tr>
+			</table><br><br>			
+
+<!-- ********************************** -->
+<!--  1.0.1 Release -->
+<!-- ********************************** -->
+
+			<table class="download" width="100%" cellpadding="0" cellspacing="0" border="1" bordercolor="#cccccc">
+				<tr>
+					<td class="tablehead" colspan="2">
+						<p><b>1.0.1</b><br>
+ 						<a href="http://go-mono.com/archive/1.0.1">Release notes August 9th, 2004</a></p>
+					</td>
+				</tr>
+				<tr>
+					<td valign="top" class="left">
+						<p><img src="/img/mono_icon_source.gif" align="absmiddle">&nbsp;&nbsp;<b>Source Code</b></p>
+					</td>
+					<td valign="top" class="right">
+						<ul>
+						<li><a href="http://www.go-mono.com/archive/1.0.1/mono-1.0.1.tar.gz">Mono Runtime 1.0.1</a></li>
+						<li><a href="http://www.go-mono.com/archive/1.0.1/mcs-1.0.1.tar.gz">Mono Class Libraries and C# Compiler 1.0.1</a></li>
+						<li><a href="http://www.go-mono.com/archive/1.0.1/libgdiplus-1.0.1.tar.gz">libgdiplus 1.0.1</a></li>
+						<li><a href="http://www.go-mono.com/archive/1.0.1/monodoc-1.0.1.tar.gz">MonoDoc 1.0.1</a></li>
+						<li><a href="http://www.go-mono.com/archive/1.0.1/mod_mono-1.0.1.tar.gz">Apache Mono module 1.0.1 (mod_mono)</a></li>							  
+						</ul>
+						<ul>
+						<li><a href="http://www.go-mono.com/archive/1.0.1/xsp-1.0.1.tar.gz">XSP web server 1.0.1</a></li>					
+					</td>
+				</tr>
+				<tr>
+					<td valign="top" class="left">
+						<p><img src="/img/mono_icon_redhat.gif" align="absmiddle">&nbsp;&nbsp;<b>Red Hat 9.0/x86</b></p>
+					</td>
+					<td valign="top" class="right">
+						<ul>
+						<li><a href="http://www.go-mono.com/archive/1.0.1/redhat-9-i386">Packages</a></li>
+						</ul>
+					</td>
+				</tr>
+				<tr>
+					<td valign="top" class="left">
+						<p><img src="/img/mono_icon_redhat.gif" align="absmiddle">&nbsp;&nbsp;<b>Fedora Core 1/x86</b></p>
+					</td>
+					<td valign="top" class="right">
+						<ul>
+						<li><a href="http://www.go-mono.com/archive/1.0.1/fedora-1-i386">Packages</a><br></li>
+						</ul>
+					    <p>For YUM repository, please use:<br>
+					    <code>http://www.go-mono.com/archive/1.0.1/fedora-1-i386/</code></p>
+					</td>
+				</tr>
+				<tr>
+					<td valign="top" class="left">
+						<p><img src="/img/mono_icon_redhat.gif" align="absmiddle">&nbsp;&nbsp;<b>Fedora Core 2/x86</b></p>
+					</td>
+					<td valign="top" class="right">
+						<ul>
+						<li><a href="http://www.go-mono.com/archive/1.0.1/fedora-2-i386">Packages</a><br></li>
+						</ul>
+					    <p>For YUM repository, please use:<br>
+					    <code>http://www.go-mono.com/archive/1.0.1/fedora-2-i386/</code></p>
+					</td>
+				</tr>				
+				<tr>
+					<td valign="top" class="left">
+						<p><img src="/img/mono_icon_suse.gif" align="absmiddle">&nbsp;&nbsp;<b>SUSE LINUX<br>Enterprise Server 8 for x86</b></p>
+					</td>
+					<td valign="top" class="right">
+						<ul>
+						<li><a href="http://www.go-mono.com/archive/1.0.1/sles-8-i386/">Packages</a></li>
+						</ul>
+					</td>
+				</tr>
+				<tr>
+					<td valign="top" class="left">
+						<p><img src="/img/mono_icon_suse.gif" align="absmiddle">&nbsp;&nbsp;<b>SUSE LINUX<br>Enterprise Server 9 for x86</b></p>
+					</td>
+					<td valign="top" class="right">
+						<ul>
+						<li><a href="http://www.go-mono.com/archive/1.0.1/sles-9-i586/">Packages</a></li>
+						</ul>
+					</td>
+				</tr>
+				<tr>
+					<td valign="top" class="left">
+						<p><img src="/img/mono_icon_suse.gif" align="absmiddle">&nbsp;&nbsp;<b>SUSE LINUX 9.0<br>for x86</b></p>
+					</td>
+					<td valign="top" class="right">
+						<ul>
+						<li><a href="http://www.go-mono.com/archive/1.0.1/suse-90-i586/">Packages</a></li>
+						</ul>
+					</td>
+				</tr>
+				<tr>
+					<td valign="top" class="left">
+						<p><img src="/img/mono_icon_suse.gif" align="absmiddle">&nbsp;&nbsp;<b>SUSE LINUX 9.1<br>for x86</b></p>
+					</td>
+					<td valign="top" class="right">
+						<ul>
+						<li><a href="http://www.go-mono.com/archive/1.0.1/suse-91-i586/">Packages</a></li>
+						</ul>
+					</td>
+				</tr>
+<!-- 				<tr> -->
+<!-- 					<td valign="top" class="left"> -->
+<!-- 						<p><img src="/img/slackware.jpg" align="absmiddle">&nbsp;&nbsp;<b>Slackware 10</b></p> -->
+<!-- 					</td> -->
+<!-- 					<td valign="top" class="right"> -->
+<!-- 						<ul> -->
+<!-- 							<li><a href="http://www.slackcare.com/download.php?view.105">Packages</a> (External)</li> -->
+<!-- 						</ul> -->
+<!-- 					</td> -->
+<!-- 				</tr> -->
+				<tr>
+					<td valign="top" class="left">
+						<p><img src="/img/mono_icon_windows.gif" align="absmiddle">&nbsp;&nbsp;<b>Windows Installer</b><br>Windows 2000 and above</p>
+					</td>
+					<td valign="top" class="right">
+						<ul>
+						<li><a href="http://www.go-mono.com/archive/1.0.1/windows/mono-1.0.1-gtksharp-1.0-win32-0.5.exe">Mono Setup (includes Gtk# and XSP)</a></li>
+						</ul>
+					</td>
+				</tr>
+				<tr>
+					<td valign="top" class="left">
+						<p><img src="/img/mono_icon_mac.gif" align="absmiddle">&nbsp;&nbsp;<b>Mac OS X</b></p>
+					</td>
+					<td valign="top" class="right">
+						<ul>
+						<li><a href="http://www.go-mono.com/archive/1.0.1/macos/MonoFramework-1.0.1.dmg">MonoFramework-1.0.1.dmg</a> in /Library/Framework, for MacOS X 10.3 (Panther) only</li>
+						</ul>
+					</td>
+				</tr>
+			</table><br><br>			
+
+
+<!-- ********************************** -->
+<!--  1.0 Release -->
+<!-- ********************************** -->
+
+			<table class="download" width="100%" cellpadding="0" cellspacing="0" border="1" bordercolor="#cccccc">
+				<tr>
+					<td class="tablehead" colspan="2">
+						<p><b>1.0</b><br>
+						<a href="http://go-mono.com/archive/1.0/">Release notes June 30th, 2004</a></p>
+					</td>
+				</tr>
+				<tr>
+					<td valign="top" class="left">
+						<p><img src="/img/mono_icon_source.gif" align="absmiddle">&nbsp;&nbsp;<b>Source Code</b></p>
+					</td>
+					<td valign="top" class="right">
+						<ul>
+						<li><a href="http://www.go-mono.com/archive/1.0/mono-1.0.tar.gz">Mono Runtime 1.0</a></li>
+						<li><a href="http://www.go-mono.com/archive/1.0/mcs-1.0.tar.gz">Mono Class Libraries and C# Compiler 1.0</a></li>
+						<li><a href="http://www.go-mono.com/archive/1.0/libgdiplus-1.0.tar.gz">libgdiplus 1.0</a></li>
+						</ul>
+						<ul>
+						<li><a href="http://www.go-mono.com/archive/1.0/monodoc-1.0.tar.gz">MonoDoc 1.0</a></li>
+						<li><a href="http://www.go-mono.com/archive/1.0/xsp-1.0.tar.gz">XSP web server 1.0</a></li>
+					
+						<li><a href="http://www.go-mono.com/archive/1.0/mod_mono-1.0.tar.gz">Apache Mono module 1.0 (mod_mono)</a></li>
+						</ul>
+						<ul>
+						<li><a href="http://www.go-mono.com/archive/1.0/winelib-0.3.tar.gz">Winelib 0.3</a></li>
+						</ul>
+						<ul>
+						<li><a href="http://www.go-mono.com/archive/1.0/gtk-sharp-1.0.tar.gz">Gtk# 1.0</a></li>
+						<li><a href="http://www.go-mono.com/archive/1.0/gecko-sharp-0.5.tar.gz">Gecko# 0.5</a></li>
+						<li><a href="http://www.go-mono.com/archive/1.0/gtksourceview-sharp-0.5.tar.gz">GtkSourceView# 0.5</a></li>
+						<li><a href="http://www.go-mono.com/archive/1.0/monodevelop-0.5.tar.gz">MonoDevelop 0.5</a></li>
+						</ul>
+					</td>
+				</tr>
+				<tr>
+					<td valign="top" class="left">
+						<p><img src="/img/mono_icon_redhat.gif" align="absmiddle">&nbsp;&nbsp;<b>Red Hat 9.0/x86</b></p>
+					</td>
+					<td valign="top" class="right">
+						<ul>
+						<li><a href="http://www.go-mono.com/archive/1.0/redhat-9-i386">Packages</a></li>
+						</ul>
+					</td>
+				</tr>
+				<tr>
+					<td valign="top" class="left">
+						<p><img src="/img/mono_icon_redhat.gif" align="absmiddle">&nbsp;&nbsp;<b>Fedora Core 1/x86</b></p>
+					</td>
+					<td valign="top" class="right">
+						<ul>
+						<li><a href="http://www.go-mono.com/archive/1.0/fedora-1-i386">Packages</a><br></li>
+						</ul>
+					    <p>For YUM repository, please use:<br>
+					    <code>http://www.go-mono.com/archive/1.0/fedora-1-i386/</code></p>
+					</td>
+				</tr>
+				<tr>
+					<td valign="top" class="left">
+						<p><img src="/img/mono_icon_redhat.gif" align="absmiddle">&nbsp;&nbsp;<b>Fedora Core 2/x86</b></p>
+					</td>
+					<td valign="top" class="right">
+						<ul>
+						<li><a href="http://www.go-mono.com/archive/1.0/fedora-2-i386">Packages</a><br></li>
+						</ul>
+					    <p>For YUM repository, please use:<br>
+					    <code>http://www.go-mono.com/archive/1.0/fedora-2-i386/</code></p>
+					</td>
+				</tr>				
+				<tr>
+					<td valign="top" class="left">
+						<p><img src="/img/mono_icon_suse.gif" align="absmiddle">&nbsp;&nbsp;<b>SUSE LINUX Enterprise Server 8 for x86</b></p>
+					</td>
+					<td valign="top" class="right">
+						<ul>
+						<li><a href="http://www.go-mono.com/archive/1.0/sles-8-i386/">Packages</a></li>
+						</ul>
+					</td>
+				</tr>
+				<tr>
+					<td valign="top" class="left">
+						<p><img src="/img/mono_icon_suse.gif" align="absmiddle">&nbsp;&nbsp;<b>SUSE LINUX 9.0<br>for x86</b></p>
+					</td>
+					<td valign="top" class="right">
+						<ul>
+						<li><a href="http://www.go-mono.com/archive/1.0/suse-90-i586/">Packages</a></li>
+						</ul>
+					</td>
+				</tr>
+				<tr>
+					<td valign="top" class="left">
+						<p><img src="/img/mono_icon_suse.gif" align="absmiddle">&nbsp;&nbsp;<b>SUSE LINUX 9.1<br>for x86</b></p>
+					</td>
+					<td valign="top" class="right">
+						<ul>
+						<li><a href="http://www.go-mono.com/archive/1.0/suse-91-i586/">Packages</a></li>
+						</ul>
+					</td>
+				</tr>
+				<tr>
+					<td valign="top" class="left">
+						<p><img src="/img/slackware.jpg" align="absmiddle">&nbsp;&nbsp;<b>Slackware 10</b></p>
+					</td>
+					<td valign="top" class="right">
+						<ul>
+							<li><a href="http://www.slackcare.com/download.php?view.105">Packages</a> (External)</li>
+						</ul>
+					</td>
+				</tr>
+				<tr>
+					<td valign="top" class="left">
+						<p><img src="/img/mono_icon_windows.gif" align="absmiddle">&nbsp;&nbsp;<b>Windows Installer</b><br>Windows 2000 and above</p>
+					</td>
+					<td valign="top" class="right">
+						<ul>
+						<li><a href="http://www.go-mono.com/archive/1.0/windows/mono-1.0-win32-1.exe">Mono Setup</a></li>
+						</ul>
+					</td>
+				</tr>
+				<tr>
+					<td valign="top" class="left">
+						<p><img src="/img/mono_icon_mac.gif" align="absmiddle">&nbsp;&nbsp;<b>Mac OS X</b></p>
+					</td>
+					<td valign="top" class="right">
+						<ul>
+						<li><a href="http://www.go-mono.com/archive/1.0/macos/MonoFramework-1.0.dmg">MonoFramework-1.0.dmg</a> in /Library/Framework, for MacOS X 10.3 (Panther) only</li>
+						</ul>
+					</td>
+				</tr>
+			</table><br><br>			
+
+<!-- ********************************** -->
+<!--  1.1.3 Release -->
+<!-- ********************************** -->
+
+			<table class="download" width="100%" cellpadding="0" cellspacing="0" border="1" bordercolor="#cccccc">
+				<tr>
+					<td class="tablehead" colspan="2">
+						<p>Unstable: <b>1.1.3</b><br>
+ 						<a
+ 						href="http://go-mono.com/archive/1.1.3">Release
+ 						notes December 8th, 2004</a></p>
+					</td>
+				</tr>
+				<tr>
+					<td valign="top" class="left">
+						<p><img src="/img/mono_icon_source.gif" align="absmiddle">&nbsp;&nbsp;<b>Source Code</b></p>
+					</td>
+					<td valign="top" class="right">
+						<ul>
+						<li><a href="http://www.go-mono.com/archive/1.1.3/mono-1.1.3.tar.gz">Mono Runtime 1.1.3</a></li>
+						<li><a href="http://www.go-mono.com/archive/1.1.3/libgdiplus-1.1.3.tar.gz">libgdiplus 1.1.3</a></li>
+						</ul>
+					</td>
+				</tr>
+<!-- 				<tr> -->
+<!-- 					<td valign="top" class="left"> -->
+<!-- 						<p><img src="/img/mono_icon_redhat.gif" align="absmiddle">&nbsp;&nbsp;<b>Red Hat 9.0/x86</b></p> -->
+<!-- 					</td> -->
+<!-- 					<td valign="top" class="right"> -->
+<!-- 						<ul> -->
+<!-- 						<li><a href="http://www.go-mono.com/archive/1.1.3/redhat-9-i386">Packages</a></li> -->
+<!-- 						</ul> -->
+<!-- 					</td> -->
+<!-- 				</tr> -->
+<!-- 				<tr> -->
+<!-- 					<td valign="top" class="left"> -->
+<!-- 						<p><img src="/img/mono_icon_redhat.gif" align="absmiddle">&nbsp;&nbsp;<b>Fedora Core 1/x86</b></p> -->
+<!-- 					</td> -->
+<!-- 					<td valign="top" class="right"> -->
+<!-- 						<ul> -->
+<!-- 						<li><a href="http://www.go-mono.com/archive/1.1.3/fedora-1-i386">Packages</a><br></li> -->
+<!-- 						</ul> -->
+<!-- 					    <p>For YUM repository, please use:<br> -->
+<!-- 					    <code>http://www.go-mono.com/archive/1.1.3/fedora-1-i386/</code></p> -->
+<!-- 					</td> -->
+<!-- 				</tr> -->
+				<tr>
+					<td valign="top" class="left">
+						<p><img src="/img/mono_icon_redhat.gif" align="absmiddle">&nbsp;&nbsp;<b>Fedora Core 2/x86</b></p>
+					</td>
+					<td valign="top" class="right">
+						<ul>
+						<li><a href="http://www.go-mono.com/archive/1.1.3/fedora-2-i386">Packages</a><br></li>
+						</ul>
+					    <p>For YUM repository, please use:<br>
+					    <code>http://www.go-mono.com/archive/1.1.3/fedora-2-i386/</code></p>
+					</td>
+				</tr>
+				<tr>
+					<td valign="top" class="left">
+						<p><img src="/img/mono_icon_redhat.gif" align="absmiddle">&nbsp;&nbsp;<b>Fedora Core 3/x86</b></p>
+					</td>
+					<td valign="top" class="right">
+						<ul>
+						<li><a href="http://www.go-mono.com/archive/1.1.3/fedora-3-i386">Packages</a><br></li>
+						</ul>
+					    <p>For YUM repository, please use:<br>
+					    <code>http://www.go-mono.com/archive/1.1.3/fedora-3-i386/</code></p>
+					</td>
+				</tr>
+<!-- 				<tr> -->
+<!-- 					<td valign="top" class="left"> -->
+<!-- 						<p><img src="/img/mono_icon_suse.gif" align="absmiddle">&nbsp;&nbsp;<b>SUSE LINUX<br>Enterprise Server 8 for x86</b></p> -->
+<!-- 					</td> -->
+<!-- 					<td valign="top" class="right"> -->
+<!-- 						<ul> -->
+<!-- 						<li><a href="http://www.go-mono.com/archive/1.1.3/sles-8-i386/">Packages</a></li> -->
+<!-- 						</ul> -->
+<!-- 					</td> -->
+<!-- 				</tr> -->
+				<tr>
+					<td valign="top" class="left">
+						<p><img src="/img/mono_icon_suse.gif" align="absmiddle">&nbsp;&nbsp;<b>SUSE LINUX<br>Enterprise Server 9 for x86</b></p>
+					</td>
+					<td valign="top" class="right">
+						<ul>
+						<li><a href="http://www.go-mono.com/archive/1.1.3/sles-9-i586/">Packages</a></li>
+						</ul>
+					</td>
+				</tr>
+<!-- 				<tr> -->
+<!-- 					<td valign="top" class="left"> -->
+<!-- 						<p><img src="/img/mono_icon_suse.gif" align="absmiddle">&nbsp;&nbsp;<b>SUSE LINUX 9.0<br>for x86</b></> -->
+<!-- 					</td> -->
+<!-- 					<td valign="top" class="right"> -->
+<!-- 						<ul> -->
+<!-- 						<li><a href="http://www.go-mono.com/archive/1.1.3/suse-90-i586/">Packages</a></li> -->
+<!-- 						</ul> -->
+<!-- 					</td> -->
+<!-- 				</tr> -->
+				<tr>
+					<td valign="top" class="left">
+						<p><img src="/img/mono_icon_suse.gif" align="absmiddle">&nbsp;&nbsp;<b>SUSE LINUX 9.1<br>for x86</b></p>
+					</td>
+					<td valign="top" class="right">
+						<ul>
+						<li><a href="http://www.go-mono.com/archive/1.1.3/suse-91-i586/">Packages</a></li>
+						</ul>
+					</td>
+				</tr>
+				<tr>
+					<td valign="top" class="left">
+						<p><img src="/img/mono_icon_suse.gif" align="absmiddle">&nbsp;&nbsp;<b>Novell Linux Desktop 9<br>for x86</b></p>
+					</td>
+					<td valign="top" class="right">
+						<ul>
+						<li><a href="http://www.go-mono.com/archive/1.1.3/nld-9-i586/">Packages</a></li>
+						</ul>
+					</td>
+				</tr>
+<!-- 				<tr> -->
+<!-- 					<td valign="top" class="left"> -->
+<!-- 						<p><img src="/img/slackware.jpg" align="absmiddle">&nbsp;&nbsp;<b>Slackware 10</b></p> -->
+<!-- 					</td> -->
+<!-- 					<td valign="top" class="right"> -->
+<!-- 						<ul> -->
+<!-- 							<li><a href="http://www.slackcare.com/download.php?view.105">Packages</a> (External)</li> -->
+<!-- 						</ul> -->
+<!-- 					</td> -->
+<!-- 				</tr> -->
+				<tr>
+					<td valign="top" class="left">
+						<p><img src="/img/mono_icon_windows.gif" align="absmiddle">&nbsp;&nbsp;<b>Windows Installer</b><br>Windows 2000 and above</p>
+					</td>
+					<td valign="top" class="right">
+						<ul>
+						<li><a
+					href="http://www.go-mono.com/archive/1.1.3/windows/mono-1.1.3-gtksharp-1.9.1-win32-0.4.exe">Mono
+					Setup (includes Gtk# and
+					XSP)</a></li>
+						</ul>
+					</td>
+				</tr>
+ 				<tr> 
+ 					<td valign="top" class="left"> 
+ 						<p><img src="/img/mono_icon_mac.gif" align="absmiddle">&nbsp;&nbsp;<b>Mac OS X</b></p> 
+ 					</td> 
+ 					<td valign="top" class="right"> 
+ 						<ul> 
+ 						<li><a href="http://www.go-mono.com/archive/1.1.3/macos/MonoFramework-1.1.3.dmg">MonoFramework-1.1.3.dmg</a> in /Library/Framework, for MacOS X 10.3 (Panther) only</li> 
+ 						</ul> 
+ 					</td> 
+ 				</tr> 
+				<tr>
+					<td valign="top" class="left">
+						<p><img src="/img/mono_icon_suse.gif" align="absmiddle">&nbsp;&nbsp;<b>SLES9 on S390</b></p>
+					</td>
+					<td valign="top" class="right">
+						<ul>
+						<li><a href="http://www.go-mono.com/archive/1.1.3/sles-9-s390">Packages</a><br></li>
+						</ul>
+					</td>
+				</tr>
+				<tr>
+					<td valign="top" class="left">
+						<p><img src="/img/mono_icon_suse.gif" align="absmiddle">&nbsp;&nbsp;<b>SLES8 on S390</b></p>
+					</td>
+					<td valign="top" class="right">
+						<ul>
+						<li><a
+					href="http://www.go-mono.com/archive/1.1.3/sles-8-s390">Packages</a><br></li>
+						</ul>
+					</td>
+				</tr>
+ 			</table><br><br>			
+
+<!--  1.1.2 Release -->
+<!-- ********************************** -->
+
+			<table class="download" width="100%" cellpadding="0" cellspacing="0" border="1" bordercolor="#cccccc">
+				<tr>
+					<td class="tablehead" colspan="2">
+						<p><b>1.1.2</b><br>
+ 						<a href="http://go-mono.com/archive/1.1.2">Release notes September 21st, 2004</a></p>
+					</td>
+				</tr>
+				<tr>
+					<td valign="top" class="left">
+						<p><img src="/img/mono_icon_source.gif" align="absmiddle">&nbsp;&nbsp;<b>Source Code</b></p>
+					</td>
+					<td valign="top" class="right">
+						<ul>
+						<li><a href="http://www.go-mono.com/archive/1.1.2/mono-1.1.2.tar.gz">Mono Runtime 1.1.2</a></li>
+						<li><a href="http://www.go-mono.com/archive/1.1.2/mcs-1.1.2.tar.gz">Mono Class Libraries and C# Compiler 1.1.2</a></li>
+						<li><a href="http://www.go-mono.com/archive/1.1.2/libgdiplus-1.1.2.tar.gz">libgdiplus 1.1.2</a></li>
+						</ul>
+					</td>
+				</tr>
+<!-- 				<tr> -->
+<!-- 					<td valign="top" class="left"> -->
+<!-- 						<p><img src="/img/mono_icon_redhat.gif" align="absmiddle">&nbsp;&nbsp;<b>Red Hat 9.0/x86</b></p> -->
+<!-- 					</td> -->
+<!-- 					<td valign="top" class="right"> -->
+<!-- 						<ul> -->
+<!-- 						<li><a href="http://www.go-mono.com/archive/1.1.2/redhat-9-i386">Packages</a></li> -->
+<!-- 						</ul> -->
+<!-- 					</td> -->
+<!-- 				</tr> -->
+<!-- 				<tr> -->
+<!-- 					<td valign="top" class="left"> -->
+<!-- 						<p><img src="/img/mono_icon_redhat.gif" align="absmiddle">&nbsp;&nbsp;<b>Fedora Core 1/x86</b></p> -->
+<!-- 					</td> -->
+<!-- 					<td valign="top" class="right"> -->
+<!-- 						<ul> -->
+<!-- 						<li><a href="http://www.go-mono.com/archive/1.1.2/fedora-1-i386">Packages</a><br></li> -->
+<!-- 						</ul> -->
+<!-- 					    <p>For YUM repository, please use:<br> -->
+<!-- 					    <code>http://www.go-mono.com/archive/1.1.2/fedora-1-i386/</code></p> -->
+<!-- 					</td> -->
+<!-- 				</tr> -->
+				<tr>
+					<td valign="top" class="left">
+						<p><img src="/img/mono_icon_redhat.gif" align="absmiddle">&nbsp;&nbsp;<b>Fedora Core 2/x86</b></p>
+					</td>
+					<td valign="top" class="right">
+						<ul>
+						<li><a href="http://www.go-mono.com/archive/1.1.2/fedora-2-i386">Packages</a><br></li>
+						</ul>
+					    <p>For YUM repository, please use:<br>
+					    <code>http://www.go-mono.com/archive/1.1.2/fedora-2-i386/</code></p>
+					</td>
+				</tr>
+<!-- 				<tr> -->
+<!-- 					<td valign="top" class="left"> -->
+<!-- 						<p><img src="/img/mono_icon_suse.gif" align="absmiddle">&nbsp;&nbsp;<b>SUSE LINUX<br>Enterprise Server 8 for x86</b></p> -->
+<!-- 					</td> -->
+<!-- 					<td valign="top" class="right"> -->
+<!-- 						<ul> -->
+<!-- 						<li><a href="http://www.go-mono.com/archive/1.1.2/sles-8-i386/">Packages</a></li> -->
+<!-- 						</ul> -->
+<!-- 					</td> -->
+<!-- 				</tr> -->
+<!-- 				<tr> -->
+<!-- 					<td valign="top" class="left"> -->
+<!-- 						<p><img src="/img/mono_icon_suse.gif" align="absmiddle">&nbsp;&nbsp;<b>SUSE LINUX<br>Enterprise Server 9 for x86</b></p> -->
+<!-- 					</td> -->
+<!-- 					<td valign="top" class="right"> -->
+<!-- 						<ul> -->
+<!-- 						<li><a href="http://www.go-mono.com/archive/1.1.2/sles-9-i586/">Packages</a></li> -->
+<!-- 						</ul> -->
+<!-- 					</td> -->
+<!-- 				</tr> -->
+<!-- 				<tr> -->
+<!-- 					<td valign="top" class="left"> -->
+<!-- 						<p><img src="/img/mono_icon_suse.gif" align="absmiddle">&nbsp;&nbsp;<b>SUSE LINUX 9.0<br>for x86</b></> -->
+<!-- 					</td> -->
+<!-- 					<td valign="top" class="right"> -->
+<!-- 						<ul> -->
+<!-- 						<li><a href="http://www.go-mono.com/archive/1.1.2/suse-90-i586/">Packages</a></li> -->
+<!-- 						</ul> -->
+<!-- 					</td> -->
+<!-- 				</tr> -->
+				<tr>
+					<td valign="top" class="left">
+						<p><img src="/img/mono_icon_suse.gif" align="absmiddle">&nbsp;&nbsp;<b>SUSE LINUX 9.1<br>for x86</b></p>
+					</td>
+					<td valign="top" class="right">
+						<ul>
+						<li><a href="http://www.go-mono.com/archive/1.1.2/suse-91-i586/">Packages</a></li>
+						</ul>
+					</td>
+				</tr>
+<!-- 				<tr> -->
+<!-- 					<td valign="top" class="left"> -->
+<!-- 						<p><img src="/img/slackware.jpg" align="absmiddle">&nbsp;&nbsp;<b>Slackware 10</b></p> -->
+<!-- 					</td> -->
+<!-- 					<td valign="top" class="right"> -->
+<!-- 						<ul> -->
+<!-- 							<li><a href="http://www.slackcare.com/download.php?view.105">Packages</a> (External)</li> -->
+<!-- 						</ul> -->
+<!-- 					</td> -->
+<!-- 				</tr> -->
+				<tr>
+					<td valign="top" class="left">
+						<p><img src="/img/mono_icon_windows.gif" align="absmiddle">&nbsp;&nbsp;<b>Windows Installer</b><br>Windows 2000 and above</p>
+					</td>
+					<td valign="top" class="right">
+						<ul>
+						<li><a
+					href="http://www.go-mono.com/archive/1.1.2/windows/mono-1.1.2-gtksharp-1.9-win32-0.3.exe">Mono
+					Setup (includes Gtk# and
+					XSP)</a></li>
+						</ul>
+					</td>
+				</tr>
+ 				<tr> 
+ 					<td valign="top" class="left"> 
+ 						<p><img src="/img/mono_icon_mac.gif" align="absmiddle">&nbsp;&nbsp;<b>Mac OS X</b></p> 
+ 					</td> 
+ 					<td valign="top" class="right"> 
+ 						<ul> 
+ 						<li><a href="http://www.go-mono.com/archive/1.1.2/macos/MonoFramework-1.1.2.dmg">MonoFramework-1.1.2.dmg</a> in /Library/Framework, for MacOS X 10.3 (Panther) only</li> 
+ 						</ul> 
+ 					</td> 
+ 				</tr> 
+ 			</table><br><br>			
+
+<!-- ********************************** -->
+<!--  1.1.1 Release -->
+<!-- ********************************** -->
+
+			<table class="download" width="100%" cellpadding="0" cellspacing="0" border="1" bordercolor="#cccccc">
+				<tr>
+					<td class="tablehead" colspan="2">
+						<p><b>1.1.1</b><br>
+ 						<a href="http://go-mono.com/archive/1.1.1">Release notes September 21st, 2004</a></p>
+					</td>
+				</tr>
+				<tr>
+					<td valign="top" class="left">
+						<p><img src="/img/mono_icon_source.gif" align="absmiddle">&nbsp;&nbsp;<b>Source Code</b></p>
+					</td>
+					<td valign="top" class="right">
+						<ul>
+						<li><a href="http://www.go-mono.com/archive/1.1.1/mono-1.1.1.tar.gz">Mono Runtime 1.1.1</a></li>
+						<li><a href="http://www.go-mono.com/archive/1.1.1/mcs-1.1.1.tar.gz">Mono Class Libraries and C# Compiler 1.1.1</a></li>
+						<li><a href="http://www.go-mono.com/archive/1.1.1/libgdiplus-1.1.1.tar.gz">libgdiplus 1.1.1</a></li>
+						</ul>
+					</td>
+				</tr>
+<!-- 				<tr> -->
+<!-- 					<td valign="top" class="left"> -->
+<!-- 						<p><img src="/img/mono_icon_redhat.gif" align="absmiddle">&nbsp;&nbsp;<b>Red Hat 9.0/x86</b></p> -->
+<!-- 					</td> -->
+<!-- 					<td valign="top" class="right"> -->
+<!-- 						<ul> -->
+<!-- 						<li><a href="http://www.go-mono.com/archive/1.1.1/redhat-9-i386">Packages</a></li> -->
+<!-- 						</ul> -->
+<!-- 					</td> -->
+<!-- 				</tr> -->
+<!-- 				<tr> -->
+<!-- 					<td valign="top" class="left"> -->
+<!-- 						<p><img src="/img/mono_icon_redhat.gif" align="absmiddle">&nbsp;&nbsp;<b>Fedora Core 1/x86</b></p> -->
+<!-- 					</td> -->
+<!-- 					<td valign="top" class="right"> -->
+<!-- 						<ul> -->
+<!-- 						<li><a href="http://www.go-mono.com/archive/1.1.1/fedora-1-i386">Packages</a><br></li> -->
+<!-- 						</ul> -->
+<!-- 					    <p>For YUM repository, please use:<br> -->
+<!-- 					    <code>http://www.go-mono.com/archive/1.1.1/fedora-1-i386/</code></p> -->
+<!-- 					</td> -->
+<!-- 				</tr> -->
+				<tr>
+					<td valign="top" class="left">
+						<p><img src="/img/mono_icon_redhat.gif" align="absmiddle">&nbsp;&nbsp;<b>Fedora Core 2/x86</b></p>
+					</td>
+					<td valign="top" class="right">
+						<ul>
+						<li><a href="http://www.go-mono.com/archive/1.1.1/fedora-2-i386">Packages</a><br></li>
+						</ul>
+					    <p>For YUM repository, please use:<br>
+					    <code>http://www.go-mono.com/archive/1.1.1/fedora-2-i386/</code></p>
+					</td>
+				</tr>
+<!-- 				<tr> -->
+<!-- 					<td valign="top" class="left"> -->
+<!-- 						<p><img src="/img/mono_icon_suse.gif" align="absmiddle">&nbsp;&nbsp;<b>SUSE LINUX<br>Enterprise Server 8 for x86</b></p> -->
+<!-- 					</td> -->
+<!-- 					<td valign="top" class="right"> -->
+<!-- 						<ul> -->
+<!-- 						<li><a href="http://www.go-mono.com/archive/1.1.1/sles-8-i386/">Packages</a></li> -->
+<!-- 						</ul> -->
+<!-- 					</td> -->
+<!-- 				</tr> -->
+<!-- 				<tr> -->
+<!-- 					<td valign="top" class="left"> -->
+<!-- 						<p><img src="/img/mono_icon_suse.gif" align="absmiddle">&nbsp;&nbsp;<b>SUSE LINUX<br>Enterprise Server 9 for x86</b></p> -->
+<!-- 					</td> -->
+<!-- 					<td valign="top" class="right"> -->
+<!-- 						<ul> -->
+<!-- 						<li><a href="http://www.go-mono.com/archive/1.1.1/sles-9-i586/">Packages</a></li> -->
+<!-- 						</ul> -->
+<!-- 					</td> -->
+<!-- 				</tr> -->
+<!-- 				<tr> -->
+<!-- 					<td valign="top" class="left"> -->
+<!-- 						<p><img src="/img/mono_icon_suse.gif" align="absmiddle">&nbsp;&nbsp;<b>SUSE LINUX 9.0<br>for x86</b></> -->
+<!-- 					</td> -->
+<!-- 					<td valign="top" class="right"> -->
+<!-- 						<ul> -->
+<!-- 						<li><a href="http://www.go-mono.com/archive/1.1.1/suse-90-i586/">Packages</a></li> -->
+<!-- 						</ul> -->
+<!-- 					</td> -->
+<!-- 				</tr> -->
+				<tr>
+					<td valign="top" class="left">
+						<p><img src="/img/mono_icon_suse.gif" align="absmiddle">&nbsp;&nbsp;<b>SUSE LINUX 9.1<br>for x86</b></p>
+					</td>
+					<td valign="top" class="right">
+						<ul>
+						<li><a href="http://www.go-mono.com/archive/1.1.1/suse-91-i586/">Packages</a></li>
+						</ul>
+					</td>
+				</tr>
+<!-- 				<tr> -->
+<!-- 					<td valign="top" class="left"> -->
+<!-- 						<p><img src="/img/slackware.jpg" align="absmiddle">&nbsp;&nbsp;<b>Slackware 10</b></p> -->
+<!-- 					</td> -->
+<!-- 					<td valign="top" class="right"> -->
+<!-- 						<ul> -->
+<!-- 							<li><a href="http://www.slackcare.com/download.php?view.105">Packages</a> (External)</li> -->
+<!-- 						</ul> -->
+<!-- 					</td> -->
+<!-- 				</tr> -->
+<!-- 				<tr> -->
+<!-- 					<td valign="top" class="left"> -->
+<!-- 						<p><img src="/img/mono_icon_windows.gif" align="absmiddle">&nbsp;&nbsp;<b>Windows Installer</b><br>Windows 2000 and above</p> -->
+<!-- 					</td> -->
+<!-- 					<td valign="top" class="right"> -->
+<!-- 						<ul> -->
+<!-- 						<li> -->
+<!--                                    <a href="http://www.go-mono.com/archive/1.1.1/windows/mono-1.1.1-gtksharp-1.0-win32-0.5.exe">Mono -->
+<!-- 					Setup (includes Gtk# and -->
+<!-- 					XSP)</a></li>-\-> -->
+<!-- 					Packages not available yet. -->
+					
+<!-- 						</ul> -->
+<!-- 					</td> -->
+<!-- 				</tr> -->
+ 				<tr> 
+ 					<td valign="top" class="left"> 
+ 						<p><img src="/img/mono_icon_mac.gif" align="absmiddle">&nbsp;&nbsp;<b>Mac OS X</b></p> 
+ 					</td> 
+ 					<td valign="top" class="right"> 
+ 						<ul> 
+ 						<li><a href="http://www.go-mono.com/archive/1.1.1/macos/MonoFramework-1.1.1.dmg">MonoFramework-1.1.1.dmg</a> in /Library/Framework, for MacOS X 10.3 (Panther) only</li> 
+ 						</ul> 
+ 					</td> 
+ 				</tr> 
+ 			</table><br><br>			
+			
+			<h2>Regression Tests</h2>
+			
+				<p>You can get binaries for the Mono Regression Test Suite <a href="http://www.go-mono.com/archive/mono-tests.tar.gz">here</a></p>
+				
+				
+				<h2>Binaries for other platforms</h2>
+				
+		
+				<ul>
+					<li>Debian: <a href="http://pkg-mono.alioth.debian.org/">http://pkg-mono.alioth.debian.org/</a>
+				</ul>
+			
+			
+			<h2>Snapshots</h2>
+			
+				<p><a href="http://www.go-mono.com/snapshots/">Nightly snapshots</a> of 
+				the CVS repository are made every day at 10pm EST (Boston
+				Time).  These are not guaranteed to build, they are just a
+				snapshot of the tree.</p>
+				
+				<p>The <a href="/contributing/anonsvn.html">anonSVN</a> mirrors
+				updated every 30 minutes.</p>
+				
+			<h2>Compilation</h2>
+			
+				<p>For instructions on how to build Mono, please refer to the <a href="/contributing/compiling.html">compiling</a> page.</p>
+				
+			
+
+<!-- *********************************************************************************** -->
+<!-- TABLE TEMPLATE
+
+			<table class="download" width="100%" cellpadding="0" cellspacing="0" border="1" bordercolor="#cccccc">
+				<tr>
+					<td class="tablehead" colspan="2">
+						<p></p>
+					</td>
+				</tr>
+				<tr>
+					<td valign="top" class="left">
+						<p><img src="/img/mono_icon_source.gif" align="absmiddle">&nbsp;&nbsp;<b>Source Code</b></p>
+					</td>
+					<td valign="top" class="right">
+						<ul>
+						</ul>
+					</td>
+				</tr>
+				<tr>
+					<td valign="top" class="left">
+						<p><img src="/img/mono_icon_.gif" align="absmiddle">&nbsp;&nbsp;<b></b></p>
+					</td>
+					<td valign="top" class="right">
+						<ul>
+						</ul>
+					</td>
+				</tr>
+				<tr>
+					<td class="tablefoot" colspan="2"><img src="/img/spacer.gif" border="0" alt="" width="1" height="1"></td>
+				</tr>
+			</table>			<p>* The Debian and Gentoo distributions provide their own packaging of Mono.</p> -->
+<!-- *********************************************************************************** -->
+
+
+			
+
+		</div> <!-- End Body Content -->
+		<div id="clear"></div>
+	</div> <!-- End Body -->
+	<div id="clear"></div>
+	<!-- **************************************** -->
+	<!--  BEGIN FOOTER HERE -->
+	<!--#include virtual="/inc/footer.inc"-->
+	<!--  END FOOTER HERE -->
+	<!-- **************************************** -->
+</div> <!-- End The Page -->
+
+</body>
+</html>

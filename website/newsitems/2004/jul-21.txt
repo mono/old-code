@@ -1,0 +1,4 @@
+@Mono 1.0 covered in 45 articles and counting...
+<p>
+	Two weeks after the release of Mono 1.0, we took a
+	look at the extensive <a href="http://www.mono-project.com/news/mono1.0.press.html" target='_blank'>press coverage</a> that followed the release.</p>

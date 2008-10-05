@@ -1,0 +1,3 @@
+@Release of Mono 1.0 Beta 2
+<img src="http://www.go-mono.com/images/beta2.gif" align="left">
+Mono Beta 2 has been released.  See our <a href="http://www.mono-project.com/using/relnotes/1.0-beta2.html">Release Notes</a>, or go directly to the <a href="http://www.mono-project.com/downloads/index.html">download</a> page. <br><br><br><br><br>

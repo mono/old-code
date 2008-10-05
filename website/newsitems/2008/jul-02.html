@@ -1,0 +1,72 @@
+<h1>Moonlight 0.7 released</h1>
+
+	<p>We have just released Moonlight 0.7 to the public.
+
+	<p>Get <a href="http://www.go-mono.com/moonlight">your copy
+	here</a>. 
+
+	<p>This
+	new version of Moonlight works on both Firefox 2.0 and 3.0 and
+	sports some significant changes from 0.6:
+
+	<ul>
+<li>Webkit loads the plugin (kangaroo, lewing)
+   <li> The stream/downloader/request/response logic (used for
+     downloading media) has been been almost entirely moved from the
+     browser bridges into libmoon, with the browsers providing
+     subclasses. (kangaroo, sde)
+
+   </li>
+<li> Finally add argument checking to all wrapped plugin objects
+     (fejj).
+
+   </li><li> Windowless mode fixes (lewing, toshok)
+
+   </li><li> Plugin event handling fixes (lewing)
+
+
+</li></ul>
+</li><li>Engine
+<ul>
+<li>Many clock/animation framework fixes.  We now pass both animation
+     matrix tests, and many, *many* other bugs (and regressions) have
+     been fixed. (mdk).
+
+</li><li>Bug fixes in the Stroke{Collection}.HitTest and
+     Stroke{Collection}.Bounds code (toshok, sde).
+
+</li><li>Namescope merging fixes (sde, jackson)
+
+</li><li>Parser fixes, and changes paving the way for 2.0 work (jackson)
+
+</li><li>Fix mouse event bubbling behavior (toshok)
+</li></ul>
+
+</li><li>Media
+<ul>
+
+<li>Big, big strides in our media framework and the various (file,
+     http, mms) downloaders, (fejj, rolf, kangaroo, fer)
+
+</li><li>MMS stream selection (kangaroo)
+</li></ul>
+
+</li><li>Performance
+<ul><li> Shape caching and bounds computation reduction (spouliot)
+
+</li><li>Geometry bounds work (spouliot)
+
+</li><li>Fast path for position updates (Canvas.Left/Canvas.Top) (toshok)
+
+</li><li>Improved temporary cairo surface bounds (lewing)
+
+</li><li>Glyph rendering speedups (fejj)
+
+</li><li>Resort by ZIndex as a dirty pass (toshok)
+</li></ul>
+
+</li><li>Silverlight 2.0
+<ul><li> work is progressing. A very simple 2.0 application successfully
+     ran. (miguel, jackson, sde).
+</li></ul>
+</ul>

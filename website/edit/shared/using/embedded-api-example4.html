@@ -1,0 +1,18 @@
+<html>
+<head>
+<title>Invoking a MonoMethod</title>
+<style type="text/css" media="all"><!--  @import url(/inc/mono-main.css); --></style>
+</head>
+
+<body>
+<div id="bodyContentTier2">
+<pre>
+
+typedef gint32 (*GetHashCode) (MonoObject *obj);
+
+GetHashCode func = mono_method_get_unmanaged_thunk (System_Object_GetHashCode_method);
+
+gint32 hashvalue = func (myobject);
+</pre>
+</div>
+</body>
