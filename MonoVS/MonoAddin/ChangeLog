@@ -1,0 +1,14 @@
+2008-06-18  Jonathan Chambers  <joncham@gmail.com>
+
+	* SettingsDialog.cs: Added.
+	
+	* SettingsDialog.Designer.cs: Added.
+	
+	* SettingsDialog.resx: Added.
+	
+	* MonoAddin.cs: Added SettingsDialog related files.
+	
+	* Connect.cs: Added command for Settings.
+	
+	Code contributed under MIT/X11 license.
+

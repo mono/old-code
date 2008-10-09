@@ -1,0 +1,115 @@
+2008-06-18  Jonathan Chambers  <joncham@gmail.com>
+
+	* Mono.VisualStudio.Debugger.csproj: Add Settings.cs.
+	
+	* PortSupplier: Use Settings for server info.
+	
+	* Settings.cs: Added.
+		
+	Code contributed under both MIT/X11 and MS-PL license.
+
+2008-06-18  Jonathan Chambers  <joncham@gmail.com>
+
+	* DebugController.cs: Add something to OnMainProcessCreated method as 
+	COM Interop registration was failing.
+		
+	Code contributed under both MIT/X11 and MS-PL license.
+
+2008-06-17  Jonathan Chambers  <joncham@gmail.com>
+
+	* AD7Events.cs: Pass program and process arguments to events when possible.
+	
+	* DebugProcess.cs: Pass in executable name in .ctor
+	
+	* Engine.cs: Implement Attach and start support for breakpoints.
+	
+	* EngineCallback.cs: Pass program and process arguments to events when possible.
+
+	* Port.cs: Pass in executable name in DebugProcess .ctor.
+	
+	* ProgramNode.cs: Implement some methods on IDebugProgram2.
+	
+	* Utils.cs: Have RequireOk and CheckOk throw a usefule exception.
+		
+	Code contributed under MIT/X11 license.
+	AD7Events.cs code contributed under MS-PL.
+
+2008-06-17  Jonathan Chambers  <joncham@gmail.com>
+
+	* AD7Events.cs: Add additional arguments to program create events
+	
+	* DebugProcess.cs: Add implementation for IDebugProcessEx2.
+	
+	* Engine.cs: Make IDebugEngineLaunch2 implementation implicit.
+
+	* Port.cs: Remove most ResumeProcess logic. We no longer hit this before attach.
+	
+	* ProgramNode.cs: Remove unneeded IDebugProgramNodeAttach2. Add implementation for
+	IDebugProgram2.
+		
+	Code contributed under MIT/X11 license.
+	AD7Events.cs code contributed under MS-PL.
+
+2008-06-17  Jonathan Chambers  <joncham@gmail.com>
+
+	* AD7Events.cs: Make AD7ProcessCreateEvent and AD7ProgramCreateEvent synchronous
+	per http://msdn.microsoft.com/en-us/library/bb145067.aspx.
+	
+	* Port.cs: Fire AD7ProgramCreateEvent in AddProgramNode per 
+	http://msdn.microsoft.com/en-us/library/bb145067.aspx.
+		
+	Code contributed under MIT/X11 license.
+	
+	AD7Events.cs code contributed under MS-PL.
+
+2008-06-17  Jonathan Chambers  <joncham@gmail.com>
+
+	* AD7Events.cs: Add AD7ProcessCreateEvent to implement IDebugProcessCreateEvent2.
+	
+	* Engine.cs: Move ResumeProcess logic to Port.
+
+	* Port.cs: Implement ResumeProcess. Send IDebugProcessCreateEvent2 event.
+		
+	Code contributed under MIT/X11 license.
+
+2008-06-17  Jonathan Chambers  <joncham@gmail.com>
+
+	* PortSupplier.cs: Add Port.cs and move Port class to there. Use tabs.
+	
+	Code contributed under MIT/X11 license.
+
+2008-06-17  Jonathan Chambers  <joncham@gmail.com>
+
+	* PortSupplier.cs: Factor out connection point logic to separate class
+	(DebugPortEvents2ConnectionPoint).
+	
+	Code contributed under MIT/X11 license.
+	
+2008-06-17  Jonathan Chambers  <joncham@gmail.com>
+
+	* PortSupplier.cs: Implement connection point code. Ports can fire events to these sinks.
+	Implement IDebugPortSupplierEx2 on PortSupplier. This give us the IDebugCoreServer2
+	object which is the first argument to all events (see IDebugPortEvents2.Event). Next,
+	should be able to move ResumeProcess logic to PortSupplier since we can now fire events.
+	
+	Code contributed under MIT/X11 license.
+
+2008-06-11  Miguel de Icaza  <miguel@novell.com>
+
+	* DebugPort.cs: Gone.
+
+	* DebuggerController.cs: Made it so only one instance is created,
+	this will do for now, and its a skeleton anyways, will have to
+	become more complicated later, with parallel interfaces mirroring
+	the tasks that we are implementing our classes.
+
+	* DebugProcess.cs: More implementation, adjust to having our own
+	port supplier.
+
+	* ProgramNode.cs: Also implement IDebugProgramNodeAttach2, for
+	debugging purposes (the documentation state that we can hook up
+	here).
+	
+	* Guids.cs: Add the Guid to the ProgramPublisher (Called the "PDM" on
+	the VS docs) and our new Port suppliers.
+
