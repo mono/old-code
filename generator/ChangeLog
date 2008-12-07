@@ -1,0 +1,164 @@
+2004-11-30  Ben Maurer  <bmaurer@ximian.com>
+
+	* updater.cs: do nested types accessability right
+
+	* updater.cs: fix nested types' file names.
+
+2004-05-27  Mike Kestner  <mkestner@ximian.com>
+
+	* updater.cs: close a stream that now causes sharing failures.
+
+2003-11-06  Martin Willemoes Hansen  <mwh@sysrq.dk>
+
+	* updater.cs: parameter type fullnames are disabled, 
+	  this fixes broken links.
+
+2003-10-29  Martin Willemoes Hansen  <mwh@sysrq.dk>
+
+	* a.cs: Obsoleted and removed.
+	* a.dll: Obsoleted and removed.
+	* all.xml: Obsoleted and removed.
+	* b.cs: Obsoleted and removed.
+	* b.dll: Obsoleted and removed.
+	* generator.cs: Obsoleted and removed.
+	* makefile: Reflects the removals
+	* .cvsignore: Reflects the removals
+
+2003-10-22  Duncan Mak  <duncan@ximian.com>
+
+	* updater.cs (GetMethodModifiers): Return the correct modifier
+	wrt. "virtual" vs. "override". This fixes bug #47016.
+
+2003-07-21  Duncan Mak  <duncan@ximian.com>
+
+	* updater.cs: Fixed indentation from the previous commit and added
+	a ChangeLog entry.
+
+2003-07-20  Joshua Tauberer <taubarer@for.net>
+
+	* updater.cs (Generate): Add top-level parameters and return value
+	section for Delegates.
+	(AddProperty): Change check from CanWrite to CanRead.
+	(AddEvent): Fix return value element.
+	(AddParameters): write out RefType attribute if applicable.
+
+	
+2003-07-11  Duncan Mak  <duncan@ximian.com>
+
+        * updater.cs (ConvertCTSName): Fix the logic for shortening type
+        names.
+        (AddTypeSignature):
+        (GetTypeKind): Move the 'enum' case higher up, so that they won't be
+        mistaken as structs.
+        (Generate): Correctly write out the ThreadSafetyStatement with a
+        proper <link> element.
+        
+        * makefile (update-docs): Added a new update-docs target.
+
+2003-07-11  Duncan Mak  <duncan@ximian.com>
+
+	* updater.cs: Fix the last commit by really inserting an
+	XmlElement named "see", and not just a "<see ... />" string inside
+	an XmlText node.
+
+	* updater.cs (AddDocsParamNode):
+	(AddDocsReturnsNode): Change it to write out a <see> element instead
+	of quoting the type name. This should help document writing in the
+	future. Less cut-n-paste to do, so on so forth.
+
+2003-03-25  Duncan Mak  <duncan@ximian.com>
+
+	* updater.cs: Fixed a stupid bug where the flag used to record
+	'ref' params were stuck. This led to a clipping of type names for
+	all params following the first 'ref' param.
+
+	Also added a little more logic to make sure that '[]' is always
+	preceded by a blank space. Hopefully, all array declarations in
+	the XML are now standardized.
+
+2003-02-20  Duncan Mak  <duncan@ximian.com>
+
+	* generator.cs (AddAttributes): New method for adding attribute nodes.
+	(Generate): Handle AssemblyFunkyAttributes.
+	(GetParameterModifier): Handle 'ref' and 'out' in parameters.
+	(GetKeyString): Output a better string.
+
+2003-02-20  Gonzalo Paniagua Javier <gonzalo@ximian.com>
+
+	* generator.cs: a bunch of little fixes to deal with corlib.
+
+2003-02-12  Duncan Mak  <duncan@ximian.com>
+
+	* generator.cs: Now it'll only generate files if there isn't an
+	existing file. Added some command line flags.
+
+2003-02-11  Duncan Mak  <duncan@ximian.com>
+
+	* makefile: cleanup and prepare for commiting the docs to gtk-sharp.
+
+	* generator.cs: Put semicolons after declarations.
+
+2003-01-28  Duncan Mak  <duncan@ximian.com>
+
+	* generator.cs (AddTypeSignature): Forgot to add the name argument
+	to the formatting string. This fixes the TypeSignature output for
+	non-class types.
+
+	Also fixed BaseTypeName node generation for non-class types.
+
+2003-01-23  Duncan Mak  <duncan@ximian.com>
+
+	* generator.cs: (GetEventType): A new method to get the type of an
+	event.
+	(StartsWithVowel): Removed, it's stupid anyhow.
+
+	We now generate the correct XML for events too.
+
+2003-01-22  Duncan Mak  <duncan@ximian.com>
+
+	* generator.cs: (AddTypeSignature): Added a out bool param to see
+	if the current Type is actually a delegate and surpress generation
+	of Member nodes if it is a delegate.
+
+	With this, we now generate proper XML for delegates.
+	
+2003-01-20  Duncan Mak  <duncan@ximian.com>
+
+	* generator.cs: More work on getting delegates to render correctly.
+	(AddConstructor): Constructors don't list ReturnValue nodes.
+
+2003-01-19  Duncan Mak  <duncan@ximian.com>
+
+	* generator.cs: What was I thinking? Made it not use exceptions
+	unless *really* necessary (like IOExceptions). Why throw an
+	exception when you can just return null and test for it in the
+	calling method? D'oh!
+	(AddConstructor): Filter out type constructors (".cctor"), this
+	cuts down our list of "CHECK ME"s generated in the output.
+
+2003-01-19  Duncan Mak  <duncan@ximian.com>
+
+	* generator.cs (AddDocsNode): Make it add <returns> and <param>
+	nodes if necessary.
+	(AddDocsParamNode): 
+	(AddDocsReturnsNode): New helper functions.
+
+2003-01-18  Duncan Mak  <duncan@ximian.com>
+
+	* generator.cs: Make it slightly nicer, it also tells you how many
+	files were written now.
+	
+2003-01-18  Duncan Mak  <duncan@ximian.com>
+
+	* generator.cs: Make it only show members that are either 'public'
+	or 'protected'.
+
+2003-01-17  Duncan Mak  <duncan@ximian.com>
+
+	* makefile: Added.
+
+	* generator.cs: Imported.
+
+	This tool takes an assembly and generates ECMA-style XML
+	documentation for all types in the assembly.
+

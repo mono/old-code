@@ -1,0 +1,50 @@
+Make Monodoc Tolerant to file changes.
+
+	If the underlying file changes, resist the change by reloading
+	instead of crashing.  
+
+	Hard to do without making a copy I guess.
+
+Add cut/paste to editor.
+
+* Monodoc Manager:
+
+	Show rendered text instead of plain XML.
+	Have buttons to show XML, XML diff and text diffs.
+	Have a button to edit the changes before commiting.
+
+	Add a fullname entry for giving credit to people.
+
+* monodoc ui:
+
+	Add multiple tabs
+
+	Scrollbar adjustment is not tied to the size of the matches
+	list.
+
+* Browser
+
+	Add support for printing (requires GnomePrint# support)
+
+	Add bookmark facility
+
+* Ecma provider:
+
+	Handle references to sample code, and generate a link in the
+  	browser to use it.
+
+* 2.0 Features:
+
+	Add ability to mark regions of text, and save the 'mark', like
+	TkMan did (highlighting the region)
+
+	Add ability to add annotations to a link.
+
+	Collaborative help: use a web service to pull comments from
+	people on a given page.
+
+* Ideas
+
+	Keep a dynamic history of actions on a right-side panel:
+
+		* Documents most visited.

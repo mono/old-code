@@ -1,0 +1,23 @@
+These are tools for users of Monodoc...
+
+The specs of the Monodoc type documentation format is at:
+	http://www.nullenvoid.com/mono/wiki/index.php/ECMAStyleDocumentation
+
+monodocer.exe (stub.cs)
+	Creates and updates Monodoc XML type documentation files using
+	reflection on an assembly.
+	Run "mono monodocer.exe" with no arguments for instructions.
+
+monodocs2html.exe (monodocs2html.cs)
+	Creates HTML docs for an assembly, based on Monodoc documentation.
+	Run "mono monodocs2html.exe" with no arguments for instructions.
+	There needs to be an index.xml file in the base directory, which
+	can be generated with monodocer.exe --stub --assembly assemblyname.
+	
+genbasedocs.sh
+	Creates HTML files and a tgz of them for each assembly
+	documented in ../class.
+
+overview.xsl, stylesheet.xsl
+	Stylesheets for formatting HTML docs with monodocs2html.
+

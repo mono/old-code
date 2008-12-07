@@ -1,38 +1,324 @@
-2003-05-08  Martin Willemoes Hansen <mwh@sysrq.dk>
+2008-09-09  Gabriel Burt  <gburt@novell.com>
 
-	* da-DK.xml: Updated 
-	* da.xml: Updated
+	* README: Add a note about where the Gtk# frontend is located
 
-2003-04-18  Duncan Mak  <duncan@ximian.com>
+2008-03-22  Jonathan Pryor  <jpryor@novell.com>
 
-	* write-source.cs: Make it handle TextInfo, NumberFormatInfo, and
-	some other fixes.
+	* configure.in: Revert to using mcs for the build, and add a CSC2 value
+	  for when a .NET 2.0 compiler is needed.
 
-2003-04-14  Duncan Mak  <duncan@ximian.com>
+2008-03-22  Jonathan Pryor  <jpryor@novell.com>
 
-	* makefile: Added a makefile.
+	* scripts/Makefile.am: Rename mdoc-export-slashdoc to mdoc-export-msxdoc.
 
-	* write-source.cs: A new program to write out C# source from the
-	XML files.
+2008-03-14  Mike Kestner  <mkestner@novell.com>
 
-	* src/MonoCulture.cs: A skeleton class for the other
-	culture-specific classes.
+	* mono.snk: copy from mcs/class, kill the .pub.
+	* Makefile.am: dist the .snk.
+
+2008-03-06  Jonathan Pryor  <jpryor@novell.com>
+
+	* scripts/Makefile.am: Build and install scripts for ech of the mdoc
+	  subcommands, so that `mdoc-assemble` is an alias for `mdoc assemble`, etc.
+	* scripts/mdoc-subcommand.in: Added; template file for mdoc subcommands.
+
+2008-03-06  Jonathan Pryor  <jpryor@novell.com>
+
+	* scripts/mdoc.in: Use `mono --debug` if --debug is on the command line.
+	  This allows accurate stack traces w/ line numbers to be displayed.
+
+2008-03-03  Jonathan Pryor  <jpryor@novell.com>
+
+	* configure.in: Use gmcs for the build.
+
+2008-03-01  Jonathan Pryor  <jpryor@novell.com>
+
+	* configure.in: Remove check for ../mono/man, as the man-provider now checks
+	  that a file exists before creating a tree node for it.
+
+2008-02-28  Jonathan Pryor  <jpryor@novell.com>
+
+	* configure.in: Add check for ../mono/man so we can (optionally) bundle the
+	  mono man pages; generate scripts/mdoc.
+
+2008-02-21  Jonathan Pryor  <jpryor@novell.com>
+
+	* scripts (svn:ignore): Ignore the `mdoc' file.
+	* scripts/mdoc.in: Added; wrapper script for tools/mdoc.exe.
+	* scripts/Makefile.am (bin_SCRIPTS): add `mdoc'.
+
+2008-01-28  Wade Berrier  <wberrier@novell.com>
+
+	* configure.in: version bump -> 1.9
+
+2007-11-08  Wade Berrier  <wberrier@novell.com>
+
+	* configure.in: version bump -> 1.2.6
+
+2007-09-27  Raja R Harinath  <rharinath@novell.com>
+
+	* configure.in (build_cserrors): Look for 'mcs' tree in $srcdir.
+
+2007-07-24  Wade Berrier  <wberrier@novell.com>
+
+	* configure.in: version bump -> 1.2.5
+
+2007-04-19  Wade Berrier  <wberrier@novell.com>
+
+	* configure.in: version bump -> 1.2.4
+
+2007-01-25  Wade Berrier  <wberrier@novell.com>
+
+	* configure.in: version bump -> 1.2.3
+
+2006-11-17  Wade Berrier  <wberrier@novell.com>
+
+	* configure.in: version bump -> 1.2.1
+
+2006-10-30  Wade Berrier  <wberrier@novell.com>
+
+	* Makefile.am: Add the `man' directory to SUBDIRS to fix building
+	from tarball.
+
+2006-10-27  Jonathan Pryor  <jonpryor@vt.edu>
+
+	* configure.in: Add the `man' directory to AC_OUTPUT() so that man pages are
+	  installed.
+
+2006-05-01  Wade Berrier <wberrier@novell.com>
+
+	* configure.in: Check if cs-errors.zip is included.
+	(Means that we're building from a source dist configured 
+	with cs-errors from mcs)
+
+2006-01-20  Lluis Sanchez Gual <lluis@novell.com>
+
+	* engine/ecma-provider.cs: Append the node kind to the node
+	caption. Fixes a crash when editing uncompiled help sources.
+
+2005-09-24  Mario Sopena Novales <mario.sopena@gmail.com>
+
+	* configure.in: Check if the mcs code is available and
+		track that through a new compiler flag build_cserrors
+
+2005-06-14  Wade Berrier  <wberrier@novell.com>
+
+	* browser/Makefile.am
+	   - Possible to run 'make dist' without running 'make' first
+
+2005-06-04  Eric Butler  <eric@extremeboredom.net>
+
+	* tools/monodocer.cs
+	   - Now exits with an exit code of 1 in the event of an error
+	   - Added '-name' command line argument
+	   - Use above argument for <Title> element
+	   
+	* browser/ecma-provider.cs
+	   - Pull the name of an uncompiled help source from <Title>
+
+2005-05-25  Ben Maurer  <bmaurer@ximian.com>
+
+	* configure.in, */Makefile.am
+	   - Remove desktop file, monodoc.in (->mono-tools)
+	   - Give each thing its own script
+	   - Fix usages of libdir
+	   - use @RUNTIME@ rather than mono
+	   - add sourcesdir to the .pc file
+	   - General cleanups
+
+2005-05-23  Mike Kestner  <mkestner@novell.com>
+
+	* configure.in : bump svn version.
+
+2005-04-23  Mike Kestner  <mkestner@novell.com>
+
+	* configure.in : remove gtk-sharp tests. remove gettext.
+	* monodoc.in : test for browser.exe and fail with a proper msg.
+	* monodoc.pc.in : s/gtk-sharp/monodoc.
+	* po : moved to mono-tools.
+
+2004-01-22  Joshua Tauberer  <tauberer@for.net>
+
+	* monodoc.in: Made the --help text a bit nicer.  Don't
+	  change to the monodoc directory before launching
+	  monodoc so the --edit option can be a relative path
+	  from the current directory.  The exe for monodocs2slashdoc
+	  was typo'd.
+
+2004-12-07  Atsushi Enomoto  <atsushi@ximian.com>
+
+	* monodoc.in : exit 0 after --cs-to-ecma.
+
+2004-12-07  Atsushi Enomoto  <atsushi@ximian.com>
+
+	* monodoc.in : added cs-to-ecma feature.
+
+2004-11-30  Atsushi Enomoto  <atsushi@ximian.com>
+
+	* configure.in,
+	  browser/monodoc.dll.config.in,
+	  browser/Makefile.am : Windows build is now available.
+	  - Skip browser.exe and dependency check on Windows.
+	  - Fixed gacutil installation location.
+	  - Rewrite document location in config (it just contains '.')
+
+2004-08-25  John Luke  <john.luke@gmail.com>
+
+	* monodoc.in: add --validate
+	* browser/Makefile.am: build and install validate.exe
+	* browser/validate.cs: validate xml files with a schema
+	* browser/monodoc-ecma.xsd: initial schema for monodoc ecma format
+
+2004-07-11 Gonzalo Paniagua Javier <gonzalo@ximian.com>
+
+	* browser/Makefile.am: use /gacdir instead of /root to create correct
+	symbolic links in the package directory.
+
+	* browser/admin.cs:
+	* browser/settings.cs: use GetFolderPath instead of getting "HOME".
+
+2004-06-03  Raja R Harinath  <rharinath@novell.com>
+
+	* configure.in (monodocdir): Simplify.
+	(AC_OUTPUT): Remove browser/monodoc.dll.config.
+	* Makefile.am (monodocdir): Don't define.
+	(pkgconfigdir): Use $(libdir).
+	* monodoc.in: Use exec to run binaries.  Propagate exit codes.
+	(prefix, exec_prefix): Get values from config.status.	
+	* monodoc.pc.in (prefix, exec_prefix, libdir): Likewise.
 	
-	* src/*.cs: Culture-specific classes for binding into CultureInfo.
+2004-05-15  Todd Berman  <tberman@sevenl.net>
 
-2003-04-12  Duncan Mak  <duncan@ximian.com>
+	* monodoc.pc.in: setup /r: direct referencing.
+	* browser/Makefile.am: use new -pkg referencing.
 
-	* README: Added to explain how to fill out the CultureInfo XML files.
+2004-05-03  Todd Berman  <tberman@sevenl.net>
 
-	* Data/CultureInfo.xsd: XML schema for the XML files.
+	* configure.in: check for proper mono/gtk-sharp versions.
+	* monodoc.pc.in: proper libdir
 
-	* Data/*.xml: Modify the DisplayName element to allow for more
-	flexible translation.
+2004-05-01  Todd Berman  <tberman@sevenl.net>
 
-2003-04-11  Duncan Mak  <duncan@ximian.com>
+	* configure.in: find gacutil, setup an AssemblyInfo, and change
+	monodoc.config to monodoc.dll.config
+	* Makefile.am: Added mono.pub to EXTRA_DIST
 
-	* Data/??.xml: Remove the empty Parent element in the neutral cultures.
+2004-04-25  John Luke  <jluke@cfl.rr.com>
+	
+	* configure.in: add checks for gtk-sharp, glade-sharp, and
+	gtkhtml-sharp 0.18.99
 
-	* Data/*.xml: Remove the IsNeutralCulture information and add in specific
-        culture information as well.
-        
+2004-04-19  Todd Berman  <tberman@sevenl.net>
+
+	* configure.in: bump to 0.13.99
+
+2004-04-19  Todd Berman  <tberman@sevenl.net>
+
+	* browser/provider.cs: Add support for GetHelpXml (string url) to get
+	the raw XML for a type. Refactor RenderTypeLookup to create a
+	function to provide a generic zip entry number.
+	* browser/ecma-provider.cs: Add GetIdFromUrl to get the zip entry #
+	for a type's XML file.
+	* browser/Makefile.am: Get mod.exe to depend on the right stuff
+
+2004-04-12  Todd Berman  <tberman@sevenl.net>
+
+	* browser/list.cs: bring up to speed with new gtk-sharp GValue changes.
+
+2004-03-10  John Luke  <jluke@cfl.rr.com>
+	
+	* Makefile.am: dist monodoc.pc and add generator to SUBDIRS
+	* configure.in: output generator/Makefile
+	* monodoc.in: add --update and --assemble switches and
+	add them to --help output
+	* generator/makefile: rm
+	* generator/Makefile.am: install update.exe and dist update.cs
+
+2004-03-10  Todd Berman  <tberman@sevenl.net>
+
+	* configure.in: respond properly to no prefix.
+
+2004-03-09  Todd Berman  <tberman@sevenl.net>
+
+	* Makefile.am: remove monodoc sed target
+	* browser/Makefile.am: remove monodoc.config sed target
+	* configure.in: move replace stuff here, now re-running configure with
+	                a new prefix will work.
+
+2004-03-09  Todd Berman  <tberman@sevenl.net>
+
+	* Makefile.am: install monodoc.pc.
+	* configure.in: turn monodoc.pc.in into monodoc.pc and a version bump.
+	* monodoc.in: change browser.exe to browser.dll.
+	* monodoc.pc.in: new file.
+	* browser/Makefile.am: change browser.exe to browser.dll.
+	* browser/browser.cs: added IBrowser interface to ease external use.
+	                      publicized classes for external use.
+
+2004-02-07  John Luke  <jluke@cfl.rr.com>
+
+	* Makefile.am: install monodoc.desktop and monodoc.png
+	* monodoc.desktop: add GenericName, and StartupNotify
+
+2003-10-24  Gonzalo Paniagua Javier <gonzalo@ximian.com>
+
+	* browser/browser.cs: updated to compile with CVS gtk#. Added a missing
+	return statement.
+
+2003-10-01  John Luke  <jluke@cfl.rr.com>
+
+	* README: talk about updater
+	* browser/NOTES: reflect current providers
+
+2003-09-09  John Luke  <jluke@cfl.rr.com>
+
+	* monodoc.in: add more complete --help output
+
+2003-08-25  Alp Toker  <alp@atoker.com>
+
+	* monodoc.png: new icon
+	* monodoc.svg: scalable form (with parts from Wasp theme,
+	gnome-theme-extras-0.3, see file metadata for further information)
+
+2003-08-24  John Luke  <jluke@cfl.rr.com>
+	
+	* monodoc.in: use new mod.exe when running mod
+
+2003-08-06  John Luke  <jluke@cfl.rr.com>
+
+	* monodoc.in: on --normalize ignnore the first arg 
+		(because --normalize is not a xml file)
+
+2003-07-30 Ben Maurer  <bmaurer@users.sourceforge.net>
+
+	* monodoc.in: add --debug by default.
+
+2003-07-24  John Luke  <jluke@cfl.rr.com>
+
+	* class/Makefile.am: add System.Web and System.Web.Services to build
+
+2003-07-01  Martin Willemoes Hansen
+	
+	* class/nunit Added documentation for NUnit 2.0
+
+2003-04-14  Miguel de Icaza  <miguel@ximian.com>
+
+	* Makefile.am (bin_SCRIPTS): Install a script `mod' that can be
+	used from the command line to browse Mono documentation, like
+	this:
+
+	mod T:System.Char
+
+2003-02-20  Duncan Mak  <duncan@ximian.com>
+
+	* README: Add some specific info about CVS repositories.
+
+2003-01-20  Duncan Mak  <duncan@ximian.com>
+
+	* class/*: Add a maintainer flag to keep track of where the
+	documents came from, this change will also happen for the gtk# docs.
+
+2003-01-20  Duncan Mak  <duncan@ximian.com>
+
+	* README: Added a note about building the browser.
+

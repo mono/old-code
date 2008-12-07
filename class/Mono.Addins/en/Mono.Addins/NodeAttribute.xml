@@ -1,0 +1,41 @@
+<Type Name="NodeAttribute" FullName="Mono.Addins.NodeAttribute">
+  <TypeSignature Language="C#" Value="public class NodeAttribute" />
+  <AssemblyInfo>
+    <AssemblyName>Mono.Addins</AssemblyName>
+    <AssemblyVersion>1.0.0.0</AssemblyVersion>
+  </AssemblyInfo>
+  <Base>
+    <BaseTypeName>System.Object</BaseTypeName>
+  </Base>
+  <Interfaces />
+  <Members>
+    <Member MemberName="Name">
+      <MemberSignature Language="C#" Value="public string Name { get; };" />
+      <MemberType>Property</MemberType>
+      <ReturnValue>
+        <ReturnType>System.String</ReturnType>
+      </ReturnValue>
+      <Docs>
+        <summary>Name of the attribute.</summary>
+        <value>Name of the attribute.</value>
+        <remarks />
+      </Docs>
+    </Member>
+    <Member MemberName="Value">
+      <MemberSignature Language="C#" Value="public string Value { get; };" />
+      <MemberType>Property</MemberType>
+      <ReturnValue>
+        <ReturnType>System.String</ReturnType>
+      </ReturnValue>
+      <Docs>
+        <summary>Value of the attribute.</summary>
+        <value>Value of the attribute.</value>
+        <remarks />
+      </Docs>
+    </Member>
+  </Members>
+  <Docs>
+    <summary>Attribute of a NodeElement.</summary>
+    <remarks>An attribute of a <see cref="T:Mono.Addins.NodeElement" />.</remarks>
+  </Docs>
+</Type>

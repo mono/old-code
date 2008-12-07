@@ -1,0 +1,99 @@
+2008-04-15  Jonathan Pryor  <jpryor@novell.com>
+
+	* mdoc-export-msxdoc.1: Document new -o parameter.
+
+2008-03-12  Jonathan Pryor  <jpryor@novell.com>
+
+	* mdoc.1: Update the URL that `make web` serves.
+
+2008-03-08  Jonathan Pryor  <jpryor@novell.com>
+
+	* Makefile.am: Rename s/mdoc-export-slashdoc/mdoc-export-msxdoc/g.
+
+2008-03-07  Jonathan Pryor  <jpryor@novell.com>
+
+	* mdoc.1: Rename `export-slashdoc` to `export-msxdoc`; cleanup.
+
+2008-03-07  Jonathan Pryor  <jpryor@novell.com>
+
+	* mdoc-export-slashdoc.1: Rename to mdoc-export-msxdoc.1.
+
+2008-03-03  Jonathan Pryor  <jpryor@novell.com>
+
+	* Makefile.am: Add mdoc-export-slashdoc.1.
+	* mdoc-export-slashdoc.1: Added; documentation for `mdoc export-slashdoc`.
+
+2008-03-03  Jonathan Pryor  <jpryor@novell.com>
+
+	* mdoc-assemble.1, mdoc-export-html.1, mdoc-validate.1: Use bold instead of
+	  italic formatting for options.  This is consistent with ls(1), etc.
+	* mdoc.1: Formatting flush.
+
+2008-03-03  Jonathan Pryor  <jpryor@novell.com>
+
+	* Makefile.am: Add mdoc-update.1.
+	* mdoc.1: Remove unused commands (removed `create', `import-*'); formatting
+	  fixes.
+	* mdoc-update.1: Added; documentation for `mdoc update`.
+	* monodocer.1: Deprecation notice.
+
+2008-03-02  Jonathan Pryor  <jpryor@novell.com>
+
+	* Makefile.am: Add mdoc-export-html.1.
+	* mdoc-export-html.1: Added; documentation for `mdoc export-html`.
+	* monodocs2html.1: Deprecation notice.
+
+2008-03-02  Jonathan Pryor  <jpryor@novell.com>
+
+	* Makefile.am: Add mdoc-validate.1.
+	* mdoc-assemble.1: Update .TH section; document --help option.
+	* mdoc-validate.1: Added; documentation for `mdoc validate`.
+	* mdvalidator.1: Deprecation notice.
+
+2008-03-02  Jonathan Pryor  <jpryor@novell.com>
+
+	* Makefile.am: Add mdoc-assemble.1.
+	* mdoc.1: Flush.
+	* mdoc-assemble.1: Added; documentation for `mdoc assemble`.
+	* mdassembler.1: Deprecation notice.
+
+2008-02-25  Jonathan Pryor  <jpryor@novell.com>
+
+	* Makefile.am: Add mdoc.1, mdoc.5.
+	* mdoc.1, mdoc.5: Added; man pages for mdoc, mdoc documentation format.
+
+2006-12-26  Jonathan Pryor  <jonpryor@vt.edu>
+
+	* Makefile.am: Add mdassembler.1
+	* mdassembler.1: Added; man page for mdassembler.
+
+2006-12-08  Jonathan Pryor  <jonpryor@vt.edu>
+
+	* Makefile.am: Add mdcs2ecma.1
+	* mdcs2ecma.1: Added; man page for mdcs2ecma.
+
+2006-11-01  Jonathan Pryor  <jonpryor@vt.edu>
+
+	* Makefile.am: Add mdvalidator.1.
+	* mdvalidator.1: Added; man page for mdvalidator.
+
+2006-10-31  Jonathan Pryor  <jonpryor@vt.edu>
+
+	* Makefile.am: Add mdnormalizer.1.
+	* mdnormalizer.1: Added; man page for mdnormalizer.
+
+2006-10-29  Jonathan Pryor  <jonpryor@vt.edu>
+
+	* Makefile.am: Remove blank line after `\' (message from automake, which
+	  seems to be an error as it prevents generation of all Makefile.in files).
+
+2006-10-27  Jonathan Pryor  <jonpryor@vt.edu>
+
+	* Makefile.am: Added; install the man pages.
+	* monodocs2html.1: Added; man page for monodocs2html program.
+
+2006-10-26  Jonathan Pryor  <jonpryor@vt.edu>
+
+	* ChangeLog: Started.
+	* monodocer.1: Added; man page for monodocer program.
+

@@ -1,5 +1,0 @@
-@Huge press response for Mono 1.0 Beta 1
-<p>
-	Two weeks after the release of Mono 1.0 Beta 1, we take a
-	look at the <a href="/news/monoBeta1_press.html" target='_blank'>press coverage</a> that followed the
-	beta release.</p>

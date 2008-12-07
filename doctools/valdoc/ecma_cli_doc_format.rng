@@ -1,0 +1,792 @@
+<?xml version='1.0'?>
+<grammar ns='' xmlns='http://relaxng.org/ns/structure/1.0' datatypeLibrary='http://www.w3.org/2001/XMLSchema-datatypes'>
+    <start>
+        <choice>
+            <ref name='Members'/>
+            <ref name='altmember'/>
+            <ref name='PRE'/>
+            <ref name='ThreadingSafetyStatement'/>
+            <ref name='codelink'/>
+            <ref name='Types'/>
+            <ref name='TypeSignature'/>
+            <ref name='ReturnType'/>
+            <ref name='code'/>
+            <ref name='threadsafe'/>
+            <ref name='term'/>
+            <element name='Libraries'>
+                <oneOrMore>
+                    <ref name='Types'/>
+                </oneOrMore>
+            </element>
+            <ref name='permission'/>
+            <ref name='Interface'/>
+            <ref name='pi'/>
+            <ref name='pre'/>
+            <ref name='summary'/>
+            <ref name='Attribute'/>
+            <ref name='ExcludedLibrary'/>
+            <ref name='Interfaces'/>
+            <ref name='MemberOfLibrary'/>
+            <ref name='block'/>
+            <ref name='Docs'/>
+            <ref name='superscript'/>
+            <ref name='permille'/>
+            <ref name='AssemblyInfo'/>
+            <ref name='altcompliant'/>
+            <ref name='ReturnValue'/>
+            <ref name='listheader'/>
+            <ref name='Type'/>
+            <ref name='item'/>
+            <ref name='AttributeName'/>
+            <ref name='ExcludedLibraryName'/>
+            <ref name='c'/>
+            <ref name='sub'/>
+            <ref name='AssemblyCulture'/>
+            <ref name='theta'/>
+            <ref name='returns'/>
+            <ref name='Base'/>
+            <ref name='i'/>
+            <ref name='InterfaceName'/>
+            <ref name='MemberSignature'/>
+            <ref name='exception'/>
+            <ref name='AssemblyVersion'/>
+            <ref name='Attributes'/>
+            <ref name='BaseTypeName'/>
+            <ref name='ExcludedBaseTypeName'/>
+            <ref name='list'/>
+            <ref name='value'/>
+            <ref name='sup'/>
+            <ref name='see'/>
+            <ref name='TypeExcluded'/>
+            <ref name='example'/>
+            <ref name='remarks'/>
+            <ref name='AssemblyPublicKey'/>
+            <ref name='paramref'/>
+            <ref name='Excluded'/>
+            <ref name='MemberValue'/>
+            <ref name='AssemblyName'/>
+            <ref name='MemberType'/>
+            <ref name='Parameters'/>
+            <ref name='subscript'/>
+            <ref name='description'/>
+            <ref name='param'/>
+            <ref name='SPAN'/>
+            <ref name='para'/>
+            <ref name='Parameter'/>
+            <ref name='onequarter'/>
+            <ref name='Member'/>
+            <ref name='ExcludedTypeName'/>
+        </choice>
+    </start>
+    <define name='summary'>
+        <element name='summary'>
+            <mixed>
+                <zeroOrMore>
+                    <choice>
+                        <ref name='para'/>
+                        <ref name='see'/>
+                        <ref name='block'/>
+                        <ref name='list'/>
+                    </choice>
+                </zeroOrMore>
+            </mixed>
+        </element>
+    </define>
+    <define name='value'>
+        <element name='value'>
+            <mixed>
+                <zeroOrMore>
+                    <choice>
+                        <ref name='para'/>
+                        <ref name='list'/>
+                        <ref name='see'/>
+                    </choice>
+                </zeroOrMore>
+            </mixed>
+        </element>
+    </define>
+    <define name='ExcludedLibrary'>
+        <element name='ExcludedLibrary'>
+            <text/>
+        </element>
+    </define>
+    <define name='code'>
+        <element name='code'>
+            <optional>
+                <attribute name='lang'>
+                    <data type='normalizedString'/>
+                </attribute>
+            </optional>
+            <text/>
+        </element>
+    </define>
+    <define name='Member'>
+        <element name='Member'>
+            <attribute name='MemberName'>
+                <data type='NMTOKEN'/>
+            </attribute>
+            <oneOrMore>
+                <ref name='MemberSignature'/>
+            </oneOrMore>
+            <ref name='MemberType'/>
+            <optional>
+                <ref name='Attributes'/>
+            </optional>
+            <ref name='ReturnValue'/>
+            <ref name='Parameters'/>
+            <optional>
+                <ref name='MemberValue'/>
+            </optional>
+            <ref name='Docs'/>
+            <ref name='Excluded'/>
+            <zeroOrMore>
+                <ref name='ExcludedLibrary'/>
+            </zeroOrMore>
+        </element>
+    </define>
+    <define name='Docs'>
+        <element name='Docs'>
+            <optional>
+                <ref name='summary'/>
+            </optional>
+            <optional>
+                <ref name='altmember'/>
+            </optional>
+            <optional>
+                <ref name='altcompliant'/>
+            </optional>
+            <zeroOrMore>
+                <ref name='param'/>
+            </zeroOrMore>
+            <optional>
+                <ref name='returns'/>
+            </optional>
+            <optional>
+                <ref name='value'/>
+            </optional>
+            <zeroOrMore>
+                <ref name='exception'/>
+            </zeroOrMore>
+            <optional>
+                <ref name='threadsafe'/>
+            </optional>
+            <optional>
+                <ref name='remarks'/>
+            </optional>
+            <optional>
+                <ref name='example'/>
+            </optional>
+            <optional>
+                <ref name='permission'/>
+            </optional>
+            <optional>
+                <ref name='example'/>
+            </optional>
+        </element>
+    </define>
+    <define name='Excluded'>
+        <element name='Excluded'>
+            <text/>
+        </element>
+    </define>
+    <define name='MemberValue'>
+        <element name='MemberValue'>
+            <text/>
+        </element>
+    </define>
+    <define name='altcompliant'>
+        <element name='altcompliant'>
+            <attribute name='cref'>
+                <data type='normalizedString'/>
+            </attribute>
+        </element>
+    </define>
+    <define name='Parameter'>
+        <element name='Parameter'>
+            <attribute name='Type'>
+                <data type='normalizedString'/>
+            </attribute>
+            <attribute name='Name'>
+                <data type='NMTOKEN'/>
+            </attribute>
+            <optional>
+                <ref name='Attributes'/>
+            </optional>
+        </element>
+    </define>
+    <define name='AssemblyName'>
+        <element name='AssemblyName'>
+            <text/>
+        </element>
+    </define>
+    <define name='onequarter'>
+        <element name='onequarter'>
+            <empty/>
+        </element>
+    </define>
+    <define name='permission'>
+        <element name='permission'>
+            <attribute name='cref'>
+                <data type='normalizedString'/>
+            </attribute>
+            <mixed>
+                <zeroOrMore>
+                    <choice>
+                        <ref name='see'/>
+                        <ref name='paramref'/>
+                        <ref name='para'/>
+                        <ref name='block'/>
+                    </choice>
+                </zeroOrMore>
+            </mixed>
+        </element>
+    </define>
+    <define name='description'>
+        <element name='description'>
+            <mixed>
+                <zeroOrMore>
+                    <choice>
+                        <ref name='SPAN'/>
+                        <ref name='paramref'/>
+                        <ref name='para'/>
+                        <ref name='see'/>
+                        <ref name='c'/>
+                        <ref name='permille'/>
+                        <ref name='block'/>
+                        <ref name='sub'/>
+                    </choice>
+                </zeroOrMore>
+            </mixed>
+        </element>
+    </define>
+    <define name='superscript'>
+        <element name='superscript'>
+            <attribute name='term'>
+                <data type='normalizedString'/>
+            </attribute>
+        </element>
+    </define>
+    <define name='subscript'>
+        <element name='subscript'>
+            <attribute name='term'>
+                <data type='normalizedString'/>
+            </attribute>
+        </element>
+    </define>
+    <define name='ThreadingSafetyStatement'>
+        <element name='ThreadingSafetyStatement'>
+            <text/>
+        </element>
+    </define>
+    <define name='exception'>
+        <element name='exception'>
+            <attribute name='cref'>
+                <data type='normalizedString'/>
+            </attribute>
+            <mixed>
+                <zeroOrMore>
+                    <choice>
+                        <ref name='paramref'/>
+                        <ref name='see'/>
+                        <ref name='para'/>
+                        <ref name='SPAN'/>
+                        <ref name='block'/>
+                    </choice>
+                </zeroOrMore>
+            </mixed>
+        </element>
+    </define>
+    <define name='Types'>
+        <element name='Types'>
+            <attribute name='Library'>
+                <data type='NMTOKEN'/>
+            </attribute>
+            <oneOrMore>
+                <ref name='Type'/>
+            </oneOrMore>
+        </element>
+    </define>
+    <define name='ReturnType'>
+        <element name='ReturnType'>
+            <text/>
+        </element>
+    </define>
+    <define name='Members'>
+        <element name='Members'>
+            <zeroOrMore>
+                <ref name='Member'/>
+            </zeroOrMore>
+        </element>
+    </define>
+    <define name='Type'>
+        <element name='Type'>
+            <attribute name='FullName'>
+                <data type='NMTOKEN'/>
+            </attribute>
+            <attribute name='Name'>
+                <data type='NMTOKEN'/>
+            </attribute>
+            <attribute name='FullNameSP'>
+                <data type='NMTOKEN'/>
+            </attribute>
+            <oneOrMore>
+                <ref name='TypeSignature'/>
+            </oneOrMore>
+            <ref name='MemberOfLibrary'/>
+            <ref name='AssemblyInfo'/>
+            <optional>
+                <ref name='ThreadingSafetyStatement'/>
+            </optional>
+            <ref name='Docs'/>
+            <ref name='Base'/>
+            <ref name='Interfaces'/>
+            <optional>
+                <ref name='Attributes'/>
+            </optional>
+            <ref name='Members'/>
+            <ref name='TypeExcluded'/>
+        </element>
+    </define>
+    <define name='AssemblyCulture'>
+        <element name='AssemblyCulture'>
+            <text/>
+        </element>
+    </define>
+    <define name='MemberType'>
+        <element name='MemberType'>
+            <text/>
+        </element>
+    </define>
+    <define name='AssemblyPublicKey'>
+        <element name='AssemblyPublicKey'>
+            <text/>
+        </element>
+    </define>
+    <define name='c'>
+        <element name='c'>
+            <mixed>
+                <zeroOrMore>
+                    <choice>
+                        <ref name='para'/>
+                        <ref name='paramref'/>
+                        <ref name='code'/>
+                        <ref name='see'/>
+                    </choice>
+                </zeroOrMore>
+            </mixed>
+        </element>
+    </define>
+    <define name='remarks'>
+        <element name='remarks'>
+            <mixed>
+                <zeroOrMore>
+                    <choice>
+                        <ref name='para'/>
+                        <ref name='block'/>
+                        <ref name='list'/>
+                        <ref name='c'/>
+                        <ref name='paramref'/>
+                        <ref name='see'/>
+                        <ref name='pre'/>
+                        <ref name='SPAN'/>
+                        <ref name='code'/>
+                        <ref name='PRE'/>
+                    </choice>
+                </zeroOrMore>
+            </mixed>
+        </element>
+    </define>
+    <define name='returns'>
+        <element name='returns'>
+            <mixed>
+                <zeroOrMore>
+                    <choice>
+                        <ref name='para'/>
+                        <ref name='list'/>
+                        <ref name='paramref'/>
+                        <ref name='see'/>
+                    </choice>
+                </zeroOrMore>
+            </mixed>
+        </element>
+    </define>
+    <define name='AssemblyVersion'>
+        <element name='AssemblyVersion'>
+            <text/>
+        </element>
+    </define>
+    <define name='sup'>
+        <element name='sup'>
+            <mixed>
+                <zeroOrMore>
+                    <choice>
+                        <ref name='i'/>
+                        <ref name='paramref'/>
+                    </choice>
+                </zeroOrMore>
+            </mixed>
+        </element>
+    </define>
+    <define name='ExcludedBaseTypeName'>
+        <element name='ExcludedBaseTypeName'>
+            <text/>
+        </element>
+    </define>
+    <define name='theta'>
+        <element name='theta'>
+            <empty/>
+        </element>
+    </define>
+    <define name='ExcludedLibraryName'>
+        <element name='ExcludedLibraryName'>
+            <text/>
+        </element>
+    </define>
+    <define name='Attributes'>
+        <element name='Attributes'>
+            <zeroOrMore>
+                <ref name='Attribute'/>
+            </zeroOrMore>
+        </element>
+    </define>
+    <define name='altmember'>
+        <element name='altmember'>
+            <attribute name='cref'>
+                <data type='normalizedString'/>
+            </attribute>
+        </element>
+    </define>
+    <define name='PRE'>
+        <element name='PRE'>
+            <empty/>
+        </element>
+    </define>
+    <define name='list'>
+        <element name='list'>
+            <attribute name='type'>
+                <data type='NMTOKEN'/>
+            </attribute>
+            <optional>
+                <ref name='listheader'/>
+            </optional>
+            <zeroOrMore>
+                <ref name='item'/>
+            </zeroOrMore>
+        </element>
+    </define>
+    <define name='SPAN'>
+        <element name='SPAN'>
+            <mixed>
+                <zeroOrMore>
+                    <choice>
+                        <ref name='para'/>
+                        <ref name='paramref'/>
+                        <ref name='SPAN'/>
+                        <ref name='see'/>
+                        <ref name='block'/>
+                    </choice>
+                </zeroOrMore>
+            </mixed>
+        </element>
+    </define>
+    <define name='example'>
+        <element name='example'>
+            <mixed>
+                <zeroOrMore>
+                    <choice>
+                        <ref name='para'/>
+                        <ref name='code'/>
+                        <ref name='c'/>
+                        <ref name='codelink'/>
+                        <ref name='see'/>
+                    </choice>
+                </zeroOrMore>
+            </mixed>
+        </element>
+    </define>
+    <define name='listheader'>
+        <element name='listheader'>
+            <ref name='term'/>
+            <oneOrMore>
+                <ref name='description'/>
+            </oneOrMore>
+        </element>
+    </define>
+    <define name='Interfaces'>
+        <element name='Interfaces'>
+            <zeroOrMore>
+                <ref name='Interface'/>
+            </zeroOrMore>
+        </element>
+    </define>
+    <define name='InterfaceName'>
+        <element name='InterfaceName'>
+            <text/>
+        </element>
+    </define>
+    <define name='MemberSignature'>
+        <element name='MemberSignature'>
+            <attribute name='Value'>
+                <data type='normalizedString'/>
+            </attribute>
+            <attribute name='Language'>
+                <data type='normalizedString'/>
+            </attribute>
+        </element>
+    </define>
+    <define name='Attribute'>
+        <element name='Attribute'>
+            <ref name='AttributeName'/>
+            <ref name='Excluded'/>
+            <optional>
+                <ref name='ExcludedTypeName'/>
+            </optional>
+            <optional>
+                <ref name='ExcludedLibraryName'/>
+            </optional>
+        </element>
+    </define>
+    <define name='TypeSignature'>
+        <element name='TypeSignature'>
+            <attribute name='Value'>
+                <data type='normalizedString'/>
+            </attribute>
+            <attribute name='Language'>
+                <data type='normalizedString'/>
+            </attribute>
+        </element>
+    </define>
+    <define name='Parameters'>
+        <element name='Parameters'>
+            <zeroOrMore>
+                <ref name='Parameter'/>
+            </zeroOrMore>
+        </element>
+    </define>
+    <define name='para'>
+        <element name='para'>
+            <mixed>
+                <zeroOrMore>
+                    <choice>
+                        <ref name='see'/>
+                        <ref name='block'/>
+                        <ref name='paramref'/>
+                        <ref name='c'/>
+                        <ref name='onequarter'/>
+                        <ref name='superscript'/>
+                        <ref name='sup'/>
+                        <ref name='permille'/>
+                        <ref name='SPAN'/>
+                        <ref name='list'/>
+                        <ref name='pi'/>
+                        <ref name='theta'/>
+                        <ref name='sub'/>
+                    </choice>
+                </zeroOrMore>
+            </mixed>
+        </element>
+    </define>
+    <define name='AssemblyInfo'>
+        <element name='AssemblyInfo'>
+            <ref name='AssemblyName'/>
+            <ref name='AssemblyPublicKey'/>
+            <ref name='AssemblyVersion'/>
+            <ref name='AssemblyCulture'/>
+            <ref name='Attributes'/>
+        </element>
+    </define>
+    <define name='paramref'>
+        <element name='paramref'>
+            <attribute name='name'>
+                <data type='normalizedString'/>
+            </attribute>
+        </element>
+    </define>
+    <define name='ReturnValue'>
+        <element name='ReturnValue'>
+            <optional>
+                <ref name='ReturnType'/>
+            </optional>
+        </element>
+    </define>
+    <define name='permille'>
+        <element name='permille'>
+            <empty/>
+        </element>
+    </define>
+    <define name='block'>
+        <element name='block'>
+            <attribute name='type'>
+                <data type='NMTOKEN'/>
+            </attribute>
+            <attribute name='subset'>
+                <data type='normalizedString'/>
+            </attribute>
+            <mixed>
+                <zeroOrMore>
+                    <choice>
+                        <ref name='see'/>
+                        <ref name='para'/>
+                        <ref name='paramref'/>
+                        <ref name='list'/>
+                        <ref name='block'/>
+                        <ref name='c'/>
+                        <ref name='subscript'/>
+                        <ref name='code'/>
+                        <ref name='sup'/>
+                        <ref name='pi'/>
+                    </choice>
+                </zeroOrMore>
+            </mixed>
+        </element>
+    </define>
+    <define name='ExcludedTypeName'>
+        <element name='ExcludedTypeName'>
+            <text/>
+        </element>
+    </define>
+    <define name='see'>
+        <element name='see'>
+            <optional>
+                <attribute name='cref'>
+                    <data type='normalizedString'/>
+                </attribute>
+            </optional>
+            <optional>
+                <attribute name='qualify'>
+                    <data type='normalizedString'/>
+                </attribute>
+            </optional>
+            <optional>
+                <attribute name='langword'>
+                    <data type='normalizedString'/>
+                </attribute>
+            </optional>
+        </element>
+    </define>
+    <define name='BaseTypeName'>
+        <element name='BaseTypeName'>
+            <text/>
+        </element>
+    </define>
+    <define name='item'>
+        <element name='item'>
+            <ref name='term'/>
+            <zeroOrMore>
+                <ref name='description'/>
+            </zeroOrMore>
+        </element>
+    </define>
+    <define name='MemberOfLibrary'>
+        <element name='MemberOfLibrary'>
+            <text/>
+        </element>
+    </define>
+    <define name='param'>
+        <element name='param'>
+            <attribute name='name'>
+                <data type='normalizedString'/>
+            </attribute>
+            <mixed>
+                <zeroOrMore>
+                    <choice>
+                        <ref name='c'/>
+                        <ref name='paramref'/>
+                        <ref name='see'/>
+                        <ref name='block'/>
+                        <ref name='para'/>
+                        <ref name='SPAN'/>
+                    </choice>
+                </zeroOrMore>
+            </mixed>
+        </element>
+    </define>
+    <define name='codelink'>
+        <element name='codelink'>
+            <attribute name='SampleID'>
+                <data type='normalizedString'/>
+            </attribute>
+            <attribute name='SnippetID'>
+                <data type='normalizedString'/>
+            </attribute>
+        </element>
+    </define>
+    <define name='AttributeName'>
+        <element name='AttributeName'>
+            <text/>
+        </element>
+    </define>
+    <define name='term'>
+        <element name='term'>
+            <mixed>
+                <zeroOrMore>
+                    <choice>
+                        <ref name='block'/>
+                        <ref name='see'/>
+                        <ref name='paramref'/>
+                        <ref name='para'/>
+                        <ref name='c'/>
+                        <ref name='sup'/>
+                        <ref name='pi'/>
+                        <ref name='theta'/>
+                    </choice>
+                </zeroOrMore>
+            </mixed>
+        </element>
+    </define>
+    <define name='i'>
+        <element name='i'>
+            <text/>
+        </element>
+    </define>
+    <define name='TypeExcluded'>
+        <element name='TypeExcluded'>
+            <text/>
+        </element>
+    </define>
+    <define name='pre'>
+        <element name='pre'>
+            <empty/>
+        </element>
+    </define>
+    <define name='sub'>
+        <element name='sub'>
+            <mixed>
+                <zeroOrMore>
+                    <ref name='paramref'/>
+                </zeroOrMore>
+            </mixed>
+        </element>
+    </define>
+    <define name='Base'>
+        <element name='Base'>
+            <optional>
+                <ref name='BaseTypeName'/>
+            </optional>
+            <optional>
+                <ref name='ExcludedBaseTypeName'/>
+            </optional>
+            <optional>
+                <ref name='ExcludedLibraryName'/>
+            </optional>
+        </element>
+    </define>
+    <define name='Interface'>
+        <element name='Interface'>
+            <ref name='InterfaceName'/>
+            <ref name='Excluded'/>
+        </element>
+    </define>
+    <define name='threadsafe'>
+        <element name='threadsafe'>
+            <oneOrMore>
+                <ref name='para'/>
+            </oneOrMore>
+        </element>
+    </define>
+    <define name='pi'>
+        <element name='pi'>
+            <empty/>
+        </element>
+    </define>
+</grammar>

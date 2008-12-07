@@ -1,0 +1,31 @@
+statidoc 0.2
+Scott Bronson
+27 Oct 2002
+
+
+To generate the output on your machine:
+
+0) Install the monodoc cvs tree.
+	% cvs co monodoc
+
+1) Install Sablotron.  Right now that's the only XSL processor
+   that can be used (Xalan 1.2 has bugs, I haven't tried any others).
+   	% apt-get install sablotron
+
+2) Install the statidoc directory in the monodoc directory
+   (beside classes, doctools, etc)
+        % cd monodoc
+	% tar zxvf statidoc.tar.gz
+
+3) Apply the patches to the root of the monodoc directory.
+   This fixes 4 small but annoying typos in the XSL files.
+	% patch -p0 < statidoc/PATCHES
+
+4) Generate the docs!  The -s says to make a second pass to strike
+   out links to missing files.
+	% ./generate -s
+
+It should run for a while.  If it completes without error, your hot, new
+docs are available in the monodoc/statidoc/output directory.
+	% galeon output/index.html
+

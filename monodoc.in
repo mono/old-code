@@ -1,0 +1,88 @@
+#!/bin/sh
+
+prefix=@prefix@
+exec_prefix=@exec_prefix@
+monodocdir=@monodocdir@
+
+case `basename $0` in
+    mod)
+	if test x$1 = x; then
+	    echo Usage is: mod TOPIC
+	    exit 1;
+	fi
+	;;
+
+    monodocer)
+	exec mono $monodocdir/monodocer.exe $*
+	;;
+
+    monodocs2html)
+	exec mono $monodocdir/monodocs2html.exe $*
+	;;
+
+    monodocs2slashdoc)
+	exec mono $monodocdir/monodocs2slashdoc.exe $*
+	;;
+esac
+
+case x$1 in
+    x--assemble)
+	shift;
+	exec mono $monodocdir/assembler.exe "$@"
+	;;
+    x--get-sourcesdir)
+	echo $monodocdir/sources
+	exit 0
+	;;
+    x--normalize)
+	shift;
+	exec mono $monodocdir/normalize.exe "$@"
+	;;
+    x--update)
+	echo '--update deprecated;  Please use "monodocer" instead.'
+	exit 0
+	;;
+    x--cs-to-ecma)
+	shift;
+	exec mono $monodocdir/cs2ecma.exe "$@"
+	exit 0
+	;;
+    x--validate)
+	shift;
+	exec mono $monodocdir/validate.exe "$@"
+	;;
+    x--help)
+	echo "Usage is:"
+	echo "monodoc [options]"
+	echo ""
+	echo "where [options] is one of the following:"
+	echo "  TOPIC              Start the browser at TOPIC"
+	echo "      (ex. N:System, T:System.Object, M:System.Object.Equals,"
+	echo "      and P: for properties, F: for fields, E: for events, etc.)"
+	echo "  --help             Print this message"
+	echo "  --html TOPIC       Print the HTML contents of TOPIC"
+	echo "  --make-index       Create the documentation index"
+	echo
+	echo "The following options are available for authoring documentation:"
+	echo "  --assemble         Runs the doc assembler"
+	echo "  --edit path        Edit (unassembled) documentation at path"
+	echo "  --get-sourcesdir   Prints the location of monodoc sources"
+	echo "  --merge-changes CHANGE_FILE [TARGET_DIR]"
+	echo "  --normalize	        Format a documentation file consistently"
+	echo "  --validate         Validate the xml file(s)"
+	echo "  --cs-to-ecma DOCFILE ASSEMBLY OUTPUT LIBRARY-NAME"
+	echo "                     Converts C# documentation to Monodoc format"
+	exit 0
+	;;
+esac
+
+if test `basename $0` = mod; then
+    mono --debug $monodocdir/mod.exe $1 | lynx -dump -stdin -force_html | ${PAGER:-more}
+    exit
+fi
+
+if test -e $monodocdir/browser.exe; then
+    exec mono --debug $monodocdir/browser.exe $OPTIONS "$@" $REST
+else
+    echo "The monodoc GUI component is not installed. Install it from the mono-tools package."
+fi

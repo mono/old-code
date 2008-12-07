@@ -1,0 +1,11 @@
+configure
+monodoc
+aclocal.m4
+config.status
+config.log
+.cvsignore
+autom4te*cache
+mod
+Makefile.in
+Makefile
+monodoc.pc

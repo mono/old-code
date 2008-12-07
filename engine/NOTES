@@ -1,0 +1,297 @@
+
+* The setup
+
+	Monodoc will load the help layout from the file monodoc.xml in
+	the current directory.   This file format is like this:
+
+		<?xml version="1.0"?>
+		<node label="Mono Documentation" name="/">
+		  <node label="Class Library" name="classlib"/>
+		</node>
+
+	The label represents the caption to be shown to the user, and
+	the name is a value that can be referenced from the sources
+	later on.  So for example class library documentation will
+	want to hook up into the `classlib' node.
+
+	The file can have nested node structures to setup a more
+	complex layout. 
+
+* The source files.
+
+	The source files and any metadata required by the browser are
+	located within the `sources' subdirectory of the execution
+	directory.  
+
+	A source file contains definition for one or more sources, and
+	the format is very simple:
+
+		<?xml version="1.0"?>
+		<monodoc>
+		  <source provider="ecma" basefile="netdocs" path="classlib"/>
+		</monodoc>
+
+	The provider identifies the provider that will be used to
+	render this information.  In the case of class libraries we
+	use the `ecma' provider.  
+
+	You can use that in your installation 
+	Typically provides will have two files: a zip file and a .tree
+	file.  The .zip file contains the compressed archives with the
+	data, and the .tree file contains the tree information to
+	render the tree on demand as the user expands it. 
+
+	The base files are created by running the `assembler'
+	program.  The assembler takes a list of provides and arguments
+	to them and builds a zip file and a tree representing them.
+
+	For example:
+
+	mono assembler.exe --ecma ../class/corlib/en/ -o corlib
+
+	That will create the `corlib.zip' and `corlib.tree' from a
+	directory structure that uses the ECMA documentation file
+	format in `../class/corlib/en'.
+
+* Deploying help files. 
+
+	To deploy more help files, just deploy the files in this
+	directory, which can be obtained by invoking the monodoc
+	script:
+
+		monodoc --get-sourcesdir
+
+* Providers
+
+	The Monodoc system uses a system of "providers".  This allows
+	multiple different information sources to be accessible from
+	the same help system.
+
+	A provider has two tasks:
+
+		* Provide "compilation" facilities (this is used by
+ 		  the assembler).
+
+		* Provider "rendering" functionality (this is used
+		  by the monodoc browser).
+
+	Currently we ship providers for:
+		ECMA-style documentation
+		Mono Handbook
+		Manual Pages
+		Compiler Errors
+		ECMA C# Specification	
+
+	Other providers are planned: a Docbook renderer, so we can
+	integrate with existing Docbook documents. 
+	
+** Provider compilation facility
+
+	The compilation facility derives from the class Provider, and
+	implements the IPopulate interface.  The task of this
+	compilation is to do two things: populate the tree with
+	entries (the tree is what will be displayed to the user) and
+	"package" the source files it will require.
+
+	The entry point is the PopulateTree method, and it receives as
+	input a Tree.  The Tree is populated with calls to LookupNode,
+	and whenever you need a data file to be "transported" to the
+	destination you should calls the tree.HelpSource.PackFile method. 
+
+	By the end of this process you will have a .tree and a .zip file
+	with the tree and the data files that will be used.
+
+** Provider rendering facility
+
+	The rendering facility derives from the HelpSource class.
+	This is invoked at the browser startup time with the basename
+	for the .zip and .tree files.  
+
+	The methods that must be implemented are:
+
+		string GetText (string url, out Node match_node)
+
+		string RenderTypeLookup (string prefix, string ns, 
+					 string type, string member, 
+					 out Node match_node)
+
+		string RenderNamespaceLookup (string nsurl, 
+					      out Node match_node)
+
+	All of these methods return null if they can not fulfill the
+	request. 
+
+	GetText will be invoked when the user clicks on the tree on
+	the left side.  And the url passed will be a url constructed
+	from the path elements you provided during the compilation.
+
+	Your root should contain a prefix with two dots, like
+	"mydoc:".  The URL construction support will create a URL for
+	a tree node by finding the first node that has "mydoc:" and
+	then attaching elements separated by slash characters to make
+	up the url.
+
+	GetText should parse this string and return an HTML
+	representation of it.  It should also try as hard as possible
+	to set the `match_node' value to a Node that represents the
+	data (this is pretty much always the case when using tree
+	urls), that way the browser can keep the document in sync with
+	the tree, and the user can see on the tree where the document
+	lives. 
+
+	RenderTypeLookup is invoked only if your provider can perform
+	type lookups.  The prefix is one of "T:", "M:", "E:" and "F:",
+	and they represent:
+
+        "T:" Types (classes, structs, interfaces, enumerations), example: (T:System.Byte)
+        "M:" Method, example: (M:System.String.Substring(System.Int32,System.Int32))
+        "P:" Properties, example: (P:System.AppDomain.CurrentDomain)
+        "N:" Namespaces, example (N:System).
+        "C:" Constructors, example (C:Gtk.Button())
+        "E:" Events, example (E:Gtk.Button.Clicked)
+        "F:" Fields, example (F:Gtk.TreeIter.Zero)
+
+
+	RenderNamespaceLookup is used by providers that can render
+	namespace lookups, and those are urls that encode the "N:"
+	prefix.
+	
+	Additional information on the ECMA provider and rendering is available at:
+	http://www.nullenvoid.com/mono/wiki/index.php/ECMAStyleDocumentation
+
+* The tree
+
+	The tree is designed to allow for on-demand loading of its
+	contents, so that large trees can be constructed without an
+	impact on the startup time, or the memory consumption.
+
+	Each tree node has a text that is presented to the user, and
+	an associated url.  The provider will populate the tree with
+	the caption and the url.  It is up to the provider to be able
+	to decode the url and render the appropriate text. 
+
+* Lookup systems
+
+	There are two lookup systems: one based on the tree, and one based on urls.
+
+	The tree system is used because we want to store as little
+	information as possible on the tree file.  
+
+	So when the user clicks on a node, a node-based rendering is
+	performed.  The actual "requested" url for rendering is
+	constructed by concatenating the result of the parent url plus
+	the current url, unless the url contains a colon (:), which
+	indicates that this is the root.
+
+	When the user clicks on a link, a more exhaustive search is performed, by
+	looking up all the nodes in the tree, and using a special URL syntax.
+
+* Future for the lookup system.
+
+	The node-based lookup was included first, because this is what
+	the tree used.  Now that we have a url-based lookup system, it
+	does not make a lot of sense anymore, so we might want to get
+	rid of it, which should factor a lot of code.
+
+* Table of contents
+
+	The table of contents is implemented so searching of key data
+	is made easy.  
+
+	Every time a new source is installed in the system, or a new
+	data file is installed, the following command should be
+	executed to update the index:
+
+		monodoc --make-index
+
+	The table of contents is generated by invoking all the
+	providers, and having each provider populate the index with
+	data that is important
+
+	Internally this is done by invoking the PopulateIndex method
+	of the HelpSource class, a PopulateIndex method should add as
+	many entries as it considers important for a user to search for
+
+	For example on the ECMA provider we do:
+
+		index_maker.Add (type_node.Caption, typename, url);
+		index_maker.Add (full + " " + doc_tag, full, url);
+		index_maker.Add ("  constructors", typename+"0", url + "/C");
+		index_maker.Add ("  fields", typename+"1", url + "/F");
+		index_maker.Add ("  events", typename+"2", url + "/E");
+		index_maker.Add ("  properties", typename+"3", url + "/P");
+		index_maker.Add ("  methods", typename+"4", url + "/M");
+
+	Notice that it adds itself twice: because people will search
+	for both terms.
+
+	The system allows for collisions.  So it is possible to
+	register multiple "ToString" methods.  This is later
+	deambiguated on the user interface by opening a window with
+	matches. 
+
+	The file format currently has been designed to be compact, but
+	it can be improved vastly.  We should introduce some string
+	compression mechanism.
+
+	I implemented a new widget for rendering a list that might
+	contain hundreds of millions of records, as GtkTreeView was
+	not up to the scalability task.
+
+* Ecma provider
+
+** Namespace summaries
+
+	Summary generation for namespaces is performed during the
+	assembly time.  This pulls both an optional "introduction" to
+	the namespace, and generates a summary page with all the
+	toplevel elements of the namespace to be rendered.
+
+	The files are stored in the zip file as:
+
+	For the System namespace:
+
+		System.xml
+			The summary file
+
+		xml.summary.System 
+			The computed information about the namespace 
+			summary.
+
+
+* Screen scraping provider
+
+	For docs that we reference, it might be interesting to
+	download the HTML docs from the Microsoft site, do some screen
+	scraping and render them.
+
+* Editing
+
+	We have created editing capibilities to monodoc in order to
+	distribute the work of writing documentation. The code behind
+	this is inside editing.cs. A provider must render the edit:
+	url in the html it generates. It does this by calling
+	GetEditUri. The function takes an XPathNavigator. It generates
+	a url that tells the provider from which it was generated, the
+	file in the zip archive, and the location of the node to be
+	edited (the node that was passed as a param), in an XPath
+	expression. When a user clicks the edit: url, the interface to
+	monodoc must detect the url (it will always start with edit:),
+	and prompt the user to edit the document.
+
+	The interface must call the GetNodeFromUrl function, which
+	will return the node that is to be edited. The user should be
+	shown the InnerXml of the XmlNode, and allowed to edit. When
+	the node has been edited, the UI must call SaveChange to save
+	changes to the node. The collection of changes that has been
+	made is saved in ~/.monodoc/changeset.xml. This file is read
+	at startup, so that monodoc can be sure to display the user's
+	version.
+
+	To sync the changes back into the tree, use monodoc
+	--merge-changes. This command can take two arguments. The
+	first, which is required, is the path to the changes file,
+	normally you will pass ~/.monodoc/changeset.xml. The second is
+	the "target directory" this is the directory where the
+	.sources files are located. You must run the tool once for
+	each such directory.

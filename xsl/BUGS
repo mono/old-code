@@ -1,0 +1,104 @@
+statidoc:
+
+Improper sorting on fully-qualified member names (i.e. System.Array members
+aren't sorted properly).  The reason is that some member names are
+fully-qualified (System.Collections.IList.RemoveAt), and there's no good
+way in XSLT 1.1 to sort on the leaf name ("RemoveAt" instead of "System...").
+There are two potential solutions:
+1) Use custom extensions to create a NodeSet from the transformed strings,
+   then sort in a second pass over the data.  This locks us into a processor.
+2) Use XSLT 2.0: compute the sort key using xsl:function
+
+Does not handle unary, binary, or conversion operators in cref statements.
+Does not handle constructors or properties with args in cref statements.
+
+We always fully-qualify cref="N:" namespace links, even if the qualify
+attribute is omitted or says not to.
+
+We ignore <seealso> because it never seems to be used.
+
+
+Xalan 1.2:
+
+Can't generate root namespace page.
+Fix: upgrade to 1.4?
+
+
+Sablotron 0.95:
+
+Generating System.Array.BinarySearch et al, injects strange attributes
+into the <i> parameter links.  No big deal--they don't harm the HTML--
+but it is very weird.  See the comment in link.xsl (search for "Sablotron")
+It's also injected into h3 links in System.CannotUnloadAppDomainException.
+Fix: upgrade to 0.96?
+
+
+Ximian:
+
+- The mscorlib assembly is in the "corlib" directory, not "mscorlib".
+- The System.Xml assembly is in the "System.XML" directory, not System.Xml.
+- Most of these files lack newlines at the end.  It doesn't wreck our
+  processing, but it does make them illegal Unix files.
+
+
+Ecma:
+
+All over they say stuff like, 'A <see cref="T:System.Int32">'
+(i.e. System.Array.Reverse).  This is grammatically incorrect.  They
+did not specify a 'qualify="true"' attribute, so this type should be
+displayed unqualified, so the article should match "Int32" not "System".
+That should be "An <see cref="T:System.Int32">'.
+
+The <code> snippets start immediately after the start tag, but include
+a newline before the end tag.  They need to be consistent about the start
+and end (either both use a newline or neither does) if they are
+to appear properly balanced in the documentation.
+
+bug-space01:
+Space in attribute: Version.xml line 100: <param name=" version">
+This bug is everywhere.  Just need to special-case all of it.
+See the code in item.xsl.
+
+bug-space02:
+They are inconsistent with the space between the function name and the
+open parentheses.  See, for instance, the description for the version
+parameter for the Version(String version) constructor for System.Version.
+The first mention of Parse has no space before the open paren, the second
+mention does.  Version.xml line 678.
+
+bug-span:
+What the hell is with System.Threading/Timer.xml line 176+??
+
+bug-paramref:
+They use paramref everywhere in the documentation.  This is stupid, because
+a paramref should refer to a specific param!  Maybe they want to add a
+varref or something like that.  I made paramrefs linkable, but then I 
+had to turn it off because of so many invalid paramrefs!
+
+bug-flattenhierarchy:
+System/Type.xml refers to System.Reflection/BindingFlags.FlattenHierarchy,
+but BindingFlags.FlattenHierarchy doesn't exist.
+
+bug-subscript-elem: whoever invented the <subscript term=""> element
+is a moron.  Should all be replaced with <sub> element.
+System.Collections/ArrayList.xml
+
+bug-superscript-elem: same as subscript.  Replace with sup.
+System/TimeSpan.xml
+
+Array.xml:136: "Language="ILASM" value=".property..."  "value" should be capitalized
+Array.xml:1949 etc.  "GetLowerBound" is not in a '<see cref="M:">' tag.
+
+
+Unsure the culprit:
+
+bug-useofpre
+What the hell is the <PRE> tag for?  It doesn't ever seem to be used,
+so statidoc doesn't do anything with it.
+
+bug-useofspan
+It looks like the Ecma documentation only mis-uses the SPAN tag.  I've
+never seen it used properly.  Therefore, statidoc ignores the SPAN tag.
+(the docs say that SPAN should start a new line.  But why would you want
+that for i.e. System.Threading/Thread.xml line 786?)
+

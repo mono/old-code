@@ -1,0 +1,398 @@
+2008-10-20  Jonathan Pryor  <jpryor@novell.com>
+
+	* Makefile.am: Make sure that Novell.* are part of $(sources_DATA).
+
+2008-10-16  Jonathan Pryor  <jpryor@novell.com>
+
+	* */en/**: Flush.  Let's hear it for running monodocer against giant
+	  assemblies (mscorlib et al) to find and fix monodocer bugs!
+
+2008-10-16  Jonathan Pryor  <jpryor@novell.com>
+
+	* */en/**: Flushity-flush.
+
+2008-10-16  Jonathan Pryor  <jpryor@novell.com>
+
+	* */en/**: Flushity-flush.
+
+2008-10-16  Jonathan Pryor  <jpryor@novell.com>
+
+	* Makefile.am: Add update-delete target, which will remove documentation
+	  for type members which no longer exist.
+	* corlib/en/**: Flush (parameter changes, renames, etc.).
+
+2008-04-28  Jonathan Pryor  <jpryor@novell.com>
+
+	* System.Core/en/**: Flush (updates prototypes for extension methods,
+	  semantics for the <TypeParameter/> element, adds "index" of extension
+	  methods to index.xml).
+
+2008-03-26  Jonathan Pryor  <jpryor@novell.com>
+
+	* Makefile.am: Fix the IMPORT_COMMAND and the `import' target so that ECMA
+	  documentation import actually works.  Add System.Core.
+	* System.Core/en/**: Added; initial import of System.Core.dll documentation.
+	* */en/**: Flush ECMA-335 4th Edition documentation import and 
+	  monodocer update.
+
+2008-03-07  Jonathan Pryor  <jpryor@novell.com>
+
+	* mono-tools.config: Rename mdoc-export-slashdoc to mdoc-export-msxdoc.
+
+2008-03-03  Jonathan Pryor  <jpryor@novell.com>
+
+	* mono-tools.config: Add additional ../man/* man pages.
+
+2008-03-03  Wade Berrier  <wberrier@novell.com>
+
+	* Makefile.am: add mono-tools.config to EXTRA_DIST to fix build
+
+2008-03-01  Jonathan Pryor  <jpryor@novell.com>
+
+	* Makefile.am: Remove BUILD_MANPAGES entries; always build mono-tools docs.
+
+2008-02-29  Jonathan Pryor  <jpryor@novell.com>
+
+	* Makefile.am: Corrections to pass distcheck.
+
+2008-02-18  Jonathan Pryor  <jpryor@novell.com>
+
+	* Makefile.am: Add a BUILD_MANPAGES section, to (optionally) build the mono
+	  man pages; build the mono-tools files for mono man pages.
+	* mono-tools.config: Added; config file for the man provider.
+	* mono-tools.source: Added; config file for monodoc to display man pages.
+	* . (svn:ignore): Ignore generated files.
+
+2008-02-11  Jonathan Pryor  <jpryor@novell.com>
+
+	* Mono.Posix/en/**: Flush UnixSignal & related additions.
+
+2008-01-06  Jonathan Pryor  <jpryor@novell.com>
+
+	* */en/**: Flush; monodocer output, plus removal of some monodocer warnings.
+
+2008-01-06  Jonathan Pryor  <jpryor@novell.com>
+
+	* */en/**: Flush; remove duplicated/removed members.
+	* Makefile.am: Add svn-add, svn-rm targets to simplify addition/removal of
+	  documentation files.
+
+2008-01-02  Jonathan Pryor  <jpryor@novell.com>
+
+	* */en/**: Flush; remove all obsolete files, update explicit prototypes.
+
+2008-01-02  Jonathan Pryor  <jpryor@novell.com>
+
+	* System.Web/en/**: Flush.  (Hopefully fixes last remaining Win32 checkout
+	  issues)
+
+2008-01-02  Jonathan Pryor  <jpryor@novell.com>
+
+	* Npgsql/en/**: Flush.
+
+2008-01-02  Jonathan Pryor  <jpryor@novell.com>
+
+	* */en/*.xml: Rename to */en/ns-*.xml; permits Win32 users to checkout the
+	  monodoc module (due to 
+	  monodoc/class/System.Security/en/System.Security.Cryptography.Xml
+	  case-sensitivity conflicts).
+
+2007-12-19  Jonathan Pryor  <jpryor@novell.com>
+
+	* nunit/en/**/*.xml: Flush.
+
+2007-12-19  Jonathan Pryor  <jpryor@novell.com>
+
+	* corlib/en/**/*.xml: Flush.
+
+2007-12-19  Jonathan Pryor  <jpryor@novell.com>
+
+	* Makefile.am: Redo update/import targets and assembly handling.  Remove
+	  $(dirs) (didn't seem to be used).  UPDATE_ASSEMBLIES now contains all the
+	  assemblies that should be updated, along with target dir and runtime
+	  versions (as some assemblies are only in 1.0 or 2.0 profiles).
+	  TO UPDATE EVERYTHING:
+	    make update
+	  Note: errors are ignored.
+	  TO UPDATE A PARTICULAR ASSEMBLY (all versions):
+	    make update ASSEMBLY=assembly-name
+	  TO UPDATE A PARTICULAR ASSEMBLY VERSION:
+	    make update-dir ASSEMBLY=assembly-name DIR=dir VER=version
+	  e.g. `make update-dir ASSEMBLY=mscorlib DIR=corlib VER=2.0`
+	* Microsoft.Build.Framework/en/**.xml, Microsoft.Build.Utilities/en/**.xml,
+	  System/en/**.xml, System.Data/en/**.xml, System.Drawing/en/**.xml,
+	  System.Web/en/**.xml, System.Windows.Forms/en/**.xml: Flush.
+
+2007-12-19  Jonathan Pryor  <jpryor@novell.com>
+
+	* Mono.Cairo/en/**.xml, Mono.Posix/en/**.xml, Mono.Security/en/**.xml,
+	  Mono.Security.Win32/en/**.xml, System/en/**.xml,
+	  System.Configuration.Install/en/**.xml, System.Data/en/**.xml,
+	  System.Design/en/**.xml, System.Drawing/en/**.xml,
+	  System.Runtime.Remoting/en/**.xml,
+	  System.Runtime.Serialization.Formatters.Soap/en/**.xml,
+	  System.Security/en/**.xml, System.Windows.Forms/en/**.xml,
+	  System.Web/en/**.xml, System.Web.Services/en/**.xml,
+	  System.XML/en/**.xml: Flush; Add monodocer-generated files.
+
+2007-12-19  Jonathan Pryor  <jpryor@novell.com>
+
+	* System.Web/en/**.xml, System.Data/en/**.xml: Flush; current monodocer output.
+
+2007-12-19  Jonathan Pryor  <jpryor@novell.com>
+
+	* Makefile.am: Update monodocer arguments (remove -ignore_extra_docs, add
+	  -show_exceptions); fix sh(1) erroor within `update' target.
+	* Mono.Cairo/en/**.xml, Mono.GetOptions/en/**.xml, Mono.Posix/en/**.xml,
+	  Mono.Security/en/**.xml, Mono.Security.Win32/en/**.xml, System/en/**.xml,
+	  System.Drawing/en/**.xml, System.Runtime.Remoting/en/**.xml,
+	  System.Security/en/**.xml, System.Web.Services/en/**.xml,
+	  System.XML/en/**.xml: Flush; current monodocer output.
+
+2007-07-23  Jonathan Pryor  <jonpryor@vt.edu>
+
+	* System.XML/en/**.xml: Sort/re-order members to be consistent with latest 
+	  monodocer output (members sorted in alphabetical order, <Docs/> have a
+	  better-defined order of [<typeparam/>]* [<param>]* <summary/>
+	  [<return/>|<value/>] <remarks/> [ REST ]*, etc.).
+
+2007-07-22  Jonathan Pryor  <jonpryor@vt.edu>
+
+	* corlib/en/**.xml: Import latest ECMA documentation.  Remove duplicate
+	  members found.
+	* Makefile.am: Add import, import-dir targets to import ECMA documentation.
+
+2007-07-19  Jonathan Pryor  <jonpryor@vt.edu>
+
+	* corlib/en/**.xml: Sort/re-order members to be consistent with latest 
+	  monodocer output (members sorted in alphabetical order, <Docs/> have a
+	  better-defined order of [<typeparam/>]* [<param>]* <summary/>
+	  [<return/>|<value/>] <remarks/> [ REST ]*, etc.).
+
+2007-04-02  Lluis Sanchez Gual <lluis@novell.com>
+
+	* Mono.Addins: Updated.
+	
+2007-03-30  Lluis Sanchez Gual <lluis@novell.com>
+
+	* Mono.Addins: Updated.
+	
+2007-03-30  Lluis Sanchez Gual <lluis@novell.com> 
+
+	* Makefile.am:
+	* Mono.Addins: Added Mono.Addins.
+
+2007-03-11  Jonathan Pryor  <jonpryor@vt.edu>
+
+	* Makefile.am: Add update-dir target to update documentation for a single
+	  directory.  Usage is: make update-dir ASSEMBLY=assembly-name DIR=dir-base
+	  e.g.: make update-dir ASSEMBLY=mscorlib DIR=corlib
+
+2007-01-28  Marek Sieradzki  <marek.sieradzki@gmail.com>
+
+	* Microsoft.Build.BuildEngine
+	* Microsoft.Build.Framework
+	* Microsoft.Build.Utilities: Added.
+
+2006-12-29  Jonathan Pryor  <jonpryor@vt.edu>
+
+	* Mono.Posix/en/**.xml: Flush.
+
+2006-12-27  Alp Toker  <alp@atoker.com>
+
+	* Mono.Cairo/en/Cairo/GlitzSurface.xml: Added.
+
+2006-12-14  Jonathan Pryor  <jonpryor@vt.edu>
+
+	* corlib/en/Microsoft.Win32.SafeHandles.xml, corlib/en/Microsoft.Win32.SafeHandles
+	  corlib/en/Microsoft.Win32.SafeHandles/SafeFileHandle.xml,
+	  corlib/en/Microsoft.Win32.SafeHandles/SafeHandleZeroOrMinusOneIsInvalid.xml,
+	  corlib/en/System.Runtime.InteropServices/SafeHandle.xml: Added.
+
+2006-12-12  Jonathan Pryor  <jonpryor@vt.edu>
+
+	* Mono.Posix/en/Mono.Unix.xml, Mono.Posix/en/Mono.Unix.Native.xml: Clarify
+	  <summary/> text.
+	* Mono.Posix/en/Mono.Unix/UnixPath.xml: Fix <ThreadingSafetyStatement/>.
+
+2006-11-12  Joshua Tauberer  <jit@occams.info>
+
+	* Mono.Data.SqliteClient: Committed some docs that
+	  have been waiting on my hard drive for months.
+	  And run the latest monodocer on them.
+
+2006-09-18  Jonathan Pryor  <jonpryor@vt.edu>
+
+	* Mono.Posix/en/Mono.Unix.Native/Syscall.xml,
+	  Mono.Posix/en/Mono.Unix.Native/Stdlib.xml: Flush.
+
+2006-08-16  Alp Toker  <alp@atoker.com>
+
+	* Mono.Posix/en/Mono.Unix/AbstractUnixEndPoint.xml:
+	Document this class as requested by our users.
+
+2006-06-23  John Luke  <john.luke@gmail.com>
+
+	* Mono.Cairo/*: run the updater
+
+2006-05-01  Wade Berrier <wberrier@novell.com>
+
+	* Makefile.am: Separate cs-errors so we don't have duplicate entries
+
+2006-01-02  Jonathan Pryor  <jonpryor@vt.edu>
+
+	* Mono.Posix/en/**.xml: Flush.  Remove Obsolete types & members.
+
+2006-01-01  Jonathan Pryor  <jonpryor@vt.edu>
+
+	* Mono.Posix/en/**.xml: Flush.
+
+2005-12-28  Jonathan Pryor  <jonpryor@vt.edu>
+
+	* Mono.Posix/en/**.xml: Flush.
+
+2005-11-04  Jonathan Pryor  <jonpryor@vt.edu>
+
+	* Mono.Posix/en/**.xml: Update.
+
+2005-10-26  Jonathan Pryor  <jonpryor@vt.edu>
+
+	* Mono.Posix/en/**.xml: Update.
+
+2005-09-24  Mario Sopena Novales <mario.sopena@gmail.com>
+
+	* Makefile.am: Make compiler errors docs conditional 
+
+2005-09-20  Jonathan Pryor  <jonpryor@vt.edu>
+
+	* Mono.Posix/en/**.xml: Update.
+
+2005-09-13  John Luke  <john.luke@gmail.com>
+
+	* Mono.Cairo/en/*.xml: update for my latest changes
+
+2005-09-11  Atsushi Enomoto  <atsushi@ximian.com>
+
+	* Makefile.am : another browser->engine fix.
+
+2005-09-11  Atsushi Enomoto  <atsushi@ximian.com>
+
+	* Commons.Xml.Relaxng/en/*.xml : monodocer updates.
+	  Added some documentation on Nvdl support.
+
+2005-09-08  John Luke  <john.luke@gmail.com>
+
+	* Mono.Cairo/en/*.xml: update for my latest changes
+
+2005-09-06  John Luke  <john.luke@gmail.com>
+
+	* Mono.Cairo/en/*.xml: update for my latest changes
+	
+2005-09-05  John Luke  <john.luke@gmail.com>
+
+	* Mono.Cairo/en/*.xml: update for my latest changes
+	
+2005-09-04  John Luke  <john.luke@gmail.com>
+
+	* Mono.Cairo/en/*.xml: update for my latest changes
+	
+2005-09-02  John Luke  <john.luke@gmail.com>
+
+	* Mono.Cairo/en/Cairo*.xml: update for my latest changes
+	
+2005-09-01  John Luke  <john.luke@gmail.com>
+
+	* Mono.Cairo/en/Cairo/Surface.xml: add and doc new WriteToPng method
+	
+2005-06-08  Rafael Teixeira <rafaelteixeirabr@hotmail.com>
+        * Mono.GetOptions/en/*/*.xml: Update with new members. Not yet fleshed out.
+        * Makefile.am: reinstate Mono.GetOptions on Mono.tree
+
+2005-06-08  Jonathan Pryor <jonpryor@vt.edu>
+
+	* Mono.Posix/en/Mono.Unix/*.xml: Flush (mostly thread statement & see-also).
+
+2005-06-08  Jonathan Pryor <jonpryor@vt.edu>
+
+	* Mono.Posix/en/Mono.Unix/*.xml: Update with final 1.1.8 members.
+
+2005-06-08  Jonathan Pryor <jonpryor@vt.edu>
+
+	* Mono.Posix/en/Mono.Unix/*.xml, Mono.Posix/en/Mono.Posix/*.xml: Update.
+
+2005-06-03  Jonathan Pryor <jonpryor@vt.edu>
+
+	* Mono.Posix/en/Mono.Unix/*.xml: Update.
+
+2005-01-30  Jonathan Pryor <jonpryor@vt.edu>
+
+	* Mono.Posix/en/Mono.Unix/*.xml: Import relevant docs from Mono.Posix.
+
+2005-01-29  Jonathan Pryor <jonpryor@vt.edu>
+
+	* Mono.Posix/en/Mono.Unix.xml,
+	  Mono.Posix/en/Mono.Unix/*.xml: Added documentation stubs for Mono.Unix.
+
+2004-07-30  Shane Landrum <epicene@pobox.com>
+
+	* Mono.Security/en/Mono.Xml/*.xml: Documented all "To be added"
+	with actual descriptions.
+	
+2004-07-08  Mike Kestner  <mkestner@novell.com>
+
+	* Makefile.am : add Mono.Posix.
+	* Mono.Posix/* : stubbed with monodoc --update.
+
+2004-07-08  Mike Kestner  <mkestner@novell.com>
+
+	* Makefile.am : add Mono.Cairo.
+	* Mono.Cairo/* : stubbed with monodoc --update.
+
+2004-06-03  Raja R Harinath  <rharinath@novell.com>
+
+	* Makefile.am (cs-errors.tree, cs-errors.zip): Refer to
+	$(srcdir)/cs-errors.config.
+
+2003-10-29  Martin Willemoes Hansen  <mwh@sysrq.dk>
+
+	* nunit/makefile: Updated ignore target
+	* nunit/en/*: Ran ignore target
+
+2003-10-28  John Luke  <jluke@cfl.rr.com>
+	
+	* Makefile.am: add update target
+	* Npgsql:
+	* nunit:
+	* System.Web:
+	* System.Web.Services: update docs
+	
+2003-08-28 Ben Maurer  <bmaurer@users.sourceforge.net>
+
+	* .cvsignore, Makefile.am, cs-errors.*: Added new error provider.
+
+2003-08-25  Martin Willemoes Hansen  <mwh@sysrq.dk>
+
+	* nunit/en/NUnit.Framework.xml: Added
+	* nunit/.cvsignore: Added
+
+2003-08-10  Martin Willemoes Hansen <mwh@sysrq.dk>
+
+	* Makefile.am: Added nunit target
+	* nunit-docs.source: Added, source for nunit docs.
+
+2003-07-25  Ben Maurer <bmaurer@users.sourceforge.net>
+
+	* Makefile.am: depend on namespace summaries
+	* System.XML/en/*.xml: wrote a few summaries.
+
+2003-07-25  John Luke  <jluke@cfl.rr.com>
+
+	* System.XML/en/*.xml: add summary pages
+	* System.Web/en/*.xml: add summary pages
+	* System.Web.Services/en/*.xml: add summary pages
+
+2003-07-24  John Luke  <jluke@cfl.rr.com>
+                                                                                
+    * ChangeLog: add to track changes in docs
+	* System.Web: run updater
+	* System.Web.Services: run updater

@@ -1,0 +1,78 @@
+Index: class/corlib/en/System/Delegate.xml
+===================================================================
+RCS file: /mono/monodoc/class/corlib/en/System/Delegate.xml,v
+retrieving revision 1.1
+diff -u -r1.1 Delegate.xml
+--- class/corlib/en/System/Delegate.xml	11 Oct 2002 22:42:32 -0000	1.1
++++ class/corlib/en/System/Delegate.xml	28 Oct 2002 06:32:01 -0000
+@@ -156,8 +156,7 @@
+       <MemberSignature Language="C#" Value="public static Delegate RemoveAll(Delegate source, Delegate value);" />
+       <MemberType>Method</MemberType>
+       <ReturnValue>
+-        <ReturnType>System.Delegate
+-  </ReturnType>
++        <ReturnType>System.Delegate</ReturnType>
+       </ReturnValue>
+       <Parameters>
+         <Parameter Name="source" Type="System.Delegate" />
+@@ -1114,4 +1113,4 @@
+     </Member>
+   </Members>
+   <TypeExcluded>0</TypeExcluded>
+-</Type>
+\ No newline at end of file
++</Type>
+Index: class/corlib/en/System/Environment.xml
+===================================================================
+RCS file: /mono/monodoc/class/corlib/en/System/Environment.xml,v
+retrieving revision 1.1
+diff -u -r1.1 Environment.xml
+--- class/corlib/en/System/Environment.xml	11 Oct 2002 22:42:32 -0000	1.1
++++ class/corlib/en/System/Environment.xml	28 Oct 2002 06:32:03 -0000
+@@ -335,7 +335,6 @@
+           <para>If the environment does not support a program name, as
+          may be the case with compact devices, then the program name is equal to <see cref="F:System.String.Empty" />.</para>
+           <para>The format of the information returned by this property is implementation-defined.</para>
+-          <pre />
+           <block subset="none" type="note">
+             <para>The program name may, but is not required to, include
+       path information.</para>
+@@ -547,4 +546,4 @@
+     </Member>
+   </Members>
+   <TypeExcluded>0</TypeExcluded>
+-</Type>
+\ No newline at end of file
++</Type>
+Index: class/corlib/en/System.Threading/Thread.xml
+===================================================================
+RCS file: /mono/monodoc/class/corlib/en/System.Threading/Thread.xml,v
+retrieving revision 1.1
+diff -u -r1.1 Thread.xml
+--- class/corlib/en/System.Threading/Thread.xml	11 Oct 2002 22:42:36 -0000	1.1
++++ class/corlib/en/System.Threading/Thread.xml	28 Oct 2002 06:32:10 -0000
+@@ -533,7 +533,7 @@
+         <ReturnType>System.Void</ReturnType>
+       </ReturnValue>
+       <Parameters>
+-        <Parameter Name="address" Type="UInt64&amp;" />
++        <Parameter Name="address" Type="System.UInt64&amp;" />
+         <Parameter Name="value" Type="System.UInt64" />
+       </Parameters>
+       <Docs>
+@@ -665,7 +665,7 @@
+       </Docs>
+       <Excluded>0</Excluded>
+     </Member>
+-    <Member MemberName="MemoryBarrier ">
++    <Member MemberName="MemoryBarrier">
+       <MemberSignature Language="ILASM" Value=".method public hidebysig static void MemoryBarrier ()" />
+       <MemberSignature Language="C#" Value="public static void MemoryBarrier ();" />
+       <MemberType>Method</MemberType>
+@@ -1369,4 +1369,4 @@
+     </Member>
+   </Members>
+   <TypeExcluded>0</TypeExcluded>
+-</Type>
+\ No newline at end of file
++</Type>

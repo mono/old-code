@@ -1,0 +1,33 @@
+- Add awareness of whether an item is static or not to all pages
+- Add awareness of whether an item is public or not to item page
+- Add awareness of whether an item is const or not
+
+- Add a view by static page (so you can list all static and non-static
+  items together)
+
+- Need to add <Excluded> handling everywhere
+
+- Run through Validator.
+
+
+Idle questions:
+
+- Do we want a "To Top" button with every overloaded function
+  prototype on the item page?  I think we do.
+
+- How do we handle langwords?
+
+
+
+2299 down 215 to go: translating en/System/Array.xml,item.xsl[l=en,m=Item].html
+Warning [code:87] [URI:file:/home/bronson/mono/monodoc/statidoc/item.xsl] [line:36] [node:element '<xsl:message>'] 
+  xsl:message (
+      Could not find Item in this xml file!
+        )
+
+2847 down   9 to go: translating en/System/Type.xml,item.xsl[l=en,m=FindMembers].html
+Warning [code:87] [URI:file:/home/bronson/mono/monodoc/statidoc/item.xsl] [line:36] [node:element '<xsl:message>'] 
+  xsl:message (
+      Could not find FindMembers in this xml file!
+        )
+

@@ -1,0 +1,22 @@
+0.2:
+- summary page: added interfaces
+- summary page: added all the member views
+- created the member tables (view by type, access, name, etc)
+- created the item pages (describes each method, field, etc)
+- made langwords static -- don't attempt to link them.
+- made overloading work everywhere (overloaded methods share an item page)
+- made full-method-link work for constructors too
+- added second pass to strike out missing links.
+- got rid of unfinished.xsl pseudo file.
+
+0.11:
+- generate takes the name of the assembly to generate from the cmd line.
+- put  namespace links at top of summary page
+- generate methods page (sorta... got a long way to go)
+- link generation re-org.  link.xsl should make sense now.
+- force params to always be in alphabetical order
+- added a bit more link checking to generate.pl
+
+0.1:
+- first release
+

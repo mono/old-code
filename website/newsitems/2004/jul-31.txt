@@ -1,3 +1,0 @@
-@O'Reilly publishes 'Mono: A Developer's Notebook' 
-<p>We're pleased to announce that O'Reilly Publishing just released Edd Dumbill and Niel M.Bornstein's excellent Mono book: <a href='http://www.oreilly.com/catalog/monoadn/index.html'>Mono: A Developer's Notebook</a>. Available now !
-</p>

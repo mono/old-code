@@ -1,0 +1,10 @@
+*dbg
+*tree
+*.dll
+Makefile
+Makefile.in
+Mono.Website.Handlers.dll
+monodoc.dll
+monodoc.dll.config
+AssemblyInfo.cs
+mono.pub

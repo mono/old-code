@@ -1,3 +1,0 @@
-@Winfessor announces new Instant Messaging SDK for Mono 1.0
-<p>Today, <a href="http://www.winfessor.com">Winfessor</a> announced its new <a href="http://test.winfessor.com/sdk/mono">SoapBox Framework 1.9</a> for Mono 1.0. SoapBox Framework is the first pure .NET implementation of <a href="http://www.ietf.org/html.charters/xmpp-charter.html">XMPP</a> and includes support for multi-chat, conferencing, server to server communication and presence features.</p>
-<p>Winfessor is one of the recent ISVs which announced products running on Mono along with <a href="http://www.sourcegear.com">SourceGear</a>, <a href="http://www.openlinksw.com">OpenLink</a> and <a href="http://www.mainsoft.com">Mainsoft</a>.</p>

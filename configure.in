@@ -1,0 +1,79 @@
+AC_INIT(README)
+AC_CANONICAL_SYSTEM
+AM_INIT_AUTOMAKE(monodoc, 1.9)
+AM_MAINTAINER_MODE
+
+AC_PROG_INSTALL
+monodocdir=${libdir}/monodoc
+AC_SUBST(monodocdir)
+
+API_VERSION=1.0.0.0
+AC_SUBST(API_VERSION)
+
+AC_PATH_PROG(GACUTIL, gacutil, no)
+AC_PATH_PROG(RUNTIME, mono, no)
+AC_PATH_PROG(CSC, mcs, no)
+AC_PATH_PROG(CSC2, gmcs, no)
+
+# Check for mcs repo
+AC_CHECK_FILE($srcdir/../mcs, build_cserrors=yes, build_cserrors=no)
+if test "x$build_cserrors" = "xno" ; then
+# If building from a source dist, check to see if cs-errors were included
+        AC_CHECK_FILE(class/cs-errors.zip, build_cserrors=yes, build_cserrors=no)
+fi
+AM_CONDITIONAL(BUILD_CSERRORS, test "x$build_cserrors" = "xyes")
+
+if test "x$GACUTIL" = "xno" ; then
+        AC_MSG_ERROR([No gacutil tool found])
+fi
+AC_SUBST(GACUTIL)
+
+if test "x$GACUTIL" = "xno" ; then
+        AC_MSG_ERROR([No mono found])
+fi
+
+CS="C#"
+if test "x$MCS" = "xno"  ; then
+	AC_MSG_ERROR([No $CS compiler found])
+fi
+
+use_cygpath=no
+monodoc_refdir=$monodocdir
+case "$host" in
+	*-*-mingw*|*-*-cygwin*)
+		monodoc_refdir=.
+		use_cygpath=yes
+		;;
+esac
+AC_SUBST(monodoc_refdir)
+
+AM_CONDITIONAL(USE_CYGPATH, test x$use_cygpath = xyes)
+
+AC_OUTPUT([
+Makefile
+engine/Makefile
+class/Makefile
+extras/Makefile
+tools/Makefile
+man/Makefile
+monodoc.pc
+monodoc
+engine/AssemblyInfo.cs
+scripts/Makefile
+scripts/mdoc
+scripts/mod
+scripts/monodocer
+scripts/monodocs2slashdoc
+scripts/monodocs2html
+scripts/mdassembler
+scripts/mdnormalizer
+scripts/mdvalidater
+scripts/mdcs2ecma
+])
+
+if test "x$build_cserrors" = "xno" ; then
+	echo "---"
+	echo "The sources of the mono compiler (mcs) were not found."
+	echo "To include the COMPILER ERRORS in the documentation,"
+	echo "download the mcs sources and rerun autogen.sh"
+fi

@@ -1,0 +1,13 @@
+This utillity is made to validate the mono class documentation.
+
+compile:
+	make
+
+usage:
+	valdoc ../../AnyDir/AnyDocFile.xml
+
+Note about compilation:
+The Relax Ng schema is injected in to a class that is compiled in to
+the valdoc.exe executable for faster and easier validation of doc
+files.
+

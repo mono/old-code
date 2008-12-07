@@ -1,0 +1,13 @@
+#!/bin/sh
+
+prefix=@prefix@
+exec_prefix=@exec_prefix@
+monodocdir=@monodocdir@
+
+RUNTIME_FLAGS=
+
+if echo "$@" | grep '[-][-]debug' > /dev/null 2>&1 ; then
+	RUNTIME_FLAGS=--debug
+fi
+
+exec @RUNTIME@ $RUNTIME_FLAGS $monodocdir/mdoc.exe "$@"

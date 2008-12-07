@@ -1,0 +1,4 @@
+<?xml version="1.0"?>
+<monodoc>
+  <source provider="ecma" basefile="Mono.GetOptions" path="classlib-mono-getoptions"/>
+</monodoc>

@@ -1,6 +1,0 @@
-@First public release of IronPython, a Python implementation for Mono/.NET.
-
-<p>Jim Hugunin has released <a
-href="http://ironpython.com">IronPython</a>, an implementation of
-Python for Mono and the .NET Framework.  IronPython was released to
-the public under the CPL license.  </p>

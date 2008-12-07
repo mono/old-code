@@ -1,0 +1,6 @@
+0.3:
+	Add automake/autoconf build setup.
+	Add history.
+	Add introductory text.
+	Add monodoc script.
+	Add installation setup.
