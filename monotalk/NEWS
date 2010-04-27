@@ -1,0 +1,11 @@
+before 0.1
+----------
+
+* indexer and source database
+* basic source view
+* fixed FindBar - no more lockups because of Thread.Abort
+* put Find and Source to Notebook
+* put selectors to HPaned, so that user could size them as needed
+* save geometry information on exit
+* display member counts in All/Instance/Class selector
+* source code highligting

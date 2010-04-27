@@ -1,0 +1,64 @@
+2003-02-20  Radek Doulik  <rodo@ximian.com>
+
+	* ObjectBrowser/ObjectBrowser.cs: don't hardcode SourceView font,
+	it could be set from gtkrc
+
+2003-01-23  Gonzalo Paniagua Javier <gonzalo@ximian.com>
+
+	* ObjectBrowser/DemoApp.cs: use [GladeWidget] for window.
+
+	* ObjectBrowser/demoapp.glade: connected delete_event.
+
+2003-01-23  Radek Doulik  <rodo@ximian.com>
+
+	* ObjectBrowser/ObjectBrowser.cs: nest types only under types in
+	the same assembly
+
+2002-12-08  Radek Doulik  <rodo@ximian.com>
+
+	* ObjectBrowser/FindBar.cs: filter SpecialNames
+
+2003-01-15  Gonzalo Paniagua Javier <gonzalo@ximian.com>
+
+	* ObjectBrowser/FindBar.cs: unambiguated Thread to make it compile with
+	latest mcs.
+
+2002-12-03  Gonzalo Paniagua Javier <gonzalo@ximian.com>
+
+	* ObjectBrowser/MemberView.cs: avoid critical message when refreshing
+	the members view.
+
+2002-11-21  Radek Doulik  <rodo@ximian.com>
+
+	* ObjectBrowser/DemoApp.cs: added View/Full Type Names check menu
+	item
+
+	* ObjectBrowser/MemberRecord.cs: added TypeAliases::FullNames
+	field, specifies if to return full type names
+
+2002-11-20  Radek Doulik  <rodo@ximian.com>
+
+	* ObjectBrowser/MemberRecord.cs: use patch from Gonzalo, slightly
+	modified, it introduces short type aliases, I made it work with
+	arrays as well and extracted to TypeAliases class with
+	indexer. Also parameter names are displayed now.
+
+2002-11-19  Radek Doulik  <rodo@ximian.com>
+
+	* ObjectBrowser/DemoApp.cs: load assembly from path as well as by
+	name
+	try LoadFrom before Load, suggested by Gonzalo
+
+	* ObjectBrowser/ObjectBrowser.cs: show only public members by
+	default, set type and flags just to 'all' factory, which forwards
+	it to others
+
+	* ObjectBrowser/MemberRecordFactory.cs: fixed Load methods to
+	detect type == null, implemented AllRecordFactory::Flags property
+
+	* ObjectBrowser/MemberRecord.cs: implemented EventRecord::Label
+	prop, fixed empty constructors to play nice with fixed mcs
+
+	* ObjectBrowser/DemoApp.cs: derive from Gnome.Program, use glade
+	for UI, added View menu with scope changing check and radio items
+

@@ -1,0 +1,14 @@
+To run object browser.exe you need to:
+  make
+  make install
+  mono objectbrowser.exe
+
+Of course you need mono, mcs, and gtk-sharp intalled properly for the above to
+work.
+
+By default, objectbrowser.exe will load and show the contents of corlib.dll, 
+whereever that happens to be for your install.  If you want to browse a 
+different assembly, you can provide it on the command line, such as:
+  mono objectbrowser ~/some/app/i-made.exe
+
+

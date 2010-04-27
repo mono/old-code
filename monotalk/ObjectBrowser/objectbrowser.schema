@@ -1,0 +1,55 @@
+<gconfschemafile>
+    <schemalist>
+
+      <!-- Object Browser application -->
+    
+      <schema>
+        <key>/schemas/apps/monotalk/objectbrowser/width</key>
+        <applyto>/apps/monotalk/objectbrowser/width</applyto>
+        <owner>monotalk</owner>
+        <type>int</type>
+	<default>720</default>
+	<locale name="C"></locale>
+      </schema>
+
+      <schema>
+        <key>/schemas/apps/monotalk/objectbrowser/height</key>
+        <applyto>/apps/monotalk/objectbrowser/height</applyto>
+        <owner>monotalk</owner>
+        <type>int</type>
+	<default>540</default>
+	<locale name="C"></locale>
+      </schema>
+
+      <!-- Object Browser widget -->
+
+      <schema>
+        <key>/schemas/apps/monotalk/objectbrowser/hpaned1position</key>
+        <applyto>/apps/monotalk/objectbrowser/hpaned1position</applyto>
+        <owner>monotalk</owner>
+        <type>int</type>
+	<default>240</default>
+	<locale name="C"></locale>
+      </schema>
+
+      <schema>
+        <key>/schemas/apps/monotalk/objectbrowser/hpaned2position</key>
+        <applyto>/apps/monotalk/objectbrowser/hpaned2position</applyto>
+        <owner>monotalk</owner>
+        <type>int</type>
+	<default>120</default>
+	<locale name="C"></locale>
+      </schema>
+
+      <schema>
+        <key>/schemas/apps/monotalk/objectbrowser/vpaned1position</key>
+        <applyto>/apps/monotalk/objectbrowser/vpaned1position</applyto>
+        <owner>monotalk</owner>
+        <type>int</type>
+	<default>300</default>
+	<locale name="C"></locale>
+      </schema>
+
+    </schemalist>
+
+</gconfschemafile>  
