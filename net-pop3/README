@@ -1,0 +1,24 @@
+Mono.Net.POP3
+Copyright 2005(C) Zac Bowling
+zac@zacbowling.com
+http://zacbowling.com
+
+Licenced under the terms of the MIT X11 licence.
+Read the MIT.X11 for more information.
+
+FEATURES:
+* List support
+* Top support with full message fall back.
+* Decodes headers and messages for you.
+* Delete support
+* Lots of nice helper functions
+* On-demand connection ablity
+* Really simpile and lightweight
+* Uses nothing more then System.Net
+
+KNOWN ISSUE: 
+* None so far :-)
+
+SAMPLES: 
+All of the samples are in the following syntax. 
+> mono <sample>.exe <username> <password> <server IP/Hostname>

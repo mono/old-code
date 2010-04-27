@@ -1,0 +1,6 @@
+2006-07-14  Zac Bowling <zac@zacbowling.com>
+	src/POP3Connect.cs: Patch from Lars Brubaker
+
+2005-03-19  Zac Bowling  <zac@zacbowling.com>
+
+	* * : Intial commit of Mono.Net.POP3
