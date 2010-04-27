@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="utf-8" standalone="no"?>
+<!--This file represents the results of running a test suite-->
+<test-results name="/Users/plasma/src/objc2-sharp/test/objc2-sharp-tests.dll" total="13" failures="0" not-run="0" date="22/01/2008" time="11:05 P">
+  <test-suite name="/Users/plasma/src/objc2-sharp/test/objc2-sharp-tests.dll" success="True" time="0.153889" asserts="0">
+    <results>
+      <test-suite name="TestObjC2" success="True" time="0.140421" asserts="0">
+        <results>
+          <test-suite name="InvokeTests" success="True" time="0.071089" asserts="0">
+            <results>
+              <test-case name="TestObjC2.InvokeTests.InvokeRoundTrip" executed="True" success="True" time="0.014" asserts="1" />
+            </results>
+          </test-suite>
+          <test-suite name="MarshalTests" success="True" time="0.030689" asserts="0">
+            <results>
+              <test-case name="TestObjC2.MarshalTests.MarshalInt32" executed="True" success="True" time="0.003" asserts="1" />
+              <test-case name="TestObjC2.MarshalTests.MarshalIntPtr" executed="True" success="True" time="0.002" asserts="1" />
+              <test-case name="TestObjC2.MarshalTests.MarshalFloat" executed="True" success="True" time="0.004" asserts="1" />
+              <test-case name="TestObjC2.MarshalTests.MarshalDouble" executed="True" success="True" time="0.002" asserts="1" />
+              <test-case name="TestObjC2.MarshalTests.MarshalBool" executed="True" success="True" time="0.001" asserts="1" />
+              <test-case name="TestObjC2.MarshalTests.MarshalObject" executed="True" success="True" time="0.000" asserts="0" />
+            </results>
+          </test-suite>
+          <test-suite name="ReturnTests" success="True" time="0.024051" asserts="0">
+            <results>
+              <test-case name="TestObjC2.ReturnTests.ReturnInt32" executed="True" success="True" time="0.001" asserts="1" />
+              <test-case name="TestObjC2.ReturnTests.ReturnIntPtr" executed="True" success="True" time="0.001" asserts="1" />
+              <test-case name="TestObjC2.ReturnTests.ReturnFloat" executed="True" success="True" time="0.001" asserts="1" />
+              <test-case name="TestObjC2.ReturnTests.ReturnDouble" executed="True" success="True" time="0.001" asserts="1" />
+              <test-case name="TestObjC2.ReturnTests.ReturnBool" executed="True" success="True" time="0.001" asserts="1" />
+              <test-case name="TestObjC2.ReturnTests.ReturnObject" executed="True" success="True" time="0.001" asserts="1" />
+            </results>
+          </test-suite>
+        </results>
+      </test-suite>
+    </results>
+  </test-suite>
+</test-results>

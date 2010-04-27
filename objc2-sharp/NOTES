@@ -1,0 +1,20 @@
+Neat stuff:
+	We use DynamicMethods to directly dispatch to the method stub in the managed class.  This is a shit ton faster than the old marshaller/translator at the expense of a bit of memory.  Memory is "cheap" these days anyways.  We could likely do some caching there (or more than the none that I do).  NSInvocation works now too which allows stuff like this.Call ("someSelector:") which is freaking AWESOME compared to the old objc_msgSend crap.
+
+This list is by no means exhaustive, its just a spew of stuff I keep forgetting that needs to be done:
+
+- Support [Export ("someOtherSelectorName:")]
+- Support static methods
+- Support ivar [in|out] in the class proxy
+- Proper support for NSView subclassers this time
+- Support non-alloc/init constructors and generate their proxies
+
+Thoughts:
+
+- Posing?
+- Overloading methods in a poser?
+- Why is nunit appdomainyness fucking us so hard?
+- nsautoreleasepool that I alloc/init should probably not be retained
+- sdp generate scriptbridge stuff?
+- possibly statically/dynamically generate types from bridge-support?
+- do we want a fallback of the new dynamicmethod stuff that will work with 10.4?  how do we realistically switch runtimes from shitty old code to beautiful new code?
