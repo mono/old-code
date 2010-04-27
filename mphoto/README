@@ -1,0 +1,95 @@
+Sat Oct  5 02:08:30 PDT 2002
+<vladimir@pobox.com>
+
+When thumbnailing lots of images at once with the Db repository, an
+exception may occur similar to:
+
+Unhandled Exception: System.NotImplementedException: The requested feature is not yet implemented
+in <0x0002b> 00 System.Data.OleDb.OleDbCommand:Dispose (bool)
+
+I'm not sure how/when Dispose is getting called here; a quick fix is
+to simply comment out the throw in
+System.Data.OleDb.OleDbCommand:Dispose :)
+
+
+Fri Oct  4 17:57:31 PDT 2002
+<vladimir@pobox.com>
+
+Due to a weird bug in gtk-sharp, you must be using the Default gnome2
+theme to avoid crashes -- run gnome-theme-properties and select
+Default.  This will hopefully be fixed asap.
+
+An eog preview pane is available, but it's sort of a hack atm.  You
+need libeog (eog/libeog) compiled as a shared library, and libeog.so
+somewhere in your library path.  This will be packaged later on.
+Then, build with /define HAVE_LIBEOG
+
+Wed Oct  3 16:55:59 PDT 2002
+<vladimir@pobox.com>
+
+Two different repository modes: database-based and directory-based.
+Directory based mode is read-only; you can't import new images or
+create/delete collections.  Database mode is full-featured, but does
+require sqlite (or another appropriate db).  To use a
+directory-based repository, specify a list of directories on the
+command line, i.e.:
+
+	./mphoto.exe /path/to/dir1 /path/to/dir2 /path/to/dir3
+
+Each directory will show up as a separate collection.  If you use the
+db backend, don't specify any arguments, and mphoto will create the
+sqlite database to use (you still have to set up the libgda/config
+file -- see below).  Then you can use Create Collection/Import
+Directory to create collections and import dirs.
+
+
+---------------------------------------------------------------
+----- old readme contents, ignore, included for archiving -----
+
+Wed Oct  2 04:07:59 PDT 2002
+<vladimir@pobox.com>
+
+Some quick start instructions on setting up a database for use with mphoto.
+
+The datababse name is currently hardcoded to be "mphoto" (main.cs).
+This means your ~/.libgda/config should look something like:
+
+<?xml version="1.0"?>
+<libgda-config>
+  <section path="/apps/libgda/Datasources/mphoto">
+    <entry name="DSN" type="string" value="URI=/home/vladimir/mphoto.db"/>
+    <entry name="Description" type="string" value="Mphoto"/>
+    <entry name="Provider" type="string" value="SQLite"/>
+  </section>
+</libgda-config>
+
+or at least have the releavnt <section> entry.  Change the URI bit in
+the DSN to be wherever you want the database file to live.
+
+Then, create the tables in the database -- this should/will be done from
+mphoto itself sometime soon:
+
+% sqlite /path/to/my/mphoto.db
+SQLite version 2.4.0
+Enter ".help" for instructions
+sqlite> .read mphoto-sqlite.sql			-- included in source
+[some spam here]
+sqlite> .exit
+
+Fire up mphoto.
+
+% mono mphoto.exe
+
+Select File -> New Collection.  Nothing will happen, but some SQL will
+scroll by in the window.  Congratulations, you now have a collection.
+Don't select New Collection again because there is currentlly no way
+to pick which collection you're looking at.
+
+Select File -> Import Directory and type in/select a directory name to
+add images.
+
+It'll churn for a bit (this import needs to happen in a separate
+thread).  Then you'll see the thumbnailer kick off and your images
+will show up.
+
+It will probably segfault when you Quit.  Just ignore this. :)

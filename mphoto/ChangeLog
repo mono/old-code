@@ -1,0 +1,337 @@
+2003-03-11  Miguel de Icaza  <miguel@ximian.com>
+
+	* IconList.cs: Use realize/unrealize to allocate the GCs instead
+	of doing this on every expose.
+
+2003-02-27  Miguel de Icaza  <miguel@ximian.com>
+
+	* IconList.cs (ExposeHandler, DisposeGCs): Dispose the GCs, do not
+	wait for garbage collector.
+
+2003-02-15  Gonzalo Paniagua Javier <gonzalo@ximian.com>
+
+	* EogImageView.cs: added Zoom property.
+	* MphotoToplevel.cs: Support zoom in the Preview tab. Don't call
+	ZoomToFit.
+	* mphoto.glade: added switch_page signal handler.
+
+2003-02-06  Miguel de Icaza  <miguel@ximian.com>
+
+	* DirImageCollection.cs: Make the DirImageCollection the main
+	object used by the directory provider.  Remove duplicated code 
+
+	Add support for storing metadata on a per-directory basis.
+
+	* DirImageRepository.cs: Add support for the searchable keywords
+	interface. 
+
+2002-12-14  Miguel de Icaza  <miguel@ximian.com>
+
+	* IconListPopup.cs: Add back my Copy Image Location feature;   Do
+	not show menu entries in the popup that do nothing.
+
+2002-11-24  Vladimir Vukicevic  <vladimir@pobox.com>
+
+	* DbProvider.cs: recognize type of 'text' as a string.
+
+2002-11-11  Vladimir Vukicevic  <vladimir@pobox.com>
+
+	* MphotoToplevel.cs: add code for selection copy/paste support
+
+	* IconListPopup.cs, IconList.cs: split popup code out of
+	icon list
+
+	* IconList.cs: fixed selection crash
+
+	* CollectionIconListAdapter.cs, SimpleSearchIconListAdapter.cs:
+	add Repo property
+
+	* DbImageCollection.cs: only add images if they're not already in
+	collection
+
+	
+2002-10-25  Miguel de Icaza  <miguel@ximian.com>
+
+	* MphotoToplevel.cs: Avoid crashing if there are no collections.
+
+	* DirImageRepository.cs: Only create DirImageCollections for
+	directories. 
+
+	Do not enter non-directories into the collection.  Coding style
+	changed ;-)
+
+2002-10-20  Vladimir Vukicevic  <vladimir@pobox.com>
+
+	* MphotoToplevel.cs, mphoto.glade: finally start using
+	custom widgets with glade.  This will probably crash
+	with most everyone else's version of gtk#; hopefully
+	that will be fixed soon.
+
+	* IconList.cs: fix multiple selection crash
+
+	* KeywordsWidget.cs, KeywordsTreeView.cs: handle displaying
+	keywords in case of a multiple selection, as well as setting
+	keywords on multiple images.  No way to delete keywords yet.
+	
+	* DbImageRepository.cs: shut up some of the debug spam
+
+2002-10-18  Vladimir Vukicevic  <vladimir@pobox.com>
+
+	* KeywordsWidget.cs, KeywordsTreeView.cs: I am a moron
+
+	* makefile: updated for new keywords widget
+
+	* KeywordsWidget.cs, KeywordsTreeView.cs: new keywords widget
+
+	* IImageRepository.cs: new ImageChanged event type
+
+	* MphotoToplevel.cs: removed old keyword junk, new widget creation
+
+	* CollectionsTreeStore.cs: minor fixes
+
+	* DbImageRepository.cs: emit RepoChanged event when keywords are
+	changed
+
+	* mphoto.glade: use new keywords widget
+	
+	* IconList.cs: fix the annoying out-of-bounds crash
+	
+2002-10-16  Vladimir Vukicevic  <vladimir@pobox.com>
+
+	* ImageItem.cs: duh, referesh thumbail when told to do so
+
+	* DbProvider.cs: catch errors in in VerifyDatabase, and just
+	attempt to initialize db
+
+2002-10-13  Vladimir Vukicevic  <vladimir@pobox.com>
+
+	* mphoto-sqlite.sql: version number bumped to
+	support keywords; forgot in last commit.
+
+	* main.cs: use ~/.mphoto/mphoto.db for database
+	location; also change dbspec to SqliteClient
+	format.
+
+	* ImageInfoTreeStore.cs, ImageInfoTreeView.cs,
+	CollectionsTreeStore.cs, CollectionsTreeViwe.cs:
+	New widget wrappers
+
+	* MphotoToplevel.cs: Removed both tree view creations
+	into their own separate objects.  Glade custom widgets
+	still break us, so add some niceness to put widgets
+	in the frames they belong in.
+
+	* makefile: misc changes and file renames
+
+	* mphoto.glade: some widget rearranging
+
+	* DbImageCollection.cs, DbImageRepository.cs:
+	Add a new "All Images" collection, currently set to
+	special id "0" (which is unused by sqlite when assigning
+	keys)  Need to fix bug so that this collection refreshes
+	when images are imported anywhere (and to allow importing
+	into the collection)
+
+	* DbProvider.cs: Use Mono.Data.SqliteClient
+
+2002-10-10  Vladimir Vukicevic  <vladimir@pobox.com>
+
+	* new features:
+	- keyword tagging/searching, in Db repo only
+	
+	* ISearchableRepository.cs, SimpleSearchIconListAdapter.cs: new
+	files to support keyword searching and viewing of search results
+
+	* DbImageRepository.cs, DbProvider.cs, MphotoToplevel.cs,
+	mphoto.glade: Stuff to support new ISearchableRepository interface
+	as well as UI bits for setting/searching keywords
+
+2002-10-10  U-RIVER\Vladimir Vukicevic  <vladimir@vlad1.com>
+
+	* GtkMphoto.cs: Gtk-only driver for testing
+
+	* IconList.cs: make delegate public (not enforced my mcs)
+
+	* DbImageRepository.cs, DirImageRepository.cs: some csc build
+	fixes, also removed unix-isms, and use a generic DirSep char for
+	dir separators
+
+	* EogImageView.cs: null != IntPtr.Zero
+	
+	* Util.cs: removed unixisms (mkdir, etc)
+
+	* makefile: win32-ification
+
+	* libexif-wrapper.cs: NO_EXIF define to kill exif if we want
+
+2002-10-09  Miguel de Icaza  <miguel@ximian.com>
+
+	* IconList.cs: Add wheel support.
+
+2002-10-09  Duncan Mak  <duncan@ximian.com>
+
+	* MphotoToplevel.cs: 
+	* mphoto.glade: Hook up the DeleteEvent.
+
+2002-10-08  Vladimir Vukicevic  <vladimir@pobox.com>
+
+	* DirImageRepository.cs, DbImageRepository: add
+	NO_MULTITHREAD ifdefs to disable multithreaded thumbnailing.
+
+	* Thumbnailer.cs: catch exif exceptions, also change
+	#if to USE_EXIF_THUMBS
+	
+	* makefile: add commented out CSFLAGS for above
+
+	* makefile, invalid.png: add new png
+
+	* Thumbnailer.cs: typo
+
+	* IIconListAdapter.cs, CollectionIconListAdapter.cs:
+	Add DeleteItem method
+
+	* DbImageRepository.cs, DbImageCollection.cs, DbProvider.cs:
+	Use generic System.Data interfaces for everywhere except
+	initial connection creation
+
+	* DirImageRepository.cs: implement new semantics of passing
+	the saved pixbuf down through the thumbnail callback
+
+	* IconList.cs: add Remove Item to right-click menu
+
+	* Thumbnailer.cs: correct code flow if exif thumbnails get
+	enabled
+
+2002-10-08  Vladimir Vukicevic  <vladimir@pobox.com>
+
+	* New features:
+	- sidebar stays on screen whether you're in preview or browse
+	- browser (icon view) is zoomable
+	- tree columns are resizable (should really a bug fix)
+	- thumbnailing should be faster, as the pixbuf generated is
+	  saved and passed down to the image item (so no round-trip
+	  to/from disk for creating new thumbnails)
+	- selection is now a nice blue color
+
+	* IIconListAdapter.cs, IconList.cs, CollectionIconListAdapter.cs:
+	changed icon list name from "TheIconList" to "IconList"
+
+	* IconList.cs: added Zoom property and associted functions
+
+	* Thumbnailer.cs: disabled exif thumbnails for stability (segfault
+	and memory corruption in libexif if the exif data was corrupted --
+	that's ok, the thumbnails sucked anyway). Passing back the
+	thumbnailed pixbuf for speed, avoiding loading newly-written
+	thumbnail from disk.
+
+	* ImageItem.cs, DbImageRepository.cs: correct handling
+	of thumbnail pixbuf from thumbnailer
+
+	* MphotoToplevel.cs: new handlers for zoom functions; file
+	still needs cleanup
+
+	* ImageInfoStore.cs: catch exception due to bad exif data
+
+2002-10-05  Vladimir Vukicevic  <vladimir@pobox.com>
+
+	* mphoto-sqlite.sql: stripped comments due to libgda bug
+
+	* Thumbnailer.cs: use GdkPixbuf for thumbnailing instead of
+	forking to convert.
+
+	* ImageItem.cs: ref loading.png correctly (and load from
+	assembly, not from dir!)
+
+	* most everything: indentation and naming
+
+	* Thumbnailer.cs, DbImageRepository.cs, DirImageRepository.cs: do
+	exif extraction in thumbnailer thread, as it can be slow
+
+	* EogUiImage.cs: changed/removed some function names to match
+	what's in the .so, not what's in the .h
+
+	* IconList.cs: removed EnsureStyle() call (not necessary)
+
+	* MphotoToplevel.cs: if eog is used, switch to preview pane
+	on double-click and make image fit-to-window.  eog keyboard
+	commands work within the preview area (once focus is given
+	to it when clicked)
+
+	* mphoto.glade: some items renamed
+	
+2002-10-04  Vladimir Vukicevic  <vladimir@pobox.com>
+
+	* MphotoToplevel.cs: HAVE_EOG -> HAVE_LIBEOG typo
+
+	* EogImageView.cs, EogUiImage.cs: wrappers for eog widgets
+
+	* CollectionIconListAdapter.cs: Added some functions for figuring
+	out which imageid is at an index (used for preview)
+
+	* DbImageRepository.cs, DirImageRepository.cs: extract thumbnail
+	from exif if present instead of generating
+
+	* IconList.cs: first pass at double-click handling, including a C#
+	Activated event (not exported through the glib layer).  Also first
+	pass at shift-range selecting, which sort-of kind-of works but has
+	bugs.
+
+	* MphotoToplevel.cs: added support for EOG preview pane.  See
+	README.
+	
+	* README: note regarding Default theme
+
+	* Thumbnailer.cs: fixed some constructor protection levels
+	
+	* DirectoryImageImporter.cs: same.. thanks to Duncan for
+	pointing these out :)
+
+2002-10-03  Vladimir Vukicevic  <vladimir@pobox.com>
+
+	* CollectionIconListAdapter.cs, DbImageCollection.cs, DbImageRepository.cs,
+	DbProvider.cs, DirImageCollection.cs, DirImageRepository.cs,
+	DirectoryImageImporter.cs, IIconListAdapter.cs, IImageCollection.cs,
+	IImageImporter.cs, IImageRepository.cs, IconList.cs, ImageInfo.cs,
+	ImageInfoStore.cs, ImageInfoStoreTwo.cs, ImageItem.cs, Metadata.cs,
+	MphotoToplevel.cs, Thumbnailer.cs, Util.cs, mphoto.glade,
+	mphoto-sqlite.sql
+
+	New framework and other changes.  See README for more information --
+	more docs forthcoming.
+
+
+2002-09-17  Miguel de Icaza  <miguel@ximian.com>
+
+	* IconList.cs (IconList): Fix code compilation
+
+	Use LoadFromResouce to load images to load our internal images.
+
+	* makefile: embed loading.png
+
+2002-09-03  Miguel de Icaza  <miguel@ximian.com>
+
+	* DirectoryProvider.cs: Public method to abort threads.
+
+	New strategy: use thumbnail from exif if available, if not, queue
+	on a thread the image loading.
+
+	* TopLevel.cs: make file exit work.
+	
+	* IconList.cs: Support images of different sizes non matching our size.
+
+2002-09-03  Ravi Pratap  <ravi@ximian.com>
+
+	* lifbexif-wrapper.cs : Cosmetic changes
+	
+
+2002-08-30  Miguel de Icaza  <miguel@ximian.com>
+
+	* libexif-wrapper.cs: Redid.
+
+	* IconList.cs: More fixes.
+
+	* ImageInfo.cs: Import exif data into the status window.
+	
+	* IconList.cs: Reimplemented selection handling.
+	
+

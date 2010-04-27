@@ -1,0 +1,71 @@
+* Bugs
+
+	If you specify file names on the command line it crashes.
+		It probably should add all the "spare" files to an extra collection.
+
+	We should not keep references to images that are off-screen
+
+* Features
+
+	Push images to the web.
+
+	Add metadata/keywords to the DirectoryProvider.
+
+* Web Export
+
+	Upload files with SSH/Script
+
+	Generate PHP/Gallery
+
+* Icon List.
+
+	Right context menu.
+		Copy
+		Move
+		Rotate
+		Flip 
+
+	Resizability.
+
+	Captioning support.
+
+	Selection
+		Shift/Control.
+		Export to Album
+		Export to Web.
+
+* Tool
+
+	Import images.
+
+* Metadata
+	Load, Save
+
+* Build
+	Ship EOG and libexif embedded in this module.
+	Wrap EOG to render the preview
+	Implement progressive rendering with EOG + Progressive Pixbufs
+
+-------------------
+
+* DirectoryImporter
+	- use a thread for importing
+	- use exif query for width/height instead of calling identify
+
+* DbProvider
+	- add lock and command/reader wrapper to make sure that
+	  multiple threads aren't accessing the db at once
+
+* EogPreview
+	- add a widget for EOG preview
+
+* Toplevel
+	- needs major cleanup and splitting into separate ui classes
+	- needs to handle drag-and-drop for importing images and/or directories
+
+* Architecture
+
+	The repository performs too much work, a lot of it should be moved
+	into the collection, there is no real need to have keyword operations
+	or image operations on the repository, they should be part of the
+	collection.
