@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="iso-8859-1"?>
+
+<!-- NAnt build file for AppServerConsole.exe -->
+
+<project name="AppServerConsole" default="build">
+	<target name="build">
+		<csc target="exe" output="../../lib/AppServerConsole.exe" debug="${debug}">
+			<arg value="/nowarn:1595"/>
+			<arg value="/nowarn:0067"/>
+			<arg value="/nowarn:0109"/>
+			<arg value="/nowarn:0169"/>
+			<arg value="/nowarn:0649"/>
+			<arg value="/unsafe"/>
+			<arg value="/noconfig"/>
+			<arg value="/r:System.dll"/>
+			<arg value="/r:System.Xml.dll"/>
+			<arg value="/r:../../lib/Mono.AppServer.Security.dll"/>
+			<arg value="/r:../../lib/Mono.AppServer.Core.dll"/>
+			<sources>
+				<includes name="**/*.cs"/> 
+			</sources>
+			<references>
+				<includes name="corlib.dll"/>
+				<includes name="System.dll"/>
+				<includes name="System.Xml.dll"/>
+				<includes name="../../lib/Mono.AppServer.Security.dll"/>
+				<includes name="../../lib/Mono.AppServer.Core.dll"/>
+			</references>
+		</csc>
+		<copy file="app.config" tofile="../../lib/AppServerConsole.exe.config"/>
+	</target>
+	<target name="clean">
+		<delete file="../../lib/AppServerConsole.exe" failonerror="false"/>
+	</target>
+</project>

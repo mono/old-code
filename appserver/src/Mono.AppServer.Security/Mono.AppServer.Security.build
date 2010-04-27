@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="iso-8859-1"?>
+<project name="Mono.AppServer.Security" default="build">
+	<target name="build">
+		<csc target="library" output="../../lib/Mono.AppServer.Security.dll" debug="${debug}">
+			<references>
+				<includes name="System.dll"/>
+				<includes name="System.Web.dll"/>
+				<includes name="System.Xml.dll"/>
+			</references>
+			<sources>
+				<includes name="**/*.cs"/> 
+			</sources>
+		</csc>
+	</target>
+	<target name="clean">
+		<delete file="../../lib/Mono.AppServer.Security.dll" failonerror="false"/>
+	</target>
+</project>

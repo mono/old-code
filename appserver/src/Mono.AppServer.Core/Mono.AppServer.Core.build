@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="iso-8859-1"?>
+<project name="Mono.AppServer.Core" default="build">
+	<target name="build">
+		<csc target="library" output="../../lib/Mono.AppServer.Core.dll" debug="${debug}">
+			<sources>
+				<includes name="**/*.cs"/> 
+			</sources>
+			<references>
+				<includes name="System.dll"/>
+				<includes name="System.Data.dll"/>
+				<includes name="System.Xml.dll"/>
+				<includes name="System.Web.dll"/>
+				<includes name="System.Runtime.Remoting.dll"/>
+				<includes name="../../lib/Mono.AppServer.Security.dll"/>
+				<includes name="../../lib/ICSharpCode.SharpZipLib.dll"/>
+                <includes name="../../lib/Logger.NET.dll"/>
+			</references>
+		</csc>
+	</target>
+	<target name="clean">
+		<delete file="../../lib/Mono.AppServer.Core.dll" failonerror="false"/>
+	</target>
+</project>

@@ -1,0 +1,201 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN" >
+<HTML>
+	<HEAD>
+		<title>Application Server</title>
+		<meta name="GENERATOR" Content="Microsoft Visual Studio 7.0">
+		<meta name="CODE_LANGUAGE" Content="C#">
+		<meta name="vs_defaultClientScript" content="JavaScript">
+		<meta name="vs_targetSchema" content="http://schemas.microsoft.com/intellisense/ie5">
+	</HEAD>
+	<body leftmargin="0" topmargin="0">
+		<form name="default" method="post" action="appserver.aspx" id="default">
+			<BLOCKQUOTE dir="ltr" style="MARGIN-RIGHT: 0px">
+				<P><FONT face="Verdana" size="2"><FONT face="Verdana" size="2"><FONT face="Verdana" size="2"><FONT face="Verdana" size="2">
+									<TABLE id="Table1" cellSpacing="1" cellPadding="4" width="90%" border="0">
+										<TBODY>
+											<TR>
+												<TD>
+													<P><FONT size="2"><FONT face="Verdana" size="2"><FONT size="5"><STRONG>Application Server</STRONG></FONT><BR>
+															</FONT>
+															<BR>
+															<A href="http://www12.brinkster.com/brianr/ideas/appserver.aspx">Home Page</A><BR>
+															<BR>
+															I've been working on an application server that would host remoting, web, and 
+															other applications for the Mono project.&nbsp;</FONT></P>
+													<P><FONT size="2"> <FONT face="Verdana"><FONT size="3"><FONT size="2"><FONT face="Verdana"><FONT size="3"><STRONG>
+																					Download</STRONG></FONT></FONT></FONT></FONT></FONT></FONT></P>
+													<UL>
+														<LI>
+															<FONT size="2">0.2: Binary &amp; Source Code</FONT>
+															<UL>
+																<LI>
+																	<FONT size="2">Completely Redesigned Administration UI. See icon credit below.</FONT>
+																<LI>
+																	<FONT size="2">Supports deploying &amp; mounting application packages (.zip,.tar)</FONT>
+																<LI>
+																	<FONT size="2">Ability to "publish" applications directory via FTP.&nbsp; You can 
+																		then get, put, etc. to update files remotely.</FONT>
+																<LI>
+																	<FONT size="2">Basic user manager</FONT>
+																<LI>
+																	<FONT size="2">Modified Web Application to use the Mono XSP Server instead of 
+																		Cassini.&nbsp; Cassini is now an optional download (see below).</FONT>
+																<LI>
+																	<FONT size="2">Many bug fixes.</FONT></LI></UL>
+														<LI>
+															<FONT size="2">0.1: Initial&nbsp;alpha release&nbsp;</FONT></LI></UL>
+													<P><FONT size="2"><FONT face="Verdana"><FONT size="3"><STRONG><a name="Features">Features</a></STRONG></FONT>&nbsp;</FONT></FONT>
+													</P>
+													<UL>
+														<LI>
+															<FONT face="Verdana" size="2"><STRONG>Pluggable Application Architecture </STRONG></FONT>
+															<UL>
+																<LI>
+																	<FONT face="Verdana" size="2">Base application class allows an application type to 
+																		be managed by the framework </FONT>
+																<LI>
+																	<FONT face="Verdana" size="2"><STRONG>Web Application</STRONG> class can serve 
+																		ASP.NET pages utilizing the XSP Server developed by Daniel Lopez Ridruejo 
+																		(daniel@rawbyte.com) and Gonzalo Paniagua Javier, Ximian Inc. (<A href="http://www.ximian.com">http://www.ximian.com</A>)
+																	</FONT>
+																<LI>
+																	<FONT face="Verdana" size="2">Alternate Web Server is also availalbe based on the </FONT>
+																	<A href="http://asp.net/Default.aspx?tabindex=7&amp;tabid=41"><FONT face="Verdana" size="2">
+																			Cassini web server</FONT></A><FONT face="Verdana" size="2"> released by 
+																		Microsoft.&nbsp; [ Download ] </FONT>
+																<LI>
+																	<FONT face="Verdana" size="2"><STRONG>FTP Application</STRONG> class serves files 
+																		to FTP clients.
+																		<BR>
+																		The ftp server was adapted from a </FONT><A href="http://www.c-sharpcorner.com/internet/FTPServerinCSharp.asp">
+																		<FONT face="Verdana" size="2">server by Pramod Singh</FONT></A><FONT face="Verdana" size="2">.&nbsp; 
+																		It was ported to the final release of .NET, modified to run outside the GUI, 
+																		and integrated with the security framework. </FONT>
+																<LI>
+																	<FONT face="Verdana" size="2"><STRONG>Remoting Application</STRONG> class hosts 
+																		.NET objects </FONT>
+																<LI>
+																	<FONT face="Verdana" size="2">Extendable for other services: LDAP, POP3, SMTP, etc. </FONT>
+																</LI>
+															</UL>
+														<LI>
+															<FONT face="Verdana" size="2"><STRONG>Web-based Admistration Program </STRONG></FONT>
+															<UL>
+																<LI>
+																	<FONT size="2"><FONT face="Verdana" size="2">The server self-hosts an ASP.NET 
+																			application for managing the applications allowing the settings to be editted. </FONT>
+																	</FONT>
+																<LI>
+																	<FONT size="2">Using icons designed by Jakub "Jimmac" Steiner at(<A href="http://jimmac.musichall.cz/ikony.php3">http://jimmac.musichall.cz/ikony.php3</A>) 
+																		with permission from Miguel(<A href="http://www.ximian.com">http://www.ximian.com</A>)</FONT>
+																	<FONT size="2">
+																		<LI>
+																			<FONT size="2">Add/Edit/Delete Users within the Admin UI</FONT>
+																		<LI>
+																		View the </FONT><A href="appserver-screenshots.aspx"><FONT face="Verdana" size="2">Screenshots</FONT></A>
+								</FONT></LI></UL>
+								<LI>
+									<FONT face="Verdana" size="2"><STRONG>Application Configuration/Installation </STRONG>
+									</FONT>
+									<UL>
+										<LI>
+											<FONT face="Verdana" size="2">All configuration is stored in XML files either 
+												within the application directory (similar to web.config) or in the server 
+												directory. </FONT>
+										<LI>
+											<FONT face="Verdana" size="2">Applications can be installed by placing them in the 
+												"applications" directory, or uploading a installation package (.zip or .tar) 
+												using the interface.&nbsp; This form of </FONT><A href="http://jakarta.apache.org/tomcat/tomcat-4.1-doc/appdev/deployment.html">
+												<FONT face="Verdana" size="2">deployment</FONT></A><FONT face="Verdana" size="2">
+												is similar to Tomcat.</FONT></LI></UL>
+								<LI>
+									<FONT face="Verdana" size="2"><STRONG>Container Application </STRONG></FONT>
+									<UL>
+										<LI>
+											<FONT face="Verdana" size="2">The container currently runs as a console 
+												applications (will run as a service in the future).&nbsp; Similar to COM+/IIS 
+												applications but can be web, ftp, remoting, etc. </FONT>
+										<LI>
+											<FONT face="Verdana" size="2">Publishes remote objects for mangement (unload, 
+												reload, etc.) </FONT>
+										</LI>
+									</UL>
+								<LI>
+									<FONT face="Verdana" size="2"><STRONG>Other features</STRONG> </FONT>
+									<UL>
+										<LI>
+											<FONT face="Verdana" size="2">Integrated Security: maintains list of users and 
+												roles.&nbsp; This is used to secure the applications, FTP access, and is 
+												available for hosted ASP.NET applications. </FONT>
+										<LI>
+											<FONT face="Verdana" size="2">Logging: The container application listens to trace 
+												messages from the hosted applications and logs them into files.&nbsp; These 
+												messages are then viewable within the admin site. </FONT>
+										</LI>
+									</UL>
+								</LI>
+								</UL>
+								<P><FONT size="2"><FONT face="Verdana"><FONT size="3"><STRONG><a name="To-Do">To-Do List</a></STRONG></FONT></FONT></FONT></P>
+								<UL>
+									<LI>
+										<FONT size="2"><STRONG>Administration UI</STRONG></FONT>&nbsp;
+										<UL>
+											<LI>
+												<FONT size="2">Use interface within admin gui instead of classes: </FONT>
+												<UL>
+													<LI>
+														<FONT size="2">IClientSessions (FTP App)</FONT>
+													<LI>
+														<FONT size="2">IWebServices (Web App, Cassini App) </FONT>
+													</LI>
+												</UL>
+											<LI>
+												<FONT size="2">Provide GetProperties() method to return name/value pairs to 
+													display. Change admin app to display this instead of reading properties 
+													directly off objects. (For first tab on application page) </FONT>
+											<LI>
+												<FONT size="2">GetWebServices() method should return WebServiceDescriptor objects </FONT>
+											<LI>
+												<FONT size="2">Add ReadTextFile, WriteTextFile. Update admin GUI to allow editting 
+													of text files.</FONT>
+											<LI>
+												<FONT size="2">Add ReadBinaryFile. Update admin GUI to display image files. - Add 
+													WriteFile. Update admin GUI to allow uploading of files into the application 
+													directories. </FONT>
+											<LI>
+												<FONT size="2">Support multiple roles within the admin GUI - Secure admin GUI with 
+													login page</FONT></LI></UL>
+									<LI>
+										<FONT size="2"><STRONG><FONT size="2"><STRONG><FONT size="2">User Administration</FONT></STRONG></FONT></STRONG></FONT>
+										<UL>
+											<LI>
+												<FONT size="2">Role publishing- Allow installed applications to publish which roles 
+													they support.&nbsp; </FONT>
+											<LI>
+												<FONT size="2">Add SQL-based user storage.&nbsp;</FONT></LI></UL>
+									<LI>
+										<FONT size="2"><STRONG>Container Application</STRONG></FONT>
+										<UL>
+											<LI>
+												<FONT size="2">Run as service or console mode</FONT>
+											<LI>
+												<FONT size="2">Add more configurable option to server's .config file</FONT></LI></UL>
+									</LI>
+								</UL>
+								<P>&nbsp;</P>
+								</TD>
+								<TD vAlign="top">
+									<P><BR>
+										&nbsp;</P>
+								</TD>
+								</TR></TBODY></TABLE>
+								<BR>
+								<BR>
+							</FONT></FONT></FONT></FONT>
+				</P>
+			</BLOCKQUOTE>
+			<P>
+				<FONT face="Verdana" size="2"></FONT>&nbsp;</P>
+		</form>
+	</body>
+</HTML>

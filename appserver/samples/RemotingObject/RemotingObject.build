@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="iso-8859-1"?>
+
+<!-- NAnt build file for RemotingObject.dll -->
+
+<project name="RemotingObject" default="build">
+	<property name="debug" value="false"/>
+
+	<target name="build">
+		<mkdir dir="../../bin/applications/remoteapp1"/>
+		<csc target="library" output="../../bin/applications/remoteapp1/RemotingObject.dll" debug="${debug}">
+			<arg value="/nowarn:1595"/>
+			<arg value="/nowarn:0067"/>
+			<arg value="/nowarn:0109"/>
+			<arg value="/nowarn:0169"/>
+			<arg value="/nowarn:0649"/>
+			<arg value="/unsafe"/>
+			<arg value="/noconfig"/>
+			<arg value="/r:System.dll"/>
+			<arg value="/r:System.Xml.dll"/>
+			<arg value="/r:System.Data.dll"/>
+			<arg value="/r:System.Web.dll"/>
+			<arg value="/r:System.Runtime.Remoting.dll"/>
+			<arg value="/r:../../lib/Mono.AppServer.Core.dll"/>
+			<sources>
+				<includes name="**/*.cs"/> 
+			</sources>
+			<references>
+				<includes name="corlib.dll"/>
+				<includes name="System.dll"/>
+				<includes name="System.Data.dll"/>
+				<includes name="System.Xml.dll"/>
+				<includes name="System.Web.dll"/>
+				<includes name="System.Runtime.Remoting.dll"/>
+				<includes name="../../lib/Mono.AppServer.Core.dll"/>
+			</references>
+		</csc>
+		<copy file="app.config" tofile="../../bin/applications/remoteapp1/app.config"/>
+	</target>
+	<target name="clean">
+		<delete dir="../../bin/applications/RemotingObject" failonerror="false"/>
+	</target>
+</project>

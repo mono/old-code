@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="iso-8859-1"?>
+<!-- NAnt build file for Mono.AppServer -->
+<project name="Mono.AppServer" default="build">
+	<property name="debug" value="true"/>
+
+	<target name="build">
+		<call target="src"/>
+		<call target="samples"/>
+	</target>
+
+	<target name="samples">
+		<copy todir="bin/users">
+			<fileset basedir="samples/users">
+				<includes name="*.user"/>
+			</fileset>
+		</copy>
+		<mkdir dir="bin/applications/WebApp"/>
+		<copy todir="bin/applications/WebApp">
+			<fileset basedir="samples/WebApp">
+				<includes name="*.*"/>
+			</fileset>
+		</copy>
+		<nant basedir="samples/RemotingObject" target="build" buildfile="samples/RemotingObject/RemotingObject.build"/>
+	</target>
+	<target name="src">
+		<mkdir dir="lib"/>
+		<copy file="utils/SharpZipLib/ICSharpCode.SharpZipLib.dll" tofile="lib/ICSharpCode.SharpZipLib.dll"/>
+        <nant basedir="utils/Logger.NET" target="release" buildfile="utils/Logger.NET/Logger.NET.build"/>
+        <copy file="utils/Logger.NET/Logger.NET.dll" tofile="lib/Logger.NET.dll"/>
+		<nant inheritall="true" basedir="src/Mono.AppServer.Security" target="build" buildfile="src/Mono.AppServer.Security/Mono.AppServer.Security.build"/>
+		<nant inheritall="true" basedir="src/Mono.AppServer.Core" target="build" buildfile="src/Mono.AppServer.Core/Mono.AppServer.Core.build"/>
+		<nant inheritall="true" basedir="src/Mono.AppServer.WebApplication" target="build" buildfile="src/Mono.AppServer.WebApplication/Mono.AppServer.WebApplication.build"/>
+		<nant inheritall="true" basedir="src/Mono.AppServer.FTPApplication" target="build" buildfile="src/Mono.AppServer.FTPApplication/Mono.AppServer.FTPApplication.build"/>
+		<nant inheritall="true" basedir="src/Mono.AppServer.AdminApplication" target="build" buildfile="src/Mono.AppServer.AdminApplication/Mono.AppServer.AdminApplication.build"/>
+		<nant inheritall="true" basedir="src/Mono.AppServer.RemotingApplication" target="build" buildfile="src/Mono.AppServer.RemotingApplication/Mono.AppServer.RemotingApplication.build"/>
+		<nant inheritall="true" basedir="src/AppServerConsole" target="build" buildfile="src/AppServerConsole/AppServerConsole.build"/>
+		<call target="deploy.bin"/>
+<!--		<nant inheritall="true" basedir="src/Mono.AppServer.Admin.UI" target="build" buildfile="src/Mono.AppServer.Admin.UI/Mono.AppServer.Admin.UI.build"/>-->
+	</target>
+	<target name="deploy.bin">
+		<mkdir dir="bin"/>
+		<mkdir dir="bin/users"/>
+        <mkdir dir="bin/applications"/>
+		<copy todir="bin">
+			<fileset basedir="lib">
+				<includes name="*.dll"/>
+				<includes name="*.exe"/>
+				<includes name="*.config"/>
+			</fileset>
+		</copy>
+	</target>
+	<target name="clean">
+		<delete dir="lib" failonerror="false"/>
+		<delete dir="bin" failonerror="false"/>
+	</target>
+</project>

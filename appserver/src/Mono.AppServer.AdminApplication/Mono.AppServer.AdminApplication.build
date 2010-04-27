@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="iso-8859-1"?>
+<project name="Mono.AppServer.AdminApplication" default="build">
+	<target name="build">
+		<csc target="library" output="../../lib/Mono.AppServer.AdminApplication.dll" debug="${debug}">
+			<sources>
+				<includes name="**/*.cs"/> 
+			</sources>
+			<references>
+				<includes name="System.dll"/>
+				<includes name="System.Data.dll"/>
+				<includes name="System.Xml.dll"/>
+				<includes name="System.Web.dll"/>
+				<includes name="../../lib/Mono.AppServer.Core.dll"/>
+				<includes name="../../lib/Mono.AppServer.WebApplication.dll"/>
+				<includes name="../../lib/Mono.AppServer.FTPApplication.dll"/>
+			</references>
+		</csc>
+	</target>
+	<target name="clean">
+		<delete file="../../lib/Mono.AppServer.AdminApplication.dll" failonerror="false"/>
+		<delete file="../../bin/Mono.AppServer.AdminApplication.dll" failonerror="false"/>
+	</target>
+</project>

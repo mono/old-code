@@ -1,0 +1,28 @@
+<project default="release">
+  <property name="project.basedir" value="${nant.project.basedir}"/>  
+  <property name="project.basebuilddir" value="${project.basedir}"/>
+  <target name="release">
+    <property name="build.outputdir" value="${project.basebuilddir}"/>
+    <mkdir dir="${build.outputdir}"/>
+    <csc output="${build.outputdir}/Logger.NET.dll" target="library" debug="false" optimize="true" define="RELEASE" checked="true">
+      <references>
+        <includes name="System.Drawing.dll"/>
+      </references>
+      <sources>
+        <includes name="**/*.cs"/>
+      </sources>
+    </csc>
+  </target>
+  <target name="debug">
+    <property name="build.outputdir" value="${project.basebuilddir}"/>
+    <mkdir dir="${build.outputdir}"/>
+    <csc output="${build.outputdir}/Logger.NET.dll" target="library" debug="true" optimize="false" define="DEBUG" checked="false">
+     <references>
+        <includes name="System.Drawing.dll"/>
+      </references>
+      <sources>
+        <includes name="**/*.cs"/>
+      </sources>
+    </csc>
+  </target>
+</project>

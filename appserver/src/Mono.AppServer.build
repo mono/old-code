@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="iso-8859-1"?>
+<project name="Mono.AppServer" default="build">
+	<property name="debug" value="true"/>
+	<target name="build">
+		<mkdir dir="../lib"/>
+		<copy file="../utils/SharpZipLib/ICSharpCode.SharpZipLib.dll" tofile="../lib/ICSharpCode.SharpZipLib.dll"/>
+		<nant inheritall="true" basedir="Mono.AppServer.Security" target="build" buildfile="Mono.AppServer.Security/Mono.AppServer.Security.build"/>
+		<nant inheritall="true" basedir="Mono.AppServer.Core" target="build" buildfile="Mono.AppServer.Core/Mono.AppServer.Core.build"/>
+		<nant inheritall="true" basedir="Mono.AppServer.WebApplication" target="build" buildfile="Mono.AppServer.WebApplication/Mono.AppServer.WebApplication.build"/>
+		<nant inheritall="true" basedir="Mono.AppServer.FTPApplication" target="build" buildfile="Mono.AppServer.FTPApplication/Mono.AppServer.FTPApplication.build"/>
+		<nant inheritall="true" basedir="Mono.AppServer.AdminApplication" target="build" buildfile="Mono.AppServer.AdminApplication/Mono.AppServer.AdminApplication.build"/>
+		<nant inheritall="true" basedir="Mono.AppServer.RemotingApplication" target="build" buildfile="Mono.AppServer.RemotingApplication/Mono.AppServer.RemotingApplication.build"/>
+		<nant inheritall="true" basedir="AppServerConsole" target="build" buildfile="AppServerConsole/AppServerConsole.build"/>
+		<call target="deploy.bin"/>
+		<nant inheritall="true" basedir="Mono.AppServer.Admin.UI" target="build" buildfile="Mono.AppServer.Admin.UI/Mono.AppServer.Admin.UI.build"/>
+	</target>
+	<target name="deploy.bin">
+		<mkdir dir="bin"/>
+		<mkdir dir="bin/applications"/>
+		<mkdir dir="bin/users"/>
+		<copy todir="bin">
+			<fileset basedir="lib">
+				<includes name="*.dll"/>
+				<includes name="*.exe"/>
+			</fileset>
+		</copy>
+	</target>
+	<target name="clean">
+		<nant inheritall="true" basedir="Mono.AppServer.Security" target="clean" buildfile="Mono.AppServer.Security/Mono.AppServer.Security.build"/>
+		<nant inheritall="true" basedir="Mono.AppServer.Core" target="clean" buildfile="Mono.AppServer.Core/Mono.AppServer.Core.build"/>
+		<nant inheritall="true" basedir="Mono.AppServer.WebApplication" target="clean" buildfile="Mono.AppServer.WebApplication/Mono.AppServer.WebApplication.build"/>
+		<nant inheritall="true" basedir="Mono.AppServer.FTPApplication" target="clean" buildfile="Mono.AppServer.FTPApplication/Mono.AppServer.FTPApplication.build"/>
+		<nant inheritall="true" basedir="Mono.AppServer.AdminApplication" target="clean" buildfile="Mono.AppServer.AdminApplication/Mono.AppServer.AdminApplication.build"/>
+		<nant inheritall="true" basedir="Mono.AppServer.RemotingApplication" target="clean" buildfile="Mono.AppServer.RemotingApplication/Mono.AppServer.RemotingApplication.build"/>
+		<nant inheritall="true" basedir="AppServerConsole" target="clean" buildfile="AppServerConsole/AppServerConsole.build"/>
+		<nant inheritall="true" basedir="Mono.AppServer.Admin.UI" target="clean" buildfile="Mono.AppServer.Admin.UI/Mono.AppServer.Admin.UI.build"/>
+	</target>
+</project>

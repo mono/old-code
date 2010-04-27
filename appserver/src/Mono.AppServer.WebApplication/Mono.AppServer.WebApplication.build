@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="iso-8859-1"?>
+<project name="Mono.AppServer.WebApplication" default="build">
+	<target name="build">
+		<csc target="library" output="../../lib/Mono.AppServer.WebApplication.dll" debug="${debug}" defines="WEBTRACE">
+			<sources>
+				<includes name="**/*.cs"/> 
+			</sources>
+			<references>
+				<includes name="System.dll"/>
+				<includes name="System.Data.dll"/>
+				<includes name="System.Xml.dll"/>
+				<includes name="System.Web.dll"/>
+				<includes name="../../lib/Mono.AppServer.Core.dll"/>
+			</references>
+		</csc>
+	</target>
+	<target name="clean">
+		<delete file="../../lib/Mono.AppServer.WebApplication.dll" failonerror="false"/>
+	</target>
+</project>

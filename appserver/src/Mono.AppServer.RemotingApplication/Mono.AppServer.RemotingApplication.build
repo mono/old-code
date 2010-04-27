@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="iso-8859-1"?>
+<project name="Mono.AppServer.RemotingApplication" default="build">
+	<target name="build">
+		<csc target="library" output="../../lib/Mono.AppServer.RemotingApplication.dll" debug="${debug}">
+			<sources>
+				<includes name="**/*.cs"/> 
+			</sources>
+			<references>
+				<includes name="System.dll"/>
+				<includes name="System.Data.dll"/>
+				<includes name="System.Xml.dll"/>
+				<includes name="System.Web.dll"/>
+				<includes name="../../lib/Mono.AppServer.Core.dll"/>
+				<includes name="System.Runtime.Remoting.dll"/>
+			</references>
+		</csc>
+	</target>
+	<target name="clean">
+		<delete file="../../lib/Mono.AppServer.RemotingApplication.dll" failonerror="false"/>
+	</target>
+</project>
