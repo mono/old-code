@@ -1,0 +1,121 @@
+README for Mono SQL Query For GTK# (sqlsharpgtk)
+------------------------------------------------
+
+SQL# is a GUI tool for entering 
+and executing SQL queries that runs on Mono and GTK#.
+
+You have a top paned text editor for entering SQL commands,
+and a bottom panel (either a grid or text viewer) to output
+the results.  There is a notebook tabs for editing different files.
+These files can be loaded and saved.  The results can be saved
+to XML or CSV file.  
+
+It is written in C# and has support for executing queries for
+various ADO.NET data providers:
+
+- PostgreSQL 7.x/8.x (Npgsql)
+- MySQL (ByteFX.Data.MySQLClient)
+- Oracle (8i, 9i, and 10g)
+- Microsoft SQL Server 7/2000/2005
+- Sybase 12.x
+- Firebird SQL
+- SQL Lite
+- ODBC
+- and other providers listsed in sqlsharpgtk.exe.config
+
+This tool complements the SQL# command-line version included with Mono.
+
+Mono can be found at http://www.mono-project.com/
+GTK# can be found at http://gtk-sharp.sourceforge.net/
+
+You can find Mono SQL Query in Mono's Subversion repository as module sqlsharpgtk.
+
+Mono SQL# For GTK# project page is at:
+http://forge.novell.com/modules/xfmod/project/?sqlsharpgtk
+
+Browse the Subversion repository:
+http://svn.myrealbox.com/viewcvs/trunk/sqlsharpgtk/
+
+How to check out from the repository:
+http://www.mono-project.com/contributing/anonsvn.html
+
+Read INSTALL.TXT on how to install sqlsharpgtk.
+
+Use gmcs to build sqlsharpgtk instead of mcs because it needs the NET_2_0 profile.
+
+Using Mono SQL Query For GTK# 
+-----------------------------
+
+Once you started SQL Query, you can connect to a database by selecting 
+the Session menu and click Connect.
+
+A Login Dialog will appear.
+
+Select the Provider to use, such as, PostgreSQL (Npgsql) to connect to 
+a PostgreSQL database via the Npgsql provider.
+
+Enter the Connection String you would use to connect to the database, 
+and click OK.
+
+Connection String formats
+-------------------------
+	
+	Example connection strings for various providers:
+
+Provider:	
+	Microsoft SQL Server via System.Data.SqlClient or Mono.Data.TdsClient provider:
+ConnectionString:
+	Server=DANPC;Database=pubs;User ID=danmorg;Password=freetds
+
+Provider:		
+	PostgreSQL (Npgsql)
+ConnectionString:
+	Server=localhost;Database=test;User ID=postgres;Password=fun2db
+
+Provider:		
+	MySQL (ByteFX MySql)
+ConnectionString:
+	Server=localhost;Database=test;User ID=mysql;Password=mypass
+
+Provider:		
+	ODBC via System.Data.Odbc provider using a DSN named "MSSQLDSN"	I set up 
+	in the Windows control panel's ODBC Data Sources which connects 
+	to Microsoft SQL Server 2000:
+ConnectionString:
+	DSN=MSSQLDSN;UID=danmorg;PWD=freetds
+
+Provider:
+	SQL Lite via Mono.Data.SqliteClient provider which connects to the
+	database file SqliteTest.db; if not found, the file is created:
+ConnectionString:
+	URI=file:SqliteTest.db
+
+Provider:		
+	OLE DB via System.Data.OleDb provider which connects to a PostgreSQL database:
+ConnectionString:
+	Provider=PostgreSQL;Addr=127.0.0.1;Database=rodrigo
+
+Provider:		
+	Oracle via System.Data.OracleClient
+ConnectionString:
+	Data Source=testdb;User ID=scott;Password=tiger
+
+Provider:
+	FirebirdSql via FirebirdSql.Data.Firebird (not included with Mono)
+ConnectionString:
+    Database=C:\FIREBIRD\EXAMPLES\EMPLOYEE.FDB;User=SYSDBA;Password=masterkey;Dialect=3;Server=localhost
+
+List of Data Providers
+----------------------
+
+Provider    Name          Namespace                  Assembly
+=========== ============= ========================== ==========================
+OleDb       OLE DB        System.Data.OleDb          System.Data 
+SqlClient   MS SQL 7/2000 System.Data.SqlClient      System.Data
+Odbc        ODBC          System.Data.Odbc           System.Data
+Sqlite      SQL Lite      Mono.Data.SqliteClient     Mono.Data.SqliteClient
+Sybase      Sybase        Mono.Data.SybaseClient     Mono.Data.SybaseClient
+Oracle      Oracle 8i/9i  System.Data.OracleClient   System.Data.OracleClient
+PostgreSql  NET Postgres  Npgsql                     Npgsql
+MySQL       ByteFX MySQL  ByteFX.Data.MySQLClient    ByteFX.Data
+

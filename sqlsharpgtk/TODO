@@ -1,0 +1,100 @@
+TODO for Mono SQL Query for GTK#
+================================
+
+Connections
+-----------
+
+- add SQL# commands for disconnecting.
+  Helpful for scripting.  
+- every connection needs to have at least one other connection for the schema browser
+  if four connections share the same provider and connection string, then there only
+  needs to have one extra connection for the schema browser
+
+Meta Data Tree View (Left Pane)
+-------------------------------
+
+- only load the child nodes if you expand the node and it has not been
+  expanded before
+- implement refresh 
+- add meta data for:
+  - tables (done)
+  - table columns (done except for sqlite)
+  - views (oracle, sybase, and sql server done)
+  - stored procedures (oracle, sybase, and sql server done) 
+    - Oracle - packages and package bodies (done)
+             - list the functions and procedures in a package (done)
+             - show invalid database objects in different color
+    - Firebird - TODO - does Firebird have stored procedures?
+    - PostgreSQL - TODO
+    - MySQL 5.0 - TODO - one of the new features in MySQL 5.0 is stored prcedures
+  - parameters for stored procedures
+   - Oracle - (done)
+  - triggers
+  - indexes - unque/duplicate, primary keys, foreign keys
+  - constraints
+  - users
+  - sessions (dynamic info)
+  - tablespaces
+  - handle database objects used by a particular DBMS, such as, sequences for Oracle
+- in the future, replace the database browser with chrish01's Mono.Data.Sql
+
+Stored Procedures, Functions, and other stored procedural objects
+-----------------------------------------------------------------
+
+with meta data added to list all stored procedures, then do these:
+- for a stored procedure screen, all execute functions are execute as-is.
+- for oracle:
+       - allow (all or individual) invalid objects to be re-compiled
+       - if saving a stored procedure, and there are errors, show errors in grid.  If
+         user double-clicks on a row in the grid, go to that line and position
+
+SQL Execution Engine
+--------------------
+
+- refactor the SQL execution code into its own assembly.  Use threads and events
+  to handle this
+
+Clipboard (Cut/Copy/Paste)
+--------------------------
+
+- add Edit menu with clipboard cut/copy/paste functionality for the
+  SQL editor
+
+Options Dialg
+-------------
+
+- create an options dialog for user preferences
+
+Variables
+---------
+
+- add the ability for SQL# to set and get variables. Useful for scripting.
+- add support for parameters when executing SQL statements via variables
+- create a new dialog for accepting missing parameters when executing SQL
+
+Find / Replace
+--------------
+
+- create a Find / Replace dialog
+
+Project Files
+-------------
+
+- change the source code files from vs.net default style to mono style
+- refactor the majority of source code in sqlsharpgtk.cs, move this into other classes, such as,
+  the output for csv files vs. normal output can be generalized into output classes.  and refactor
+  the non-GUI code from the GUI code
+
+Data Grid
+---------
+
+- Make the DataGrid a first-class Data Grid like the one found in System.Windows.Forms or
+  System.Web.UI.WebControls, such as, allow the grid to be editable - when a value changes in
+  the grid - update the data source.  Add the approviate events for this.
+  See what vlad and duncan did for managed tree model stuff
+
+Providers
+---------
+- test the following providers, and if they work, add them to the config file
+	- MySql.Data.  Test versions of MySQL 4.x and 5.x
+	- ADP

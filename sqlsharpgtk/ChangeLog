@@ -1,0 +1,493 @@
+2008-02-26  Daniel Morgan <monodanmorg@yahoo.com>
+
+	* configure.ac: use gmcs instead of
+	mcs to build because sqlsharpgtk needs the
+	NET_2_0 prfile.
+	* README: add comment about using gmcs
+
+2007-01-01  Daniel Morgan <monodanmorg@yahoo.com>
+
+	* autogen.sh
+	* configure.ac
+	* Makefile.am
+	* aclocal.m4
+	* NEWS
+	* AUTHORS
+	* browser/Makefile.am
+	* browser/AssemblyInfo.cs.in
+	* sqlsharpgtk/Makefile.am
+	* sqlsharpgtk/AssemblyInfo.cs.in: add files 
+	  for autotools support
+	
+	* Makefile
+	* browser/Makefile
+	* browser/AssemblyInfo.cs
+	* sqlsharpgtk/Makefile
+	* sqlsharpgtk/AssemblyInfo.cs: deleted files
+	   to support autotools
+	
+	* README.TXT --> README
+	* INSTALL.TXT --> INSTALL: renamed files 
+	  to support autotools
+	
+	* TODO.TXT --> TODO: renamed file
+	
+	* sqlsharpgtk/EditorTab.cs: support multiple result 
+	  grids in one execution
+	
+	* MultiResultsGrid.cs: added new widget 
+	  for handling multiple results as multiple grids
+
+    * DataGridColumn.cs: put DataGridColumn 
+      from DataGrid.cs into its own file.
+      and add support for formatting of dates 
+      and right-justification of numeric
+      data types
+      
+    * DataGrid.cs: add support for formatting 
+      of dates and justification of numeric
+      data types
+	
+	* sqlsharpgtk.cs: changes to support one execution
+	  can have multiple results and show all these results
+	  via a new widget that can show multiple grids,
+	  do not load all meta data at once in connection tree view - load them on-demand,
+	  and allow meta data to be refreshed, and fix Tooltips to work
+	
+	* sqlsharpgtk.exe.config.in: app settings file should
+	  explicitly use the fully qualified assembly name of Mono.Data
+	
+	* DbProvider.cs
+	* DbProviderCollection.cs: delete obsolete files
+
+2005-12-26  Daniel Morgan <danielmorgan@verizon.net>
+
+	* browser/MetaProcedureArgument.cs
+	* browser/MetaProcedureArgumentCollection.cs: add new files
+	for listing parameters of a stored procedure
+
+2005-12-26  Daniel Morgan <danielmorgan@verizon.net>
+
+	* browser/MetaProcedureCollection.cs: add method
+	GetProcedures to return an array of MetaProcedure
+	for a given procedure name to support Oracle stored
+	packages which can contain overloaded procedures 
+	and functions
+	
+	* browser/MetaProcedure.cs: modified:
+		- list stored procedure	arguments
+		- provide a way to list procedures and functions in
+			an Oracle package via collection Procedures,
+			a way needed needed to indicate if this
+			instance of MetaProcedure contained Procedures 
+			via property HasProcedures
+	
+	* browser/PostgreSqlMetaData.cs: 
+		- support PostgreSQL 8.0
+		- list views and stored procedures
+		- fix run-time error getting list of tables
+	
+	* browser/OracleMetaData.cs: support 
+	listing of parameters
+	for stored produres and functions 
+	and the functions and procedures
+	in a package, support listing of packages 
+	and listing the functions
+	and procedures in each package
+	
+	* browser/MySqlMetaData.cs: 
+		- support MySQL 5.0
+		- list views and stored procedures (only available in MySQL 5.0)
+		
+	* sqlsharpgtk/DataGrid.cs: support multiple selection mode
+	and add some convience methods and properties	
+		
+	* sqlsharpgtk/AboutDialog.cs: bump up version to 0.4
+	
+	* sqlsharpgtk/sqlsharpgtk.cs: modified
+		- modify Copy for the results DataGrid pop up menu 
+		to be able to paste into a spreadsheet
+		using tab separated values. Comma Separated Values pastes 
+		in a spreadsheet as one big cell.
+		- implement Select All and UnSelect All 
+		for the results DataGrid.  However, getting right-clicking
+		to work right with multiple rows selected is a TODO
+		- set the results DataGrid to support selecting of multiple rows
+		- list parameters (arguments) for each procedure and function
+		- list packages for Oracle, and the functions and procedures in a package,
+		  and the parameters for each function and procedure
+		
+	* sqlsharpgtk/Makefile: flush
+	
+	* sqlsharpgtk/DataSourceConnection.cs: dispose properly
+	
+	* TODO.TXT: update TODO status
+	
+	* Makefile: allow to run sqlsharpgtk
+	
+2005-08-14  Daniel Morgan <danielmorgan@verizon.net>
+
+	* browser/SybaseMetaData.cs: bug fixes
+	
+	* sqlsharpgtk/sqlsharpgtk.exe.config.in: add
+	an example connection string to connect to
+	Sybase ASE database
+
+2005-07-29  Daniel Morgan <danielmorgan@verizon.net>
+
+	* Makefile: use a slash instead of backslash 
+	as directory separator
+
+2005-06-26  Daniel Morgan <danielmorgan@verizon.net>
+
+	Port SQL# For GTK# to Mono 1.1.7 and GTK# 1.9.3 and gtk+ 2.6
+
+	* sqlsharpgtk/FileSelectionDialog.cs
+	* sqlsharpgtk/SqlEditorSharp.cs
+    * sqlsharpgtk/ConnectionString.cs
+	* browser/Makefile
+	* browser/MySqlMetaData.cs
+    * browser/PostgreSqlMetaData.cs
+	* browser/MetaTable.cs: get rid of compiler warnings
+	
+	* browser/SqlMetaData.cs
+	* browser/SybaseMetaData.cs: SQL Server and Sybase should use 
+	xusertype instead of xtype when getting	meta data about table columns
+	
+	* sqlsharpgtk/LoginDialog.cs: port to GTK# 1.9.3 and get rid of warnings
+	  - use ComboBox instead of OptionMenu
+	  
+	* sqlsharpgtk/sqlsharpgtk.cs: port to GTK# 1.9.3 and get rid of warnings
+	  - use ComboBox instead of Combo
+	  
+	* sqlsharpgtk/DataGrid.cs: port to GTK# 1.9.3
+	
+	* EditorTab.cs
+	* QueryMode.cs
+	* BatchExecuteMode.cs
+	* ExecuteOutputType.cs  
+	* OutputResults.cs: added new files by moving items from sqlsharpgtk.cs
+	
+	* ComboHelper.cs: new file for helping getting/setting text for ComboBox
+	
+	* sqlsharpgtk/Makefile: add new files to build, start using 
+	the gtk-sharp-2.0.pc which is required for gtk# 1.9.3 and up, get
+	rid of compile warnings
+	
+	* TODO.TXT
+	* README.TXT
+	* INSTALL.TXT: update text files with latest info
+	
+2005-04-26  Daniel Morgan <danielmorgan@verizon.net>
+
+	* browser/MetaView.cs
+	* browser/MetaViewCollection.cs: add files for
+        meta data for views
+
+	* browser/MetaProcedure.cs
+	* browser/MetaProcedureCollection.cs: meta data
+        for stored procedures
+
+	* browser/SqliteMetaData.cs: meta data for Sqlite
+
+	* sqlsharpgtk/sqlsharpgtk.cs: when logging error 
+        messages to console
+
+
+2005-04-10  Daniel Morgan <danielmorgan@verizon.net>
+
+	* browser/SqlMetaData.cs: add meta data for Views and Stored Procedures and
+	the source so a user can view or edit a stored procedure, sort tables
+	
+	* browser/PostgreSqlMetaData.cs: sort table, add stubs for views and procedures and source
+	
+	* browser/SchemaBrowser.cs: add support for providers 
+	for Mono.Data.SqliteClient and MySQL.Data, handle cases where a schema provider does not implement
+	a function, add support for Views, Stored Procedures, and Source of the Stored Procedures
+	
+	* browser/MySqlMetaData.cs: add stubs
+	
+	* browser/OracleMetaData.cs: sort tables, add support for views, stored procedures,
+	and source of stored procedures, add support to show errors when a stored procedures
+	has compile errors
+	
+	* browser/FirebirdMetaData.cs: add support for views and stored procedures
+	
+	* browser/SybaseMetaData.cs: sort tables, add support for stored procedures and views
+	
+	* browser/IMetaData.cs: add support for views, stored procedures, and source of
+	stored procedure
+	
+	* browser/Makefile: add new .cs files to build for views and procedures, and add
+	Sqlite meta data provider
+	
+	* sqlsharpgtk/DataGrid.cs: flush
+	
+	* sqlsharpgtk/LoginDialog.cs: if a setting is selected, make the setting name show up on
+	the tree view and combo box for connections
+	
+	* sqlsharpgtk/sqlsharpgtk.exe.config.in: add example connection strings for SQL Lite v2.x or v3.x
+	
+	* sqlsharpgtk/AboutDialog.cs: add copyright
+	
+	* sqlsharpgtk/sqlsharpgtk.cs: app name is "Mono SQL# For GTK#", add Copy pop up menu item
+	for the data grid which copies a row to the clipboard as comma separated values, show list
+	of views and stored procedures in meta data tree view, add new menu item to pop up menu 
+	to allow viewing/editing of a stored procedure, added shortcut for F7 key to execute SQL
+	AS-IS, if a setting was selected in the Login Dialog - show it in the tree view and combo as
+	a connection name
+	
+	* sqlsharpgtk/SqlEditorSharp.cs: clean up
+	
+	* TODO.TXT: update TODO file	
+
+2005-01-10  Daniel Morgan <danielmorgan@verizon.net>
+
+	* ChangeLog: fix the my email address
+	
+	* INSTALL.TXT
+	* sqlsharpgtk/DataGrid.cs: flush
+	
+	* sqlsharpgtk/AboutDialog.cs: bump up version to 0.0.2
+	
+	*  sqlsharpgtk/sqlsharpgtk.cs: fixes to get it 
+	to build on Mono 1.1.3 too
+	
+	* browser/Makefile
+	* sqlsharpgtk/Makefile: db browser 
+	has new name Mono.Data.SqlSharp.DatabaseBrowser.dll
+	so it can build and run on Mono 1.1.3
+	
+	* sqlsharpgtk/SqlEditorSharp.cs: flush
+	
+	* browser/MetaTableCollection.cs
+	* browser/IMetaData.cs
+	* browser/MetaTableColumnCollection.cs
+	* browser/FirebirdMetaData.cs
+	* browser/MySqlMetaData.cs
+	* browser/OracleMetaData.cs
+	* browser/PostgreSqlMetaData.cs
+	* browser/SchemaBrowser.cs
+	* browser/SqlMetaData.cs
+	* browser/MetaTable.cs
+	* browser/MetaTableColumn.cs: renamed namespace so sqlsharpgtk
+	can build on Mono 1.1.3 too
+	
+	* browser/SybaseMetaData.cs: added file for Sybase SQL support
+
+2004-12-05  Daniel Morgan <danielmorgan@verizon.net>
+
+	* sqlsharpgtk/sqlsharpgtk.cs: when selecting the Query menu item in 
+	the left pane Tree View, automatically set the data source combo so
+	it will execute the sql against the correct database
+
+2004-12-05  Daniel Morgan <danielmorgan@verizon.net>
+
+	* sqlsharpgtk/sqlsharpgtk.cs: fix right-clicking on
+	data grid causes crash
+
+2004-12-05  Daniel Morgan <danielmorgan@verizon.net>
+
+	* sqlsharpgtk/DataTree.cs: add Clear method
+	
+	* sqlsharpgtk/sqlsharpgtk.cs: implemented handling
+	multiple connections, added SQL# command "CONNECT setting"
+	for connecting to a data source to be used in scripts
+	
+	* sqlsharpgtk/Makefile: added new files to build
+	
+	* sqlsharpgtk/DataSourceConnectionCollection.cs
+	* sqlsharpgtk/DataSourceConnection.cs: added new files
+	
+	* TODO.TXT: updated TODO
+
+2004-12-05  Daniel Morgan <danielmorgan@verizon.net>
+	
+	* sqlsharpgtk/ConnectionString.cs: right-trim a semicolon on the
+	connection string
+	
+	* sqlsharpgtk/LoginDialog.cs: fix the display of the connection
+	string parameters in the app settings grid
+	
+	* sqlsharpgtk/sqlsharpgtk.exe.config.in: add a sample connection
+	string for a SQL Lite database
+	
+	* sqlsharpgtk/FileSelectionDialog.cs
+	* sqlsharpgtk/DataGrid.cs
+	* sqlsharpgtk/DataTree.cs: flush
+	
+	* sqlsharpgtk/sqlsharpgtk.cs: each SQL Editor notebook tab will 
+	have its own results notebook pane (grid or log), added
+	toolbar buttons for file new, open, save, and close
+	
+	* sqlsharpgtk/SqlEditorSharp.cs: after loading a file
+	into the text buffer, set the cursor position to the beginning
+
+	* TODO.TXT: update TODO
+	
+	* INSTALL.TXT: add requirement for Mono.Data.dll
+	
+2004-11-29  Daniel Morgan <danielmorgan@verizon.net>
+
+	* sqlsharpgtk/DataGrid.cs
+	* sqlsharpgtk/ConnectionString.cs
+	* sqlsharpgtk/LoginDialog.cs: enhancements to the Login screen
+	
+	* sqlsharpgtk/sqlsharpgtk.cs: replace option menu with
+	combo for the connected data source, added Help About
+	menu
+	
+	* sqlsharpgtk/Makefile: added AboutDialog to build
+	
+	* TODO.TXT: added TODO file
+	
+	* INSTALL.TXT
+	* README.TXT: updated 
+	
+	* sqlsharpgtk/AboutDialog.cs: added About dialog
+
+2004-11-23  Daniel Morgan <danielmorgan@verizon.net>
+
+	* sqlsharpgtk/sqlsharpgtk.cs: do pending events
+	so the status bar can be updated to reflect
+	its getting meta data
+	
+	* browser/Makefile
+	* browser/SchemaBrowser.cs: added meta data
+	support for FirebirdSql
+	
+	* browser/MySqlMetaData.cs
+	* browser/OracleMetaData.cs: flush
+
+2004-11-21  Daniel Morgan <danielmorgan@verizon.net>
+	
+	* sqlsharpgtk/sqlsharpgtk.cs: output text view
+	should always scroll to end of buffer, and do not
+	execute empty queries (ignore them)
+	
+	* sqlsharpgtk/DataGrid.cs
+	* qlsharpgtk/LoginDialog.cs: flush
+
+2004-11-21  Daniel Morgan <danielmorgan@verizon.net>
+
+	* sqlsharpgtk/DataGrid.cs: enhancements to allow adding
+	new rows and columns instead of via DataLoad or DataBind
+		
+	* sqlsharpgtk/LoginDialog.cs:
+	update the LoginDialog to parse the Mono.Data app settings
+	into a new grid to allow a user to connect via this,
+	updated namespaces to one namespace
+	
+	* sqlsharpgtk/Makefile: add ConnectionString.cs to build
+	
+	* sqlsharpgtk/DataTree.cs
+	* sqlsharpgtk/SqlEditorSharp.cs
+	* sqlsharpgtk/SqlSharpDataAdapter.cs
+	* sqlsharpgtk/FileSelectionDialog.cs: updated namespaces 
+	to one namespace
+	
+	* sqlsharpgtk/sqlsharpgtk.cs: allow right-clicking
+	the output results grid to pop-up a menu,
+	updated namespaces to one namespace
+		
+	* sqlsharpgtk/sqlsharpgtk.exe.config
+	* sqlsharpgtk/sqlsharpgtk.exe.config.in: replace
+	sqlsharpgtk.exe.config with sqlsharpgtk.exe.config.in
+	
+	* sqlsharpgtk/ConnectionString.cs: new class for 
+	parsing connection string
+
+2004-11-21  Daniel Morgan <danielmorgan@verizon.net>
+
+	* sqlsharpgtk/sqlsharpgtk.cs: add menu item to clear log,
+	unselect text when appending text to log, update status
+	when records retrieved
+	
+	* browser/SchemaBrowser.cs
+	* browser/PostgreSqlMetaData.cs (new file)
+	* browser/MySqlMetaData.cs (new file)
+	* browser/Makefile: added support for PostgreSQL and MySQL
+
+2004-11-21  Daniel Morgan <danielmorgan@verizon.net>
+
+	* sqlsharpgtk/DataGrid.cs: do not load the DataGrid 
+	if there is no results.
+	
+	* sqlsharpgtk/sqlsharpgtk.cs
+	* sqlsharpgtk/SqlEditorSharp.cs:
+	- set status bar messages.
+	- execute command - allow execution of one command at the cursor
+	  (execute command). each SQL command separated by a semicolon.
+	- execute script - allow execution of multiple commands one at a
+	  time starting at the cursor. if error occurs, stop executing. 
+	  point the cursor at the last successful or errored command.
+	  each SQL command separated by a semicolon.
+	- bug - if provider does have meta data, do not fail loading
+	  the treeview
+	- simply namespaces
+	
+	* sqlsharpgtk/LoginDialog.cs
+	* browser/MetaTable.cs
+	* browser/MetaTableColumn.cs
+	* browser/SqlMetaData.cs
+	* browser/SchemaBrowser.cs
+	* browser/OracleMetaData.cs
+	* browser/MetaTableColumnCollection.cs
+	* browser/IMetaData.cs
+	* browser/MetaTableCollection.cs: new 
+	namespace SqlSharp.DatabaseBrowser
+
+	* sqlsharpgtk/Makefile	
+	* browser/Makefile: new DLL name SqlSharp.DatabaseBrowser.dll
+
+2004-11-20  Daniel Morgan <danielmorgan@verizon.net>
+
+	in .:
+
+	* Makefile: added build file
+	
+	* browser: new subdirectory
+
+	in sqlsharpgtk:
+	
+	* DataGrid.cs: set the font family
+	in the grid to courier
+	
+	* sqlsharpgtk.cs: use DatabaseBrowser to populate tables
+	and columns in a left paned TreeView, the TreeView can
+	be right-clicked to show a popup menu. One menu items 
+	allows you to query data from a table, use Mono.Data.ProviderFactory
+	and config file sqlsharpgtk.exe.config to load providers,
+	created work-around for bug in gtk text view search where the last
+	character in the buffer is the text being searched
+	
+	* sqlsharpgtk.exe.config: added xml file for app settings based 
+	on the app.settings	file from Mono.Data
+	
+	* LoginDialog.cs: load providers from xml file
+	sqlsharpgtk.exe.config using Mono.Data.ProviderFactory
+	
+	* Makefile: include DataTree.cs and refence assembly Mono.Data 
+	
+	* DataTree: container for a scrollable TreeView/TreeStore
+	
+	in browser:
+	
+	* SchemaBrowser.cs
+	* IMetaData.cs
+	* SqlMetaData.cs
+	* OracleMetaData.cs
+	* MetaTableCollection.cs
+	* MetaTable.cs
+	* MetaTableColumnCollection.cs
+	* MetaTableColumn.cs
+	* Makefile.cs: new DatabaseBrowser.dll
+
+2004-01-11  Daniel Morgan <danielmorgan@verizon.net>
+
+	* ChangeLog: add file ChangeLog to root
+	* INSTALL.TXT: add file for installation instructions 
+	  for SQL# For GTK#
+	* README.TXT: add README file for general info and 
+	  user instructions
+

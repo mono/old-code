@@ -1,0 +1,48 @@
+INSTALL.TXT for SQL Query for Mono and GTK# (sqlsharpgtk)
+-------------------------------------------
+
+To Build sqlsharpgtk.exe 
+
+	cd sqlsharpgtk
+	make	
+
+To Run sqlsharpgtk.exe
+
+	mono sqlsharpgtk.exe
+
+The following are minimum requirements for sqlsharpgtk:
+- GTK# 1.9.3 or higher
+- Mono 1.1.7 or higher
+- gtk+ 2.4 or higher
+
+Additional Assemblies:
+- System.Data.dll 
+- Mono.Data.dll - used for the ProviderFactory
+
+Mono and GTK# can be downloaded from http://mono-project.com/
+See README.TXT for more info.
+
+Provider Factory:  
+
+Either create a config file or 
+add information to your machine.config
+SQL# For GTK# uses the Provider Factory to load the assemblies of the providers.  
+In order to do this, it needs the provider to be listed 
+in sqlsharpgtk.exe.config or your machine.config file.
+
+If you prefer to use your own config file, 
+copy sqlsharpgtk.exe.config.in to sqlsharpgtk.exe.config
+
+
+Works on Windows and Linux.  
+
+It works great on Linux.
+
+For Windows 2000/XP users, get the Combined Mono 1.1.x and GTK# 1.9.x Windows Installer
+from Mono's download page.
+
+I have heard it works on Mac OS X as well.
+
+
+
+

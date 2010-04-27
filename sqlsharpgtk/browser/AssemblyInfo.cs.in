@@ -1,0 +1,15 @@
+//
+// AssemblyInfo.cs.in for project 'sqlsharpgtk'  
+//
+// Authors:
+//	 Daniel Morgan <monodanmorg@yahoo.com>
+//
+using System.Reflection;
+using System.Runtime.CompilerServices;
+
+[assembly: AssemblyVersion("@VERSION@")]
+[assembly: AssemblyTitle ("Mono Database Browswer for SQL# For GTK#")]
+[assembly: AssemblyDescription ("Database Browser")]
+[assembly: AssemblyCopyright ("Copyright (c) 2006 Daniel Morgan")]
+[assembly: AssemblyCompany ("")]
+
