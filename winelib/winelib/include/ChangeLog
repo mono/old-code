@@ -1,0 +1,4 @@
+2004-03-11  Peter Bartok  <pbartok@novell.com>
+
+   * config.h.in: Added from wine
+   * port.h: Added from wine

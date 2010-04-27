@@ -1,0 +1,46 @@
+2004-05-24  Peter Bartok  <pbartok@novell.com>
+   * winelib.c: Added WineGetUnixPath() and WineReleaseUnixPath() functions
+   to allow translation from Windows(DOS) path to unix path no matter what
+   version of wine is used.
+
+2004-05-05  Peter Bartok  <pbartok@novell.com>
+   * winelib.c: Removed references to NtCurrentTeb (which is available only
+   if we're compiling optimized. Instead uses the pthread equivalent func.
+
+2004-04-01  Peter Bartok  <pbartok@novell.com>
+   * winelib.c: Added save/restore of signal actions around wine 
+                initialization (Might have a few too many signals saved,
+                couldn't decide)
+
+2004-03-18  Duncan Mak   <duncan@ximian.com>
+
+   * Makefile.in: Make sure the links are created inside $(DESTDIR), this is
+   necessary for making packages
+
+2004-03-17  Peter Bartok  <pbartok@novell.com>
+   * Makefile.in: Added creation of symlinks for wine dlls on 'install' rule
+
+2004-03-16  Peter Bartok  <pbartok@novell.com>
+   * Makefile.in: Added 'distdir' rule
+
+
+2004-03-13  Peter Bartok  <pbartok@novell.com>
+   * Makefile.in: Added include reference required to find library.h in
+                  Wine installation scenarios where non-default directories
+                  are used
+   * pthread.c: Removed path for library.h include
+   * winelib.c: Removed library.h include
+                Added Alexandre Julliard's suggested TEB reset code 
+   * winelib.exe.spec.c: Updated to have VirtualFree references
+
+
+2004-03-11  Peter Bartok  <pbartok@novell.com>
+
+   * gettid.c: Added from wine
+   * winelib.c: Renamed from wine-sharedlib.c; streamlined code
+   * ChangeLog: Created
+   * winelib.exe.spec.c: Created
+   * pthread.c: Added from wine
+   * pthread.h: Added from wine
+   * Makefile.in: Created
+   * interlocked.c: Added from wine

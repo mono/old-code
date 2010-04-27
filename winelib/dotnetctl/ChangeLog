@@ -1,0 +1,11 @@
+2004-04-12  Sachin Kumar  <skumar1@novell.com>
+   * Makefile.in: Added dotnetctl.h and dotnetbutton.c in DISTFILES 
+2004-03-16  Peter Bartok  <pbartok@novell.com>
+   * Makefile.in: Added 'distdir' rule; fixed winebuild path setup
+
+2004-03-11  Peter Bartok  <pbartok@novell.com>
+
+   * ChangeLog: Created
+   * dotnetctl.dll.spec.c: Created
+   * dotnetctl.c: Created stub sourcefile 
+   * Makefile.in: Created autoconf Makefile to build dotnetctl library

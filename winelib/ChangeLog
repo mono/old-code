@@ -1,0 +1,27 @@
+2004-05-02  Duncan Mak  <duncan@ximian.com>
+
+	* configure.ac (AC_OUTPUT): Remove dotnetctl/Makefile from here
+	as well. configure wouldn't run with the resulting tarball
+	wouldn't run otherwise.
+
+2004-04-30 Peter Bartok <pbartok@novell.com>
+   * Makefile.in: Commented out dotnetctl subdir until I have time to deal with
+   the new wine switches for newer wine versions
+
+2004-03-16 Peter Bartok <pbartok@novell.com>
+   * configure.ac: Fixed AC_INIT arguments
+   * Makefile.in: Added 'dist' and 'distcheck' rules (distcheck still needs work)
+
+2004-03-12 Peter Bartok <pbartok@novell.com>
+   * configure.ac: Removed wine_uuid check
+   * Make.rule.in: Removed wine_uuid reference
+
+
+2004-03-11  Peter Bartok  <pbartok@novell.com>
+
+   * ChangeLog: Created
+   * configure.ac: Created
+   * Makefile.in: Changed to have rules for building subdirs
+   * Make.rules.in: Created
+   * aclocal.m4: Partially copied from wine
+   * autogen.sh: Copied from mono and stripped down
