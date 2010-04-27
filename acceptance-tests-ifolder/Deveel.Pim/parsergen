@@ -1,0 +1,3 @@
+#!/bin/sh
+java -classpath csharpcc/csharpcc.jar csharpcc -OUTPUT_DIRECTORY=Deveel.Pim Deveel.Pim/iCalParser.csc
+java -classpath csharpcc/csharpcc.jar csharpcc -OUTPUT_DIRECTORY=Deveel.Pim Deveel.Pim/vCardParser.csc

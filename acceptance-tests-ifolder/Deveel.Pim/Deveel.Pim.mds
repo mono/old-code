@@ -1,0 +1,16 @@
+<Combine name="Deveel.Pim" fileversion="2.0">
+  <Configurations active="Debug">
+    <Configuration name="Debug" ctype="CombineConfiguration">
+      <Entry build="True" name="Deveel.Pim" configuration="Debug" />
+    </Configuration>
+    <Configuration name="Release" ctype="CombineConfiguration">
+      <Entry build="True" name="Deveel.Pim" configuration="Debug" />
+    </Configuration>
+  </Configurations>
+  <StartMode startupentry="Deveel.Pim" single="True">
+    <Execute type="None" entry="Deveel.Pim" />
+  </StartMode>
+  <Entries>
+    <Entry filename="./Deveel.Pim.mdp" />
+  </Entries>
+</Combine>
