@@ -1,0 +1,8 @@
+assembly = "bake.exe"
+sources = wildcard ("src/Bake/*.boo")
+
+booc_target (assembly, sources, { "debug" : true })
+
+target ("clean") do:
+    delete (wildcard ("*.exe*"))
+

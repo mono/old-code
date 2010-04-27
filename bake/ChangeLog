@@ -1,0 +1,22 @@
+2008-01-25  Aaron Bockover  <abockover@novell.com>
+
+	* src/Bake/Exec.boo: Define a sweet _ exec command that munges everything
+	together; make exec return stdout
+
+	* src/Bake/Files.boo: Allow delete to take params of object, convert
+	to a list and flatten; added ch_ext, changes an extension on a list
+	of files
+
+	* src/Bake/Lang.boo: Added each and flatten methods
+
+	* src/Bake/Paths.boo: Properly escape '.' as '\.'
+
+	* src/Bake/PkgConfig.boo: Added basic pkg-config support
+
+	* src/Bake/Target.boo: Added make % style rule support for expanding
+	to multiple targets based on dependency input
+
+2008-01-22  Aaron Bockover  <abockover@novell.com>
+
+	* Bake: initial project checkin
+

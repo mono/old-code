@@ -1,0 +1,23 @@
+Bake is a make replacement written in Boo. Bakefiles replace Makefiles, and
+are also written in Boo. The concept of targets, dependencies, and actions
+make up the core of Bake, just like make.
+
+Bake has a full function library including many helper functions and targets 
+for building Mono/.NET projects.
+
+
+Building Bake
+=============
+
+Bake is able to build itself, but Bake is simple enough that typically we
+just build it with make to avoid bootstrap overhead. Therefore, to build
+Bake, just type "make".
+
+To bootstrap Bake however, run "make", and then source in the bakestrap file
+into BASH:
+
+$ make
+$ . bakestrap
+$ touch src/Bake/Bake.boo
+$ bake
+

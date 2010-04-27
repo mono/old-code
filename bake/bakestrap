@@ -1,0 +1,7 @@
+# Source this file into your BASH environment
+# $ . bakestrap
+# Then you will be able to run "bake"
+
+bakedir=$PWD
+alias bake='mono --debug $bakedir/bake.exe'
+
