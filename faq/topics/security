@@ -1,0 +1,62 @@
+* Security
+
+<p>Q: WebRequest.Create("https://www.anywhere.com"); throws an exception
+
+	<p>That's probably because you do not trust the site you're connecting
+	to. Note that a default installation of Mono doesn't trust anyone!
+
+	<p>You can confirm this by using the <a href="http://svn.myrealbox.com/source/trunk/mcs/class/Mono.Security/Test/tools/tlstest/tlstest.cs">tlstest.exe</a>
+	tool.<code>
+	<br>mcs tlstest.cs /r:System.dll /r:Mono.Security.dll
+	<br>mono tlstest.exe https://www.anywhere.com</code>
+
+	<p>There are two alternatives to solve this problem:
+	<ul>
+		<li>Implement a <code>ICertificatePolicy</code> class. An 
+		example is available in the <code>tlstest.cs</code> source
+		code. By doing this you can override the normal results of 
+		the certificate validation (e.g. accepting an untrusted
+		certificate). However you are now responsible of applying
+		your own trust rules for your application.
+
+		<li>Use the <code>certmgr.exe</code> tool (included in Mono)
+		to add the root certificates into the Mono <b>Trust</b> store.
+		Every SSL certificate signed from this root will then be
+		accepted (i.e. no thrown exception) for SSL usage (for all
+		Mono applications running for the user or the computer -
+		depending on the certificate store where the certificate was
+		installed).
+	</ul>
+
+
+<p>Q: Why is SSL using certificates ?
+
+	<p>SSL encrypts data - but encrypting data to an untrusted server 
+	doesn't improve much security. You need to know who is on the other 
+	side of the socket! (e.g. think about a man-in-the-middle attack 
+	between you and your bank). 
+
+	<p>SSL use X.509 certificates for the purpose of binding a public key
+	with an entity (in this case the web server). The server gets it's
+	certificate from a certificate authority (CA) who certify that the
+	key belongs to it's owner. Finally you must <b>trust</b> that CA to 
+	do it's job properly.
+
+
+<p>Q: Why doesn't Mono includes root certificates from X, Y and Z ?
+
+	<p>There are two main reasons not to include "defaults" root 
+	certificates in Mono.
+
+	<ol>
+		<li>Digital certificates are, like many digital files, 
+		copyrightable. This means that <b>there are</b> restrictions 
+		on how the roots certificates can be distributed.
+
+		<li>We aren't in the business to decide on <b>who <u>you</u>
+		are going to trust</b>. Certificates Authorities exists all
+		around the world. The ones best suited to you aren't 
+		necessarily the ones best suited for everybody else and having
+		a terribly long list of "trusted" roots isn't a very secure 
+		solution.
+	</ol>

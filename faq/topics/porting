@@ -1,0 +1,62 @@
+* Porting
+
+<p>Q: Are Mono binaries compatible with binaries produces for .NET?
+
+	<p>Mono binaries are compatible with the binaries produced by
+	tools that target the .NET Framework.
+
+	<p>There is one limitation though: the .NET Framework supports
+	an incremental compilation mode.  This file format is not
+	currently supported by Mono (The Mono runtime will report that
+	the "#~ heap is not supported).  To fix this, you should
+	recompile your application without the incremental feature
+	turned on.  
+
+<p>Q: I have a Visual Studio solution, how can I compile it on Unix using Mono?
+
+	<p>Use the <a
+	href="http://forge.novell.com/modules/xfmod/project/?prj2make-sharp">prj2make</a>
+	software: this software will produce makefiles.  
+
+	<p>After running prj2make, type `make' to build your programs.
+
+<p>Q: Are there plans to support the incremental file format?
+
+	<p>Yes, it is on our list of pending tasks.  
+
+	<p>Using the incremental mode also produces larger executables
+	than you need, so you might want to turn it off anyways.
+
+<p>Q: Do I need to recompile my applications with the Mono compiler to run them on Linux/MacOS/Solaris?
+
+	<p>There is no need to recompile your applications with the
+	Mono compilers to target Mono.  You can just copy your
+	binaries from a Windows machine to a Linux machine to run the
+	executable.
+
+<p>Q: Will you support the PDB debugging file format?
+
+	<p>The PDB file format is not documented, and it is hence not
+	possible for Mono to consume debugging information that comes
+	from the PDB format.
+
+	<p>If debugging information for stack traces, or using the
+	Mono debugger is important to you, you will have to recompile
+	your applications using the Mono compilers.
+
+<p>Q: Will you support the an API that is very windows-specific?
+
+	<p>A: This is decided on a case-by-case basis.  Some
+	APIs that are specific to Windows are worth supporting in
+	Mono, to ensure both-way compatibility (for example, file
+	sharing modes).
+
+	<p>But we can not emulate every possible Win32-ish API on
+	Linux, as not only it might not make sense to emulate it, but
+	we might also not provide the sensible default for the
+	particular domain of your application.
+
+	<p>So in these cases it is much better to adapt your
+	application to take advantage of Windows features on Windows,
+	and Linux features on Linux.
+

@@ -1,0 +1,21 @@
+
+
+* Web Services Enhancements
+
+<p>Where can I get Web Services Enhancements (WSE) for Mono?
+
+	<p>A: WSE is not available for Mono, and currently we do not
+	have plans on implementing the WSE.
+
+	<p>There are two implementations of WSE today: WSE1 and WSE2,
+	they have different APIs and they are regarded as stop-gap
+	solutions until Indigo comes out.
+
+	<p>In addition, there is also rumor that a WSE3 implementation
+	would come out, and it is not clear whether the API will be
+	compatible or not.  
+
+	<p>At this point the Mono team is not currently looking at
+	implementing any of these APIs, but we would welcome any
+	contributions in this area.
+

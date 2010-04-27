@@ -1,0 +1,38 @@
+* EnterpriseServices
+
+<p>Q: Does Novell have intentions on providing EnterpriseServices?
+
+	<p>At this point it seems like EnterpriseServices on the
+	Windows world will remain only a backwards-compatible API, and
+	developers will be encouraged to move to the new Indigo
+	platform.
+
+	<p>So at this point, it is not likely that we will spend any
+	cycles supporting EnterpriseServices on Mono.
+
+<p>Q: What about the future?
+
+	<p>One possible implementation path would be to implement
+	first Indigo, or something equivalent to Indigo, and then
+	build on top of this the API exposed by EnterpriseServices. 
+		
+<p>Q: Is anyone working on EnterpriseServices?
+
+	<p>At various times various volunteers have tried to implement
+	the EnterpriseServices API, but so far nobody has completed
+	such a task.
+
+<p>Q: I really need something like EnterpriseServices, what can I do?
+
+	<p>You could either join an existing effort to implement
+	EnterpriseServices, or you might want to look at different
+	solutions available.
+
+	<p>You might also want to look at third party products on this
+	space:
+
+	<ul>
+		<li><a href="http://www.zeroc.com">ZeroC</a> sells Ice
+		distributed platform, although it might not do everything you
+		want.
+	</ul>

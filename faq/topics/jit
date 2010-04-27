@@ -1,0 +1,41 @@
+* JIT engine
+
+<p>What platforms are currently supported by the JIT?
+
+	<p>The JIT currently supports the following platforms:
+
+	<p>32 bit platforms:
+
+	<ul>
+		<li>x86 
+		<li>SPARC
+		<li>PowerPC
+		<li>S390
+	</ul>
+
+	<p>64 bit platforms:
+	<ul>
+		<li>SPARC v9.
+		<li>x86-64.
+	</ul>
+
+	<p>Mono comes with an interpreter as well that works on the
+	above platforms and in addition on the StrongARM and HPPA
+	architectures.  The interpreter is not as fast as the JIT
+	engine. 
+
+<p>Will you support dynamic recompilation of "hot" methods?
+
+	<p>Although this is not currently on the plans, the various
+	bits that would be necessary to support dynamic recompilation
+	of hot methods is being worked on:
+
+	<ul>
+		<li>A new method-call trampoline system that will
+		allow us to replace the method on the fly.
+
+		<li>A non-intrusive runtime profiler (available <a
+		href="http://lists.ximian.com/archives/public/mono-devel-list/2004-August/007566.html">here</a>)
+		that will allow the identification of hot methods with
+		minimal overhead.
+	</ul>
