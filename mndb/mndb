@@ -1,0 +1,5 @@
+#!/bin/bash
+
+export MONO_INSIDE_MDB=1
+
+exec gdb --quiet -x mndb.gdbinit --args mono $@
