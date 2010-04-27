@@ -1,0 +1,14 @@
+This is (yet another) OpenGL binding to C#.  This one follows the work of the 
+GTK# project.  We use the C header files to create a little C# library that
+P/Invokes the system GL library.
+
+This library contains bindings to GL and glut.  An example app is in gears.cs.
+
+This isn't fancy at all, but it works for me.  Should also work for any madman
+who wants to port Quake2 to C#.
+
+Contact crichton@gimp.org for more info.
+
+Generator shamelessly ripped off from Gtk#, so it's under the GPL.
+
+gl.cs and glut.cs are LGPLed.  glut.cs is by Mark Steele.
