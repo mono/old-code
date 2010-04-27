@@ -1,0 +1,7 @@
+2005-08-30  Florian Gross  <flgr@ccan.de>
+
+	* Fixed Makefile to work correctly on BSD style platforms
+
+2005-08-18  Florian Gross  <flgr@ccan.de>
+
+	* Everything: Set svn:eol-style to native
