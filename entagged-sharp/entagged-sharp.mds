@@ -1,0 +1,16 @@
+<Combine name="entagged-sharp" fileversion="2.0">
+  <Configurations active="Debug">
+    <Configuration name="Debug" ctype="CombineConfiguration">
+      <Entry configuration="Debug" build="True" name="entagged-sharp" />
+    </Configuration>
+    <Configuration name="Release" ctype="CombineConfiguration">
+      <Entry configuration="Release" build="True" name="entagged-sharp" />
+    </Configuration>
+  </Configurations>
+  <StartMode startupentry="entagged-sharp" single="True">
+    <Execute type="None" entry="entagged-sharp" />
+  </StartMode>
+  <Entries>
+    <Entry filename="./entagged-sharp.mdp" />
+  </Entries>
+</Combine>

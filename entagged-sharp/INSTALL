@@ -1,0 +1,20 @@
+
+   ***************************************************************** 
+   * NOTICE: entagged-sharp is not being packaged at the moment    *
+   * for installation into the GAC. When more application          *
+   * consumption is achieved, and the API can be frozen, and       *
+   * the library may be installed in the GAC.                      *
+   *                                                               *
+   * IF YOU ARE A DEVELOPER, and would like to use the             *
+   * entagged-sharp code in your application, please copy the      *
+   * source tree/build system parts into your project, so your     *
+   * application will not break, and package maintainers will      *
+   * have easier jobs :)                                           *
+   *                                                               *
+   * Alternatively, you can link against entagged-sharp.dll and    *
+   * copy it into your application's directory.                    *
+   *                                                               *
+   * For more information, please read the guidelines at:          *
+   * http://www.mono-project.com/Guidelines:Application_Deployment *
+   ***************************************************************** 
+

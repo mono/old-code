@@ -1,0 +1,410 @@
+2006-08-25  Aaron Bockover  <abock@gnome.org>
+
+	* DEPRECATED: Do not use entagged-sharp for new code as it is deprecated
+	in favor of taglib-sharp
+
+2006-04-24  Daniel Drake  <dsd@gentoo.org>
+
+	* src/Ogg/OggFileReader.cs: Add new audio/x-vorbis+ogg mimetype, noted
+	by Stefan Glasenhardt on the Ubuntu bugzilla.
+
+2006-04-13  James Willcox  <snorp@snorp.net>
+
+	* src/Mp3/Util/Id3frames/Id3Frame.cs: correctly read UTF-16 tags
+
+2006-03-15  Aaron Bockover  <aaron@abock.org>
+
+	* src/EncodingInfo.cs: Handle invalid integer durations
+
+2006-03-15  Daniel Drake  <dsd@gentoo.org>
+
+	* entagged-sharp: Remove all in-file CVS $Log sections
+	* src/Util/Utils.cs: Fix storing of null values in
+	FieldListToStringArray(). Noted by Debajyoti Bera.
+
+2006-03-10  Daniel Drake  <dsd@gentoo.org>
+
+	* src/Tag.cs: Return null rather than "Unknown" for genres. Patch from
+	Debajyoti Bera.
+
+2006-02-19  Aaron Bockover  <aaron@abock.org>
+
+	* src/Mpc/MpcFileReader.cs: Added application/x-apetag as a mime type
+
+2006-01-14  Aaron Bockover  <aaron@aaronbock.net>
+
+	* src/Ogg/Util/OggInfoReader.cs: Fixed bitrate calculation oversight
+	by using duration.TotalSeconds (was duration.Seconds, which is remainging)
+
+2005-12-11  Daniel Drake  <dsd@gentoo.org>
+
+	* tests/samples/sample.wma: A tagged WMA sample thanks to Andy Carvell.
+	* tests/EntaggedTest.cs: Add tests for WMA file.
+
+2005-12-05  Aaron Bockover  <aaron@aaronbock.net>
+
+	* src/Exceptions/UnsupportedFormatException.cs: Exception to throw when
+	a reader doesn't exist for a given mimetype
+	* src/AudioFileIO.cs: Throw UnsupportedFormatException for a mimetype
+	that doesn't have a reader, allows differentiation between a format not
+	supported and a file that could not be parsed
+	* src/Makefile.am: Added UnsupportedFormatException.cs
+	* src/Exceptions/CannotReadException.cs: house cleaning
+	* entagged-sharp.mdp: Updated MonoDevelop project
+
+2005-12-03  Raphael Slinckx  <rslinckx@cvs.gnome.org>
+
+	* src/Mp3/Util/Id3frames/CommId3Frame.cs:
+	Fix some corner cases with comment frames in ID3
+
+2005-11-30  Aaron Bockover  <aaron@aaronbock.net>
+
+	* src/EncodingInfo.cs: Removed LENGTH initialization from content table
+	* src/Asf/Util/AsfInfoReader.cs: correct duration parsing bug
+
+2005-11-29  Aaron Bockover  <aaron@aaronbock.net>
+
+	* tests/EntaggedTest.cs: Added tests to verify (TimeSpan)Duration 
+	* src/Mpc/Util/MpcInfoReader.cs:
+	* src/Mp3/Util/Mp3InfoReader.cs:
+	* src/Mp4/Util/Mp4TagReader.cs:
+	* src/Flac/Util/FlacInfoReader.cs:
+	* src/Ape/Util/MonkeyInfoReader.cs:
+	* src/Asf/Util/AsfInfoReader.cs:
+	* src/Ogg/Util/OggInfoReader.cs: Changed all info readers to set the
+	EncodingInfo.Duration property as a TimeSpan
+	* src/EncodingInfo.cs:
+	* src/AudioFile.cs:
+	* src/AudioFileContainer.cs: The Length property is now called Duration
+	and its type is now System.TimeSpan; this allows for potentially higher
+	resolution and normalizes all values to the same time representation
+
+2005-11-28  Aaron Bockover  <aaron@aaronbock.net>
+
+	* src/extract-mime-types.sh: fixed minor bug 
+	* src/Asf/AsfFileReader.cs: Added video/x-ms-asf as supported mimetype
+	because gnome-vfs is dumb
+
+	* src/AudioFile.cs: Minor API changes adjusting variable names to conform
+	to .NET framework guidelines
+	* src/Asf/{*.cs,Util/*.cs}: Affixed update copyright headers
+	* src/Mp4/Mp4FileReader.cs:
+	* src/Mp4/Util/Mp4InfoReader.cs:
+	* src/Mp4/Util/Mp4TagReader.cs: Clean up, reformat, fixed a couple minor
+	issues, petty stuff
+
+2005-11-28  Aaron Bockover  <aaron@aaronbock.net>
+
+	* src/Mp4/Util/Mp4TagReader.cs: hack to handle potentially corrupt MP4 
+	containers (see BGO #320038) where seeking may get "stuck", creating an
+	infinite loop. May need to investigate this more, or maybe it doesn't
+	really matter
+
+2005-11-28  Aaron Bockover  <aaron@aaronbock.net>
+
+	* src/Tag.cs: Removed stray Console.WriteLine
+	* tests/EntaggedTest.cs: Restored dsd's NUnit tests, they were overwritten
+	on accident; updated for slightly changed API
+
+2005-11-27  Aaron Bockover  <aaron@aaronbock.net>
+
+	* src/Mp3/Util/Id3v1TagReader.cs: Use ValidateUtf8() when reading tags
+	to see if the tag can be parsed as UTF-8 or fall back on ISO-8859-1
+	* src/Util/Utils.cs: Added the UnicodeValidator class here
+	* src/EncodingInfo.cs: Ugh, reversed the previous patch... that class
+	really doesn't belong in this file ;)
+
+2005-11-27  Aaron Bockover  <aaron@aaronbock.net>
+
+	* src/EncodingInfo.cs: UnicodeValidator class to validate a string as
+	UTF-8; by Ruben Vermeersch
+
+2005-11-24  Aaron Bockover  <aaron@aaronbock.net>
+
+	* vacuum.cs: Runs make maintainer-clean and removes extra files
+	* Makefile.am: cleaned up, don't force removal of some files on distclean
+	* src/extract-mime-types.sh: Shell script for extracting supported 
+	MimeTypes from source files
+	* src/configure.ac: Version 0.2.0; output src/AssemblyInfo.cs
+	* src/AssemblyInfo.cs.in: Added Assembly Info class, generated by configure
+	* src/AudioFileIO.cs:
+	* src/Util/AudioFileReader.cs:
+	* src/Util/AudioFileWriter.cs: Updated to reflect class renaming (AudioFile
+	to AudioFileContainer)
+	* src/AudioFile.cs: AudioFile is now the top-level API class (was 
+	AudioFileWrapper)
+	* src/AudioFileContainer.cs: A container class that holds the encoding
+	info and tag info objects (was AudioFile)
+	* src/AudioFileWrapper.cs: Removed, now AudioFile.cs
+	* src/entagged-sharp.mdp: Updated to reflect renaming of files
+
+2005-11-24  Aaron Bockover  <aaron@aaronbock.net>
+
+	* src/Ogg/OggTag.cs: Map the License vorbis field to CommonField.License
+	* src/Mp3/Id3Tag.cs: Added map for TCOP as a License CommonField
+	* src/Tag.cs (Tag.AddCommonFieldAlias): Added support for 
+	CommonField aliasing; Added License Common Field
+	* src/Util/*.cs:
+	* src/*.cs: Basic house cleaning, formatting, etc
+	* entagged-sharp.mdp:
+	* entagged-sharp.mds: Updated MonoDevelop solution/project files
+
+2005-11-23  Aaron Bockover  <aaron@aaronbock.net>
+
+	* src/Makefile.am: Removed reference to src/Asf/Util/Utils.cs
+	* src/Asf/Util/Utils.cs (ReadGUID): Moved to GUID class
+	* src/Asf/Util/GUID.cs: Cleaned up, removed pointless hashtable,
+	rewrote most utility functions for efficiency and to take advantage
+	of C# language features
+	* src/Asf/Util/AsfTagReader.cs:
+	* src/Asf/Util/AsfInfoReader.cs: Cleaned up, conform to C#/.NET
+	coding conventions, minor optimizations and fixes
+	* src/Asf/AsfFileReader.cs: tweaked and cleaned to build against changes
+	to src/Asf/Utils/*.cs
+
+2005-11-23  Aaron Bockover  <aaron@aaronbock.net>
+
+	* src/Asf/Util/AsfTagReader.cs (ReadFixedSizeUTF16Str): Optimize the 
+	reader by reducing number of byte array copies, fixed an index out of
+	range exception, instantiate a static readonly UnicodeEncoding object,
+	and use UnicodeEncoding.GetString() to perform the encoding
+	
+	* src/Asf/AsfFileReader.cs: Added audio/x-ms-wma SupportedMimeType
+
+2005-11-23  Aaron Bockover  <aaron@aaronbock.net>
+
+	* src/Asf/*: Added ASF/WMA parser by Christian Laireiter
+	* src/Makefile.am: Added build rules for src/Asf/*
+
+2005-11-20  Raphael Slinckx  <rslinckx@cvs.gnome.org>
+
+	* src/Util/ByteBuffer.cs:
+	Fixes bug #321844, using length instead of 0-starting index
+
+2005-11-20  Raphael Slinckx  <rslinckx@cvs.gnome.org>
+
+	* src/Mp3/Util/Id3v24TagReader.cs:
+	* src/Mp3/Util/Id3v2TagReader.cs:
+	* src/Util/Utils.cs:
+	Small fix in ReadSyncsafeInteger, because of stupid priority of operation.
+	Small fix in TagReader, we skipped one byte and so had an offset for the
+	rest of parsing.
+
+2005-11-19  Raphael Slinckx  <rslinckx@cvs.gnome.org>
+
+	* src/Makefile.am:
+	* src/Mp3/Id3Tag.cs:
+	* src/Mp3/Util/Id3frames/Id3Frame.cs:
+	* src/Mp3/Util/Id3frames/TextId3Frame.cs:
+	* src/Mp3/Util/Id3v23TagReader.cs:
+	* src/Mp3/Util/Id3v24TagReader.cs:
+	* src/Mp3/Util/Id3v2TagReader.cs:
+	* src/Util/Utils.cs:
+	Merge Id3v2.4 reading support from java's entagged
+
+2005-11-13  Aaron Bockover  <aaron@aaronbock.net>
+
+	* src/Makefile.am: added CreativeCommons.cs
+	* src/CreativeCommons.cs: Added the CC parser I wrote at the 2005 Gnome
+	Summit for Nathan Yergler of CC; will connect it in AFW
+
+2005-11-13  Raphael Slinckx  <rslinckx@cvs.gnome.org>
+
+	* src/Flac/Util/FlacInfoReader.cs:
+	* src/Flac/Util/FlacTagReader.cs:
+	* src/Flac/Util/MetadataBlockHeader.cs:
+	* src/Makefile.am:
+	* src/Ogg/Util/OggInfoReader.cs:
+	* src/Util/ByteBuffer.cs:
+	Add completely untested, besides "It compiles" write support for Ogg and
+	Flac files.
+
+2005-10-31 Aaron Bockover <aaron@aaronbock.net>
+	
+	* src/Makefile.am: fixed for manually handled AssemblyInfo.cs
+	* src/configure.ac: Do not generate src/AssemblyInfo.cs
+	* src/AssemblyInfo.cs: Added, must manually update version number
+	* src/AssemblyInfo.cs.in: Removed
+	* src/Util/Utils.cs (FieldListToStringArray): set array item as null
+	if string in list is empty
+
+2005-10-29 Aaron Bockover <aaron@aaronbock.net>
+
+	* src/Ape/MonkeyFileReader.cs: Added musepack mimetypes
+
+2005-10-15 Raphael Slinckx <raphael@slinckx.net>
+
+	* src/Mp3/Util/Id3Frames/Id3Frame.cs:
+	Fix an error with id3v2 tag reading, resulting in an 
+	empty content.
+
+2005-10-03 Raphael Slinckx <raphael@slinckx.net>
+	* src/Mp3/Util/Id3Frames/TextId3Frame.cs,Id3Frame.cs:
+	Fix UTF16 comments reading
+
+2005-09-07 Raphael Slinckx <raphael@slinckx.net>
+
+	* src/Mpc/MpcFileWriter.cs: Added Write support for Mpc tags
+	* src/Makefile.am: add files to autotools
+
+2005-09-07 Raphael Slinckx <raphael@slinckx.net>
+
+	* src/Ape/Util/ApeTagCreator.cs, src/Ape/Util/ApeTagWriter.cs,
+	src/Ape/MonkeyFileWriter.cs: Added Write support for Ape tags
+	* src/Util/AudioFileWriter.cs, src/Utils/AbstractTagCreator.cs:
+	Generic support for tag writing
+	* src/Makefile.am: add files to autotools
+
+2005-08-25 Aaron Bockover <aaron@aaronbock.net>
+
+	* src/Makefile.am: Small whitespace fix
+
+2005-08-23 Aaron Bockover <aaron@aaronbock.net>
+
+	* src/Asf: Added ASF/WMA support back to tree... non-working	
+	* src/Ape/MonkeyFileReader.cs, src/Flac/FlacFileReader.cs, 
+	src/Mp3/Mp3FileReader.cs, src/Mp4/Mp4FileReader.cs, 
+	src/Mpc/MpcFileReader.cs, src/Ogg/OggFileReader.cs, 
+	src/Tracker/TrackerFileReader.cs: Added more mimetype attributes
+	* src/Mp3/Util/Id3v2TagReader.cs: mp3Stream.ReadByte() without assigning
+	to unused variable
+	* src/Mp3/Util/Id3v1TagReader.cs: removed unused trackNumber variable
+	* src/M4a: Removed from tree
+	* src/Mp4: Added to tree
+	* src/Mp4/Mp4FileReader.cs, src/Mp4/Util/Mp4InfoReader.cs, 
+	src/Mp4/Util/Mp4TagReader.cs: All M4a strings changed to Mp4 (class names,
+	messages, etc.)
+
+2005-08-22 Daniel Drake <dsd@gentoo.org>
+
+	* src/Tracker/TrackerFileReader.cs: Fix duplication of mimetype
+	* src/Mp3/Mp3FileReader.cs: Add audio/mpeg mimetype
+
+	* src/Util/Utils.cs: Don't try and convert an empty string to an integer
+
+2005-08-21 Daniel Drake <dsd@gentoo.org>
+
+	* src/AudioFileIO.cs, src/Util/CustomAttribute.cs,
+	src/Util/AudioFileReader.cs: Drop the concept of extensions and pass
+	mimetypes to the individual file readers.
+	* File Readers: Updates for new AudioFileReader interface
+	* src/Tracker/TrackerFileReader.cs, src/Tracker/TrackerTagReader.cs,
+	src/Makefile.am: New audio file reader for amiga tracker files based on
+	work by Boris Peterbarg.
+	* tests/EntaggedTest.cs, tests/samples: Add tracker tests
+
+2005-08-19 Daniel Drake <dsd@gentoo.org>
+
+	* entagged-sharp: Lots of changes!
+	Removed Tag/GenericTag/AbstractTag abstraction, there is now just Tag.
+	Removed *TagField and *Tag abstraction, now just using strings and the
+	plain Tag class in the most part. All readers updated for the new model.
+	Fixed some minor reader bugs/omissions which means the tests now pass in
+	full.
+
+	* tests/run-test: Dummy file to inflict happiness upon autotools
+	* tests/EntaggedTest.cs: New tests for M4A, and single/dual-tag mp3.
+	* tests/samples/sample.m4a: Added a tag.
+	* tests/samples/sample_v1_only.mp3, sample_v2_only.mp3, sample_both.mp3:
+	3 mp3 test cases, with varying tag combinations.
+	* src/Mp3/Util/Id3v23TagReader.cs: Fixed reading of id3v2 comment.
+	* src/Makefile: Fixed building of m4a reader.
+
+2005-08-18 Aaron Bockover <aaron@aaronbock.net>
+
+	* configure.ac: Entagged 0.1.4
+	* src/AudioFile.cs: Print encoding info in ToString()
+	* src/Makefile.am: new rules: test, testrun
+	* src/EntaggedTest.cs: Print entire AFW object, accept scanning path from
+	command line, use ../tests/samples if none specified
+	* src/M4a/M4aFileReader.cs: ReadTags(), ReadEncodingInfo()
+	* src/M4a/Util/M4aTagReader.cs: Added EncodingInfo methods, to read
+	duration data from MVHD AAC tag container. More encoding info to come.
+	Thanks snorp!
+
+2005-08-18 Daniel Drake <dsd@gentoo.org>
+
+	* src/Tag.cs, src/AudioFileWrapper.cs, src/Util/Utils.cs,
+	src/Util/AudioFileReader.cs: Additions to deal with track count info
+	* src/M4a/M4aTag.cs, src/Mp3/Id3Tag.cs, src/Mp3/Util/Id3v23TagReader.cs,
+	src/Ape/ApeTag.cs, src/Ape/Util/ApeTagReader.cs, src/Ogg/OggTag.cs:
+	Handle track count field
+	* tests/samples/: Set the track count to 7
+	* tests/EntaggedTest.cs: Add TrackCount tests
+
+2005-08-17 Daniel Drake <dsd@gentoo.org>
+
+	* configure.ac, Makefile.am: Added references to tests/
+	* tests/ConsoleUi.cs: Added the nunit console testing utility
+	* tests/EntaggedTest.cs: Added our nunit test library
+	* tests/samples/: Added a pre-tagged 5 sec sample of a CC-licensed track
+	in various formats.
+
+2005-08-16 Daniel Drake <dsd@gentoo.org>
+
+	* src/Tag.cs: Remove First* interface and Merge() implementation
+	* src/AudioFileWrapper.cs, src/Util/Utils.cs, src/Util/AudioFileReader.cs:
+	New API for retrieving a list of artists/albums/comments/etc (for files
+	with multiple tags). Provides a new way of combining tags.
+	* src/Mp3/Mp3FileReader.cs: Use the new CombineTags() method to combine
+	id3v1/v2 tags.
+
+2005-08-11 Aaron Bockover <aaron@aaronbock.net>
+	
+	* entagged-sharp.mdp: Added src/Util/CustomAttributes.cs to MonoDevelop
+	project file
+
+2005-08-11 Daniel Drake <dsd@gentoo.org>
+
+	* src/AudioFileIO.cs, src/AudioFile.cs, src/AudioFileWrapper.cs,
+	src/Util/AudioFileReader.cs: Add interfaces for working with streams and
+	mimetypes.
+
+2005-08-10 Daniel Drake <dsd@gentoo.org>
+
+	* src/AudioFileIO.cs: Get the list of file readers using reflection, and
+	keep a lookup table of mime types as well as extensions.
+
+	* src/Util/CustomAttributes.cs, src/Makefile.am: New attribute classes
+	to reflect supported extensions and supported mime-types.
+
+	* src/Mpc/MpcFileReader.cs, src/M4a/M4aFileReader.cs,
+	src/Mp3/Mp3FileReader.cs, src/Ape/MonkeyFileReader.cs,
+	src/Flac/FlacFileReader.cs, src/Ogg/OggFileReader.cs: Add supported
+	extensions and mime-type attributes.
+
+2005-07-18 Aaron Bockover <aaron@aaronbock.net>
+
+	* configure.ac: Updated checks for pkg-config and removed GAC stuff
+	* src/Makefile.am: Install into $(pkglibdir)
+	* entagged-sharp.pc.in: Updated for --variable=Libraries per recommendation
+	in the Mono Application Deployment Guidelines
+
+2005-06-29 Aaron Bockover <aaron@aaronbock.net>
+
+	* AudioFileWrapper.cs: Length is now Duration, added some exception
+	catching and default values to the get accessors for safer, easier use
+	* entagged-sharp: Added M4a code to MonoDevelop project
+
+2005-06-28 Aaron Bockover <aaron@aaronbock.net>
+
+	* AudioFileWrapper.cs: Friendlier API wrapper to the entagged API
+	Applications using entagged-sharp should USE THIS CLASS!
+	* AudioFile.cs: EncodingInfo public get accessor added for exposure
+	to AudioFileWrapper
+
+	* entagged-sharp: Build system updated, GAC support removed, install
+	warning added to `make install'
+
+	* entagged-sharp: Build system updated
+	* entagged-sharp: Created MonoDevelop project
+	* entagged-sharp: Removed ASF support (hopefully temporarily) due to
+	licensing restrictions
+
+2005-06-27 Aaron Bockover <aaron@aaronbock.net>
+
+	* entagged-sharp: Imported to Mono SVN
+	* entagged-sharp: Re-licensed under MIT X11 License
+	* entagged-sharp: Build system updated
+	* entagged-sharp: Sources pulled out of SourceForge CVS
+

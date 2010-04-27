@@ -1,0 +1,22 @@
+DEPRECATED!
+Please use 'taglib-sharp' for new code, located in mono subversion
+-----------------
+
+
+entagged-sharp is a metadata library written in pure C#. It has no dependencies
+other than the base .NET/C# system.
+
+entagged-sharp is a port of the Java code. Its API is for the most part
+identical to that of the Java code. See http://entagged.sf.net/ for the 
+lower level API documentation.
+
+HOWEVER, an API wrapper has been written to simplify the use of entagged, 
+and it is recommended that your C#/.NET application use the AudioFileWrapper
+class instead of the AudioFile/AudioFileIO classes directly:
+
+AudioFileWrapper af = new AudioFileWrapper("mysong.mp3");
+Console.WriteLine(af.Artist + " - " + af.Title);
+
+See the src/AudioFileWrapper.cs file for API information. Documentation
+will be produced later.
+
