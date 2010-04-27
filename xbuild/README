@@ -1,0 +1,3 @@
+Moved to mcs module in SVN:
+mcs/class/Microsoft.Build.* and
+mcs/tools/xbuild.
