@@ -1,0 +1,38 @@
+# primitive types
+char	sbyte
+CHAR2B	char
+BOOL	bool
+BYTE	sbyte
+INT8	sbyte
+INT16	short
+INT32	int
+CARD8	byte
+CARD16	ushort
+CARD32	uint
+
+VISUALID	uint
+TIMESTAMP	uint
+ID	uint
+KEYSYM	uint
+KEYCODE	byte
+BUTTON	byte
+
+# Xid
+XID	Id
+
+# hacks: should come from Render and Shape
+PICTURE	Id
+SHAPE_KIND	byte
+
+#TODO: replace with generic parameter
+void	IntPtr
+#FIXME: union workarounds
+ClientMessageData	uint
+DRAWABLE	Id
+FONTABLE	Id
+
+#Case correction
+GCONTEXT	GContext
+
+# Non-primitive
+STR	string

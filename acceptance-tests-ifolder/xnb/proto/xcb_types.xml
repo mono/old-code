@@ -1,0 +1,228 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+Copyright (C) 2001-2004 Bart Massey, Jamey Sharp, and Josh Triplett.
+All Rights Reserved.
+
+Permission is hereby granted, free of charge, to any person obtaining a copy
+of this software and associated documentation files (the "Software"), to deal
+in the Software without restriction, including without limitation the rights
+to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+copies of the Software, and to permit persons to whom the Software is
+furnished to do so, subject to the following conditions:
+
+The above copyright notice and this permission notice shall be included in all
+copies or substantial portions of the Software.
+
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+AUTHORS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN
+ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION
+WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
+
+Except as contained in this notice, the names of the authors or their
+institutions shall not be used in advertising or otherwise to promote the
+sale, use or other dealings in this Software without prior written
+authorization from the authors.
+-->
+<xcb header="xcb_types">
+  <!-- Core protocol types -->
+  
+  <struct name="CHAR2B">
+    <field type="CARD8" name="byte1" />
+    <field type="CARD8" name="byte2" />
+  </struct>
+  
+  <xidtype name="WINDOW" />
+  
+  <xidtype name="PIXMAP" />
+  
+  <xidtype name="CURSOR" />
+  
+  <xidtype name="FONT" />
+  
+  <xidtype name="GCONTEXT" />
+  
+  <xidtype name="COLORMAP" />
+  
+  <xidtype name="ATOM" />
+  
+  <union name="DRAWABLE">
+    <field type="WINDOW" name="window" />
+    <field type="PIXMAP" name="pixmap" />
+  </union>
+  
+  <union name="FONTABLE">
+    <field type="FONT" name="font" />
+    <field type="GCONTEXT" name="gcontext" />
+  </union>
+  
+  <struct name="VISUALID">
+    <field type="CARD32" name="id" />
+  </struct>
+
+  <struct name="TIMESTAMP">
+    <field type="CARD32" name="id" />
+  </struct>
+
+  <struct name="KEYSYM">
+    <field type="CARD32" name="id" />
+  </struct>
+
+  <struct name="KEYCODE">
+    <field type="CARD8" name="id" />
+  </struct>
+
+  <struct name="BUTTON">
+    <field type="CARD8" name="id" />
+  </struct>
+
+  <struct name="POINT">
+    <field type="INT16" name="x" />
+    <field type="INT16" name="y" />
+  </struct>
+
+  <struct name="RECTANGLE">
+    <field type="INT16" name="x" />
+    <field type="INT16" name="y" />
+    <field type="CARD16" name="width" />
+    <field type="CARD16" name="height" />
+  </struct>
+
+  <struct name="ARC">
+    <field type="INT16" name="x" />
+    <field type="INT16" name="y" />
+    <field type="CARD16" name="width" />
+    <field type="CARD16" name="height" />
+    <field type="INT16" name="angle1" />
+    <field type="INT16" name="angle2" />
+  </struct>
+
+  <!-- Connection setup-related types -->
+
+  <struct name="FORMAT">
+    <field type="CARD8" name="depth" />
+    <field type="CARD8" name="bits_per_pixel" />
+    <field type="CARD8" name="scanline_pad" />
+    <pad bytes="5" />
+  </struct>
+
+  <struct name="VISUALTYPE">
+    <field type="VISUALID" name="visual_id" />
+    <field type="CARD8" name="class" />
+    <field type="CARD8" name="bits_per_rgb_value" />
+    <field type="CARD16" name="colormap_entries" />
+    <field type="CARD32" name="red_mask" />
+    <field type="CARD32" name="green_mask" />
+    <field type="CARD32" name="blue_mask" />
+    <pad bytes="4" />
+  </struct>
+
+  <struct name="DEPTH">
+    <field type="CARD8" name="depth" />
+    <pad bytes="1" />
+    <field type="CARD16" name="visuals_len" />
+    <pad bytes="4" />
+    <list type="VISUALTYPE" name="visuals">
+      <fieldref>visuals_len</fieldref>
+    </list>
+  </struct>
+
+  <struct name="SCREEN">
+    <field type="WINDOW" name="root" />
+    <field type="COLORMAP" name="default_colormap" />
+    <field type="CARD32" name="white_pixel" />
+    <field type="CARD32" name="black_pixel" />
+    <field type="CARD32" name="current_input_masks" />
+    <field type="CARD16" name="width_in_pixels" />
+    <field type="CARD16" name="height_in_pixels" />
+    <field type="CARD16" name="width_in_millimeters" />
+    <field type="CARD16" name="height_in_millimeters" />
+    <field type="CARD16" name="min_installed_maps" />
+    <field type="CARD16" name="max_installed_maps" />
+    <field type="VISUALID" name="root_visual" />
+    <field type="BYTE" name="backing_stores" />
+    <field type="BOOL" name="save_unders" />
+    <field type="CARD8" name="root_depth" />
+    <field type="CARD8" name="allowed_depths_len" />
+    <list type="DEPTH" name="allowed_depths">
+      <fieldref>allowed_depths_len</fieldref>
+    </list>
+  </struct>
+
+  <struct name="ConnSetupReq">
+    <field type="CARD8" name="byte_order" />
+    <pad bytes="1" />
+    <field type="CARD16" name="protocol_major_version" />
+    <field type="CARD16" name="protocol_minor_version" />
+    <field type="CARD16" name="authorization_protocol_name_len" />
+    <field type="CARD16" name="authorization_protocol_data_len" />
+    <list type="char" name="authorization_protocol_name">
+      <fieldref>authorization_protocol_name_len</fieldref>
+    </list>
+    <list type="char" name="authorization_protocol_data">
+      <fieldref>authorization_protocol_data_len</fieldref>
+    </list>
+  </struct>
+
+  <struct name="ConnSetupGenericRep">
+    <field type="CARD8" name="status" />
+    <pad bytes="5" />
+    <field type="CARD16" name="length" />
+  </struct>
+
+  <struct name="ConnSetupFailedRep">
+    <field type="CARD8" name="status" /> <!-- always 0 -> Failed -->
+    <field type="CARD8" name="reason_len" />
+    <field type="CARD16" name="protocol_major_version" />
+    <field type="CARD16" name="protocol_minor_version" />
+    <field type="CARD16" name="length" />
+    <list type="char" name="reason">
+      <fieldref>reason_len</fieldref>
+    </list>
+  </struct>
+
+  <struct name="ConnSetupAuthenticateRep">
+    <field type="CARD8" name="status" /> <!-- always 2 -> Authenticate -->
+    <pad bytes="5" />
+    <field type="CARD16" name="length" />
+    <list type="char" name="reason">
+      <op op="*">
+        <fieldref>length</fieldref>
+        <value>4</value>
+      </op>
+    </list>
+  </struct>
+
+  <struct name="ConnSetupSuccessRep">
+    <field type="CARD8" name="status" /> <!-- always 1 -> Success -->
+    <pad bytes="1" />
+    <field type="CARD16" name="protocol_major_version" />
+    <field type="CARD16" name="protocol_minor_version" />
+    <field type="CARD16" name="length" />
+    <field type="CARD32" name="release_number" />
+    <field type="CARD32" name="resource_id_base" />
+    <field type="CARD32" name="resource_id_mask" />
+    <field type="CARD32" name="motion_buffer_size" />
+    <field type="CARD16" name="vendor_len" />
+    <field type="CARD16" name="maximum_request_length" />
+    <field type="CARD8" name="roots_len" />
+    <field type="CARD8" name="pixmap_formats_len" />
+    <field type="CARD8" name="image_byte_order" />
+    <field type="CARD8" name="bitmap_format_bit_order" />
+    <field type="CARD8" name="bitmap_format_scanline_unit" />
+    <field type="CARD8" name="bitmap_format_scanline_pad" />
+    <field type="KEYCODE" name="min_keycode" />
+    <field type="KEYCODE" name="max_keycode" />
+    <pad bytes="4" />
+    <list type="char" name="vendor">
+      <fieldref>vendor_len</fieldref>
+    </list>
+    <list type="FORMAT" name="pixmap_formats">
+      <fieldref>pixmap_formats_len</fieldref>
+    </list>
+    <list type="SCREEN" name="roots">
+      <fieldref>roots_len</fieldref>
+    </list>
+  </struct>
+</xcb>

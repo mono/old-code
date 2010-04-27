@@ -1,0 +1,197 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema" elementFormDefault="qualified">
+  <xs:element name="xcb">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element minOccurs="0" maxOccurs="unbounded" ref="import"/>
+        <xs:choice maxOccurs="unbounded">
+          <xs:element ref="enum"/>
+          <xs:element ref="error"/>
+          <xs:element ref="errorcopy"/>
+          <xs:element ref="event"/>
+          <xs:element ref="eventcopy"/>
+          <xs:element ref="request"/>
+          <xs:element ref="struct"/>
+          <xs:element ref="typedef"/>
+          <xs:element ref="union"/>
+          <xs:element ref="xidtype"/>
+        </xs:choice>
+      </xs:sequence>
+      <xs:attribute name="extension-name" type="xs:NCName"/>
+      <xs:attribute name="extension-xname" type="xs:NCName"/>
+      <xs:attribute name="header" use="required" type="xs:NCName"/>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="import" type="xs:NCName"/>
+  <xs:element name="enum">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element maxOccurs="unbounded" ref="item"/>
+      </xs:sequence>
+      <xs:attribute name="name" use="required" type="xs:NCName"/>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="item">
+    <xs:complexType mixed="true">
+      <xs:choice minOccurs="0" maxOccurs="unbounded">
+        <xs:element ref="op"/>
+        <xs:element ref="value"/>
+      </xs:choice>
+      <xs:attribute name="name" use="required" type="xs:NCName"/>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="error">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element minOccurs="0" maxOccurs="unbounded" ref="field"/>
+        <xs:element minOccurs="0" ref="pad"/>
+      </xs:sequence>
+      <xs:attribute name="name" use="required" type="xs:NCName"/>
+      <xs:attribute name="number" type="xs:integer"/>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="errorcopy">
+    <xs:complexType>
+      <xs:attribute name="name" use="required" type="xs:NCName"/>
+      <xs:attribute name="number" use="required" type="xs:integer"/>
+      <xs:attribute name="ref" use="required" type="xs:NCName"/>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="event">
+    <xs:complexType>
+      <xs:sequence>
+				<xs:choice minOccurs="0" maxOccurs="unbounded">
+					<xs:element ref="field"/>
+					<xs:element ref="pad"/>
+					<xs:element ref="list"/>
+				</xs:choice>
+      </xs:sequence>
+      <xs:attribute name="name" use="required" type="xs:NCName"/>
+      <xs:attribute name="no-sequence-number" type="xs:boolean"/>
+      <xs:attribute name="number" use="required" type="xs:integer"/>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="eventcopy">
+    <xs:complexType>
+      <xs:attribute name="name" use="required" type="xs:NCName"/>
+      <xs:attribute name="number" use="required" type="xs:integer"/>
+      <xs:attribute name="ref" use="required" type="xs:NCName"/>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="request">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element minOccurs="0" ref="exprfield"/>
+        <xs:choice minOccurs="0" maxOccurs="unbounded">
+          <xs:element ref="field"/>
+          <xs:element ref="pad"/>
+          <xs:element ref="list"/>
+          <xs:element ref="valueparam"/>
+        </xs:choice>
+        <xs:element minOccurs="0" ref="localfield"/>
+        <xs:element minOccurs="0" ref="reply"/>
+      </xs:sequence>
+      <xs:attribute name="combine-adjacent" type="xs:boolean"/>
+      <xs:attribute name="name" use="required" type="xs:NCName"/>
+      <xs:attribute name="opcode" use="required" type="xs:integer"/>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="exprfield">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element ref="op"/>
+      </xs:sequence>
+      <xs:attribute name="name" use="required" type="xs:NCName"/>
+      <xs:attribute name="type" use="required" type="xs:NCName"/>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="localfield">
+    <xs:complexType>
+      <xs:attribute name="name" use="required" type="xs:NCName"/>
+      <xs:attribute name="type" use="required" type="xs:NCName"/>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="reply">
+    <xs:complexType mixed="true">
+      <xs:choice minOccurs="0" maxOccurs="unbounded">
+        <xs:element ref="field"/>
+        <xs:element ref="list"/>
+        <xs:element ref="pad"/>
+        <xs:element ref="valueparam"/>
+      </xs:choice>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="struct">
+    <xs:complexType>
+      <xs:choice maxOccurs="unbounded">
+        <xs:element ref="field"/>
+        <xs:element ref="list"/>
+        <xs:element ref="pad"/>
+      </xs:choice>
+      <xs:attribute name="name" use="required" type="xs:NCName"/>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="typedef">
+    <xs:complexType>
+      <xs:attribute name="newname" use="required" type="xs:NCName"/>
+      <xs:attribute name="oldname" use="required" type="xs:NCName"/>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="union">
+    <xs:complexType>
+      <xs:choice>
+        <xs:element maxOccurs="unbounded" ref="field"/>
+        <xs:element maxOccurs="unbounded" ref="list"/>
+      </xs:choice>
+      <xs:attribute name="name" use="required" type="xs:NCName"/>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="xidtype">
+    <xs:complexType>
+      <xs:attribute name="name" use="required" type="xs:NCName"/>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="pad">
+    <xs:complexType>
+      <xs:attribute name="byes" type="xs:integer"/>
+      <xs:attribute name="byte" type="xs:integer"/>
+      <xs:attribute name="bytes" type="xs:integer"/>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="field">
+    <xs:complexType>
+      <xs:attribute name="name" use="required" type="xs:NCName"/>
+      <xs:attribute name="type" use="required" type="xs:NMTOKEN"/>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="list">
+    <xs:complexType>
+      <xs:choice minOccurs="0">
+        <xs:element ref="fieldref"/>
+        <xs:element ref="op"/>
+        <xs:element ref="value"/>
+      </xs:choice>
+      <xs:attribute name="name" use="required" type="xs:NCName"/>
+      <xs:attribute name="type" use="required" type="xs:NCName"/>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="op">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element minOccurs="0" ref="op"/>
+        <xs:element minOccurs="0" maxOccurs="unbounded" ref="fieldref"/>
+        <xs:element minOccurs="0" maxOccurs="unbounded" ref="value"/>
+      </xs:sequence>
+      <xs:attribute name="op" use="required"/>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="valueparam">
+    <xs:complexType>
+      <xs:attribute name="value-list-name" use="required" type="xs:NCName"/>
+      <xs:attribute name="value-mask-name" use="required" type="xs:NCName"/>
+      <xs:attribute name="value-mask-type" use="required" type="xs:NCName"/>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="value" type="xs:NMTOKEN"/>
+  <xs:element name="fieldref" type="xs:NCName"/>
+</xs:schema>
