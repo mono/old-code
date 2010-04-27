@@ -1,0 +1,16 @@
+2005-10-19  Everaldo Canuto  <everaldo@smios.org>
+
+        * src/Makefile.am: Fix DISTCLEANFILES to properly execute maintainerclean.
+
+2005-09-16  Everaldo Canuto  <everaldo@smios.org>
+
+	* src/AssemblyInfo.cs.in: This file is a template in which configure
+	will perform substitutions. We use it to get the VERSION variable 
+	replaced by the version we provided in AM_INIT_AUTOMAKE, which will be
+	0.0.1 for the first time. src/Makefile.am
+	* Makefile.am: Add Makefile.in to DISTCLEANFILES
+	* src/Makefile.am: Add DISTCLEANFILES and fix compiling line
+	* autogen.sh: Make aclocal to runs first in autogen.sh
+	* Makefile.in: Delete this file because is automatically generated 
+	by autogen.sh
+
