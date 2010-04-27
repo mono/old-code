@@ -1,0 +1,24 @@
+Mono.Net.Snmp
+Copyright 2005(C) Zac Bowling
+zac@zacbowling.com
+http://zacbowling.com
+
+Licenced under the terms of the MIT X11 licence.
+Read the MIT.X11 for more information.
+
+Known issues: 
+* No MIB support. All values need to be passed as the raw OID.
+* No OID values larger 32,768
+* No async support...
+
+How to build:
+1. if necissary, put mcs or csc path into makefile
+2. run `make`
+
+SAMPLES: 
+
+SimpleSNMP - Read basic SNMP device information:
+> mono samples/SimpleSNMP.exe <ipaddress> <community>
+
+MacAddress - Query a remote Mac Address:
+> mono samples/MacAddress.exe <ipaddress> <community>

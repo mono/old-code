@@ -1,0 +1,8 @@
+all:
+	csc.exe /d:WIN32 /optimize+ /target:library src\SNMP.cs src\AssemblyInfo.cs /out:Mono.Net.Snmp.dll
+	csc.exe /d:WIN32 /optimize+ /target:exe samples\SimpleSNMP.cs /r:Mono.Net.Snmp.dll /out:samples\SimpleSNMP.exe
+	csc.exe /d:WIN32 /optimize+ /target:exe samples\MacAddress.cs /r:Mono.Net.Snmp.dll /out:samples\MacAddress.exe
+clean:
+	del Mono.Net.Snmp.dll
+	del samples\SimpleSNMP.exe
+	del samples\MacAddress.exe
