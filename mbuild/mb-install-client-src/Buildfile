@@ -1,0 +1,13 @@
+using [
+	Core
+	Languages.CSharp
+]
+
+mb-install-client.exe = [
+	@mb-install-client.exe.sources
+	/System.Runtime.Remoting.dll
+	/Mono.Build.dll
+	/Monkeywrench.dll
+] with [
+	install = /config/mbuild/exe_installer
+]

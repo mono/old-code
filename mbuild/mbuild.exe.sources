@@ -1,0 +1,7 @@
+mbuild/AssemblyInfo.cs
+mbuild/BuildContextProxy.cs
+mbuild/BuildLoggerProxy.cs
+mbuild/GeneratedAssemblyVersionInfo.cs
+mbuild/InstallerServiceNotify.cs
+mbuild/WarningLoggerProxy.cs
+mbuild/mbuild.cs

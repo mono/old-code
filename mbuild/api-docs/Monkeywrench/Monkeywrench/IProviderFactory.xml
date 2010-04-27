@@ -1,0 +1,37 @@
+<Type Name="IProviderFactory" FullName="Monkeywrench.IProviderFactory">
+  <TypeSignature Language="C#" Value="public abstract interface IProviderFactory" Maintainer="auto" />
+  <AssemblyInfo>
+    <AssemblyName>Monkeywrench</AssemblyName>
+    <AssemblyPublicKey>
+    </AssemblyPublicKey>
+    <AssemblyVersion>0.0.0.0</AssemblyVersion>
+    <AssemblyCulture>neutral</AssemblyCulture>
+    <Attributes />
+  </AssemblyInfo>
+  <ThreadSafetyStatement>Gtk# is thread aware, but not thread safe; See the <link location="node:gtk-sharp/programming/threads">Gtk# Thread Programming</link> for details.</ThreadSafetyStatement>
+  <Docs>
+    <summary>To be added</summary>
+    <remarks>To be added</remarks>
+  </Docs>
+  <Base />
+  <Interfaces />
+  <Attributes />
+  <Members>
+    <Member MemberName="Create">
+      <MemberSignature Language="C#" Value="public virtual Monkeywrench.IPersistentBuildProvider Create (string basis);" />
+      <MemberType>Method</MemberType>
+      <ReturnValue>
+        <ReturnType>Monkeywrench.IPersistentBuildProvider</ReturnType>
+      </ReturnValue>
+      <Parameters>
+        <Parameter Name="basis" Type="System.String" />
+      </Parameters>
+      <Docs>
+        <summary>To be added</summary>
+        <param name="basis">a <see cref="T:System.String" /></param>
+        <returns>a <see cref="T:Monkeywrench.IPersistentBuildProvider" /></returns>
+        <remarks>To be added</remarks>
+      </Docs>
+    </Member>
+  </Members>
+</Type>

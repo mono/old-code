@@ -1,0 +1,7 @@
+#!/bin/sh
+# -*- shell-script -*-
+
+# Can't recursively call self ..
+exec -a "$0" mono $MONO_FLAGS "@location@/mbuild.exe" "$@"
+
+

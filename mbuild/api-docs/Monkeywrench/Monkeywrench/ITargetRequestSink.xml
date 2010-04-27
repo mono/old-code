@@ -1,0 +1,36 @@
+<Type Name="ITargetRequestSink" FullName="Monkeywrench.ITargetRequestSink">
+  <TypeSignature Language="C#" Value="public abstract interface ITargetRequestSink" Maintainer="auto" />
+  <AssemblyInfo>
+    <AssemblyName>Monkeywrench</AssemblyName>
+    <AssemblyPublicKey>
+    </AssemblyPublicKey>
+    <AssemblyVersion>0.0.0.0</AssemblyVersion>
+    <AssemblyCulture>neutral</AssemblyCulture>
+    <Attributes />
+  </AssemblyInfo>
+  <ThreadSafetyStatement>Gtk# is thread aware, but not thread safe; See the <link location="node:gtk-sharp/programming/threads">Gtk# Thread Programming</link> for details.</ThreadSafetyStatement>
+  <Docs>
+    <summary>To be added</summary>
+    <remarks>To be added</remarks>
+  </Docs>
+  <Base />
+  <Interfaces />
+  <Attributes />
+  <Members>
+    <Member MemberName="RequestTarget">
+      <MemberSignature Language="C#" Value="public virtual void RequestTarget (string target);" />
+      <MemberType>Method</MemberType>
+      <ReturnValue>
+        <ReturnType>System.Void</ReturnType>
+      </ReturnValue>
+      <Parameters>
+        <Parameter Name="target" Type="System.String" />
+      </Parameters>
+      <Docs>
+        <summary>To be added</summary>
+        <param name="target">a <see cref="T:System.String" /></param>
+        <remarks>To be added</remarks>
+      </Docs>
+    </Member>
+  </Members>
+</Type>

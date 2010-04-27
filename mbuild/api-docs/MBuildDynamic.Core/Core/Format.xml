@@ -1,0 +1,24 @@
+﻿<rule name="Format">
+        <docs>
+                <summary>To be added.</summary>
+                <remarks>To be added.</remarks>
+        </docs>
+        <argument name="format" exists_since="0.0.3.1">
+                <docs>
+                        <summary>To be added.</summary>
+                        <remarks>To be added.</remarks>
+                </docs>
+                <type>Mono.Build.MBString</type>
+                <flags>default </flags>
+        </argument>
+        <argument name="values" exists_since="0.0.3.1">
+                <docs>
+                        <summary>To be added.</summary>
+                        <remarks>To be added.</remarks>
+                </docs>
+                <type>Mono.Build.MBString</type>
+                <flags>optional multi ordered default_ordered </flags>
+        </argument>
+</rule>
+
+

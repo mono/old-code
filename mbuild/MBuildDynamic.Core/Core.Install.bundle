@@ -1,0 +1,120 @@
+# Core installer support
+
+namespace Core.Install {
+
+	using default;
+	using Core.Config;
+
+	parameters {
+		basis Config = /config/install;
+		namespace Core;
+	}
+
+	provider Config {
+		default_prefix = "/usr/local";
+
+		prefix = ConfigString (default_prefix) tags {
+			"prompt" = "Specify the directory prefix that files will be installed into";
+			"config_group" = "Installation";
+		};
+
+		prefix_dir = MakeInstallDirectory (prefix);
+
+		# These used to be JoinPath calls, but we don't have 
+		# the infrastructure to do AddDefaultOrdered () calls
+		# on a SimpleTarget ...
+
+		libdir = MakeInstallSubdirectory (prefix_dir, "lib");
+		bindir = MakeInstallSubdirectory (prefix_dir, "bin");
+		datadir = MakeInstallSubdirectory (prefix_dir, "share");
+		pkglibdir = MakeInstallSubdirectory (libdir, Core.Env/compat_name);
+
+		bindir_installer = MakeExecutableCopyInstaller (bindir);
+		libdir_installer = MakeCopyInstaller (libdir);
+		pkglibdir_installer = MakeCopyInstaller (pkglibdir);
+	}
+
+	# These can't be MBDirectories, because they might not exist
+	# yet, which would cause the fingerprint code to be unhappy.
+
+	result InstallDirectory : MBString {
+		@{
+
+		public InstallDirectory (string s) : base (s) {}
+
+		@}
+	}
+
+	rule JoinPath {
+
+		InstallDirectory base;
+		default ordered string+ pieces;
+
+		build (InstallDirectory res, ctxt) @{
+			string p = @base.Value;
+
+			for (int i = 0; i < pieces.Length; i++)
+				p = System.IO.Path.Combine (p, pieces[i]);
+
+			res.Value = p;
+			return false;
+		@}
+	}
+
+	rule MakeInstallDirectory {
+
+		string dir;
+
+		build (InstallDirectory res, ctxt) @{
+			res.Value = dir;
+			return false;
+		@}
+	}
+
+	rule MakeInstallSubdirectory {
+
+		InstallDirectory base;
+		string piece;
+
+		build (InstallDirectory res, ctxt) @{
+			string p = @base.Value;
+			p = System.IO.Path.Combine (p, piece);
+
+			res.Value = p;
+			return false;
+		@}
+	}
+
+	# FIXME: I have a hunch that this is not a good rule to have
+	# hack for f-spot.
+	rule ProbeInstallDirectory {
+		InstallDirectory dir;
+
+		build (MBBool res, ctxt) @{
+			res.Value = System.IO.Directory.Exists (dir.Value);
+			return false;
+		@}
+	}
+
+	rule MakeCopyInstaller {
+
+		InstallDirectory destdir;
+
+		@{
+
+		protected virtual bool Initialize (CopyInstaller ci, IBuildContext ctxt) {
+			ci.DestDir = destdir.Value;
+			return false;
+		}
+
+		@}
+
+		build (CopyInstaller ci, ctxt) @{
+			return Initialize (ci, ctxt);
+		@}
+	}
+
+	rule MakeExecutableCopyInstaller : MakeCopyInstaller {
+		default restype ExecutableCopyInstaller;
+	}
+}

@@ -1,0 +1,200 @@
+2006-12-28  Peter Williams  <peter@newton.cx>
+
+	* Tokenizer.cs: change 'structure' keyword into 'parameters'.
+
+	* StructureElement.cs: Add an access for namespace information.
+
+	* INamespaceParams.cs: New interface, allow common access to
+	the parameters of an existing or being-defined structure.
+
+	* NamespaceBuilder.cs: Put structure template management code
+	into here now that there is one structure template per 
+	namespace by default.
+
+	* Parser.jay: Change parsing for new 'parameters' syntax,
+	rather than overconvoluted structure template syntax.
+
+	* Parser-rest.cs: Some support code for new namespace model.
+
+	* Driver.cs (LookupExistingFQN): Break out the code to lookup
+	a type in the loaded assemblies from LookupFQN.
+
+	* MetaRuleBuilder.cs: Kill the StructureBuilder ctor.
+
+	* UserType.cs: Modify to cope with new structure binding stuff.
+	* BGTargetBuilder.cs: Same.
+	* StructureBoundItem.cs: Same. Also break out some shared code
+	to access references to child structures.
+	* TemplateBuilder.cs: Same. Use the new shared code in
+	StructureBoundItem.
+	* MatcherBuilder.cs: Same.
+	* StructureBuilder.cs: Same. Use new shared code.
+	* BGProviderBuilder.cs: Same.
+	
+	* ExistingNamespaceParams.cs: New, implement INamespaceParams 
+	for an existing namespace, one that has already had its
+	_DefaultStructure defined.
+
+	* DefaultsBuilder.cs: Delete.
+	* StructArgKind.cs: Same.
+	
+2006-12-20  Peter Williams  <peter@newton.cx>
+
+	* Parser.jay: Whoooa fix native code line numbering.
+
+2006-12-19  Peter Williams  <peter@newton.cx>
+
+	* Driver.cs (LookupExistingFQN): Break out code to lookup a type
+	in the reference assemblies only.
+
+	* Parser-rest.cs: Unused variable warning cleanup.
+
+2006-09-03  Peter Williams  <peter@newton.cx>
+
+	* EmittingInfoHolder.cs: New class that derives from TargetInfoHolder.
+	It has methods that will emit statements to initialize a TargetBuilder
+	with its stored arg info values. Removes and clarifies a great deal of
+	redundant code.
+
+	* StructureBuilder.cs (MakeTargetNameExpr): Move this function here
+	and add a few extra args to make it sufficiently general.
+
+	* TemplateBuilder.cs: Hold target state in an EmittingInfoHolder field.
+	Eliminates most of our code.
+
+	* BGTargetBuilder.cs: Derive directly from EmittingInfoHolder and strip
+	out all our redundant code.
+
+2006-09-02  Peter Williams  <peter@newton.cx>
+
+	* Parser.jay: Allow templates to specify rules.
+
+2006-09-01  Peter Williams  <peter@newton.cx>
+
+	* Complete rewrite to be more of a real compiler. This all stems from
+	the fact that if we want to inherit from a class that requires information
+	from a StructureTemplate class, we need to be able to interrogate its type
+	if it is in a DLL or runtime-constructed, so we need to build an AST of
+	everything being compiled ...
+
+2006-08-09  Peter Williams  <peter@newton.cx>
+
+	* Parser.jay: Large grammar updates to accomodate new structure model.
+
+	* Parser-rest.cs: Concomitant support updates.
+
+	* Tokenizer.cs: De-protect a bunch of members and eliminate unused ones.
+	Add 'basis' and 'structure' keywords.
+
+2006-07-30  Peter Williams  <peter@newton.cx>
+
+	* Tokenizer.cs: Add 'basis' and 'structure' keywords. Turn the
+	keyword table into a Dictionary`2. Remove a bunch of stupid
+	protecteds on members.
+	
+2006-07-29  Peter Williams  <peter@newton.cx>
+
+	* Parser.jay (opt_bang): No longer used, remove.
+
+2006-07-19  Peter Williams  <peter@newton.cx>
+
+	* Parser.jay: Also use partial classes. Cleans up a lot of code
+	here.
+
+	* Parser-rest.cs: Renamed from ParserHelper. Use partial classes
+	as in Monkeywrench. Move over the few functions in Parser.jay.
+	Privatize as many functions as possible.
+
+2006-07-18  Peter Williams  <peter@newton.cx>
+
+	* Parser.jay: Remove the unused 'dictitem' and superfluous 'field'
+	tokens.
+
+	* Tokenizer.cs: Remove the dictitem and field tokens.
+
+	* ParserHelper.cs: Remove AddResultDictitem as it was unused.
+
+2006-07-18  Peter Williams  <peter@newton.cx>
+
+	* Parser.jay: Add a way to specify 'manual' build functions, which
+	don't take a preconstructed result argument. Sometimes this is needed.
+
+	* ParserHelper.cs (GenBuildManual): New helper to generate CodeDom
+	for manual build functions.
+	(AddRuleBuildFunc): Take different paths depending on whether this
+	is a manual build function or not.
+
+2006-07-18  Peter Williams  <peter@newton.cx>
+
+	* Tokenizer.cs: Add a 'restype' token.
+
+	* Parser.jay: Add new syntax to support preconstructed results: a result
+	type and name argument to build(); 'restype @{}@' for SpecificResultTypes
+	and 'default restype Type;' for GeneralResultType overriding.
+	(): Also allow Rules with no interior statements.
+	
+	* ParserHelper.cs: Changes to support the above. Add functions to generate
+	GeneralResultType overrides and SpecificResultType overrides in the 
+	appropriate places.
+
+2006-07-09  Peter Williams  <peter@newton.cx>
+
+	* Parser.jay: Change syntax: no more 'args' argument to Build. Don't treat
+	as absolute type names those starting with '.' to allow our slightly changed
+	.target syntax.
+
+	* mb-bundlegen.cs: Move to .Net 2.0 CodeDom APIs.
+
+	* ParserHelper.cs: Rework rule argument handling code to match new model.
+	We now do a composite-result type thing with overridden virtual functions
+	chaining up to the base, adding items to an array, basically. New code to
+	handle .target arguments and insert conversions from Result[]s to members
+	of the appropriate type.
+
+2006-07-05  Peter Williams  <peter@newton.cx>
+
+	* ParserHelper.cs (NewRuleTargetTag): Track method renames in ITaggable.
+	(NewRuleLiteralTag): Same.
+	
+2006-06-17  Peter Williams  <peter@newton.cx>
+
+	* Parser.jay: Move most of the code into ParserHelper.cs, in which we
+	have syntax highlighting and other useful goodies.
+
+	* ParserHelper.cs: New file, but mostly just code moved from Parser.jay
+
+	Also add support for 'enum results'.
+
+	* Tokenizer.cs: New 'enum' keyword. Also allow escaped identifiers a la
+	C# : @keyword is an ident, not a keyword.
+	
+2005-09-24  Peter Williams  <peter@newton.cx>
+
+	* Parser.jay: Allow "target = Rule (namedarg = value);" syntax in
+	.bundle files, for specifying named arguments (!).
+
+2005-01-19  Peter Williams  <peter@newton.cx>
+
+	* Parser.jay: Unused variable warning.
+
+2004-11-28  Peter Williams  <peter@newton.cx>
+
+	* Parser.jay: Add yacc_verbose_flag that newer jay wants.
+
+2004-09-26  Peter Williams  <peter@newton.cx>
+
+	* mb-bundlegen.cs: Give more helpful parameter identifiers (instead
+	of PARAM). Hopefully will prevent me from messing up the /resource:
+	option again. Really neat implementation of the feature in 
+	Mono.GetOptions ...
+
+2004-08-30  Peter Williams  <peter@newton.cx>
+
+	* Buildfile: Reference the common /config/mbuild/Mono.GetOptions.dll
+	
+2004-08-30  Peter Williams  <peter@newton.cx>
+
+	* Buildfile: Install with exe_installer.
+
+	* ChangeLog: start this file.
+

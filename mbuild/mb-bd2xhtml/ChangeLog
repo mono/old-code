@@ -1,0 +1,11 @@
+2004-08-30  Peter Williams  <peter@newton.cx>
+
+	* Buildfile: Use common DLL checks instead of redundantly
+	looking for them here.
+
+2004-08-30  Peter Williams  <peter@newton.cx>
+
+	* Buildfile: install with exe_installer, instead of no install.
+
+	* ChangeLog: start file.
+

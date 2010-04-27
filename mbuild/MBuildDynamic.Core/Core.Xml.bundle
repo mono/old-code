@@ -1,0 +1,76 @@
+# Core Xml support
+
+namespace Core.Xml {
+
+	using default;
+	using Core;
+
+	using !System;
+	using !System.Collections;
+	using !System.IO;
+	using !System.Xml;
+	using !System.Xml.XPath;
+	using !System.Xml.Xsl;
+
+	result XmlFile : TextFile {}
+	result XslFile : XmlFile {}
+
+	sourcefile rule XmlSourcefileRule = XmlFile;
+	sourcefile rule XslSourcefileRule = XslFile;
+
+	dependency regex matcher "\\.xml$" = XmlSourcefileRule;
+	dependency regex matcher "\\.xsl$" = XslSourcefileRule;
+
+	rule XslProcess : ProcessorBaseRule {
+
+		XmlFile input;
+		XslFile stylesheet;
+		MBDictionary? params;
+
+		@{
+
+		protected virtual bool InitializeArgs (XsltArgumentList xargs, IBuildContext ctxt)
+		{
+			if (@params == null)
+				return false;
+
+			// Note that we force parameters to be string values.
+			// Theoretically we could pass MBFiles and whatnot as
+			// XSL extension objects ... but how about not.
+
+			foreach (IDictionaryEnumerator item in @params)
+				xargs.AddParam ((string) item.Key, "", item.Value.ToString ());
+			return false;
+		}
+
+		@}
+
+		build (TextFile output, ctxt) @{
+			MBFile tempdest;
+
+			if (GetOutputAndTemp (ctxt, output, out tempdest))
+				return true;
+
+			XsltArgumentList xargs = new XsltArgumentList ();
+
+			if (InitializeArgs (xargs, ctxt))
+				return true;
+
+			XslTransform xform = new XslTransform ();
+			StreamWriter tempstream = new StreamWriter (tempdest.OpenWrite (ctxt));
+
+			try {
+				XPathDocument xinput = new XPathDocument (input.GetPath (ctxt));
+				xform.Load (stylesheet.GetPath (ctxt));
+				xform.Transform (xinput, xargs, tempstream, new XmlUrlResolver ());
+			} catch (Exception e) {
+				ctxt.Logger.Error (3011, "Caught exception during XSL transform", e.ToString ());
+				return true;
+			} finally {
+				tempstream.Close ();
+			}
+
+			return MoveToFinal (output, tempdest, ctxt);
+		@}
+	}
+}

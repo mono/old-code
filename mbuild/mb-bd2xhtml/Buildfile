@@ -1,0 +1,17 @@
+using [
+	Core
+	Core.Clr
+	Core.Xml
+	Languages.CSharp
+]
+
+mb-bd2xhtml.exe = [
+	@mb-bd2xhtml.exe.sources
+	resources = bd2xhtml.xsl
+
+	/config/mbuild/System.Xml.dll
+	/config/mbuild/Mono.GetOptions.dll
+] with [
+	#default = false
+	install = /config/mbuild/exe_installer
+]

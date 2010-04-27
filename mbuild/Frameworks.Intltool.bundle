@@ -1,0 +1,310 @@
+namespace Frameworks.Intltool {
+
+using default;
+
+using Core;
+using Core.Tools;
+using Core.Install;
+using Frameworks.Gettext;
+
+using !System;
+using !System.IO;
+using !System.Reflection;
+
+# FIXME: The intltool support is still very incomplete; we just have enough
+# to get merging working for F-Spot. Although probably most other stuff
+# will need to wait on command results (which, admittedly, should not be 
+# hard to implement).
+
+parameters {
+	basis Config = /config/fx/intltool;
+	namespace Frameworks.Gettext;
+	namespace Core.Install;
+}
+
+	# FIXME: would be nice to be able to check for this stuff and
+	# have some boolean 'can_use_intltool' that gets set; but then
+	# there needs to be a mechanism that (by default) causes a prereq error if
+	# can_use_intltool is false. This comes back to the problem that
+	# builders can configure /config/ targets, but Buildfiles can't.
+
+	provider Config {
+
+		perl_names = "!perl";
+		perl = FindTool (perl_names);
+		perl_works = _CheckPerlWorks (perl) tags { "prereq" = true; };
+
+		iconv_names = "!iconv";
+		iconv = FindTool (iconv_names);
+
+		substs = MakeIntltoolSubsts () tags { "prereq" = true; };
+
+		extract_src = ExtractAndSubstitute ("intltool-extract");
+		merge_src = ExtractAndSubstitute ("intltool-merge");
+		update_src = ExtractAndSubstitute ("intltool-update");
+
+		hacky_po_directory = GetPoDirectoryHack ();
+
+		merge_program = MakeInterpretedProgram (perl, merge_src);
+	}
+
+	rule MakeIntltoolSubsts {
+		BinaryInfo perl;
+		BinaryInfo iconv;
+		BinaryInfo msgfmt;
+		BinaryInfo msgmerge;
+		BinaryInfo xgettext;
+
+		# Don't convert to string since we just shove it into
+		# the MBDictionary.
+		MBString libdir;
+	
+		build (MBDictionary res, ctxt) @{
+			res["INTLTOOL_PERL"] = new MBString (perl.ToUnixStyle (ctxt));
+			res["INTLTOOL_MSGFMT"] = new MBString (msgfmt.ToUnixStyle (ctxt));
+			res["INTLTOOL_MSGMERGE"] = new MBString (msgmerge.ToUnixStyle (ctxt));
+			res["INTLTOOL_XGETTEXT"] = new MBString (xgettext.ToUnixStyle (ctxt));
+			res["INTLTOOL_ICONV"] = new MBString (iconv.ToUnixStyle (ctxt));
+			res["INTLTOOL_LIBDIR"] = libdir;
+
+			// FIXME: 1) need to subst in the absolute path (could create
+			// an API for this, and probably should, but don't want to)
+			// and 2) the Makefile with intltool seems to prefer setting
+			// the environment variable INTLTOOL_EXTRACT.
+
+			res["INTLTOOL_EXTRACT"] = new MBString ("donotuseme");
+
+			return false;
+		@}
+	} default {
+		perl = Config/perl;
+		iconv = Config/iconv;
+		msgfmt = Gettext.Config/msgfmt;
+		msgmerge = Gettext.Config/msgmerge;
+		xgettext = Gettext.Config/xgettext;
+		libdir = Install.Config/libdir;
+	}
+
+	rule ExtractAndSubstitute {
+		string resource;
+		MBDictionary subst;
+
+		build (TextFile output, ctxt) @{
+			string resin = resource + ".in";
+
+			// The input.
+
+			Assembly caller = Assembly.GetAssembly (GetType ());
+			Stream instream = caller.GetManifestResourceStream (resin);
+
+			if (instream == null) {
+				ctxt.Logger.Error (9999, "No resource stream " + resin + 
+				                   "in assembly " + caller.FullName, null);
+				return true;
+			}
+
+			// The output.
+
+			output.Dir = ctxt.WorkingDirectory;
+			output.Name = resource;
+
+			// Link together with subst.
+
+			IOSink outsink = new IOSink (output, ctxt);
+			SubstSink subsink = new SubstSink (outsink, SubstStyles.Autoconf);
+			subsink.AddDictionary (subst, ctxt);
+
+			// Go.
+
+			try {
+				IOSink.DrainStream (instream, subsink);
+			} catch (Exception e) {
+				ctxt.Logger.Error (3018, "Exception while performing intltool unpack",
+				                   e.Message);
+				return true;
+			}
+
+			return false;
+		@}
+	} default {
+		subst = Config/substs;
+	}
+
+	abstract rule MergeTranslationsBase : OutputFileRule {
+		default TextFile input;
+
+		# This does not depend on the PO directory per se; it really depends
+		# on all of the PO files. Once again, we do not have have a nice way
+		# to specify that. Yet.
+
+		MBDirectory posrc;
+		BinaryInfo program;
+		TextFile? typeref; # copied hack from Core.Subst.Subst
+
+		@{
+
+		protected abstract string GetExtraArgs (IBuildContext ctxt);
+
+		@}
+
+		restype @{
+			if (typeref != null)
+				return typeref.GetType ();
+			return typeof (TextFile);
+		@}
+
+		build (TextFile output, ctxt) @{
+			string destname = GetOutputName (ctxt);
+			if (destname == null)
+				return true;
+
+			output.Dir = ctxt.WorkingDirectory;
+			output.Name = destname;
+
+			MBFile cachefile = new MBFile ();
+			cachefile.Dir = new MBDirectory (ResultStorageKind.Built, posrc.SubPath);
+			cachefile.Name = ".intltool-merge-cache";
+
+			string args = String.Format ("{0} -c {1} {2} {3} {4}", 
+			                             GetExtraArgs (ctxt),
+			                             cachefile.GetPath (ctxt),
+		        	                     ctxt.PathTo (posrc),
+		                	             input.GetPath (ctxt),
+		                        	     output.GetPath (ctxt));
+
+			return (Launcher.RunTool (program, args, ctxt, "intltool-merge program failed") != 0);
+		@}
+
+		tags {
+			"default" = true;
+		}
+	} default {
+		posrc = Config/hacky_po_directory;
+		program = Config/merge_program;
+	}
+		
+	rule MergeDesktopTranslations : MergeTranslationsBase {
+		@{
+
+		protected override string GetExtraArgs (IBuildContext ctxt)
+		{
+			return "-d -u";
+		}
+	
+		@}
+	}
+
+	rule MergeKeyTranslations : MergeTranslationsBase {
+		@{
+
+		protected override string GetExtraArgs (IBuildContext ctxt)
+		{
+			return "-k -u";
+		}
+	
+		@}
+	}
+
+	rule MergeBATranslations : MergeTranslationsBase {
+		@{
+
+		protected override string GetExtraArgs (IBuildContext ctxt)
+		{
+			return "-b -u";
+		}
+	
+		@}
+	}
+
+	rule MergeXmlTranslations : MergeTranslationsBase {
+		@{
+
+		protected override string GetExtraArgs (IBuildContext ctxt)
+		{
+			return "-x -u";
+		}
+	
+		@}
+	}
+	
+	rule MergeSchemaTranslations : MergeTranslationsBase {
+		@{
+
+		protected override string GetExtraArgs (IBuildContext ctxt)
+		{
+			return "-s -u";
+		}
+	
+		@}
+	}
+
+	transform regex matcher "\\.desktop.in$" = MergeDesktopTranslations;
+	transform regex matcher "\\.directory.in$" = MergeDesktopTranslations;
+	transform regex matcher "\\.prop.in$" = MergeDesktopTranslations;
+	transform regex matcher "\\.soundlist.in$" = MergeDesktopTranslations;
+	transform regex matcher "\\.caves.in$" = MergeDesktopTranslations;
+	transform regex matcher "\\.theme.in$" = MergeDesktopTranslations;
+	transform regex matcher "\\.service.in$" = MergeDesktopTranslations;
+
+	transform regex matcher "\\.keys.in$" = MergeKeyTranslations;
+
+	transform regex matcher "\\.server.in$" = MergeBATranslations;
+
+	transform regex matcher "\\.pong.in$" = MergeXmlTranslations;
+	transform regex matcher "\\.sheet.in$" = MergeXmlTranslations;
+	transform regex matcher "\\.ui.in$" = MergeXmlTranslations;
+	transform regex matcher "\\.xml.in$" = MergeXmlTranslations;
+	transform regex matcher "\\.kbd.in$" = MergeXmlTranslations;
+
+	# We don't implement the .xml.in -> .xam XML_NOMERGE_RULE:
+	#    intltool-merge -x -u /tmp $< $@
+
+	transform regex matcher "\\.schemas.in$" = MergeSchemaTranslations;
+
+rule _CheckPerlWorks {
+	BinaryInfo perl;
+
+	build (MBBool res, ctxt) @{
+		// Need to check if version 5.x and if XML::Parser installed
+		// (intltool.m4 allows skipping of the latter check, presumably
+		// if there are no XML files being intltooled in one's package.
+		// We should allow a similar toggle eventually.)
+
+		string versinfo = Launcher.GetToolStdout (perl, "-v", ctxt);
+		if (versinfo == null)
+			return true;
+
+		if (versinfo.IndexOf ("v5") < 0) {
+			ctxt.Logger.Error (3029, "You need Perl version 5.x installed to use " + 
+			                   "intltool support", perl.ToUnixStyle (ctxt));
+			return true;
+		}
+
+		if (Launcher.RunTool (perl, "-e \"require XML::Parser\"", ctxt, "Your version " +
+		                      "of Perl does not include the required module XML::Parser") != 0)
+			return true;
+
+		res.Value = true;
+		return false;
+	@}
+}
+
+rule GetPoDirectoryHack {
+
+	# Should institute some kind of 'named special' providers system
+	# that allows a Buildfile to indicate 'I am the po/ directory',
+	# effectively, and that allows bundles to specify that
+	# 'the special po provider is by default located a /po/'
+
+	build (MBDirectory posrc, ctxt) @{
+		posrc.Init (ResultStorageKind.Source, "po");
+
+		if (Directory.Exists (ctxt.PathTo (posrc)))
+			return false;
+
+		ctxt.Logger.Error (9999, "We need a po/ directory but it doesn't seem to exist", null);
+		return true;
+	@}
+}
+
+}

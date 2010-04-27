@@ -1,0 +1,149 @@
+namespace Frameworks.Gettext {
+
+using default;
+
+using Core;
+using Core.Tools;
+using Core.Install;
+
+using !System;
+using !System.IO;
+
+# FIXME: detect whether we are using GNU gettext by
+# following gettext.m4 or (more likely) some simplified
+# version thereof.
+
+	parameters {
+		basis Config = /config/fx/gettext;
+		namespace Core;
+		namespace Core.Install;
+	}
+
+	provider Config {
+
+		msgfmt_names = "!gmsgfmt msgfmt";
+
+		msgfmt = FindTool (msgfmt_names) tags {
+			"prereq" = true;
+		};
+
+		# Not used here but should be
+
+		msgmerge_names = "!gmsgmerge msgmerge";
+
+		msgmerge = FindTool (msgmerge_names) tags {
+			"prereq" = true;
+		};
+
+		xgettext_names = "!xgettext";
+
+		xgettext = FindTool (xgettext_names) tags {
+			"prereq" = true;
+		};
+
+		# FIXME: detect /usr/share or /usr/lib depending on whether
+		# we are using GNU gettext or not
+
+		mo_installer = MakeMOFileInstaller (Install.Config/datadir);
+	}
+
+	rule FormatPOFile : OutputFileRule {
+		default POFile source;
+		BinaryInfo msgfmt;
+
+		tags { 
+			"default" = true;
+			"install" = Config/mo_installer;
+		}
+
+		# FIXME: change the extension to gmo if we are using GNU
+		# gettext. Maybe this shouldn't be an outputfilerule --
+		# maybe we should just mutate the source file name?
+
+		build (MOFile dest, ctxt) @{
+			string destname = GetOutputName (ctxt);
+			if (destname == null)
+				return true;
+
+			dest.Dir = ctxt.WorkingDirectory;
+			dest.Name = destname;
+
+			string a = string.Format ("-c -o {0} {1}", dest.GetPath (ctxt), 
+					 	  source.GetPath (ctxt));
+
+			if (Launcher.RunTool (msgfmt, a, ctxt, "msgfmt tool returned an error") != 0)
+				return true;
+
+			return false;
+		@}
+	} default {
+		msgfmt = Config/msgfmt;
+	}
+
+	# install dir: $datadir/locale for GNU, $libdir/locale for nongnu
+	# We need to detect whether we're using GNU gettext and choose
+	# destdir for a new MOFileInstaller appropriately.
+
+	rule MakeMOFileInstaller : MakeCopyInstaller {
+		string package;
+		string? category;
+
+		default restype MOFileInstaller;
+
+		@{
+		protected override bool Initialize (CopyInstaller ci, IBuildContext ctxt) {
+			if (base.Initialize (ci, ctxt))
+				return true;
+
+			((MOFileInstaller) ci).PackageName = package;
+
+			if (category != null)
+				((MOFileInstaller) ci).LocaleCategory = category;
+
+			return false;
+		}
+		@}
+	} default {
+		package = Core.Env/compat_name;
+	}
+
+	transform regex matcher "\\.po$" = FormatPOFile;
+
+result PotFile : TextFile {}
+
+result POFile : TextFile {}
+
+result MOFile : BinFile {}
+
+sourcefile rule POSourcefileRule = POFile;
+dependency regex matcher "\\.po$" = POSourcefileRule;
+
+result MOFileInstaller : CopyInstaller {
+	@{
+
+	public string PackageName;
+	public string LocaleCategory = "LC_MESSAGES";
+
+	protected override string MutateDestDir (string destdir, MBFile other, IBuildContext ctxt) {
+		string lang = Path.GetFileNameWithoutExtension (other.Name);
+		char c = Path.DirectorySeparatorChar;
+		string p2 = String.Format ("locale{0}{1}{0}{2}", c, lang, LocaleCategory);
+		return Path.Combine (destdir, p2);
+	}
+
+	protected override string GetDestName (MBFile src, MBDirectory dest, IBuildContext ctxt) {
+		return PackageName + Path.GetExtension (src.Name);
+	}
+
+	public override Type OtherType {
+		get { return typeof (MOFile); }
+	}
+
+	@}
+}
+
+# FIXME: provide some kind of update-po functionality. Need action 
+# results or something.
+
+# FIXME: package.pot generation capability. Base on pure gettext version.
+}

@@ -1,0 +1,385 @@
+2006-12-28  Peter Williams  <peter@newton.cx>
+
+	* *.bundle: ANOTHER pervasive change. Make the structure templating
+	system a lot simpler. These files probably need to be reindented.
+
+2006-09-02  Peter Williams  <peter@newton.cx>
+
+	* Makefile.in (mb-bundlegen.exe): mb-bundlegen.exe now references
+	Mono.Build.dll.
+
+	* Buildfile (ExtraDist): Use the new apply format. Requires MBuild
+	from r64787 or later to build with MBuild; or you can just bootstrap
+	it with make. (r64787 can be built with older versions of MBuild.)
+
+	* Buildfile (ExtraDist): Prep for using the new apply format.
+
+2006-08-09  Peter Williams  <peter@newton.cx>
+
+	* *.bundle: Yay, another pervasive change. Move to the StructureTemplate 
+	model of ... templating structure. I think this is all just code 
+	rearrangement.
+
+2006-07-29  Peter Williams  <peter@newton.cx>
+
+	* Buildfile (Monkeywrench.dll): We need to sign this DLL now for
+	BundleManager to be able to snarf its public key; no reason not to
+	sign it, anyway.
+	* Makefile: Same.
+
+2006-07-20  Peter Williams  <peter@newton.cx>
+
+	* Makefile.in: Track movement of BuildfileParser.jay.
+
+	* configure.ac (MCS): Use gmcs, not mcs.
+
+2006-07-19  Peter Williams  <peter@newton.cx>
+
+	* Buildfile.config (docdir): Change the syntax of the default ordered
+	argument to match the new one.
+
+	* Languages.CrappyC.bundle (DefAddQuotes): Remove now that we can format
+	strings nicely.
+
+	* Tools.PkgConfig.bundle (PkgConfigProbe): Fix an important inverted logic
+	bug introduced in the invasive changes.
+
+2006-07-18  Peter Williams  <peter@newton.cx>
+
+	* *.bundle: Remove 'field' keywords.
+
+2006-07-18  Peter Williams  <peter@newton.cx>
+
+	* Tools.GLibGenmarshal.bundle: Migrate to the new preconstructed-results
+	model: add arguments to the build functions, add 'default restype' and
+	'restype @{}@' code where appropriate, change construction-type
+	operations to initialize-function-type operations, and change return types
+	to booleans.
+
+	* Frameworks.Gettext.bundle: Same.
+
+	* Frameworks.AutoheaderCompat.bundle: Same.
+
+	* Frameworks.Intltool.bundle: Same.
+
+	* Tools.Bundlegen.bundle: Same.
+
+	* Tools.PkgConfig.bundle: Same.
+
+	* Tools.Jay.bundle: Same.
+
+	* Tools.Monodoc.bundle: Same.
+
+	* Languages.CrappyC.bundle: Same.
+
+	* Languages.CSharp.bundle: Same.
+
+2006-07-09  Peter Williams  <peter@newton.cx>
+
+	* *.bundle: Use the new bundle syntax for argument handling.
+
+	* Tools.Jay.bundle: Fix the skeleton file handling to avoid a problem
+	that wasn't caught with the old ArgCollector type matching code.
+	
+	* Buildfile (mb-bundledoc): Comment out this subdir until I get around
+	to fixing it.
+
+2006-07-03  Peter Williams  <peter@newton.cx>
+
+	* Tools.Jay.bundle: Strip out some old old old sample tag settings that
+	now cause errors (that should have been caught before).
+
+2006-06-28  Peter Williams  <peter@newton.cx>
+
+	* Buildfile: Comment out mb-gtkconfig until Monkeywrench settles down.
+
+	* Monkeywrench.dll.sources: Reflect creation of Monkeywrench.Compiler dir.
+	Track movements and file additions (see Monkeywrench/ChangeLog).
+
+	* This is the compiled target graph branch.
+
+2006-06-23  Peter Williams  <peter@newton.cx>
+
+	* Buildfile: Add a 'resources' subdirectory where some random text templates
+	will be stored. Also add Frameworks.Intltool and rename some ex-Tools.
+
+	* Languages.CSharp.bundle: Add support for nowarn and define compiler options.
+
+	* Frameworks.Intltool.bundle: New bundle, incomplete intltool support.
+	Enough to get desktop file merging for f-spot. What is there is fairly
+	decent, though. Chose to bundle the intltool sources with mbuild source;
+	solves some thorny issues well, but presents many others too.
+
+	* Languages.CrappyC.bundle: Enable the CompileShlib matcher rule. Add
+	versioning support to shared libraries. Create an installer that honors the
+	version and creates symlinks like libtool.
+
+	* Frameworks.AutoheaderCompat.bundle: Rename from Tools.AutoheaderCompat. Have
+	true booleans emit '#define foo 1' like autoconf does.
+
+	* Frameworks.Gettext.bundle: Rename from Tools.Gettext. Define a few new
+	gettext-related programs.
+
+	* Tools.Bundlegen.bundle: Track API change to ExtractAssemblyResource rule.
+
+	* Tools.Monodoc.bundle: Same.
+
+	* Makefile.in: Reflect movement of some template files to resources/
+
+	* Tools.Gettext.bundle: Rename to Frameworks.Gettext.bundle.
+
+2006-06-17  Peter Williams  <peter@newton.cx>
+
+	* Languages.CrappyC.bundle: Crappy C compilation support. It's actually
+	pretty solid in most places, I think, but it is far, far, far from
+	portable and is missing important features.
+
+	* c-check-template.c.in: Support file for the above.
+	
+	* Tools.GLibGenmarshal.bundle: Support for glib-genmarshal. Very
+	straightforward.
+
+	* Tools.AutoheaderCompat.bundle: Hacky support to output a config.h.
+	Really needs to be integrated with prereq checks to automatically insert
+	#defines as the checks are performed. For now it's all manual.
+
+	* Tools.Bundlegen.bundle: Update to new FindTool arg format.
+
+	* Tools.Jay.bundle: Same.
+
+	* Tools.Monodoc.bundle: Same.
+
+	* Tools.PkgConfig.bundle: Same.
+
+	* Languages.CSharp.bundle: Same.
+	
+	* Tools.Gettext.bundle: Quick bundle that does gettext message
+	formatting.
+	
+2006-06-05  Peter Williams  <peter@newton.cx>
+
+	* Languages.CSharp.bundle: Use new temporary file API.
+
+2006-06-03  Peter Williams  <peter@newton.cx>
+
+	* Tools.PkgConfig.bundle: Add PkgConfigProbe rule: like
+	PkgConfigCheck, but set prereq = default = false, and don't
+	report an error if the pkg-config check fails. Sugar for
+	use cases like the f-spot configure.in.
+
+2005-12-01  Peter Williams  <peter@newton.cx>
+
+	* Makefile.in (Mono.Build.dll): /r:Mono.Posix.dll here.
+
+	* Buildfile: Use it for Mono.Build.dll.
+
+	* Buildfile.config: Define Mono.Posix.dll system dll.
+
+2005-10-15  Peter Williams  <peter@newton.cx>
+
+	* Buildfile: Dist Makefile.in, not Makefile, now.
+
+2005-10-10  Peter Williams  <peter@newton.cx>
+
+	* mb-import/mb-import.cs (EvaluateTargets): Result -> BuiltItem.
+
+	* Mono.Build.dll.sources: New files: BuiltItem.cs, StrUtils.cs
+
+2005-09-24  Peter Williams  <peter@newton.cx>
+
+	* Tools.Monodoc.bundle: Finally update for the changes to monodoc. Call 'mdassembler'
+	rather than 'monodoc --assemble' and get the 'sourcesdir' through pkg-config.
+
+	* Makefile.in (MBuildDynamic.Tools.Monodoc.dll): Now depends on Tools.PkgConfig.dll
+
+	* Buildfile (MBuildDynamic.Tools.Monodoc.dll): Same.
+
+2005-09-23  Peter Williams  <peter@newton.cx>
+
+	* Languages.CSharp.bundle: Finally fix that bug where check_debug files
+	stayed around.
+
+2005-09-01  Peter Williams  <peter@newton.cx>
+
+	* Languages.CSharp.bundle: Format index typo fix.
+
+2005-08-26  Peter Williams  <peter@newton.cx>
+
+	* Tools.PkgConfig.bundle: Add an installer to the PkgConfig provider
+	for easy installation of pkg-config files.
+
+	* Languages.CSharp.bundle (InstallResult): Check for null ouptut.Config.
+
+2005-08-21  Peter Williams  <peter@newton.cx>
+
+	* Languages.CSharp.bundle: Add support for assembly config files. Make
+	the config file a dep of the compile rule (a little unclean since changing
+	the config file will result in a recompile) and copy the config file to
+	the location of the CSC output so that if the executable is run, the config
+	file will be found. Also add an 'unsafe' boolean argument to allow us to
+	compile unsafe assemblies.
+
+2005-08-16  Peter Williams  <peter@newton.cx>
+
+	* configure.ac (COMPAT): Fix a check for the Jay skeleton file.
+
+2005-07-15  Peter Williams  <peter@newton.cx>
+
+	* Buildfile: Haha, remembered this stuff before it bit me in the ass.
+	(Distribute autoconf support files)
+
+2005-07-15  Peter Williams  <peter@newton.cx>
+
+	Change the Makefile-based build system to use Autoconf. People will want
+	to install into custom prefixes, Mono might be in a weird prefix, etc.
+	And in general people feel more comfortable if they can do the whole
+	./configure blah blah blah thing. We also add explanatory text on 'make install'
+	to tell people how to build MBuild with itself; we even import their configured
+	prefix via a generated result storage XML file. Shows how the XML import stuff
+	is pretty sweet.
+	
+	* configure.ac: Check for required proggies.
+
+	* autogen.sh: A necessary evil. You know, in MBuild world, you don't need
+	this file. Just saying.
+
+	* Makefile.in: New file. Based on Makefile, of course. Add a big helpful text
+	explaining what to do next after doing a 'make install'. Add autoconf rebuild rules
+	and a rule to generate prefix-config.xml.
+
+	* Makefile: This is now generated from Makefile.in. 
+
+	* prefix-config.xml.in: New file, template for importing prefix information
+	into an MBuild build from an Autoconf build.
+
+	* Buildfile: Distribute the above.
+
+2005-07-14  Peter Williams  <peter@newton.cx>
+
+	* Mono.Build.dll.sources: Get rid of IResultTypeLookup.cs, which I only
+	needed because I didn't know that loading an assembly into the current
+	appdomain imported its types.
+
+2005-03-05  Peter Williams  <peter@newton.cx>
+
+	* Update a whole bunch of stuff: introduce CompositeResults, make it
+	so that everything is cool and we can finally install debug info.
+	Add XML export and import of results for more robust storage than
+	binary serialization. Fid the ILogger interface to not be idiotic
+	with regard to locations. And more.
+	
+2005-01-19  Peter Williams  <peter@newton.cx>
+
+	* Languages.CSharp.bundle: Unused variable warning.
+
+2004-09-29  Peter Williams  <peter@newton.cx>
+
+	* Tools.Monodoc.bundle (MonodocFilesInstaller): Update this to reflect new
+	CopyInstaller.CopyFile and DescribeAction function.
+
+	* TODO: Buncha updates.
+
+2004-09-26  Peter Williams  <peter@newton.cx>
+
+	* Makefile: Make sure to always give the resource file and the resource name
+	to the C# compiler: /resource:foo,foo instead of just /resource:foo.
+
+2004-09-26  Peter Williams  <peter@newton.cx>
+
+	* Monkeywrench.dll.sources: Add BuildServices and WrenchOperations.
+	
+	* Buildfile.config (gac_csc_options): Rename from csc_options, 
+	because these options should only be added for things that will be gac'ed.
+
+	* Buildfile (Mono.Build.dll): Reflect rename of csc_options.
+	(mbuild.exe): No csc_options here -- no gac'ed.
+
+2004-09-21  Peter Williams  <peter@newton.cx>
+
+	* Tools.PkgConfig.bundle (GetQuery): Fix order -- if the query arg is set,
+	it should override the given name of the target.
+
+2004-09-18  Peter Williams  <peter@newton.cx>
+
+	* Makefile (install): Add rules to compile mb-bd2xhtml.exe and install the
+	wrapper so that people can build the API docs. Oops.
+
+2004-08-30  Peter Williams  <peter@newton.cx>
+
+	* Languages.CSharp.bundle: Add CSharpSystemDllCheck, a rule that just returns
+	a SystemDll for its .target but tries to link a test program with it to ensure
+	that the C# compiler can find the DLL.
+
+	* csharp-check-template.cs.in: New file; skeleton C# file used to generate
+	test code when probing the C# compiler.
+
+	* Buildfile.config: Check for Mono.GetOptions.dll and System.Xml.dll here.
+
+	* Buildfile: reference /config/mbuild/Mono.GetOptions.dll, etc.
+
+2004-08-30  Peter Williams  <peter@newton.cx>
+
+	* Makefile (install): Install into pkglibdir too.
+
+	* Languages.CSharp.bundle: "Encourage" good build policy by installing DLL's
+	into pkglibdir by default. Do the same for exes?
+
+2004-08-30  Peter Williams  <peter@newton.cx>
+
+	* Languages.CSharp.bundle: Oops, strip off the file path when adding resources
+	without explicit ID's.
+
+	* Makefile (install-extra): Little utility target (don't install these by default
+	because the .exes they wrap aren't built by the Makefile.)
+
+2004-08-30  Peter Williams  <peter@newton.cx>
+
+	* Buildfile.config: Make exe_installer point to /config/install/pkglibdir_installer.
+
+2004-08-30  Peter Williams  <peter@newton.cx>
+
+	* Buildfile (mbuild.exe): Install things with exe_installer,
+	not the regular bindir installer. This puts them into a versioned
+	subdirectory of libdir, which I think is better form.
+
+	* Buildfile.config (exedir): Define the exe installation directory:
+	{libdir}/{compat_name}. Should make globally available in /config/install/.
+
+	* Makefile: Updates to mirror change in install directory above; other
+	random cleanups.
+
+2004-08-30  Peter Williams  <peter@newton.cx>
+
+	* Languages.CSharp.bundle: Major update. Break out compiler
+	options into a separate result class; merge options together
+	when compiling; add a CSharpCompilerProgram class that stores
+	config along with the bare BinaryInfo. (No actual config yet,
+	but abstract the argument generation.)
+
+	* Buildfile.config (csc_options): Define new compiler options
+	variable that has mbuild.snk as a keyfile.
+	(docdir): Make this with JoinPath to install to somewhat saner
+	directory  : {prefix}/share/docs/{compat-name}.
+
+	* Buildfile: Use /config/mbuild/csc_options for compiler
+	options. Still under construction a bit but the initial
+	cut still works.
+	(docs): Install these again, now that docdir has a better name.
+
+2004-08-30  Peter Williams  <peter@newton.cx>
+
+	* README: A little bit of this, a little bit of that.
+
+2004-08-30  Peter Williams  <peter@newton.cx>
+
+	* Buildfile: Require base assemblies to be version 0.0.4.0 -- would
+	be nice to maintain 0031 compat, but need to test the update assemblies...
+	Maybe I'll bump this back down if compat is not broken by release time.
+
+	* Makefile (VERSION): Sync up to 0.0.4.0.
+
+	* Tools.Monodoc.bundle: Honor /config/generic/build_docs for the 
+	default tag of docs and generated .source files.
+
+	* ChangeLog: start this, now that we are CVS imported.
+

@@ -1,0 +1,57 @@
+namespace Frameworks.AutoheaderCompat {
+
+	using default;
+
+	using Core;
+	using Core.Tools;
+	using Languages.CrappyC;
+
+	using !System.IO;
+	using !System.Text;
+
+	target regex matcher "^config.h$" = GenerateConfigH;
+
+	# FIXME: There should be a bunch of things that show up by
+	# default.
+
+	rule GenerateConfigH : OutputFileRule {
+		MBDictionary defs;
+
+		build (CHeader res, ctxt) @{
+			string destname = GetOutputName (ctxt);
+			if (destname == null)
+				return true;
+
+			res.Dir = ctxt.WorkingDirectory;
+			res.Name = destname;
+			
+			return WriteDefs (res, defs, ctxt);
+                @}
+
+		@{
+
+		bool WriteDefs (CHeader file, MBDictionary defs, IBuildContext ctxt)
+		{
+			using (StreamWriter sw = new StreamWriter (file.OpenWrite (ctxt))) {
+				foreach (string k in defs.Keys) {
+					Result r = defs[k];
+
+					if (r is MBString)
+						sw.WriteLine ("#define {0} {1}", k, 
+						              ((MBString) r).Value);
+					else if (r is MBBool && ((MBBool) r).Value)
+						// the '1' is what config.h has.
+						sw.WriteLine ("#define {0} 1", k);
+					else {
+						ctxt.Logger.Error (2050, "Unexpected dictionary entry for key " + k, defs.ToString ());
+						return true;
+					}
+				}
+			}
+
+			return false;
+		}
+
+		@}
+	}
+}

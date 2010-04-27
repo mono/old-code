@@ -1,0 +1,11 @@
+#!/bin/sh
+# -*- shell-script -*-
+
+# mb-gtkconfig will always be called in build directories,
+# while our naive check for a .monkeywrench.log is meant to
+# check if we are operating specifically in the mbuild build
+# directory. So skip that.
+
+exec -a "$0" mono $MONO_FLAGS "@location@/mb-gtkconfig.exe" "$@"
+
+

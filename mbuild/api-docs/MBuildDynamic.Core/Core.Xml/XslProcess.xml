@@ -1,0 +1,48 @@
+﻿<rule name="XslProcess">
+        <docs>
+                <summary>To be added.</summary>
+                <remarks>To be added.</remarks>
+        </docs>
+        <argument name="params" exists_since="0.0.3.1">
+                <docs>
+                        <summary>To be added.</summary>
+                        <remarks>To be added.</remarks>
+                </docs>
+                <type>Mono.Build.MBDictionary</type>
+                <flags>optional </flags>
+        </argument>
+        <argument name=".target" exists_since="0.0.3.1">
+                <docs>
+                        <summary>To be added.</summary>
+                        <remarks>To be added.</remarks>
+                </docs>
+                <type>Mono.Build.MBString</type>
+                <flags>optional </flags>
+        </argument>
+        <argument name="stylesheet" exists_since="0.0.3.1">
+                <docs>
+                        <summary>To be added.</summary>
+                        <remarks>To be added.</remarks>
+                </docs>
+                <type>MBuildDynamic.Core.Xml.XslFile</type>
+                <flags></flags>
+        </argument>
+        <argument name="output" exists_since="0.0.3.1">
+                <docs>
+                        <summary>To be added.</summary>
+                        <remarks>To be added.</remarks>
+                </docs>
+                <type>Mono.Build.MBString</type>
+                <flags>optional </flags>
+        </argument>
+        <argument name="input" exists_since="0.0.3.1">
+                <docs>
+                        <summary>To be added.</summary>
+                        <remarks>To be added.</remarks>
+                </docs>
+                <type>MBuildDynamic.Core.Xml.XmlFile</type>
+                <flags></flags>
+        </argument>
+</rule>
+
+

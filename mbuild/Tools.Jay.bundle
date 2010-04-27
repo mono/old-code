@@ -1,0 +1,113 @@
+namespace Tools.Jay {
+
+	using default;
+
+	using Core;
+	using Core.Tools;
+	using Languages.CSharp;
+
+	using !System.Text;
+
+	parameters {
+		basis Config = /config/tools/jay;
+	}
+
+	provider Config {
+
+		jay_name = "!jay";
+
+		jay_binary = FindTool (jay_name) tags {
+			"prereq" = true;
+		};
+
+		default_flags = "-ct";
+
+		default_skeleton_name = "skeleton.cs";
+
+		default_skeleton = GetDefaultSkeleton (default_skeleton_name);
+	}
+
+	template Foo {
+		a = true,
+		b = Config/bar
+	} tags {
+		"default" = true;
+		"qeqwe" = Config/bim;
+	}
+
+	template Bar : Foo {
+		c = false
+	}
+
+	rule JayProcess : ProcessorBaseRule {
+		JaySource source;
+		TextFile skeleton;
+		BinaryInfo jay;
+		string+ args;
+
+		build (CSSource res, ctxt) @{
+                        MBFile tempdest;
+ 
+                        if (GetOutputAndTemp (ctxt, res, out tempdest))
+                                return true;
+ 
+                        // user args
+ 
+                        StringBuilder sb = new StringBuilder ();
+ 
+                        foreach (string s in args)
+                                sb.AppendFormat (" {0}", s);
+
+                        // input argument
+
+                        sb.Append (" ");
+                        sb.Append (source.GetPath (ctxt));
+
+                        // run that mofo -- have to get a bit lower level
+			// due to stdout redirection.
+
+			string stderr = "";
+
+                        if (Launcher.Start (jay, sb.ToString (),
+                                            skeleton, tempdest, out stderr, ctxt) != 0) {
+                                ctxt.Logger.Error (3003, "Jay returned an error.", null);
+                                return true;
+                        } 
+
+			if (stderr.Length > 0)
+				ctxt.Logger.Warning (3010, "Jay printed warnings:", stderr);
+
+			return MoveToFinal (res, tempdest, ctxt);
+                @}
+	} default {
+		skeleton = Config/default_skeleton;
+		jay = Config/jay_binary;
+		args = Config/default_flags;
+	}
+
+	rule GetDefaultSkeleton {
+		BinaryInfo jay;
+		string skelname;
+
+		build (TextFile res, ctxt) @{
+			string dir = Launcher.GetToolStdout (jay, "-p", ctxt);
+			if (dir == null)
+				return true;
+ 
+	                res.Dir = new MBDirectory (ResultStorageKind.System, dir);
+			res.Name = skelname;
+
+			return false;
+		@}
+	} default {
+		jay = Config/jay_binary;
+	}
+
+	transform regex matcher "\\.jay$" = JayProcess;
+
+	result JaySource : TextFile {}
+
+	sourcefile rule JaySourcefileRule = JaySource;
+
+	dependency regex matcher "\\.jay$" = JaySourcefileRule;
+}

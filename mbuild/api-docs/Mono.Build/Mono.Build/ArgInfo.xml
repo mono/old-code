@@ -1,0 +1,163 @@
+<Type Name="ArgInfo" FullName="Mono.Build.ArgInfo">
+  <TypeSignature Language="C#" Value="public sealed struct ArgInfo" Maintainer="auto" />
+  <AssemblyInfo>
+    <AssemblyName>Mono.Build</AssemblyName>
+    <AssemblyPublicKey>[00 24 00 00 04 80 00 00 94 00 00 00 06 02 00 00 00 24 00 00 52 53 41 31 00 04 00 00 11 00 00 00 F5 C4 9D D0 0C 3C 7B 78 63 91 17 5B 7D F6 FD 4A A9 50 31 82 44 76 CF D8 68 14 88 FD C8 8F 0F 8D 0F FE B2 24 19 8D F2 C1 9F 2F 14 C8 B5 47 12 08 FD A2 C5 F9 60 77 91 22 44 72 9D 61 96 65 EE 38 88 EA 48 A6 D4 66 4A 4A 8A 6A F9 B4 4D 2D 62 51 97 7D F9 0D AD 80 DC EE E9 66 C7 F3 B5 8C 89 27 5E 02 F6 8B 15 67 70 36 ED B7 53 2E 70 B1 98 04 39 2C D6 EE 3C 18 D0 76 4D 66 68 2B D6 A3 AC AB]</AssemblyPublicKey>
+    <AssemblyVersion>0.0.0.0</AssemblyVersion>
+    <AssemblyCulture>neutral</AssemblyCulture>
+    <Attributes />
+  </AssemblyInfo>
+  <ThreadSafetyStatement>Gtk# is thread aware, but not thread safe; See the <link location="node:gtk-sharp/programming/threads">Gtk# Thread Programming</link> for details.</ThreadSafetyStatement>
+  <Docs>
+    <summary>Describes an argument marshalled in an <see cref="T:Mono.Build.ArgCollector" />.</summary>
+    <remarks>ArgInfo structures do not usually need to be created directly. The overloads of the method <see cref="M:Mono.Build.ArgCollector.AddArg" /> are usually sufficient for argument-handling needs.</remarks>
+  </Docs>
+  <Base>
+    <BaseTypeName>System.ValueType</BaseTypeName>
+  </Base>
+  <Interfaces />
+  <Attributes />
+  <Members>
+    <Member MemberName="name">
+      <MemberSignature Language="C#" Value="public string name;" />
+      <MemberType>Field</MemberType>
+      <ReturnValue>
+        <ReturnType>System.String</ReturnType>
+      </ReturnValue>
+      <Parameters>
+      </Parameters>
+      <Docs>
+        <summary>The name of the argument.</summary>
+        <remarks>The name of the argument. Names beginning with a period ('.') are reserved and should not be used.</remarks>
+      </Docs>
+    </Member>
+    <Member MemberName="default_to">
+      <MemberSignature Language="C#" Value="public string default_to;" />
+      <MemberType>Field</MemberType>
+      <ReturnValue>
+        <ReturnType>System.String</ReturnType>
+      </ReturnValue>
+      <Parameters>
+      </Parameters>
+      <Docs>
+        <summary>The absolute target name of this argument's default value.</summary>
+        <remarks>The absolute target name of the default value of this argument. If the argument is evaluated and no values have been assigned to it, the value of this default target will be returned.
+
+<para>If this field is null, no default is assumed.
+</para></remarks>
+      </Docs>
+    </Member>
+    <Member MemberName="type">
+      <MemberSignature Language="C#" Value="public Type type;" />
+      <MemberType>Field</MemberType>
+      <ReturnValue>
+        <ReturnType>System.Type</ReturnType>
+      </ReturnValue>
+      <Parameters>
+      </Parameters>
+      <Docs>
+        <summary>The type of the argument.</summary>
+        <remarks>The type of the argument. Should be a subclass of <see cref="T:Mono.Build.Result" />.</remarks>
+      </Docs>
+    </Member>
+    <Member MemberName="flags">
+      <MemberSignature Language="C#" Value="public Mono.Build.ArgInfoFlags flags;" />
+      <MemberType>Field</MemberType>
+      <ReturnValue>
+        <ReturnType>Mono.Build.ArgInfoFlags</ReturnType>
+      </ReturnValue>
+      <Parameters>
+      </Parameters>
+      <Docs>
+        <summary>Flags describing the argument's properties.</summary>
+        <remarks>A set of <see cref="T:Mono.Build.ArgInfoFlags" /> describing the argument's properties.</remarks>
+      </Docs>
+    </Member>
+    <Member MemberName="ToString">
+      <MemberSignature Language="C#" Value="public static string ToString (Mono.Build.ArgInfo[] args);" />
+      <MemberType>Method</MemberType>
+      <ReturnValue>
+        <ReturnType>System.String</ReturnType>
+      </ReturnValue>
+      <Parameters>
+        <Parameter Name="args" Type="Mono.Build.ArgInfo[]" />
+      </Parameters>
+      <Docs>
+        <summary>Render several ArgInfo structures into a string.</summary>
+        <param name="args">An array of <see cref="T:Mono.Build.ArgInfo" /> to stringify.</param>
+        <returns>A string representing the set of ArgInfo structures. The format is simply "[ arg1, arg2, arg3 ... argN]", where arg1 is the string representation of the first ArgInfo, arg2 is the string representation of the second, etc.</returns>
+        <remarks>Why did I bother writing this function?</remarks>
+      </Docs>
+    </Member>
+    <Member MemberName="ToString">
+      <MemberSignature Language="C#" Value="public override string ToString ();" />
+      <MemberType>Method</MemberType>
+      <ReturnValue>
+        <ReturnType>System.String</ReturnType>
+      </ReturnValue>
+      <Parameters />
+      <Docs>
+        <summary>Convert this definition into a somewhat-useful string.</summary>
+        <returns>A string representation of the ArgInfo.</returns>
+        <remarks>The output string looks something like "(opts) type marker name (= default)", where:
+
+
+<list type="bullet">
+            <item>
+              <term>"opts" shows characters representing flags on the argument: 'd' for default, 'o' for ordered, 'n' for narrow, 'D' for default ordered.</term>
+            </item>
+            <item>
+              <term>"type" is the type of the argument.</term>
+            </item>
+            <item>
+              <term>"marker" is the count marker. "?" for single optional, "+" for multi, "*" for optional multi, nothing for standard. (Just think of regex flags).</term>
+            </item>
+            <item>
+              <term>"name" is the name of the argument</term>.
+  </item>
+            <item>
+              <term>"default" is the absolute target name of the default value, if it is set.</term>
+            </item>
+          </list></remarks>
+      </Docs>
+    </Member>
+    <Member MemberName=".ctor">
+      <MemberSignature Language="C#" Value="public ArgInfo (string name, Type type, Mono.Build.ArgInfoFlags flags);" />
+      <MemberType>Constructor</MemberType>
+      <ReturnValue />
+      <Parameters>
+        <Parameter Name="name" Type="System.String" />
+        <Parameter Name="type" Type="System.Type" />
+        <Parameter Name="flags" Type="Mono.Build.ArgInfoFlags" />
+      </Parameters>
+      <Docs>
+        <summary>Create a new ArgInfo structure with initialization.</summary>
+        <param name="name">The name of the argument.</param>
+        <param name="type">The type of the argument. Should be a subclass of <see cref="T:Mono.Build.Result" />.</param>
+        <param name="flags">A set of <see cref="T:Mono.Build.ArgInfoFlags" /> that apply to this argument.</param>
+        <returns>A new <see cref="T:Mono.Build.ArgInfo" /> initialized with the values given to the constructor.</returns>
+        <remarks>ArgInfo structures do not usually need to be created directly. The overloads of the method <see cref="M:Mono.Build.ArgCollector.AddArg" /> are usually sufficient for argument-handling needs.</remarks>
+      </Docs>
+    </Member>
+    <Member MemberName=".ctor">
+      <MemberSignature Language="C#" Value="public ArgInfo (string name, Type type, string default_to, Mono.Build.ArgInfoFlags flags);" />
+      <MemberType>Constructor</MemberType>
+      <ReturnValue />
+      <Parameters>
+        <Parameter Name="name" Type="System.String" />
+        <Parameter Name="type" Type="System.Type" />
+        <Parameter Name="default_to" Type="System.String" />
+        <Parameter Name="flags" Type="Mono.Build.ArgInfoFlags" />
+      </Parameters>
+      <Docs>
+        <summary>Create a new ArgInfo structure with initialization.</summary>
+        <param name="name">The name of the argument.</param>
+        <param name="type">The type of the argument. Should be a subclass of <see cref="T:Mono.Build.Result" />.</param>
+        <param name="default_to">The full name of a target giving the default value of the argument.</param>
+        <param name="flags">A set of <see cref="T:Mono.Build.ArgInfoFlags" /> describing the argument.</param>
+        <returns>A new <see cref="T:Mono.Build.ArgInfo" /> initialized with the parameters to the constructor.</returns>
+        <remarks>ArgInfo structures do not usually need to be created directly. The overloads of the method <see cref="M:Mono.Build.ArgCollector.AddArg" /> are usually sufficient for argument-handling needs.</remarks>
+      </Docs>
+    </Member>
+  </Members>
+</Type>

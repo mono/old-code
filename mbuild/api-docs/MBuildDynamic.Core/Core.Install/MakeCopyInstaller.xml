@@ -1,0 +1,29 @@
+<rule name="MakeCopyInstaller">
+   <docs>
+      <summary>Create a <b>CopyInstaller</b> installing to the specified <b>InstallDirectory</b>.</summary>
+      <remarks>
+	 <p>The resulting installer will copy targets into the directory given by <b>destdir</b>. For instance:</p>
+	 <code lang="mbuild">
+dest = JoinPath [ /config/install/bindir { "subdir" } ]
+
+installer = MakeCopyInstaller [ dest ]
+
+myfile.txt = TextSource [] with [
+         install = installer
+]
+	 </code>
+	 <p>This fragment would install myfile.txt into the directory /usr/local/bin/subdir under default
+	 conditions.</p>
+      </remarks>
+   </docs>
+   <argument name="destdir" exists_since="0.0.3.1">
+      <docs>
+	 <summary>The destination directory of the resulting installer.</summary>
+	 <!-- <remarks>To be added.</remarks> -->
+      </docs>
+      <type>MBuildDynamic.Core.Install.InstallDirectory</type>
+      <flags></flags>
+   </argument>
+</rule>
+
+

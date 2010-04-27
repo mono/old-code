@@ -1,0 +1,230 @@
+<Type Name="SimpleTarget" FullName="Mono.Build.SimpleTarget">
+  <TypeSignature Language="C#" Value="public class SimpleTarget : Mono.Build.TagTargetBase, ITarget, ITagged, ITaggable" Maintainer="auto" />
+  <AssemblyInfo>
+    <AssemblyName>Mono.Build</AssemblyName>
+    <AssemblyPublicKey>[00 24 00 00 04 80 00 00 94 00 00 00 06 02 00 00 00 24 00 00 52 53 41 31 00 04 00 00 11 00 00 00 F5 C4 9D D0 0C 3C 7B 78 63 91 17 5B 7D F6 FD 4A A9 50 31 82 44 76 CF D8 68 14 88 FD C8 8F 0F 8D 0F FE B2 24 19 8D F2 C1 9F 2F 14 C8 B5 47 12 08 FD A2 C5 F9 60 77 91 22 44 72 9D 61 96 65 EE 38 88 EA 48 A6 D4 66 4A 4A 8A 6A F9 B4 4D 2D 62 51 97 7D F9 0D AD 80 DC EE E9 66 C7 F3 B5 8C 89 27 5E 02 F6 8B 15 67 70 36 ED B7 53 2E 70 B1 98 04 39 2C D6 EE 3C 18 D0 76 4D 66 68 2B D6 A3 AC AB]</AssemblyPublicKey>
+    <AssemblyVersion>0.0.0.0</AssemblyVersion>
+    <AssemblyCulture>neutral</AssemblyCulture>
+    <Attributes />
+  </AssemblyInfo>
+  <ThreadSafetyStatement>Gtk# is thread aware, but not thread safe; See the <link location="node:gtk-sharp/programming/threads">Gtk# Thread Programming</link> for details.</ThreadSafetyStatement>
+  <Docs>
+    <summary>To be added</summary>
+    <remarks>To be added</remarks>
+  </Docs>
+  <Base>
+    <BaseTypeName>Mono.Build.TagTargetBase</BaseTypeName>
+  </Base>
+  <Interfaces>
+    <Interface>
+      <InterfaceName>Mono.Build.ITarget</InterfaceName>
+    </Interface>
+    <Interface>
+      <InterfaceName>Mono.Build.ITagged</InterfaceName>
+    </Interface>
+    <Interface>
+      <InterfaceName>Mono.Build.ITaggable</InterfaceName>
+    </Interface>
+  </Interfaces>
+  <Attributes />
+  <Members>
+    <Member MemberName="name">
+      <MemberSignature Language="C#" Value="protected string name;" />
+      <MemberType>Field</MemberType>
+      <ReturnValue>
+        <ReturnType>System.String</ReturnType>
+      </ReturnValue>
+      <Parameters>
+      </Parameters>
+      <Docs>
+        <summary>To be added</summary>
+        <remarks>To be added</remarks>
+      </Docs>
+    </Member>
+    <Member MemberName="rule">
+      <MemberSignature Language="C#" Value="protected Type rule;" />
+      <MemberType>Field</MemberType>
+      <ReturnValue>
+        <ReturnType>System.Type</ReturnType>
+      </ReturnValue>
+      <Parameters>
+      </Parameters>
+      <Docs>
+        <summary>To be added</summary>
+        <remarks>To be added</remarks>
+      </Docs>
+    </Member>
+    <Member MemberName="deps">
+      <MemberSignature Language="C#" Value="protected string [] deps;" />
+      <MemberType>Field</MemberType>
+      <ReturnValue>
+        <ReturnType>System.String[]</ReturnType>
+      </ReturnValue>
+      <Parameters>
+      </Parameters>
+      <Docs>
+        <summary>To be added</summary>
+        <remarks>To be added</remarks>
+      </Docs>
+    </Member>
+    <Member MemberName="cdeps">
+      <MemberSignature Language="C#" Value="protected Mono.Build.Result[] cdeps;" />
+      <MemberType>Field</MemberType>
+      <ReturnValue>
+        <ReturnType>Mono.Build.Result[]</ReturnType>
+      </ReturnValue>
+      <Parameters>
+      </Parameters>
+      <Docs>
+        <summary>To be added</summary>
+        <remarks>To be added</remarks>
+      </Docs>
+    </Member>
+    <Member MemberName="named_deps">
+      <MemberSignature Language="C#" Value="protected System.Collections.Hashtable named_deps;" />
+      <MemberType>Field</MemberType>
+      <ReturnValue>
+        <ReturnType>System.Collections.Hashtable</ReturnType>
+      </ReturnValue>
+      <Parameters>
+      </Parameters>
+      <Docs>
+        <summary>To be added</summary>
+        <remarks>To be added</remarks>
+      </Docs>
+    </Member>
+    <Member MemberName="AddNamedArg">
+      <MemberSignature Language="C#" Value="public void AddNamedArg (string name, Mono.Build.Result value);" />
+      <MemberType>Method</MemberType>
+      <ReturnValue>
+        <ReturnType>System.Void</ReturnType>
+      </ReturnValue>
+      <Parameters>
+        <Parameter Name="name" Type="System.String" />
+        <Parameter Name="value" Type="Mono.Build.Result" />
+      </Parameters>
+      <Docs>
+        <summary>To be added</summary>
+        <param name="name">a <see cref="T:System.String" /></param>
+        <param name="value">a <see cref="T:Mono.Build.Result" /></param>
+        <remarks>To be added</remarks>
+      </Docs>
+    </Member>
+    <Member MemberName="AddNamedArg">
+      <MemberSignature Language="C#" Value="public void AddNamedArg (string name, string dep);" />
+      <MemberType>Method</MemberType>
+      <ReturnValue>
+        <ReturnType>System.Void</ReturnType>
+      </ReturnValue>
+      <Parameters>
+        <Parameter Name="name" Type="System.String" />
+        <Parameter Name="dep" Type="System.String" />
+      </Parameters>
+      <Docs>
+        <summary>To be added</summary>
+        <param name="name">a <see cref="T:System.String" /></param>
+        <param name="dep">a <see cref="T:System.String" /></param>
+        <remarks>To be added</remarks>
+      </Docs>
+    </Member>
+    <Member MemberName="AddNamedInternal">
+      <MemberSignature Language="C#" Value="public void AddNamedInternal (string name, object dep);" />
+      <MemberType>Method</MemberType>
+      <ReturnValue>
+        <ReturnType>System.Void</ReturnType>
+      </ReturnValue>
+      <Parameters>
+        <Parameter Name="name" Type="System.String" />
+        <Parameter Name="dep" Type="System.Object" />
+      </Parameters>
+      <Docs>
+        <summary>To be added</summary>
+        <param name="name">a <see cref="T:System.String" /></param>
+        <param name="dep">a <see cref="T:System.Object" /></param>
+        <remarks>To be added</remarks>
+      </Docs>
+    </Member>
+    <Member MemberName=".ctor">
+      <MemberSignature Language="C#" Value="public SimpleTarget (string name, Type rule, string [] deps, Mono.Build.Result[] cdeps);" />
+      <MemberType>Constructor</MemberType>
+      <ReturnValue />
+      <Parameters>
+        <Parameter Name="name" Type="System.String" />
+        <Parameter Name="rule" Type="System.Type" />
+        <Parameter Name="deps" Type="System.String[]" />
+        <Parameter Name="cdeps" Type="Mono.Build.Result[]" />
+      </Parameters>
+      <Docs>
+        <summary>To be added</summary>
+        <param name="name">a <see cref="T:System.String" /></param>
+        <param name="rule">a <see cref="T:System.Type" /></param>
+        <param name="deps">a <see cref="T:System.String" /></param>
+        <param name="cdeps">a <see cref="T:Mono.Build.Result" /></param>
+        <returns>a <see cref="T:Mono.Build.SimpleTarget" /></returns>
+        <remarks>To be added</remarks>
+      </Docs>
+    </Member>
+    <Member MemberName=".ctor">
+      <MemberSignature Language="C#" Value="public SimpleTarget (string name, Type rule, string [] deps);" />
+      <MemberType>Constructor</MemberType>
+      <ReturnValue />
+      <Parameters>
+        <Parameter Name="name" Type="System.String" />
+        <Parameter Name="rule" Type="System.Type" />
+        <Parameter Name="deps" Type="System.String[]" />
+      </Parameters>
+      <Docs>
+        <summary>To be added</summary>
+        <param name="name">a <see cref="T:System.String" /></param>
+        <param name="rule">a <see cref="T:System.Type" /></param>
+        <param name="deps">a <see cref="T:System.String" /></param>
+        <returns>a <see cref="T:Mono.Build.SimpleTarget" /></returns>
+        <remarks>To be added</remarks>
+      </Docs>
+    </Member>
+    <Member MemberName="Name">
+      <MemberSignature Language="C#" Value="public override string Name { get; };" />
+      <MemberType>Property</MemberType>
+      <ReturnValue>
+        <ReturnType>System.String</ReturnType>
+      </ReturnValue>
+      <Parameters />
+      <Docs>
+        <summary>To be added</summary>
+        <returns>a <see cref="T:System.String" /></returns>
+        <remarks>To be added</remarks>
+      </Docs>
+    </Member>
+    <Member MemberName="Rule">
+      <MemberSignature Language="C#" Value="public override Mono.Build.Rule Rule { get; };" />
+      <MemberType>Property</MemberType>
+      <ReturnValue>
+        <ReturnType>Mono.Build.Rule</ReturnType>
+      </ReturnValue>
+      <Parameters />
+      <Docs>
+        <summary>To be added</summary>
+        <returns>a <see cref="T:Mono.Build.Rule" /></returns>
+        <remarks>To be added</remarks>
+      </Docs>
+    </Member>
+    <Member MemberName="ApplyDependencies">
+      <MemberSignature Language="C#" Value="public override bool ApplyDependencies (Mono.Build.ArgCollector ac, Mono.Build.IWarningLogger logger);" />
+      <MemberType>Method</MemberType>
+      <ReturnValue>
+        <ReturnType>System.Boolean</ReturnType>
+      </ReturnValue>
+      <Parameters>
+        <Parameter Name="ac" Type="Mono.Build.ArgCollector" />
+        <Parameter Name="logger" Type="Mono.Build.IWarningLogger" />
+      </Parameters>
+      <Docs>
+        <summary>To be added</summary>
+        <param name="ac">a <see cref="T:Mono.Build.ArgCollector" /></param>
+        <param name="logger">a <see cref="T:Mono.Build.IWarningLogger" /></param>
+        <returns>a <see cref="T:System.Boolean" /></returns>
+        <remarks>To be added</remarks>
+      </Docs>
+    </Member>
+  </Members>
+</Type>

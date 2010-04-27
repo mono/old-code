@@ -1,0 +1,4 @@
+using [ Core ]
+
+error-codes.txt = TextSource []
+special-tags.txt = TextSource []

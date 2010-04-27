@@ -1,0 +1,16 @@
+﻿<rule name="ConfigureGacutilProgram">
+        <docs>
+                <summary>To be added.</summary>
+                <remarks>To be added.</remarks>
+        </docs>
+        <argument name="program" exists_since="0.0.3.1">
+                <docs>
+                        <summary>To be added.</summary>
+                        <remarks>To be added.</remarks>
+                </docs>
+                <type>Mono.Build.RuleLib.BinaryInfo</type>
+                <flags></flags>
+        </argument>
+</rule>
+
+

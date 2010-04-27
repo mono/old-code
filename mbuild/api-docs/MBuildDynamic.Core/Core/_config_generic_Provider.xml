@@ -1,0 +1,43 @@
+﻿<provider name="/config/generic">
+        <docs>
+                <summary>To be added.</summary>
+                <remarks>To be added.</remarks>
+        </docs>
+        <target name="build_tests" exists_since="0.0.3.1">
+                <docs>
+                        <summary>To be added.</summary>
+                        <remarks>To be added.</remarks>
+                </docs>
+                <rule>MBuildDynamic.Core.Config.ConfigBool</rule>
+        </target>
+        <target name="enable_optimize" exists_since="0.0.3.1">
+                <docs>
+                        <summary>To be added.</summary>
+                        <remarks>To be added.</remarks>
+                </docs>
+                <rule>MBuildDynamic.Core.Config.ConfigBool</rule>
+        </target>
+        <target name="build_docs" exists_since="0.0.3.1">
+                <docs>
+                        <summary>To be added.</summary>
+                        <remarks>To be added.</remarks>
+                </docs>
+                <rule>MBuildDynamic.Core.Config.ConfigBool</rule>
+        </target>
+        <target name="enable_debug" exists_since="0.0.3.1">
+                <docs>
+                        <summary>To be added.</summary>
+                        <remarks>To be added.</remarks>
+                </docs>
+                <rule>MBuildDynamic.Core.Config.ConfigBool</rule>
+        </target>
+        <target name="build_examples" exists_since="0.0.3.1">
+                <docs>
+                        <summary>To be added.</summary>
+                        <remarks>To be added.</remarks>
+                </docs>
+                <rule>MBuildDynamic.Core.Config.ConfigBool</rule>
+        </target>
+</provider>
+
+

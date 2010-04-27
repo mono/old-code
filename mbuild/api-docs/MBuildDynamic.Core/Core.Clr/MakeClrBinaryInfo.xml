@@ -1,0 +1,25 @@
+﻿<rule name="MakeClrBinaryInfo">
+        <docs>
+                <summary>To be added.</summary>
+                <remarks>To be added.</remarks>
+        </docs>
+        <argument name="runtime" exists_since="0.0.3.1">
+                <docs>
+                        <summary>To be added.</summary>
+                        <remarks>To be added.</remarks>
+                </docs>
+                <type>Mono.Build.RuleLib.BinaryInfo</type>
+                <default_to>/config/clr/runtime</default_to>
+                <flags></flags>
+        </argument>
+        <argument name="program" exists_since="0.0.3.1">
+                <docs>
+                        <summary>To be added.</summary>
+                        <remarks>To be added.</remarks>
+                </docs>
+                <type>Mono.Build.MBFile</type>
+                <flags></flags>
+        </argument>
+</rule>
+
+

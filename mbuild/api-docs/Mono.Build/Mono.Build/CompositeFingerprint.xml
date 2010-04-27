@@ -1,0 +1,167 @@
+<Type Name="CompositeFingerprint" FullName="Mono.Build.CompositeFingerprint">
+  <TypeSignature Language="C#" Value="public class CompositeFingerprint : Mono.Build.Fingerprint, IComparable, ISerializable, IFingerprintable, ICloneable" Maintainer="auto" />
+  <AssemblyInfo>
+    <AssemblyName>Mono.Build</AssemblyName>
+    <AssemblyPublicKey>[00 24 00 00 04 80 00 00 94 00 00 00 06 02 00 00 00 24 00 00 52 53 41 31 00 04 00 00 11 00 00 00 F5 C4 9D D0 0C 3C 7B 78 63 91 17 5B 7D F6 FD 4A A9 50 31 82 44 76 CF D8 68 14 88 FD C8 8F 0F 8D 0F FE B2 24 19 8D F2 C1 9F 2F 14 C8 B5 47 12 08 FD A2 C5 F9 60 77 91 22 44 72 9D 61 96 65 EE 38 88 EA 48 A6 D4 66 4A 4A 8A 6A F9 B4 4D 2D 62 51 97 7D F9 0D AD 80 DC EE E9 66 C7 F3 B5 8C 89 27 5E 02 F6 8B 15 67 70 36 ED B7 53 2E 70 B1 98 04 39 2C D6 EE 3C 18 D0 76 4D 66 68 2B D6 A3 AC AB]</AssemblyPublicKey>
+    <AssemblyVersion>0.0.0.0</AssemblyVersion>
+    <AssemblyCulture>neutral</AssemblyCulture>
+    <Attributes />
+  </AssemblyInfo>
+  <ThreadSafetyStatement>Gtk# is thread aware, but not thread safe; See the <link location="node:gtk-sharp/programming/threads">Gtk# Thread Programming</link> for details.</ThreadSafetyStatement>
+  <Docs>
+    <summary>A fingerprint that is the combination of one or more input fingerprints.</summary>
+    <remarks>A composite fingerprint is used to merge many fingerprints into one. It is useful for fingerprinting complex data types, such as <see cref="T:Mono.Build.Result" /> subclasses that are containers of other Results themselves.</remarks>
+  </Docs>
+  <Base>
+    <BaseTypeName>Mono.Build.Fingerprint</BaseTypeName>
+  </Base>
+  <Interfaces>
+    <Interface>
+      <InterfaceName>System.IComparable</InterfaceName>
+    </Interface>
+    <Interface>
+      <InterfaceName>System.Runtime.Serialization.ISerializable</InterfaceName>
+    </Interface>
+    <Interface>
+      <InterfaceName>Mono.Build.IFingerprintable</InterfaceName>
+    </Interface>
+    <Interface>
+      <InterfaceName>System.ICloneable</InterfaceName>
+    </Interface>
+  </Interfaces>
+  <Attributes />
+  <Members>
+    <Member MemberName="children">
+      <MemberSignature Language="C#" Value="protected Mono.Build.Fingerprint[] children;" />
+      <MemberType>Field</MemberType>
+      <ReturnValue>
+        <ReturnType>Mono.Build.Fingerprint[]</ReturnType>
+      </ReturnValue>
+      <Parameters>
+      </Parameters>
+      <Docs>
+        <summary>The fingerprints from which this fingerprint is derived.</summary>
+        <remarks>Subclasses are allowed to modify this field directly:
+
+
+<example>
+            <code lang="C#">
+	class MyFingerprint : CompositeFingerprint {
+		IFingerprintable left, right;
+
+		public MyFingerprint (IFingerprintable left, IFingerprintable right) {
+			this.left = left;
+			this.right = right;
+		}
+
+		protected override byte[] Calculate () {
+			children = new Fingerprint[2];
+			children[0] = left.GetFingerprint ();
+			children[1] = right.GetFingerprint ();
+
+			return base.Calculate ();
+		}
+	}
+  </code>
+          </example></remarks>
+      </Docs>
+    </Member>
+    <Member MemberName="Calculate">
+      <MemberSignature Language="C#" Value="protected override byte [] Calculate ();" />
+      <MemberType>Method</MemberType>
+      <ReturnValue>
+        <ReturnType>System.Byte[]</ReturnType>
+      </ReturnValue>
+      <Parameters />
+      <Docs>
+        <summary>Calculate the fingerprint.</summary>
+        <returns>Binary fingerprint data.</returns>
+        <remarks>All the inner fingerprints are evaluated, and then the fingerprint of their fingerprints is taken. It might be smarter just to XOR all the fingerprints together, to save time and complexity. Fingerprints don't need to be cryptographic-strength so this shortcut would probably not be a problem.</remarks>
+      </Docs>
+    </Member>
+    <Member MemberName="ContentClone">
+      <MemberSignature Language="C#" Value="protected override Mono.Build.Fingerprint ContentClone ();" />
+      <MemberType>Method</MemberType>
+      <ReturnValue>
+        <ReturnType>Mono.Build.Fingerprint</ReturnType>
+      </ReturnValue>
+      <Parameters />
+      <Docs>
+        <summary>Clone the fingerprint.</summary>
+        <returns>a <see cref="T:Mono.Build.Fingerprint" /></returns>
+        <remarks>To be added</remarks>
+      </Docs>
+    </Member>
+    <Member MemberName=".ctor">
+      <MemberSignature Language="C#" Value="public CompositeFingerprint (Mono.Build.Fingerprint[] children);" />
+      <MemberType>Constructor</MemberType>
+      <ReturnValue />
+      <Parameters>
+        <Parameter Name="children" Type="Mono.Build.Fingerprint[]" />
+      </Parameters>
+      <Docs>
+        <summary>Create a new composite fingerprint.</summary>
+        <param name="children">A list of inner <see cref="T:Mono.Build.Fingerprint" />s that will be combined to make the composite fingerprint.</param>
+        <returns>a <see cref="T:Mono.Build.CompositeFingerprint" /></returns>
+        <remarks>To be added</remarks>
+      </Docs>
+    </Member>
+    <Member MemberName=".ctor">
+      <MemberSignature Language="C#" Value="public CompositeFingerprint (System.Collections.IDictionary dict);" />
+      <MemberType>Constructor</MemberType>
+      <ReturnValue />
+      <Parameters>
+        <Parameter Name="dict" Type="System.Collections.IDictionary" />
+      </Parameters>
+      <Docs>
+        <summary>Create a new composite fingerprint.</summary>
+        <param name="dict">A dictionary whose values are the <see cref="T:Mono.Build.Fingerprint" />s that this fingerprint should composite.</param>
+        <returns>a <see cref="T:Mono.Build.CompositeFingerprint" /></returns>
+        <remarks>To be added</remarks>
+      </Docs>
+    </Member>
+    <Member MemberName=".ctor">
+      <MemberSignature Language="C#" Value="protected CompositeFingerprint (System.Runtime.Serialization.SerializationInfo info, System.Runtime.Serialization.StreamingContext ctxt);" />
+      <MemberType>Constructor</MemberType>
+      <ReturnValue />
+      <Parameters>
+        <Parameter Name="info" Type="System.Runtime.Serialization.SerializationInfo" />
+        <Parameter Name="ctxt" Type="System.Runtime.Serialization.StreamingContext" />
+      </Parameters>
+      <Docs>
+        <summary>Deserialize a new composite fingerprint.</summary>
+        <param name="info">a <see cref="T:System.Runtime.Serialization.SerializationInfo" /></param>
+        <param name="ctxt">a <see cref="T:System.Runtime.Serialization.StreamingContext" /></param>
+        <returns>a <see cref="T:Mono.Build.CompositeFingerprint" /></returns>
+        <remarks>To be added</remarks>
+      </Docs>
+    </Member>
+    <Member MemberName=".ctor">
+      <MemberSignature Language="C#" Value="protected CompositeFingerprint ();" />
+      <MemberType>Constructor</MemberType>
+      <ReturnValue />
+      <Parameters />
+      <Docs>
+        <summary>Create a new, empty composite fingerprint.</summary>
+        <returns>a <see cref="T:Mono.Build.CompositeFingerprint" /></returns>
+        <remarks>Subclasses should set the <see cref="F:Mono.Build.CompositeFingerprint.children" /> array after chaining to this constructor.</remarks>
+      </Docs>
+    </Member>
+    <Member MemberName=".ctor">
+      <MemberSignature Language="C#" Value="public CompositeFingerprint (System.Collections.SortedList sl, Mono.Build.IBuildContext ctxt);" />
+      <MemberType>Constructor</MemberType>
+      <ReturnValue />
+      <Parameters>
+        <Parameter Name="sl" Type="System.Collections.SortedList" />
+        <Parameter Name="ctxt" Type="Mono.Build.IBuildContext" />
+      </Parameters>
+      <Docs>
+        <summary>Create a new composite fingerprint.</summary>
+        <param name="sl">A sorted list whose values are <see cref="T:Mono.Build.IFingerprintable" />s; their fingerprints will be created and used to make the composite fingerprint.</param>
+        <param name="ctxt">A <see cref="T:Mono.Build.IBuildContext" /> used to evaluate the child fingerprints.</param>
+        <returns>a <see cref="T:Mono.Build.CompositeFingerprint" /></returns>
+        <remarks>This constructor may be deprecated and made internal in the future. Right now it is used to support <see cref="T:Mono.Build.MBDictionary" />.</remarks>
+      </Docs>
+    </Member>
+  </Members>
+</Type>

@@ -1,0 +1,26 @@
+﻿<rule name="MakeCompatName">
+        <docs>
+                <summary>To be added.</summary>
+                <remarks>To be added.</remarks>
+        </docs>
+        <argument name="cc" exists_since="0.0.3.1">
+                <docs>
+                        <summary>To be added.</summary>
+                        <remarks>To be added.</remarks>
+                </docs>
+                <type>Mono.Build.MBString</type>
+                <default_to>/project/compat_code</default_to>
+                <flags></flags>
+        </argument>
+        <argument name="name" exists_since="0.0.3.1">
+                <docs>
+                        <summary>To be added.</summary>
+                        <remarks>To be added.</remarks>
+                </docs>
+                <type>Mono.Build.MBString</type>
+                <default_to>/project/name</default_to>
+                <flags></flags>
+        </argument>
+</rule>
+
+

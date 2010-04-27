@@ -1,0 +1,19 @@
+<rule name="MakeInstallDirectory">
+   <docs>
+      <summary>Convert an MBString into an MBInstallDirectory</summary>
+      <remarks><p>This rule can be used to convert a plain string input into
+      an InstallDirectory needed for installer rules. Its use is not recommended, but
+      this rule might be useful for providing an application-specific installation directory that
+      is not covered by the generic MBuild rules.</p></remarks>
+   </docs>
+   <argument name="dir" exists_since="0.0.3.1">
+      <docs>
+	 <summary>A string representing the installation directory.</summary>
+	 <!-- <remarks>To be added.</remarks> -->
+      </docs>
+      <type>Mono.Build.MBString</type>
+      <flags></flags>
+   </argument>
+</rule>
+
+

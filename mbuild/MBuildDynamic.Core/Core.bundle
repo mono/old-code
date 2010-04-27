@@ -1,0 +1,376 @@
+# The core MBuild bundle
+
+namespace Core {
+
+	using default;
+	using !System;
+	using !System.Collections;
+	using Core.Install;
+	using Core.Config;
+
+	result BinFile : MBFile {}
+	result TextFile : MBFile {}
+
+	sourcefile rule TextSource = TextFile;
+	sourcefile rule BinSource = BinFile;
+
+	parameters {
+		basis Env = /config/env; 
+		basis Generic = /config/generic;
+		basis Project = /project;
+	}
+
+	# Providers
+
+	provider Env {
+		compat_name = MakeCompatName ();
+	}
+
+	provider Generic {
+		enable_debug = ConfigBool (true) tags {
+			"prompt" = "Enable debugging options?";
+			"config_group" = "Debugging";
+		};
+
+		# Any reason to ever *disable* warnings?
+		#enable_warnings = ConfigBool (true) tags {
+		#	"prompt" = "Enable warnings during the build?";
+		#	"config_group" = "Debugging";
+		#};
+
+		enable_optimize = ConfigBool (true) tags {
+			"prompt" = "Enable optimization options?";
+			"config_group" = "Debugging";
+		};
+
+		build_tests = ConfigBool (true) tags {
+			"prompt" = "Build tests by default?";
+			"config_group" = "Debugging";
+		};
+
+		build_docs = ConfigBool (true) tags {
+			"prompt" = "Build documentation by default?";
+			"config_group" = "Main";
+		};
+
+		build_examples = ConfigBool (true) tags {
+			"prompt" = "Build examples by default?";
+			"config_group" = "Main";
+		};
+	} 
+
+	rule MakeCompatName {
+		string name;
+		string cc;
+
+		build (MBString res, ctxt) @{
+			res.Value = System.String.Format ("{0}-{1}", name, cc);
+			return false;
+		@}
+	} default {
+		name = Project/name;
+		cc = Project/compat_code;
+	}
+
+	# Better place to land this?
+
+	result InterpreterBinaryInfo : BinaryInfo {
+		MBFile Program;
+		BinaryInfo Runtime;
+
+		@{
+
+		public void Init (MBFile program, string args, BinaryInfo runtime)
+		{
+			if (program != null)
+				Program = program;
+			if (args != null)
+				ForcedArgs = args;
+
+			Runtime = runtime;
+
+			foreach (string k in runtime.EnvironmentKeys)
+				SetEnvironment (k, runtime.GetEnvironment (k));
+
+		}
+ 
+		public void Init (MBFile program, BinaryInfo runtime)
+		{
+			Init (program, null, runtime);
+		}
+ 
+		public override string GetProgram (IBuildContext ctxt)
+		{
+			return Runtime.GetProgram (ctxt);
+		}
+
+		public override string GetOtherArgs (IBuildContext ctxt)
+		{
+			string rforced = Runtime.ForcedArgs;
+			string progpath;
+
+			if (ctxt == null)
+				progpath = Program.ToString ();
+			else
+				progpath = Program.GetPath (ctxt);
+
+			if (rforced != null && rforced.Length > 0)
+				return rforced + " " + progpath;
+
+			return progpath;
+		}
+
+		@}
+	}
+
+	rule MakeInterpretedProgram {
+		MBFile program;
+		BinaryInfo runtime;
+
+		build (InterpreterBinaryInfo res, ctxt) @{
+			res.Init (program, runtime);
+			return false;
+		@}
+	}
+
+	# Rules
+
+	rule MakeFile : OutputFileRule {
+		MBDirectory dir;
+
+		build (MBFile f, ctxt) @{
+			string name = GetOutputName (ctxt);
+
+			f.Name = name;
+			f.Dir = dir;
+
+			return false;
+		@}
+	}
+
+	rule Subdirectory {
+		MBDirectory base;
+		string extra;
+
+		build (MBDirectory res, ctxt) @{
+			@base.CopyValueTo (res);
+
+                        if (extra.Length == 0)
+                                return false;
+ 
+                        if (extra[0] == '/')
+                                extra = extra.Substring (1);
+ 
+                        if (extra[extra.Length - 1] != '/')
+                                extra = extra + '/';
+ 
+                        res.SubPath += extra;
+                        return false;
+		@}
+	}
+
+	rule SystemDirectory {
+		string path;
+
+		build (MBDirectory dir, ctxt) @{
+                        if (path.Length == 0)
+                                path = "/";
+                        else if (path[path.Length - 1] != '/')
+                                path = path + '/';
+ 
+			dir.Init (ResultStorageKind.System, path);
+			return false;
+		@}
+	}
+
+	rule FormatHelper {
+		default string format;
+		default ordered string* values;
+
+		build (MBString res, ctxt) @{
+			// TODO: verify format string and args match up?
+			res.Value = System.String.Format (format, values);
+			return false;
+		@}
+	}
+
+	# Allow CloneRule to be easily used in Buildfiles
+	rule Clone : !Mono.Build.RuleLib.CloneRule {}
+
+	# Copy the file to builddir. Needed for xcopy deployment kinda stuff.
+
+	rule DependentFile {
+		MBFile? file;
+		string? output;
+		.target tname;
+
+		restype @{
+			if (file != null)
+				return file.GetType ();
+
+			return typeof (MBFile);
+		@}
+
+		build (MBFile copy, ctxt) @{
+			if (file == null) {
+				if (tname.Length < 1) {
+					ctxt.Logger.Error (2046, "No filename given and no target name " +
+						"to work with either", null);
+					return true;
+				}
+
+				// ctxt.Logger.Warning (2047, "Can't guess file kind from filename", name);
+				file = new MBFile ();
+				file.Dir = ctxt.SourceDirectory;
+				file.Name = tname;
+
+				if (!file.Exists (ctxt)) {
+					ctxt.Logger.Error (2046, "No filename given and guess based on target name " +
+						"doesn't work", file.GetPath (ctxt));
+					return true;
+				}
+			}
+
+			file.CopyValueTo (copy);
+			copy.Dir = ctxt.WorkingDirectory;
+			copy.Name = tname;
+
+			if (output != null)
+				copy.Name = output;
+
+			try {
+				file.LinkFromOrCopyTo (copy, ctxt);
+			} catch (Exception e) {
+				string s = String.Format ("Error copying {0} to {1}", 
+					file.GetPath (ctxt), copy.GetPath (ctxt));
+				ctxt.Logger.Error (3023, s, e.ToString ());
+			}
+
+			return false;
+		@}
+
+		tags {
+			"default" = true;
+		}
+	}
+
+	# Really, really gross conditional support.
+
+	rule Switch {
+		ordered bool+ cases;
+		default ordered Result+ values;
+
+		# Returning as good of a restype as possible is important!
+		# We don't know argument values, of course, so we have
+		# to go by the most specific type shared by all the values
+		# arguments. This way, if we're given a list of MBFiles,
+		# we will know that the restype is an MBFile.
+
+		restype @{
+			Type deepest_subclass = values[0].GetType ();
+
+			for (int i = 1; i < values.Length; i++) {
+				Type otype = values[i].GetType ();
+
+				while (!deepest_subclass.IsAssignableFrom (otype))
+					deepest_subclass = deepest_subclass.BaseType;
+			}
+
+			return deepest_subclass;
+		@}
+
+		!build (Result, ctxt) @{
+			if (cases.Length != values.Length) {
+				ctxt.Logger.Error (2051, "Number of cases not the same as " +
+				 "number of values in Switch rule", cases.ToString ());
+				return null;
+			}
+
+			for (int i = 0; i < cases.Length; i++) {
+				if (cases[i])
+					return (Result) values[i].Clone ();
+			}
+
+			ctxt.Logger.Error (2051, "No case was chosen in Switch rule",
+			 "(You can set a default by having a case whose condition is \"true\")");
+			return null;
+		@}
+	}
+
+	rule Assert {
+		bool value;
+
+		build (MBBool unused, ctxt) @{
+			if (value)
+				return false;
+
+			ctxt.Logger.Error (3028, "Build prerequisites were not met", null);
+			return true;
+		@}
+
+		tags {
+			"prereq" = true;
+			"errnote" = "Provide information about what needs to be fixed with an errnote tag.";
+		}
+	}
+
+	rule BooleanHelper {
+		string spec;
+		default ordered bool+ operands;
+
+		# FIXME: This string spec API is really sketchy.
+
+		build (MBBool res, ctxt) @{
+			char[] cmds = spec.ToCharArray ();
+			Stack s = new Stack ();
+			bool left, right;
+
+			try {
+				for (int i = 0; i < cmds.Length; i++) {
+					char c = cmds[i];
+
+					switch (c) {
+					case '0': s.Push (operands[0]); break;
+					case '1': s.Push (operands[1]); break;
+					case '2': s.Push (operands[2]); break;
+					case '3': s.Push (operands[3]); break;
+					case '4': s.Push (operands[4]); break;
+					case '5': s.Push (operands[5]); break;
+					case '6': s.Push (operands[6]); break;
+					case '7': s.Push (operands[7]); break;
+					case '8': s.Push (operands[8]); break;
+					case '9': s.Push (operands[9]); break;
+					case '!':
+						s.Push (! (bool) s.Pop ()); break;
+					case '&':
+						left = (bool) s.Pop ();
+						right = (bool) s.Pop ();
+						s.Push (left && right); break;
+					case '|':
+						left = (bool) s.Pop ();
+						right = (bool) s.Pop ();
+						s.Push (left || right); break;
+					default:
+						throw new Exception ("Unknown BooleanHelper command " + c);
+					}
+				}
+
+				res.Value = (bool) s.Pop ();
+			} catch (Exception e) {
+				ctxt.Logger.Error (2052, "Error evaluating boolean expression",
+				                   e.Message);
+				return true;
+			}
+
+			if (s.Count > 0)
+				ctxt.Logger.Warning (2052, "Items left on boolean expression evaluation " +
+				                           "stack", s.Count.ToString ());
+
+			return false;
+		@}
+	}
+
+	template ExtraDist {
+		rule TextSource;
+	}
+}

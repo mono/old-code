@@ -1,0 +1,522 @@
+namespace Core.Native {
+
+using default;
+
+using Core;
+using Core.Tools;
+
+using !System;
+using !System.Xml;
+using !System.Text;
+
+parameters {
+	basis Config = /config/native;
+}
+
+provider Config {
+
+	# See ArchDetect.cs -- should avoid a dep on having a uname 
+	# program
+	#uname_name = "!uname";
+	#uname_binary = FindTool (uname_name);
+
+	@build = DetectBuildArchitecture () tags {
+		"prompt" = "Enter the system type of the machine on which this build will execute";
+		"config_group" = "Cross-Compilation";
+		"config" = true;
+	};
+
+	build_arch = BuildArchitectureFromString (@build);
+
+	# Clone the host arch this way so that the user can config the strings
+	# and have the right thing happen.
+
+	host = Clone (@build) tags {
+		"prompt" = "Enter the system type of the machine on which the built programs will run";
+		"config_group" = "Cross-Compilation";
+		"config" = true;
+	};
+
+	host_arch = HostArchitectureFromString (host);
+
+	@target = Clone (host) tags {
+		"prompt" = "Enter the system type for which the built programs will generate native code, if they do so at all";
+		"config_group" = "Cross-Compilation";
+		"config" = true;
+	};
+
+	target_arch = TargetArchitectureFromString (@target);
+
+	build_naming = DetermineNativeNaming (build_arch);
+	host_naming = DetermineNativeNaming (host_arch);
+	target_naming = DetermineNativeNaming (target_arch);
+}
+
+rule FindCrossTool : FindTool {
+	default Architecture toolarch;
+	Architecture fallback;
+
+	build (ExternalBinaryInfo info, ctxt) @{
+		string[] names;
+
+		if (InitializeResult (ctxt, info, out names))
+			return false;
+
+		// one system can have multiple valid system type expressions,
+		// so directly comparing the canonicalized system types is not
+		// quite correct. But we only want to search for the non-cross
+		// tool if the user really wants the arches to be identical, in which
+		// case the strings ought to be identical (probably because one
+		// defaulted to the other).
+
+		bool need_cross = (toolarch.ToCanonicalString () != fallback.ToCanonicalString ());
+
+		// Prefer a tool with the desired arch alias prefix, if it exists,
+		// even if we aren't cross compiling.
+
+		string[] archnames = (string[]) names.Clone ();
+
+		for (int i = 0; i < names.Length; i++)
+			archnames[i] = String.Format ("{0}-{1}", toolarch.Alias, names[i]);
+
+		string chosen = Programs.GetFirstInPath (archnames);
+
+		if (chosen != null) {
+			info.Program = chosen;
+			return false;
+		}
+
+		if (need_cross) {
+			ctxt.Logger.Error (3027, "Can't find any of the following cross-compilation tool " +
+			                   "names in the path", String.Join (" ", archnames));
+			return true;
+		}
+
+		chosen = Programs.GetFirstInPath (names);
+
+		if (chosen == null) {
+			ctxt.Logger.Error (3027, "Can't find any of the following tool names" +
+			                   "in the path", String.Join (" ", names));
+			return true;
+		}
+
+		info.Program = chosen;
+		return false;
+	@}
+} default { 
+	fallback = Config/build_arch;
+}
+
+# Architecture handling
+
+result Architecture : CompositeResult {
+	string CPU;
+	string Manufacturer;
+	string Kernel;
+	string OS;
+
+	# this is the name of the system type as given by the user. We are
+	# supposed to present this to the user and use it when searching
+	# for cross-compiler type tools; eg, we search for "Alias-gcc", 
+	# not "cpu-manu-kernel-os-gcc".
+
+	string Alias;
+
+	# this feels a little gross, but it seems necessary
+
+	ArchKindResult Kind;
+
+	@{
+
+	public override string ToString ()
+	{
+		return Alias;
+	}
+
+	public string ToCanonicalString ()
+	{
+		if (Kernel == null)
+			return String.Format ("{0}-{1}-{2}", CPU, Manufacturer, OS);
+		return String.Format ("{0}-{1}-{2}-{3}", CPU, Manufacturer, Kernel, OS);
+	}
+
+	public void SetFromString (string desc)
+	{
+		if (desc == null || desc.Length == 0)
+			throw new ArgumentException (desc);
+
+		Alias = desc;
+		ArchCanonicalize.SetFromString (desc, this);
+	}
+
+	public void Init (string s, ArchKind kind)
+	{
+		SetFromString (s);
+		Kind = new ArchKindResult (kind);
+	}
+
+	@}
+}
+
+rule DetectBuildArchitecture {
+	#BinaryInfo uname;
+
+	build (MBString res, ctxt) @{
+		res.Value = ArchDetect.Detect (ctxt);
+		return false;
+	@}
+}
+
+abstract rule ArchitectureFromString {
+	string arch_string;
+
+	@{
+
+	protected abstract ArchKind Kind { get; }
+
+	@}
+
+	build (Architecture arch, ctxt) @{
+		try {
+			arch.Init (arch_string, Kind);
+		} catch (Exception e) {
+			string msg = String.Format ("Invalid architecture specification " +
+			                            "input \"{0}\"", arch_string);
+			ctxt.Logger.Error (3024, msg, e.Message);
+			return true;
+		}
+
+		return false;
+	@}
+}
+
+rule BuildArchitectureFromString : ArchitectureFromString {
+	@{
+
+	protected override ArchKind Kind { get { return ArchKind.Build; } }
+
+	@}
+}
+
+rule HostArchitectureFromString : ArchitectureFromString {
+	@{
+
+	protected override ArchKind Kind { get { return ArchKind.Host; } }
+
+	@}
+}
+
+rule TargetArchitectureFromString : ArchitectureFromString {
+	@{
+
+	protected override ArchKind Kind { get { return ArchKind.Target; } }
+
+	@}
+}
+
+# Native code handling
+
+result NativeCodeFile : CompositeResult {
+	default BinFile File;
+	ArchKindResult Architecture;
+
+	@{
+
+	public NativeCodeFile (ArchKind arch)
+	{
+		this.Architecture = new ArchKindResult (arch);
+	}
+
+	public NativeCodeFile (BinFile f, ArchKind arch) : this (arch)
+	{
+		this.File = (BinFile) f.Clone ();
+	}
+
+	@}
+}
+
+result NativeLinkableFile : NativeCodeFile {
+@{
+	public NativeLinkableFile (ArchKind k) : base (k) {}
+
+	public NativeLinkableFile (BinFile f, ArchKind k) : base (f, k) {}
+@}
+}
+
+# I currently think that it is a good idea to distinguish between
+# shared libraries and modules fairly strongly. OS X does this,
+# and libtool complains a lot when one conflates the two. I haven't
+# thought throug the native code design too much, but hopefully this
+# will turn out to have been the correct choice.
+
+result NativeModule : NativeCodeFile {
+@{
+	public NativeModule (ArchKind k) : base (k) {}
+
+	public NativeModule (BinFile f, ArchKind k) : base (f, k) {}
+@}
+}
+
+result NativeProgram : NativeCodeFile {
+@{
+	public NativeProgram (ArchKind k) : base (k) {}
+
+	public NativeProgram (BinFile f, ArchKind k) : base (f, k) {}
+
+	public FileBinaryInfo AsInfo (string args)
+	{
+		// FileBinaryInfo will eventually check this, but do this here
+		// to catch the problem at its source.
+
+		ArchKindResult.AssertCanExecute (Architecture);
+
+		return new FileBinaryInfo (Architecture.Value, File, args);
+	}
+
+	public FileBinaryInfo AsInfo ()
+	{
+		return AsInfo (null);
+	}
+@}
+}
+
+result NativeObject : NativeLinkableFile {
+@{
+	public NativeObject (ArchKind k) : base (k) {}
+
+	public NativeObject (BinFile f, ArchKind k) : base (f, k) {}
+@}
+}
+
+result NativeStaticLib : NativeLinkableFile {
+@{
+	public NativeStaticLib (ArchKind k) : base (k) {}
+
+	public NativeStaticLib (BinFile f, ArchKind k) : base (f, k) {}
+@}
+}
+
+# Hm, not 100% sure on this bit either. How portable is it? 
+# Certainly not to Windows ....
+# Also, maybe it is time to implement an MBInteger result.
+
+result NativeShlibVersion : CompositeResult {
+	string Major;
+	string Minor;
+	string Micro;
+
+	@{
+
+	public void SetDefault ()
+	{
+		Major = Minor = Micro = "0";
+	}
+
+	public bool SetFromString (string s)
+	{
+		string[] bits = s.Split ('.');
+
+		if (bits.Length != 3)
+			return true;
+
+		for (int i = 0; i < 3; i++) {
+			int test;
+
+			try {
+				test = int.Parse (bits[i]);
+			} catch (FormatException) {
+				return true;
+			}
+
+			if (test < 0)
+				return true;
+		}
+
+		Major = bits[0];
+		Minor = bits[1];
+		Micro = bits[2];
+
+		return false;
+	}
+
+	public override string ToString ()
+	{
+		return String.Format ("{0}.{1}.{2}", Major, Minor, Micro);
+	}
+
+	@}
+}
+
+rule ParseNativeShlibVersion {
+	string strvers;
+
+	build (NativeShlibVersion nsv, ctxt) @{
+		if (nsv.SetFromString (strvers)) {
+			ctxt.Logger.Error (3024, "Cannot parse string as a native shared library version",
+			                   strvers);
+			return true;
+		}
+
+		return false;
+	@}
+}
+		
+result NativeSharedLibrary : NativeLinkableFile {
+	NativeShlibVersion Version;
+
+@{
+	public NativeSharedLibrary (ArchKind k) : base (k) 
+	{
+		Version = new NativeShlibVersion ();
+		Version.SetDefault ();
+	}
+
+	public NativeSharedLibrary (BinFile f, ArchKind k) : base (f, k)
+	{
+		Version = new NativeShlibVersion ();
+		Version.SetDefault ();
+	}
+@}
+}
+
+rule MakeNativeBinaryInfo {
+	NativeProgram file;
+	string? args;
+
+	build (FileBinaryInfo fbi, ctxt) @{
+		try {
+			FileBinaryInfo tmp = file.AsInfo (args);
+			tmp.CopyValueTo (fbi);
+		} catch (InvalidOperationException ioe)  {
+			ctxt.Logger.Error (3025, "Cannot run a native binary aimed at the wrong " +
+			                   "architecture", ioe.Message);
+			return true;
+		}
+
+		return false;
+	@}
+}
+
+# More shared library / module handling
+
+result SystemShlib : MBString {
+	@{
+
+	// Here basename is the core unique part of the shlib
+	// name: libfoo.so has a basename foo, as does foo.dll on
+	// Windows.
+
+	public SystemShlib (string basename) : base (basename) {}
+
+	public override string ToString ()
+	{
+		return String.Format ("<system native library \"{0}\">", Value);
+	}
+
+	@}
+}
+
+result NativeNamingConfiguration : CompositeResult {
+	string shlib_pfx;
+	string shlib_sfx;
+	string prog_pfx;
+	string prog_sfx;
+	string module_pfx;
+	string module_sfx;
+
+	@{
+
+	public NativeNamingConfiguration (Architecture arch)
+	{
+		SetFromArch (arch);
+	}
+
+	public void SetFromArch (Architecture arch)
+	{
+		// FIXME. Yeah.
+
+		shlib_pfx = "lib";
+		shlib_sfx = ".so";
+		prog_pfx = "";
+		prog_sfx = "";
+		module_pfx = "lib";
+		module_sfx = ".so";
+	}
+
+	public string ExportShlib (string basename)
+	{
+		return String.Concat (shlib_pfx, basename, shlib_sfx);
+	}
+
+	public string ExportProgram (string basename)
+	{
+		return String.Concat (prog_pfx, basename, prog_sfx);
+	}
+
+	public string ExportModule (string basename)
+	{
+		return String.Concat (module_pfx, basename, module_sfx);
+	}
+
+	// I am kind of tempted to be super-didactic and enforce the
+	// following conventions:
+	//
+	// * shlibs are named in Buildfiles as foo.lib
+	// * programs as foo.exe
+	// * modules as foo.module.
+	//
+	// However, people will write libfoo.so over and over and over
+	// again. So right now, the following conventions hold:
+	//
+	// * shlibs are named libfoo.so or foo.dll
+	// * programs are named foo.exe or just foo
+	// * modules are named libfoo.so or foo.module
+	//
+	// The functions below use this convention to return a
+	// basename that can be fed into one of the functions above.
+	// They return null if the input doesn't seem to come in the
+	// appropriate format.
+
+	public static string ImportShlib (string mbformat)
+	{
+		if (mbformat.StartsWith ("lib") && mbformat.EndsWith (".so"))
+			return mbformat.Substring (3, mbformat.Length - 6);
+
+		if (mbformat.EndsWith (".dll"))
+			return mbformat.Substring (0, mbformat.Length - 4);
+
+		return null;
+	}
+
+	public static string ImportProgram (string mbformat)
+	{
+		if (mbformat.EndsWith (".exe"))
+			return mbformat.Substring (0, mbformat.Length - 4);
+
+		return mbformat;
+	}
+
+	public static string ImportModule (string mbformat)
+	{
+		if (mbformat.StartsWith ("lib") && mbformat.EndsWith (".so"))
+			return mbformat.Substring (3, mbformat.Length - 6);
+
+		if (mbformat.EndsWith (".module"))
+			return mbformat.Substring (0, mbformat.Length - 7);
+
+		return null;
+	}
+
+	@}
+}
+
+rule DetermineNativeNaming {
+	Architecture arch;
+
+	build (NativeNamingConfiguration nnc, ctxt) @{
+		nnc.SetFromArch (arch);
+		return false;
+	@}
+}
+
+}

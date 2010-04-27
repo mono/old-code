@@ -1,0 +1,143 @@
+# Self-hosting in the bundle generator! All right!
+
+namespace Tools.Bundlegen {
+
+	using default;
+	using Core;
+	using Core.Tools;
+	using Core.Clr;
+	using Core.Install;
+	using Core.Config;
+	using !System.Text;
+
+	parameters {
+		basis Config = /config/tools/bundlegen;
+		basis Project = /project;
+		namespace Core;
+		namespace Core.Install;
+		namespace Core.Clr;
+	}
+
+	provider Config {
+
+		bundlegen_name = "!mb-bundlegen";
+
+		bundlegen_binary = FindTool (bundlegen_name) tags {
+			"prereq" = true;
+		};
+
+		mbuild_snk = ExtractMBuildSnkFile ();
+
+		enable_debug = ConfigBool(Core.Generic/enable_debug) tags {
+			"prompt" = "Generate debugging information for MBuild bundles?";
+			"config_group" = "Debugging";
+		};
+	}
+
+	rule BundlegenProcess : OutputFileRule {
+		BundlegenFileResult+ inputs;
+		DllAssembly* refs;
+		SystemDll* sysrefs;
+		TextFile* natives;
+		MBFile* resources;
+		string? language;
+		bool debug;
+		default MBString version;
+
+		BinaryInfo bundlegen;
+		StrongnameKeypairFile keyfile;
+		StrongnameProgram sn;
+
+		tags {
+			"default" = true;
+			"install" = Install.Config/libdir_installer;
+		}
+
+		build (DllAssembly dest, ctxt) @{
+			string destname = GetOutputName (ctxt);
+			if (destname == null)
+				return true;
+
+			dest.Dir = ctxt.WorkingDirectory;
+			dest.Name = destname;
+ 
+                        StringBuilder sb = new StringBuilder ();
+
+			if (language != null)
+				sb.AppendFormat ("/lang:{0} ", language);
+
+			sb.AppendFormat ("/v:{0} ", version);
+
+			if (debug)
+				sb.Append ("/g ");
+
+			sb.AppendFormat ("/out:{0} ", dest.GetPath (ctxt));
+                        sb.AppendFormat ("/keyfile:{0} ", keyfile.GetPath (ctxt));
+
+			// system references
+
+			for (int i = 0; i < sysrefs.Length; i++)
+				sb.AppendFormat ("/r:{0} ", sysrefs[i].Value);
+
+			// local references
+
+			for (int i = 0; i < refs.Length; i++)
+				sb.AppendFormat ("/r:{0} ", refs[i].GetPath (ctxt));
+
+			// native input files
+
+			for (int i = 0; i < natives.Length; i++)
+				sb.AppendFormat ("/n:{0} ", natives[i].GetPath (ctxt));
+
+			// resource files
+
+			for (int i = 0; i < resources.Length; i++)
+				sb.AppendFormat ("/resource:{0} ", resources[i].GetPath (ctxt));
+
+			// inputs
+
+			for (int i = 0; i < inputs.Length; i++)
+				sb.AppendFormat ("{0} ", inputs[i].GetPath (ctxt));
+
+                        // run that mofo
+
+                        if (Launcher.RunTool (bundlegen, sb.ToString (), ctxt, 
+				"Bundlegen tool returned an error") != 0)
+                                return true;
+
+ 			if (sn.StrongnameAssembly (dest, keyfile, ctxt)) {
+				dest.Delete (ctxt);
+                                return true;
+			}
+
+                        return false;
+                @}
+	} default {
+		debug = Config/enable_debug;
+		version = Project/version;
+
+		bundlegen = Config/bundlegen_binary;
+		keyfile = Config/mbuild_snk;
+		sn = Clr.Config/sn_program;
+	}
+
+	transform regex matcher "\\.bundle$" = BundlegenProcess;
+
+	result BundlegenFileResult : TextFile {}
+
+	sourcefile rule BundlegenFile = BundlegenFileResult;
+
+	dependency regex matcher "\\.bundle$" = BundlegenFile;
+
+	rule ExtractMBuildSnkFile : ExtractAssemblyResource {
+
+		default restype StrongnameKeypairFile;
+
+		@{
+		protected override string GetResourceName (IBuildContext ctxt)
+		{
+			return "mbuild.snk"; 
+		}
+		@}
+	}
+}

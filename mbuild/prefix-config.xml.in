@@ -1,0 +1,15 @@
+<!-- We use this file to import Autoconf's idea of the prefix
+     into MBuild, avoiding the annoying prompt of a bare-bones
+     'mbuild -C'. This is suggested in the instructions printed
+     after the user runs a 'make install'.
+
+     This file also serves as a cute demo of how the -import-xml
+     and -export-xml commands are useful.
+-->
+
+<mbuild-results>
+  <metadata />
+  <targets>
+    <result id="/config/install/prefix" type="Mono.Build.MBString">@prefix@</result>
+  </targets>
+</mbuild-results>

@@ -1,0 +1,13 @@
+2006-08-08  Peter Williams  <peter@newton.cx>
+
+	* mb-install-client.cs: Track that IInstallerService is now
+	in Monkeywrench.
+
+	* Buildfile: Same.
+
+2005-09-01  Peter Williams  <peter@newton.cx>
+
+	* New directory, with the planned privileged install
+	client. Need the -src at the name so we don't conflict
+	with the wrapper script. Not so clean.
+

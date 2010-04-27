@@ -1,0 +1,11 @@
+@prologue@
+
+namespace _csharp_check {
+
+	public class _check_class {
+
+		public static int Main (string[] args) {
+			@code@
+		}
+	}
+}

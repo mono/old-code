@@ -1,0 +1,890 @@
+2006-12-28  Peter Williams  <peter@newton.cx>
+
+	* Monkeywrench.Compiler/NameLookupContext.cs: Clean up all the
+	'use namespace' stuff in light of our much more clarified model
+	and the better Mono.Build.Bundling classes.
+
+2006-12-23  Peter Williams  <peter@newton.cx>
+
+	* Monkeywrench/SourceSettings.cs: Fix unused variable warning.
+
+	* Monkeywrench/WrenchProject.cs: Same.
+
+2006-10-02  Peter Williams  <peter@newton.cx>
+
+	* Monkeywrench/TargetList.cs (Inside): Teeny rearrangement for
+	clarity and miniscule speedup.
+
+	* Monkeywrench.Compiler/BinaryLoadedGraph.cs (GetOffsetRange): Whoops,
+	fix major think-o affecting lookup of the numerically last tag.
+	(GetTargetsWithTag): Use the right version now.
+
+2006-09-03  Peter Williams  <peter@newton.cx>
+
+	* Monkeywrench/WrenchProject.cs: Change a couple of Hashtables into
+	Dictionaries for great justice.
+
+	* Monkeywrench.Compiler/WrenchTarget.cs: TargetInfoHolder takes
+	care of holding the target info now, so track that.
+
+	* Monkeywrench.Compiler/BuildfileParser-rest.cs: Track Add -> AddDep.
+
+2006-09-02  Peter Williams  <peter@newton.cx>
+
+	* Monkeywrench.Compiler/WrenchTarget.cs (AddWaitTag): Add a hacky way
+	to get tags working again (the templates were overwriting them). Lengthy
+	comment in code explaining more.
+
+	* Monkeywrench.Compiler/BundleManager.cs (MakeName): For some reason
+	our method of getting the public key token stopped working; upon
+	inspection, not sure how it ever did. But now I know a more elegant way
+	to get the token, so no biggie.
+
+	* Monkeywrench.Compiler/BuildfileTokenizer.cs: Add 'apply' token.
+
+	* Monkeywrench.Compiler/BuildfileParser.jay: Add my long-awaited
+	'apply Template [ idents ]' syntax.
+	(with_property): Use AddWaitTag above to fix tags.
+	
+	* Monkeywrench.Compiler/BuildfileParser-rest.cs (ApplyTemplate): New
+	support function.
+
+2006-09-01  Peter Williams  <peter@newton.cx>
+
+	Track the lower-level changes in names and API.
+	
+	* Monkeywrench/IBuildManager.cs: Get rid of unneccessary genericity
+	and remove the defaulting hack. yay!
+
+	* Monkeywrench/IInstallerService.cs: Fix namespace, reindent.
+
+	* Monkeywrench/ArgCollector.cs: Now allow the default values for rules to
+	be specified separately to enable the New Paradigm.
+
+	* Monkeywrench.Compiler/IDependencyVisitor.cs: Change to use SingleValue.
+
+	* Monkeywrench.Compiler/BundleManager.cs: Most functionality moved
+	into BundleManagerBase; now just handles discovery and loading of assemblies.
+
+	* Monkeywrench.Compiler/GraphCompiler.cs: Track classname changes and
+	API changes associated with structure migration.
+
+	* Monkeywrench.Compiler/IBundleUser.cs: Removed.
+
+	* Monkeywrench.Compiler/NameLookupContext.cs: Some functionality moved
+	into Bundling.TypeResolver; much hairy functionality added to handle
+	structures and structure-bound types.
+
+	* Monkeywrench.Compiler/WrenchTarget.cs: Renamed from TargetBuilder;
+	now inherits from Bundling.TargetBuilder, and much functionality moved
+	to the baseclass.
+	* Monkeywrench.Compiler/WrenchProvider.cs: Analogous.
+	* Monkeywrench.Compiler/GraphBuilder.cs: Analogous (for ProjectBuilder).
+
+	* Monkeywrench.Compiler/TargetValidity.cs: Move into Mono.Build.
+
+	* Monkeywrench.Compiler/BuildfileParser.jay: Reflect the RuleName -> TemplateName
+	change, using Bundling.SingleValue<>
+
+	* Monkeywrench.Compiler/BuildfileParser-rest.cs: Track class name changes;
+	use Bundling.SingleValue<> more aggressively.
+
+	* Monkeywrench.Compiler/BinaryLoadedGraph.cs: Load default values for 
+	arguments, now that this is per-target and not per-rule, and apply them.
+
+	* Monkeywrench.Compiler/BinaryGraphSerializer.cs: Track class name changes,
+	change the binary format slightly to record argument default values.
+
+	* Monkeywrench.Compiler/InsideProviderLoader.cs: Track ProviderBuilder ->
+	WrenchProvider change.
+	* Monkeywrench.Compiler/BuildfileProviderLoader.cs: Same.
+	* Monkeywrench.Compiler/ProjectProviderLoader.cs: Quick new class to
+	construct a provider for /project/.
+
+	* Monkeywrench.Compiler/ProviderLoaderBase.cs: Verify that the basis argument
+	is a valid basis, track class name changes.
+
+	* Monkeywrench.Compiler/ProviderCopyLoader.cs: Deleted, no longer needed
+	that bundles can access the generic *Builder classes.
+
+	* Monkeywrench.Compiler/XmlGraphSerializer.cs: Track ProviderBuilder ->
+	WrenchProvider change. Track changes in APIs to list tags. Also record
+	default argument values associated with rules.
+
+	* Monkeywrench.Compiler/XmlBackedGraph.cs: Apply default argument values.
+	(Untested).
+	
+2006-08-09  Peter Williams  <peter@newton.cx>
+
+	* Monkeywrench.Compiler/NameLookupContext.cs: Extensive changes
+	to work with StructureTemplate model. Reindent.
+
+	* Monkeywrench.Compiler/BundleManager.cs: Most Type-related functionality
+	moved into Mono.Build.Bundling.BundleManagerBase. This just takes care
+	of how bundles are loaded now.
+
+	* Monkeywrench.Compiler/NamespaceUsable.cs: New class, implements 
+	IUsable for a bunch of types in a namespace.
+	
+	* Monkeywrench.Compiler/XmlGraphSerializer.cs: Track various sundry
+	changes in *Builder API. No logic changes.
+	* Monkeywrench.Compiler/BinaryGraphSerializer.cs: Same.
+	* Monkeywrench.Compiler/GraphCompiler.cs: Similar, a few larger changes
+	to fit the new model.
+
+	* Monkeywrench.Compiler/ProviderCopyLoader.cs: Eliminate.
+	* Monkeywrench.Compiler/IBundleUser.cs: Same.
+	* Monkeywrench.Compiler/ITargetRequestSink.cs: Same.
+	* Monkeywrench.Compiler/ProjectProvider.cs: Same.
+	* Monkeywrench.Compiler/ProviderCopyLoader.cs: Same.
+
+	* Monkeywrench.Compiler/InsideProviderLoader.cs: Track signature changes
+	and class renames.
+	* Monkeywrench.Compiler/BuildfileParser-rest.cs: Same.
+	* Monkeywrench.Compiler/BuildfileParser.jay: Same.
+	* Monkeywrench.Compiler/BuildfileProviderLoader.cs: Same. Also use
+	new ProjectProviderLoader.
+	* Monkeywrench.Compiler/ProviderLoaderBase.cs: Same.
+
+	* Monkeywrench.Compiler/TargetValidity.cs: Move to Mono.Build.
+
+	* Monkeywrench.Compiler/IDependencyVisitor.cs: Move from Mono.Build.
+
+	* Monkeywrench.Compiler/WrenchTarget.cs: Renamed from TargetBuilder.
+	Generic functionality moved into Mono.Build.Bundling.TargetBuilder.
+	* Monkeywrench.Compiler/WrenchProvider.cs: Same for ProviderBuilder.
+	* Monkeywrench.Compiler/GraphBuilder.cs: Keep same name, but similar
+	process into Mono.Build.Bundling.ProjectBuilder.
+
+	* Monkeywrench.Compiler/ProjectProviderLoader.cs: Create the /project/
+	provider directly into a ProviderBuilder now.
+
+	
+2006-07-29  Peter Williams  <peter@newton.cx>
+
+	* Monkeywrench/IInstallerService.cs: Move from Mono.Build, not that
+	it is used at the moment. Reindent.
+
+	* Monkeywrench.Compiler/BundleManager.cs (LoadBundle): Just report the
+	exception message; the backtrace will not be helpful.
+	(BundleManager): Use a Dictionary`2 instead of a Hashtable. Reindent.
+
+2006-07-21  Peter Williams  <peter@newton.cx>
+
+	* Monkeywrench.Compiler/NameLookupContext.cs: Move here from Mono.Build.Bundling.
+	No need to have this lower in the stack.
+
+	* Monkeywrench.Compiler/BundleManager.cs: Same.
+
+	* Monkeywrench.Compiler/IBundleUser.cs: Same.
+
+	* Monkeywrench/ProjectInfo.cs: Add a using for the above changes.
+
+2006-07-20  Peter Williams  <peter@newton.cx>
+
+	* Monkeywrench.Compiler/BuildfileParser-rest.cs (ConstructedInfo): Munge
+	in the line number in which the implicit target is defined to aid
+	debugging.
+
+2006-07-19  Peter Williams  <peter@newton.cx>
+
+	* Monkeywrench/ProjectManager.cs (GetGraph): If we can't recompile the
+	graph, delete it, since we'll just try the same thing on the next run.
+	(OnRecompile): Add a cheesy little event to notify the frontend when
+	we recompile the graph, and why.
+
+	* Monkeywrench.Compiler/BuildfileParser-rest.cs: Don't print a pointless
+	backtrace for simple parse errors.
+
+2006-07-19  Peter Williams  <peter@newton.cx>
+
+	* Monkeywrench.Compiler/BuildfileParser.jay: Rework the grammar to
+	handle centralize the loading of things with values, that is, targets
+	or literal results. We add to this set 'constructed results', which
+	are built with implicitly-defined targets. These include dictionaries
+	and boolean operations, which we had hackishly before, but add on 
+	formatted strings ("a{0}b{1}" % [a, b]) and conditionals (a ? b : c).
+	The new grammar is much more flexible, allowing dictionaries to be
+	defined inside target definitions and recursive constructed target
+	definitions. For example,
+
+	foo = Clone [ 
+	   { field = "string1", another = "test{0}" % [ mono-pcprobe ? "yes" : "no" ] } 
+	]
+
+	We need to make a tiny tweak: ordered arguments are now surrounded
+	with [], not {}.
+	
+	* Monkeywrench.Compiler/BuildfileParser-rest.cs: Rearrange code to
+	support the above.
+
+2006-07-19  Peter Williams  <peter@newton.cx>
+
+	* Monkeywrench.Compiler/BuildfileParser-rest.cs (AddSubdir): 
+	Add subdirectories progressively, instead of building a list of
+	them.
+	(AddUnversionedReference): Same for bundle references.
+	(StartInside): Similar for 'inside' statements, make more flexible.
+	Can now have multiple inside statements per buildfile.
+	(UseNamespace): More delisting.
+
+	* Monkeywrench.Compiler/BuildfileParser.jay: Grammar changes 
+	reflecting the above.
+
+	* Monkeywrench.Compiler/BuildfileProviderLoader.cs (Initialize): 
+	Track the more flexible inside API.
+
+2006-07-19  Peter Williams  <peter@newton.cx>
+
+	* Monkeywrench.Compiler/BuildfileParser-rest.cs: Renamed
+	from BuildfileParserHelper.cs.
+	
+2006-07-19  Peter Williams  <peter@newton.cx>
+
+	* Monkeywrench.Compiler/BuildfileParser.jay: Move as much code as
+	possible ...
+
+	* Monkeywrench.Compiler/BuildfileParserHelper.cs: ... to this file.
+	Yay partial classes! Clean up the code a bit -- more to come.
+
+	* Monkeywrench.Compiler/BuildfileProviderLoader.cs: Track a few
+	API changes that are side effects of the first cleanups.
+
+	* Monkeywrench/ProjectManager.cs (GetGraph): Check if the parsing
+	failed before serializing the graph.
+
+	* Monkeywrench.Compiler/TargetBuilder.cs: Give the full target 
+	name in a few error messages.
+
+2006-07-19  Peter Williams  <peter@newton.cx>
+
+	* Monkeywrench.Compiler/GraphBuilder.cs (AddDependentBundles): 
+	Loop through the bundles in the BundleManager and add 
+	DependentItemInfos for them.
+	(SetProjectInfo): Call the above here.
+	(dep_bundles): Change to just be a List`1.
+
+	* Monkeywrench/ProjectManager.cs (GraphNeedsRebuild): Check the
+	bundle assemblies for changes.
+	(LoadSavedGraph): Call the above after loading bundles, so that
+	we have the bundle assemblies to poke.
+
+2006-07-18  Peter Williams  <peter@newton.cx>
+
+	Fix requests of targets in providers to the side.
+
+	* Monkeywrench.Compiler/TargetBuilder.cs (Validity): New
+	TargetValidity enum member, superseding OnlyRequested.
+
+	* Monkeywrench.Compiler/TargetValidity.cs: New enum.
+
+	* Monkeywrench.Compiler/ProviderBuilder.cs (EnsureTarget): Helper
+	to get a TargetBuilder. Mostly old DefineTarget code.
+	(CanDefineTarget): Return true if it will be OK to define a target
+	of the given name.
+	(LookupTarget): New function, ensures a target but only sets its
+	validity to referenced ...
+	(DoneRequesting): ... so that if we get here, and the target hasn't
+	been defined, return an error.
+
+	* Monkeywrench.Compiler/GraphBuilder.cs (LookupTarget): Use the new
+	ProviderBuilder.LookupTarget. This way we can reference targets
+	in parallel providers but maintain the invariant that targets can
+	only be created via request from parent providers.
+
+	* Monkeywrench.Compiler/BuildfileParser.jay (CheckTargetName): Use
+	the new ProviderBuilder.CanDefineTarget to check for already-defined
+	targets.
+
+	* Monkeywrench/SourceSettings.cs (SubpathToBasis): Map '.' to '/'.
+
+2006-07-18  Peter Williams  <peter@newton.cx>
+
+	* Monkeywrench/MakeDictionaryRule.cs (Build): Use CreateResultObject
+	and GeneralResultType.
+
+2006-07-12  Peter Williams  <peter@newton.cx>
+
+	* Monkeywrench.Compiler/BinaryGraphSerializer.cs: New class that writes
+	the GraphBuilder in a compact binary format.
+	
+	* Monkeywrench.Compiler/BinaryLoadedGraph.cs: New class that implements
+	IGraphState from data loaded from the binary format.
+
+	* Monkeywrench.Compiler/BinaryHelper.cs: New class with a few useful
+	routines for writing and reading the binary format.
+	
+	* Monkeywrench/ProjectManager.cs (Graph): "graph.xml" -> "graph.bin"
+	(GetGraph): Write with BinaryGraphSerializer now.
+	(LoadSavedGraph): Read with BinaryLoadedGraph now.
+
+	* Monkeywrench.Compiler/GraphBuilder.cs (NumTags): New public field.
+
+	* Monkeywrench.Compiler/DependentItemInfo.cs: Mark as Serializable.
+	* Monkeywrench.Compiler/ProjectInfo.cs: Same.
+
+	* Monkeywrench.Compiler/TargetBuilder.cs 
+	(FixupVisitor.VisitResultTag): Call GetTagId () on the tag string so
+	that it gets registered with the GraphBuilder. (This whole piece of
+	code needs to be fixed up.)
+	(FixupVisitor.VisitTargetTag): Same.
+
+	* Monkeywrench.Compiler/IGraphState.cs (GetTargetsWithTag): Rename
+	the (unimportant) arg in the interface def.
+
+2006-07-12  Peter Williams  <peter@newton.cx>
+
+	More reworking to make a binary graph easier to create and
+	navigate.  The most common tag operation is 'find all targets with
+	this tag', so make that easy to store in the binary format. This
+	suggests a change in the 'what targets do I operate on' API: it
+	being resolved that iterators are a good way to navigate a list of
+	objects, ditch the Operate interface in favor of an
+	iterator-and-filter-based API.
+	
+	* Monkeywrench.Compiler/IGraphState.cs (TargetHasTag): Remove, redundant
+	with GetTargetTag.
+	(GetTargetsWithTag): New member, aimed at the common case of 'what targets
+	may be marked with this tag'.
+
+	* Monkeywrench.Compiler/TargetTagInfo.cs: New utility struct, holds
+	information provided by an IGraphState about targets having a given tag.
+	Allows a slight optimization of BuildServices (probably will be a large
+	one with the binary format).
+
+	* Monkeywrench/BuildServices.cs (.ctor): Use a constructor instead
+	of a pointless static function. Add a ctor that holds info from a 
+	TargetTagInfo.
+	(GetTag): If we have cached info from a TargetTagInfo, use that
+	instead of going back to the graph. Track the IGraphState API.
+
+	* Monkeywrench/TargetList.cs: New class, wraps an IEnumerable of
+	BuildServices with several functions that use the 'yield return' syntax
+	to filter or manipulate the enumerable in several ways. These return
+	more TargetLists, allowing several filters to be chained easily.
+	
+	* Monkeywrench/WrenchProject.cs (GetTargetServices): Use the new
+	BuildServices ctor instead of the pointless old static function.
+	(FromIds, etc): New functions for enumerator model of operating on
+	targets, rather than the top-down model. Return TargetLists.
+	(Operate*): Removed in favor of the above.
+
+	* Monkeywrench.Compiler/XmlBackedGraph.cs: Track IGraphState
+	changes.
+	(GetTargetsWithTag): Produce the IEnumerable with the 'yield
+	return' syntax, which is really, really useful.
+	(DependentEnumerator): Ditch in favor of 'yield return'.
+
+	* Monkeywrench/GraphStateProfiler.cs: Track IGraphState.
+
+	* Monkeywrench.Compiler/ProviderBuilder.cs: Use generic collections
+	when appropriate.
+	(RequestTarget): Catch a bug: check if the name is registered in the
+	targets Dictionary and def_waitlist before defining a new one.
+
+	* Monkeywrench/ArgCollector.cs: Fix namespace to Monkeywrench.
+	* Monkeywrench/BuiltItem.cs: Same.
+
+2006-07-11  Peter Williams  <peter@newton.cx>
+
+	* Monkeywrench/BuiltItem.cs: Move to here from Mono.Build, as it
+	is no longer needed lower in the stack. Re-namespace.
+	* Monkeywrench/ArgCollector.cs: same.
+	* Monkeywrench/IBuildManager.cs: same.
+
+2006-07-09  Peter Williams  <peter@newton.cx>
+
+	* Monkeywrench.Compiler/IGraphState.cs (GetTargetRuleType): Do this,
+	instead of GetTargetRule. 
+	(GetDependent*): Use IEnumerable`1 instead of IEnumerable.
+
+	* Monkeywrench/GraphStateProfiler.cs: Track the above. 
+
+	* Monkeywrench.Compiler/XmlGraphSerializer.cs: Track the above. 
+	Use integer argument IDs rather than string argument names.
+
+	* Monkeywrench.Compiler/XmlBackedGraph.cs: As above. Read integer
+	argument IDs rather than string names.
+
+	* Monkeywrench.Compiler/ProviderCopyLoader.cs: Track
+	IDependencyVisitor`2 change.
+
+	* Monkeywrench.Compiler/BuildfileParser.jay: Use .Net 2.0 
+	GetInvalidPathChars () API.
+
+	* Monkeywrench.Compiler/TargetBuilder.cs: Track IDependencyVisitor`2
+	change. Use generic collections when possible for cleaner typing.
+	Perform argument name -> argument ID mapping in the visitors and
+	check that the argument names are valid on fixup.
+
+	* Monkeywrench.Compiler/GraphBuilder.cs: Use some generic collections
+	when possible.
+
+	* Monkeywrench.Compiler/MakeDictionaryRule.cs: Track rule API. 
+	Reindent.
+
+	* Monkeywrench.Compiler/BuildServices.cs: Move to new Rule semantics.
+	(MakeBuildPrint): Move from Fingerprint.FromBuild.
+	(CheckBuildReadiness): Call Rule.FetchArgValues here.
+
+2006-07-07  Peter Williams  <peter@newton.cx>
+
+	* Monkeywrench/GraphStateProfiler.cs: New class, passes through calls
+	to an IGraphState while keeping track of how many times each interface
+	method is called.
+
+	* Monkeywrench/ProjectManager.cs (ProfileStateUsage): New static field;
+	use a GraphStateProfiler if set and print the results on disposal.
+
+2006-07-06  Peter Williams  <peter@newton.cx>
+
+	* Monkeywrench/FileStateTable.cs: Clean this up -- we were serializing
+	a bunch of members that we shouldn't have. Really we shouldn't store
+	those members because if we ever change directories, the stored values
+	would be useless.
+
+	* Monkeywrench/ActionLog.cs (Load): Right, use PathToStateItem instead
+	of our homebrew.
+	(Save): Same.
+
+	* Monkeywrench/WrenchProject.cs: Also put code to save the provider
+	persistence here; refactor a tiny bit. 
+
+	* Monkeywrench/IProviderPersistence.cs: Don't make disposable.
+	If we ever change directories, we *need* an up-to-date SourceSettings
+	to write to the correct file.
+	(Save): New member to do the above.
+	
+2006-07-06  Peter Williams  <peter@newton.cx>
+
+	* Monkeywrench/ActionLog.cs: Renamed from LoggingData.
+
+	* Monkeywrench/ProjectManager.cs: Track rename.
+
+	* Monkeywrench/WrenchProject.cs: Same.
+
+2006-07-06  Peter Williams  <peter@newton.cx>
+
+	* Monkeywrench/SourceSettings.cs: Move all the path manipulation code
+	from WrenchProject here. Instead of serializing a SourceSettings object
+	inside a log file in each build dir, write a small XML file in each
+	builddir, and use the path code to read or write these files and set up
+	the path state correctly. While doing this, clean up the path code a
+	little bit.
+
+	* Monkeywrench/LoggingData.cs: Rework significantly. Don't try
+	to stuff SourceSettings in here. Have one object per project, instead
+	of one per provider, and actually record and serialize IBuildLogger
+	events.
+
+	* Monkeywrench/WrenchProject.cs: Extract the path manipulation
+	code into SourceSettings. Reference a SourceSettings and use it
+	when necessary. Initialize ProviderInfos in the ProviderInfo
+	ctor. In that ctor, don't forget to create the build directory and
+	leave a breadcrumb in it. Strip out the unused logging code.
+
+	* Monkeywrench/ProjectManager.cs: Track the evolution of the breadcrumb
+	loading model and SourceSettings path functions. Loading code makes a
+	lot more sense now.
+
+	* Monkeywrench/BuildServices.cs: Track the centralization of logs
+	in WrenchProject rather than one-per-provider.
+
+	* Monkeywrench.Compiler/ProviderLoaderBase.cs: Track SourceSettings
+	evolution.
+
+	* Monkeywrench.Compiler/BuildfileProviderLoader.cs: Same.
+
+	* Monkeywrench/SimpleLogger.cs: Track IWarningLogger API evolution.
+
+	* Monkeywrench/IProviderFactory.cs: No longer used. Deleted.
+	* Monkeywrench/IPersistentBuildProvider.cs: Same.
+	
+	* Monkeywrench/SafeFileSerializer.cs (Save): Change sense of boolean
+	exit code to the one I use everywhere else.
+
+2006-07-05  Peter Williams  <peter@newton.cx>
+
+	Track ITarget interrogability changes. Makes a lot of this code better,
+	but it is still lame that we have to copy SimpleTargets into TargetBuilders.
+	We should just define ITargetBuilder and have bundle code write directly
+	into the TBs.
+	
+	* Monkeywrench.Compiler/TargetBuilder.cs: Don't do stuff that is now done
+	for us by TagTargetBase. Don't change all the entries in our arrays on 
+	fixup; instead, add visitor functions that take ITagVisitor<int> (eg) and
+	use wrappers around the VisitTag(ITagVisitor<string>) (eg) functions.
+
+	* Monkeywrench.Compiler/BuildfileParser.jay: Track the new TagTargetBase
+	implementation and ITaggable API.
+
+	* Monkeywrench.Compiler/ProviderCopyLoader.cs: Track the new ITarget
+	visitor API.
+
+	Other fixes:
+	
+	* Monkeywrench.Compiler/GraphBuilder.cs: Don't implement IGraphState anymore
+	now that XmlBackedGraph does the job. Cuts out a lot of functions.
+
+	* Monkeywrench.Compiler/ProviderBuilder.cs (DefineTarget): Oops, return if
+	the TB is already created so that we don't reregister it. Rearrange the code
+	a bit to make the flow more obvious.
+	(DoneRequesting): Track ITarget change (SetRuleType).
+
+	* Monkeywrench.Compiler/XmlBackedGraph.cs (GetTargetId): Implement this
+	correctly. We have to parse the target basis, look up its provider, and
+	go through its targets.
+	(ApplyTargetDependencies): We were forgetting to AddTargetName here.
+	(GetTargetTag): We need to Int32.Parse the attribute, not just cast it.
+
+	* Monkeywrench.Compiler/XmlGraphSerializer.cs (DebugOutput): New property,
+	controls whether we indent the output XML file.
+	(): Track the movement of GraphBuilder from IGraphState to its own more
+	direct API.
+	(): Track the movement to ITarget API with visitors for tags and deps.
+
+2006-07-03  Peter Williams  <peter@newton.cx>
+
+	* Monkeywrench.Compiler/XmlGraphSerializer.cs: Rename from XmlStateSerializer.
+
+	* Monkeywrench/ProjectManager.cs (GetGraph): Track the above change.
+
+2006-07-03  Peter Williams  <peter@newton.cx>
+
+	* Monkeywrench/SafeFileSerializer.cs: Only print out the Message of exceptions
+	since the backtraces are useless and long.
+
+	* Monkeywrench/ProjectManager.cs: Actually implement the intended logic: see
+	if a cached graph exists, and if so, try to load it. If that graph fails its
+	up-to-date checks or the load fails, recompile and rewrite, then load again.
+	Create a WrenchProject that looks at the graph state and fuel the build off that.
+
+	* Monkeywrench/BuildServices.cs: Reindent and change to work with integer target
+	and tag names and a IGraphState backend.
+
+	* Monkeywrench/WrenchOperations.cs: Track move from strings to ints to identify
+	targets.
+	(GetInstaller): Need to give this a WrenchProject to go from tag names to tag ids.
+
+	* Monkeywrench/WrenchProject.cs: Reindent and rework fairly extensively to just
+	run a build off of an IGraphState, not an internal object tree based on a bunch
+	of ProviderInfos. Take out target requesting code which belongs in the compile
+	step.
+
+	* Monkeywrench/IDynamicBuildProvider.cs: Deleted, not needed anymore.
+
+	* Monkeywrench.Compiler/ProviderBuilder.cs: Rework this to do target requesting
+	correctly in the new regime -- we need to convert requested target names to IDs
+	immediately, so allocate TargetBuilders for requested targets immediately.
+	(NumTargets): New member.
+
+	* Monkeywrench.Compiler/GraphBuilder.cs: Make changes needed for requesting --
+	a FinishProvider member -- and track evolution of IGraphState.
+
+	* Monkeywrench.Compiler/ITargetRequestSink.cs: Moved from Monkeywrench/. 
+	Added LookupTarget, which returns an existing target's ID number.
+
+	* Monkeywrench.Compiler/TargetBuilder.cs: Add a new 'only_requested' member
+	that holds whether this TB has only been created via a request from another
+	provider. Needed since the move to creating TBs for requested targets. Also
+	rework tag rewriting, dep storage, and add a function to visit those 
+	dependencies so we can serialize them into a graph.
+
+	* Monkeywrench.Compiler/GraphCompiler.cs: Add a new "declaration
+	location" item to each provider: this holds the effective source
+	directory in which the provider was declared, so we know what its
+	WorkingDirectory and SourceDirectory should be, where its resource
+	files are, etc.
+
+	* Monkeywrench.Compiler/XmlStateSerializer.cs: New class, takes a GraphBuilder
+	and serializes it to a simply-structured XML file. Should be renamed to 
+	XmlGraphSerializer.
+
+	* Monkeywrench.Compiler/BuildfileParser.jay: Reworked path handling a little bit
+	so that we can call AddDependentFile with a srcdir-relative path to the dependent
+	file.
+
+	* Monkeywrench.Compiler/ProviderLoaderBase.cs: Renamed from IProviderLoader.cs.
+	Add 'basis' and 'decl_loc' members since each subclass had these separately.
+	Also has logic to guess decl_loc if left unspecified.
+
+	* Monkeywrench.Compiler/BuildfileProviderLoader.cs: Changed to track
+	declaration locations and set the BuildfileName on the PInfo.
+
+	* Monkeywrench.Compiler/ProviderCopyLoader.cs: Track the above change. Also
+	copy tags from the target.
+
+	* Monkeywrench.Compiler/InsideProviderLoader.cs: Track the above change.
+
+	* Monkeywrench.Compiler/XmlBackedGraph.cs: New class implementing IGraphState
+	that is backed by the XML file written by XmlStateSerializer. Extremely slow
+	but simple.
+
+	* Monkeywrench.Compiler/IGraphState.cs: Flesh out functionality based
+	on needs of WrenchProject usage of the graph state.
+
+2006-06-29  Peter Williams  <peter@newton.cx>
+
+	* Monkeywrench/IDynamicBuildProvider.cs: Deleted.
+
+	* Monkeywrench.Compiler/ProviderBuilder.cs: Remove reference to the above.
+
+2006-06-28  Peter Williams  <peter@newton.cx>
+
+	* Monkeywrench.Compiler/ITargetRequestSink.cs: Moved from Monkeywrench/.
+	Changed namespace.
+
+2006-06-28  Peter Williams  <peter@newton.cx>
+
+	* Monkeywrench.Compiler/IGraphState.cs: New file.
+	* Monkeywrench.Compiler/IProviderLoader.cs: Same.
+	* Monkeywrench.Compiler/ProviderCopyLoader.cs: Same.
+	* Monkeywrench.Compiler/BuildfileProviderLoader.cs: Same.
+	* Monkeywrench.Compiler/InsideProviderLoader.cs: Same.
+	* Monkeywrench.Compiler/GraphBuilder.cs: Same.
+	* Monkeywrench.Compiler/GraphCompiler.cs: Same.
+	* Monkeywrench.Compiler/GraphManager.cs: Same.
+
+	* Monkeywrench.Compiler/BuildfileParser.jay: Moved from Monkeywrench/. 
+	Changed namespace. Reindent some files.
+	* Monkeywrench.Compiler/ProviderBuilder.cs: Same. Some new fields.
+	* Monkeywrench.Compiler/BuildfileTokenizer.cs: Same.
+	* Monkeywrench.Compiler/BuildfileParserHelper.cs: Same.
+	* Monkeywrench.Compiler/TargetBuilder.cs: Same. Some new fields.
+	* Monkeywrench.Compiler/ProjectProvider.cs: Same.
+
+	* Monkeywrench.Compiler/BuildfileLoader.cs: Moved from 
+	Monkeywrench/BuildfileProvider. Will probably be deleted in favor of
+	GraphCompiler + ProjectManager.
+	
+	* Monkeywrench/WrenchProvider.cs: Delete.
+	* Monkeywrench/IPopulatingProvider.cs: Same.
+
+	* Monkeywrench/WrenchProject.cs: Comment out large chunks of code
+	pending a rewrite to use an IGraphState backend.
+
+	* Monkeywrench/ProjectInfo.cs (LoadBundles): Move code to load
+	pinfo refs into a bundle manager here.
+
+	* Monkeywrench/ProjectManager.cs: Rewite to build the graph;
+	comment out higher-level functions. Reindent.
+	
+2006-06-23  Peter Williams  <peter@newton.cx>
+
+	* Monkeywrench/BuildfileParser.jay: Add grammar for boolean expressions
+	within buildfiles: booltarg = (! a && b) || (c && d || e) with [ x y z ]
+
+	* Monkeywrench/BuildfileTokenizer.cs: Read &&, ||, and ! tokens.
+
+	* Monkeywrench/BuildfileParserHelper.cs: Helper class for 
+	BuildfileParser (!) that most of the C# code should be migrated
+	to for coder ease. Currently implements boolean expression
+	compilation to my stupid, stupid little stack language.
+
+2006-06-16  Peter Williams  <peter@newton.cx>
+
+	* Monkeywrench/WrenchOperations.cs (ForceBuild): Add an operation
+	to force the build of an item (should be equiv to uncache + build).
+
+	* Monkeywrench/BuildServices: Add code to report an error if a
+	build has failed without its rule reporting an error.
+
+2006-05-30  Peter Williams  <peter@newton.cx>
+
+	* Monkeywrench/TargetBuilder.cs: Replace explicit ConstructorInfo
+	invocation with System.Activator.
+
+2006-01-15  Peter Williams  <peter@newton.cx>
+
+	* Monkeywrench/BuildfileParser.jay: Let the subdirs statement
+	take either identifiers or literal strings, so that 
+	subdirectories with spaces in their names can be handled.
+
+2005-10-10  Peter Williams  <peter@newton.cx>
+
+	The other half of fixing build fingerprints. Update the 
+	Monkeywrench code to work with BuiltItems and handle their
+	fingerprints correctly.
+	
+	* Monkeywrench/IProviderPersistence.cs: Update to use
+	BuiltItems instead of three get/set pairs for each of {result,
+	build fp, result fp}.
+
+	* Monkeywrench/BuildServices.cs (TryValueRecovery): Renamed
+	from GetCachedValue. Use BuiltItems; add the logic to check
+	the validity of the cached value (moved from ProviderInfo).
+	(BuildValue): Use BuiltItems, not Results.
+	(GetValue): Same
+	(CacheValue): Same
+	(FixValue): Same
+	(CheckBuildReadiness): Don't need old_build_fp anymore; new
+	ctor for BuildFingerprint.
+
+	* Monkeywrench/WrenchOperations.cs (BuildValue): Work with
+	BuiltItems instead of results.
+
+	* Monkeywrench/StateTable.cs: Rework. Instead of having accessors
+	for {result, result fp, build fp} separately, just load and save
+	BuiltItems.
+
+	* Monkeywrench/WrenchProject.cs (ProviderInfo): Take the result
+	caching logic out from here. Just leave wrappers for uncaching
+	and fixing the new BuiltItem structs.
+	(operate_tree): StrUtils.StartsWith.
+
+	* Monkeywrench/TargetBuilder.cs (fixup_dep): StrUtils.StartsWith
+
+2005-09-24  Peter Williams  <peter@newton.cx>
+
+	* Monkeywrench/WrenchProject.cs (GetTargetState): New function.
+	Keep a table of targets that have been built; record whether the
+	build a) is in progress, b) succeeded, or c) failed. Allows us to
+	detect recursive builds and grab the result straight out of the
+	cache if we know the build is fresh.
+	(SetTargetState): Corresponding internal function.
+	(FIXME): The hashtable currently grows without bound. Need to a
+	way to expire entries from it.
+	
+	* Monkeywrench/BuildServices.cs (GetCachedValue): If we pull
+	the result out of the cache successfully, mark it as successfully
+	built so that next time we don't bother checking build fingerprints.
+	(BuildValue): Set the target state to 'building' in this function; after
+	exit, mark it as BuiltError or BuiltOk depending on the outcome.
+
+	* Monkeywrench/WrenchOperations.cs (EvaluateTargets): Check the
+	state of the target with the project; if it's already been built
+	or recovered from the cache successfully, just recover the value
+	straight from the cache without checking build fingerprints. Handle
+	other conditions sanely too; we can now check for recursive builds.
+
+2005-09-06  Peter Williams  <peter@newton.cx>
+
+	* Monkeywrench/BuildServices.cs (old_build_fp): Recover and store
+	the old build fingerprint. I think we still have to rehash the
+	backing files of the build fingerprint, which is bad, because we
+	cache the old build FP as a ConstantFingerprint. But we were
+	messing up rebuilds (see CacheValue below) which is a more serious problem.
+
+	* Monkeywrench/WrenchProject.cs (GetCachedValue): Take the old build fingerprint
+	as an argument. Log if the external result is invalid.
+	(GetOldBuildFingerprint): New function. Does what it says.
+	(GetCachedValue): New overload providing the old signature.
+	(CacheValue): Cache the build fingerprint as a ConstantFingerprint, so that we
+	don't try to recalculate it when it's recovered. This is more efficient and 
+	makes it so that we don't erroneously update the fp's of file deps, making it look
+	like we don't need to rebuild targets that need it.
+	
+	Also ifdef'd out some unused private functions that might be useful later.
+
+	* Monkeywrench/BuildfileParser.jay: Ifdef out some functions not used at the
+	moment.
+
+	* Monkeywrench/BuildfileTokenizer.cs: Same
+
+2005-09-01  Peter Williams  <peter@newton.cx>
+
+	* Monkeywrench/WrenchOperations.cs (GetInstallerAndResult): Another helper
+	for the install client work.
+
+2005-08-21  Peter Williams  <peter@newton.cx>
+
+	* Monkeywrench/ProviderBuilder.cs: Improve error message based on some 
+	personal experience.
+
+2005-07-12  Peter Williams  <peter@newton.cx>
+
+	* Monkeywrench/WrenchOperations.cs: Fix location of PopLocation call.
+
+2005-05-19  Peter Williams  <peter@newton.cx>
+
+	* Monkeywrench/WrenchOperations.cs (Install): Track movement and behavior changes to
+	the compat finder. We now have to report the error ourself.
+	(Clean): Use the compat finder to look for an ExternalResult.
+
+2005-03-05  Peter Williams  <peter@newton.cx>
+
+	* Monkeywrench/WrenchOperations.cs (FindInstallCompatibleResult):
+	Take a logger arg, log the error.
+	(Install): Pass the logger, set location.
+
+2005-01-19  Peter Williams  <peter@newton.cx>
+
+	* Monkeywrench/WrenchProject.cs (GetRawCachedValue): Function to get
+	cached value without checking for dependencies or fingerprint.
+
+	* Monkeywrench/BuildServices.cs (GetRawCachedValue): Wrapper for the above.
+
+	* Monkeywrench/WrenchOperations.cs (Clean): Use GetRawCachedValue instead of
+	GetCachedValue, so that we don't try to rebuild deps when cleaning.
+
+2004-11-28  Peter Williams  <peter@newton.cx>
+
+	* Monkeywrench/BuildfileParser.jay: Add yacc_verbose_flag that newer jay wants.
+
+2004-11-12  Peter Williams  <peter@newton.cx>
+
+	* Monkeywrench/BuildServices.cs (GetCachedValue): Return a bool
+	and have an out Result so that callers can distiguish between
+	'error evaluating deps' and 'not cached'. Fix callers.
+
+	* Monkeywrench/WrenchOperations.cs: Fixes for GetCachedValue change.
+
+	* Monkeywrench/TargetBuilder.cs (SetName): New function to replace set accessor of
+	overridden Name property, which MCS now complains about.
+
+	* Monkeywrench/ProviderBuilder.cs: Use new SetName method now that the set accessor
+	of TargetBuilder.Name is gone.
+
+2004-09-29  Peter Williams  <peter@newton.cx>
+
+	* Monkeywrench/WrenchOperations.cs: Convert to use IResultInstaller instead. Separate
+	out GetInstall helper function, so that Install can share code with the client's
+	DescribeInstall function. (Still a lot of duplication in the result getting / type
+	checking.)
+
+	* Monkeywrench/BuildServices.cs: Whoops, check for null return from the build function.
+
+2004-09-26  Peter Williams  <peter@newton.cx>
+
+	* Monkeywrench/BuildServices.cs: New helper class that holds the state of 
+	building a particular target. Now instead of implementing a bunch of particular
+	operations in WrenchProject, this class provides the hooks into the cache services
+	so that the operations can be implemented separately and generically. Also,
+	the recursive build code is separated out from WrenchProject, so that new IBuildManagers
+	can actually be plugged in to provide better recursion logic. (IE, parallel builds)
+
+	* Monkeywrench/WrenchOperations.cs: Implementations of the standard operations:
+	build, uncache, install, dist, clean, etc. Sends events before they're executed so
+	that clients can keep stats, etc. Basically a move of code from WrenchProject, using
+	the new BuildServices support class to keep things nice.
+	
+	* Monkeywrench/OperationFunc.cs: Change signature now that we have BuildServices.
+
+	* Monkeywrench/WrenchProject.cs: Make ProviderInfo internal so it can
+	be accessed by BuildServices. Move result-cached-related functions into
+	ProviderInfo. Hold an IBuildManager reference pointing to the manager
+	that should be used when needing to build things. Remove dead code. Remove
+	implementations of build operations; these now go into WrenchOperations.
+	Change the Operate code to use BuildServices, not target name / ITarget / context
+	tuples.
+
+2004-09-21  Peter Williams  <peter@newton.cx>
+
+	* Monkeywrench/WrenchProject.cs: Report errors instead of throwing
+	some exceptions.
+
+2004-09-21  Peter Williams  <peter@newton.cx>
+
+	* Monkeywrench/BuildfileParser.jay: Add syntax to let the Buildfile
+	author define a dictionary: name = { key1 = "val", key2 = /target/name }
+
+	* Monkeywrench/MakeDictionaryRule.cs: New file, utility rule to
+	create a generic MBDictionary.
+
+	* Monkeywrench/ProjectManager.cs: Check for failure to load topfile.
+
+2004-09-02  Peter Williams  <peter@newton.cx>
+
+	* Monkeywrench/BuildfileParser.jay: Take out the MBuildDynamic
+	prefixing here, and instead let the BundleManager take care of it.
+

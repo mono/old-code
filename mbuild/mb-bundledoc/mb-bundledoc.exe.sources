@@ -1,0 +1,9 @@
+AssemblyInfo.cs
+BundleDocumenter.cs
+DeprecatingSynchronizer.cs
+GeneratedAssemblyVersionInfo.cs
+TypeDocumenter.cs
+XmlSynchronizer.cs
+documenters.cs
+synchronizers.cs
+mb-bundledoc.cs

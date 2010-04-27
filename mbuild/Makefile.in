@@ -1,0 +1,203 @@
+# Bootstrapping ahoy!
+
+# keep in sync with Buildfile
+NAME=@PACKAGE_TARNAME@
+VERSION=@PACKAGE_VERSION@
+COMPAT=@COMPAT@
+COMPAT_NAME=$(NAME)-$(COMPAT)
+ECHOPFX=@echo '        '
+
+# don't subst @libdir@ here since it may be
+# lib64 which is not what we want
+
+prefix=@prefix@
+exec_prefix=@exec_prefix@
+libdir=$(prefix)/lib
+bindir=@bindir@
+exedir=$(libdir)/$(COMPAT_NAME)
+
+MCS=@MCS@ /debug
+INSTALL=install
+GACUTIL=@GACUTIL@
+JAY=@JAY@
+JAY_SKELETON=@JAY_SKELETON_FILE@
+BUNDLEGEN=@MONO@ mb-bundlegen.exe /v:$(VERSION)
+SN=@SN@ -q
+
+default: all
+
+all: Mono.Build.dll MBuildDynamic.Core.dll MBuildDynamic.Languages.CSharp.dll MBuildDynamic.Tools.Jay.dll MBuildDynamic.Tools.Bundlegen.dll MBuildDynamic.Tools.Monodoc.dll MBuildDynamic.Tools.PkgConfig.dll Monkeywrench.dll mbuild.exe mb-bundlegen.exe mb-bd2xhtml.exe scripts/mb-bd2xhtml scripts/mb-bundlegen scripts/mbuild prefix-config.xml
+
+# ghastly
+mb-bundlegen.exe: mb-bundlegen/mb-bundlegen.exe.sources $(patsubst %,mb-bundlegen/%,$(shell cat mb-bundlegen/mb-bundlegen.exe.sources)) Mono.Build.dll
+	(cd mb-bundlegen && $(MCS) /target:exe /out:../$@ /r:Mono.GetOptions.dll /r:../Mono.Build.dll @mb-bundlegen.exe.sources)
+
+mb-bd2xhtml.exe: mb-bd2xhtml/mb-bd2xhtml.exe.sources $(patsubst %,mb-bd2xhtml/%,$(shell cat mb-bd2xhtml/mb-bd2xhtml.exe.sources))
+	(cd mb-bd2xhtml && $(MCS) /target:exe /out:../$@ /r:Mono.GetOptions.dll /r:System.Xml.dll /resource:bd2xhtml.xsl,bs2xhtml.xsl @mb-bd2xhtml.exe.sources)
+
+# horrendous
+make-version.stamp: phonydep
+	@if test -f $@ ; then \
+		echo "$(VERSION)" >$@.tmp ; \
+		if ! cmp $@ $@.tmp ; then \
+			cp -f $@.tmp $@ ; \
+			echo Version stamp $@ updated ; \
+		fi ; \
+		rm $@.tmp ; \
+	else \
+		echo "$(VERSION)" >$@ ; \
+		echo Version stamp $@ created ; \
+	fi
+
+make-prefix.stamp: phonydep
+	@if test -f $@ ; then \
+		echo "$(prefix)" >$@.tmp ; \
+		if ! cmp $@ $@.tmp ; then \
+			cp -f $@.tmp $@ ; \
+			echo Prefix stamp $@ updated ; \
+		fi ; \
+		rm $@.tmp ; \
+	else \
+		echo "$(prefix)" >$@ ; \
+		echo Prefix stamp $@ created ; \
+	fi
+
+# awful
+.PHONY: phonydep
+
+MB_VERSION_FILE=Mono.Build/Assembly/GeneratedAssemblyVersionInfo.cs
+BG_VERSION_FILE=mb-bundlegen/GeneratedAssemblyVersionInfo.cs
+BD_VERSION_FILE=mb-bd2xhtml/GeneratedAssemblyVersionInfo.cs
+CL_VERSION_FILE=mbuild/GeneratedAssemblyVersionInfo.cs
+
+# terrible
+$(MB_VERSION_FILE): make-version.stamp
+	echo '[assembly: System.Reflection.AssemblyVersion("$(VERSION)")]' >$@
+
+# dastardly
+$(CL_VERSION_FILE): make-version.stamp
+	echo '[assembly: System.Reflection.AssemblyVersion("$(VERSION)")]' >$@
+
+# despicable
+$(BD_VERSION_FILE): make-version.stamp
+	echo '[assembly: System.Reflection.AssemblyVersion("$(VERSION)")]' >$@
+
+# shit like this is why I wrote mbuild
+$(BG_VERSION_FILE): make-version.stamp
+	echo '[assembly: System.Reflection.AssemblyVersion("$(VERSION)")]' >$@
+
+Mono.Build.dll: Mono.Build.dll.sources $(shell cat Mono.Build.dll.sources)
+	$(MCS) /target:library /out:$@ /keyfile:mbuild.snk /r:Mono.Posix.dll @$<
+	$(SN) -R $@ mbuild.snk
+
+MBuildDynamic.Core.dll: MBuildDynamic.Core.dll.sources $(shell cat MBuildDynamic.Core.dll.sources) MBuildDynamic.Core/ArchCanonicalize.cs MBuildDynamic.Core/ArchDetect.cs Mono.Build.dll mb-bundlegen.exe
+	$(BUNDLEGEN) /out:$@ /keyfile:mbuild.snk /r:./Mono.Build.dll /n:MBuildDynamic.Core/ArchCanonicalize.cs /n:MBuildDynamic.Core/ArchDetect.cs $(shell cat MBuildDynamic.Core.dll.sources)
+	$(SN) -R $@ mbuild.snk
+
+MBuildDynamic.Languages.CSharp.dll: Languages.CSharp.bundle Mono.Build.dll MBuildDynamic.Core.dll mb-bundlegen.exe resources/csharp-check-template.cs.in
+	$(BUNDLEGEN) /out:$@ /keyfile:mbuild.snk /r:./Mono.Build.dll /r:./MBuildDynamic.Core.dll /resource:resources/csharp-check-template.cs.in $<
+	$(SN) -R $@ mbuild.snk
+
+MBuildDynamic.Tools.PkgConfig.dll: Tools.PkgConfig.bundle Mono.Build.dll MBuildDynamic.Core.dll mb-bundlegen.exe
+	$(BUNDLEGEN) /out:$@ /keyfile:mbuild.snk /r:./Mono.Build.dll /r:./MBuildDynamic.Core.dll $<
+	$(SN) -R $@ mbuild.snk
+
+MBuildDynamic.Tools.Bundlegen.dll: Tools.Bundlegen.bundle Mono.Build.dll MBuildDynamic.Core.dll mb-bundlegen.exe mbuild.snk
+	$(BUNDLEGEN) /out:$@ /keyfile:mbuild.snk /r:./Mono.Build.dll /r:./MBuildDynamic.Core.dll /resource:mbuild.snk $<
+	$(SN) -R $@ mbuild.snk
+
+MBuildDynamic.Tools.Monodoc.dll: Tools.Monodoc.bundle Mono.Build.dll MBuildDynamic.Core.dll MBuildDynamic.Tools.PkgConfig.dll mb-bundlegen.exe api-docs/mkmstoc.xsl
+	$(BUNDLEGEN) /out:$@ /keyfile:mbuild.snk /r:./Mono.Build.dll /r:./MBuildDynamic.Core.dll /r:./MBuildDynamic.Tools.PkgConfig.dll /resource:api-docs/mkmstoc.xsl $<
+	$(SN) -R $@ mbuild.snk
+
+MBuildDynamic.Tools.Jay.dll: Tools.Jay.bundle Mono.Build.dll MBuildDynamic.Core.dll MBuildDynamic.Languages.CSharp.dll mb-bundlegen.exe
+	$(BUNDLEGEN) /out:$@ /keyfile:mbuild.snk /r:./Mono.Build.dll /r:./MBuildDynamic.Core.dll /r:./MBuildDynamic.Languages.CSharp.dll $<
+	$(SN) -R $@ mbuild.snk
+
+Monkeywrench.dll: Monkeywrench.dll.sources $(shell cat Monkeywrench.dll.sources) Mono.Build.dll
+	$(MCS) /target:library /out:$@ /r:./Mono.Build.dll @$<
+
+mbuild.exe: mbuild.exe.sources $(shell cat mbuild.exe.sources) Monkeywrench.dll Mono.Build.dll
+	$(MCS) /target:exe /out:$@ /r:./Monkeywrench.dll /r:./Mono.Build.dll /r:Mono.GetOptions.dll @$<
+
+Monkeywrench/Monkeywrench.Compiler/BuildfileParser.cs: Monkeywrench/Monkeywrench.Compiler/BuildfileParser.jay
+	$(JAY) -ct <$(JAY_SKELETON) $< >$@
+
+mb-bundlegen/Parser.cs: mb-bundlegen/Parser.jay
+	$(JAY) -ct <$(JAY_SKELETON) $< >$@
+
+scripts/mbuild: scripts/mbuild.in make-prefix.stamp
+	sed -e 's,@''location@,$(exedir),g' <$< >$@
+
+scripts/mb-bundlegen: scripts/tmpl.in make-prefix.stamp
+	sed -e 's,@''location@,$(exedir),g' -e 's,@''program@,mb-bundlegen.exe,g' \
+	    -e 's,@''subdir@,mb-bundlegen/,g' <$< >$@
+
+scripts/mb-bd2xhtml: scripts/tmpl.in make-prefix.stamp
+	sed -e 's,@''location@,$(exedir),g' -e 's,@''program@,mb-bd2xhtml.exe,g' \
+	    -e 's,@''subdir@,mb-bd2xhtml/,g' <$< >$@
+
+prefix-config.xml: prefix-config.xml.in make-prefix.stamp
+	sed -e 's,@''prefix@,$(prefix),g' <$< >$@
+
+# Utility
+
+clean:
+	rm -f *.exe *.dll *.mdb *.stamp scripts/mbuild scripts/mb-bundlegen scripts/mb-bd2xhtml
+
+maintainer-clean: clean
+	rm -f config.status configure Makefile
+
+dist:
+	@echo You should only create distributions of MBuild using MBuild
+	@false
+
+install: all
+	mkdir -p $(libdir)
+	mkdir -p $(exedir)
+	mkdir -p $(bindir)
+	$(INSTALL) -m 755 Monkeywrench.dll $(exedir)
+	$(INSTALL) -m 755 Monkeywrench.dll.mdb $(exedir)
+	$(INSTALL) -m 755 mbuild.exe $(exedir)
+	$(INSTALL) -m 755 mbuild.exe.mdb $(exedir)
+	$(INSTALL) -m 755 mb-bundlegen.exe $(exedir)
+	$(INSTALL) -m 755 mb-bundlegen.exe.mdb $(exedir)
+	$(INSTALL) -m 755 mb-bd2xhtml.exe $(exedir)
+	$(INSTALL) -m 755 mb-bd2xhtml.exe.mdb $(exedir)
+	$(INSTALL) -m 755 scripts/mbuild $(bindir)
+	$(INSTALL) -m 755 scripts/mb-bundlegen $(bindir)
+	$(INSTALL) -m 755 scripts/mb-bd2xhtml $(bindir)
+	$(GACUTIL) /i Mono.Build.dll /f /root $(libdir) /package $(COMPAT_NAME)
+	for t in Core Languages.CSharp Tools.Jay Tools.PkgConfig Tools.Bundlegen Tools.Monodoc ; do \
+		$(GACUTIL) /i MBuildDynamic.$$t.dll /f /root $(libdir) /package $(COMPAT_NAME) ; \
+	done
+	$(ECHOPFX)
+	$(ECHOPFX) NOTE: You have only installed a partial version of MBuild. The rest
+	$(ECHOPFX) of MBuild is built with MBuild itself. You can build the rest of the
+	$(ECHOPFX) tools by running the following commands:
+	$(ECHOPFX)
+	$(ECHOPFX) '  mkdir BUILD && (cd BUILD ; mbuild -i .. && mbuild --import-xml:../prefix-config.xml' \\
+	$(ECHOPFX) '    && mbuild)'
+	$(ECHOPFX)
+	$(ECHOPFX) and install them by running
+	$(ECHOPFX)
+	$(ECHOPFX) '  (cd BUILD ; mbuild -I)' 
+	$(ECHOPFX)
+	$(ECHOPFX) with the necessary privileges. The first command will generate a lot
+	$(ECHOPFX) of output, so write down the second command in case you forget what to do.
+	$(ECHOPFX)
+
+install-extra:
+	$(INSTALL) -m 755 scripts/mb-gtkconfig $(bindir)
+	$(INSTALL) -m 755 scripts/mb-bd2xhtml $(bindir)
+
+# Auto-foo
+
+configure: configure.ac
+	autoconf
+
+config.status: configure
+	./config.status --recheck
+
+Makefile: Makefile.in config.status
+	CONFIG_FILES=$@ CONFIG_HEADERS= ./config.status

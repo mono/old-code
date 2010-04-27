@@ -1,0 +1,350 @@
+# Monodoc doc generation support
+
+namespace Tools.Monodoc {
+
+	using default;
+	using Core;
+	using Core.Tools;
+	using Core.Install;
+	using Core.Clr;
+	using Core.Xml;
+	using Tools.PkgConfig;
+
+	using !System;
+	using !System.Text;
+	using !System.Xml.Xsl;
+	using !System.Xml;
+	using !System.IO;
+
+	parameters {
+		basis Config = /config/tools/monodoc;
+		namespace Core;
+		namespace Tools.PkgConfig;
+	}
+
+	provider Config {
+
+		mdassembler_name = "!mdassembler";
+		mdassembler_binary = FindTool (mdassembler_name);
+		mdassembler_program = ConfigureMDAssemblerBinary (mdassembler_binary);
+
+		sourcesdir_str = PkgConfigVar (query = "monodoc", variable = "sourcesdir");
+		sourcesdir = MakeInstallDirectory (sourcesdir_str);
+		sourcesdir_installer = MakeCopyInstaller (sourcesdir);
+
+		monodoc_installer = MakeMonodocFilesInstaller (sourcesdir);
+
+		mkmstoc_xsl = ExtractMkmstocFile ();
+	}
+
+	rule MakeMonodocFilesInstaller {
+
+		InstallDirectory destdir;
+
+		build (MonodocFilesInstaller res, ctxt)
+		@{
+			res.Init (destdir.Value);
+			return false;
+		@}
+	} default {
+		destdir = Config/sourcesdir;
+	}
+
+	abstract rule AssembleDocsBase : OutputFileRule {
+
+		MDAssemblerProgram program;
+		default string nodepath;
+
+		@{
+			protected abstract string GetSource (IBuildContext ctxt);
+
+			protected abstract string DocType { get; }
+
+			protected abstract string ProviderKind { get; }
+		@}
+
+		build (MonodocFiles res, ctxt)
+		@{
+			string outname = GetOutputName (ctxt);
+			if (outname == null)
+				return true;
+
+			string source = GetSource (ctxt);
+			if (source == null)
+				return true;
+
+			if (program.AssembleDocs (source, DocType, outname, res, ctxt))
+				return true;
+
+			res.ProviderKind = ProviderKind;
+			res.NodePath = nodepath;
+
+			return false;
+		@}
+
+		tags {
+			"docs" = true;
+			"default" = Core.Generic/build_docs;
+			"install" = Config/monodoc_installer;
+		}
+	} default {
+		program = Config/mdassembler_program;
+	}
+
+	rule AssembleEcmaDocs : AssembleDocsBase {
+		# MBDirectory docsource;
+		XmlFile+ sources;
+
+		@{
+			protected override string GetSource (IBuildContext ctxt)
+			{
+				string sourcebase = sources[0].Dir.SubPath;
+
+				// Deeply unsatisfying. The file layout of mdassembler inputs
+				// is assemblyname/namespace/class.xml, so just chop off to
+				// assemblyname/ to get the input to the mdassembler command.
+				// Maybe patch up mdassembler to accept a list of input files.
+
+				sourcebase = sourcebase.Substring (0, sourcebase.Length - 1);
+				int i = sourcebase.LastIndexOf ('/');
+				sourcebase = sourcebase.Substring (0, i + 1);
+				
+				MBDirectory basepath = (MBDirectory) sources[0].Dir.Clone ();
+				basepath.SubPath = sourcebase;
+
+				return ctxt.PathTo (basepath);
+			}
+
+			protected override string DocType { get { return "ecma"; } }
+
+			protected override string ProviderKind { get { return "ecma"; } }
+		@}
+	}
+
+	rule AssembleXhtmlDocs : AssembleDocsBase {
+		XmlFile toc;
+		default XmlFile+ sources; # unused, have to hope this agrees with tocfile
+
+		@{
+			protected override string GetSource (IBuildContext ctxt)
+			{
+				return toc.GetPath (ctxt);
+			}
+
+			protected override string DocType { get { return "hb"; } }
+
+			protected override string ProviderKind { get { return "monohb"; } }
+		@}
+	}
+
+	rule ConfigureMDAssemblerBinary {
+
+		BinaryInfo binary;
+
+		build (MDAssemblerProgram res, ctxt)
+		@{
+			res.Init (binary);
+			return false;
+		@}
+
+		tags {
+			"prereq" = Core.Generic/build_docs;
+		}
+	}
+
+	rule MakeMonodocSourceFile : OutputFileRule {
+		XmlFile tmpl;
+		MonodocFiles+ inputs;
+
+		build (MonodocSourceFile res, ctxt)
+		@{
+			string outname = GetOutputName (ctxt);
+			if (outname == null)
+				return true;
+
+			string tmpl_path = tmpl.GetPath (ctxt);
+
+			XmlDocument doc = new XmlDocument ();
+			doc.PreserveWhitespace = true;
+			doc.Load (tmpl_path); 
+
+			for (int i = 0; i < inputs.Length; i++) {
+				MonodocFiles source = inputs[i];
+
+				string zipname = source.ZipFile.Name;
+				zipname = Path.GetFileNameWithoutExtension (zipname);
+
+				XmlElement se = doc.CreateElement ("source");
+				se.SetAttribute ("provider", source.ProviderKind);
+				se.SetAttribute ("basefile", zipname);
+				se.SetAttribute ("path", source.NodePath);
+				
+				doc.DocumentElement.AppendChild (se);
+			}
+
+			res.Dir = ctxt.WorkingDirectory;
+			res.Name = outname;
+
+			try {
+				StreamWriter writer = new StreamWriter (res.OpenWrite (ctxt));
+				doc.Save (writer);
+				writer.Close ();
+			} catch (Exception e) {
+				ctxt.Logger.Error (3013, "Couldn't save XML to file " + res.ToString (),
+					e.Message);
+				return true;
+			}
+
+			return false;
+		@}
+
+		tags {
+			"install" = Config/sourcesdir_installer;
+			"default" = Core.Generic/build_docs;
+			"docs" = true;
+		}
+	}
+
+	target regex matcher "\\.source$" = MakeMonodocSourceFile;
+
+	# XHtml source files for XHTML provider
+
+	result XHtmlFile : XmlFile {}
+
+	sourcefile rule XHtmlSourcefileRule = XHtmlFile;
+
+	dependency regex matcher "\\.xhtml$" = XHtmlSourcefileRule;
+
+	# The program
+
+	result MDAssemblerProgram : CompositeResult {
+
+		BinaryInfo Binary;
+
+		@{
+
+		public void Init (BinaryInfo binary)
+		{
+			this.Binary = binary;
+		}
+
+		public string GetSourcesDir (IBuildContext ctxt) 
+		{
+			return Launcher.GetToolStdout (Binary, "--get-sourcesdir", ctxt);
+		}
+
+		public bool AssembleDocs (string docsource, string doctype, string outname, 
+		                          MonodocFiles result, IBuildContext ctxt)
+		{
+			result.ZipFile = new BinFile ();
+			result.ZipFile.Dir =  ctxt.WorkingDirectory;
+			result.ZipFile.Name = outname + ".zip";
+			result.TreeFile = new BinFile ();
+			result.TreeFile.Dir =  ctxt.WorkingDirectory;
+			result.TreeFile.Name = outname + ".tree";
+
+			MBFile outbase = new MBFile (ctxt.WorkingDirectory, outname);
+
+			// DO NOT DELETE THE FOLLOWING COMMENT. IT WORKS AROUND
+			// THE UTTERLY BIZARRE MCS BUG DESCRIBED IN XIMIAN BUGZILLA #76217
+			//string args = String.Format ("--assemble --{0} {1} -o {2}",
+			string args = String.Format ("--{0} {1} -o {2}",
+				doctype, docsource, outbase.GetPath (ctxt));
+
+			return (Launcher.RunTool (Binary, args, ctxt, 
+			                          "MDAssembler program returned an error.") != 0);
+		}
+
+		@}
+	}
+
+	result MonodocFiles : CompositeResult {
+		BinFile ZipFile;
+		BinFile TreeFile;
+		string ProviderKind;
+		string NodePath;
+	}
+
+	result MonodocFilesInstaller : CopyInstaller {
+
+		@{
+
+		public override Type OtherType {
+			get { return typeof (MonodocFiles); }
+		}
+
+		public override bool InstallResult (Result item, bool backwards, IBuildContext ctxt)
+		{
+			MonodocFiles files = (MonodocFiles) item;
+
+			if (CopyFile (files.ZipFile, backwards, ctxt))
+				return true;
+			if (CopyFile (files.TreeFile, backwards, ctxt))
+				return true;
+
+			return false;
+		}
+
+		public override string DescribeAction (Result other, IBuildContext ctxt) {
+			MonodocFiles files = (MonodocFiles) other;
+
+			return String.Format ("Install Monodoc files ({0}, {1}) to {2}", 
+					      files.ZipFile.GetPath (ctxt), 
+					      files.TreeFile.GetPath (ctxt), 
+					      DestDir);
+		}
+
+		@}
+	}
+
+	rule ExtractMkmstocFile : ExtractAssemblyResource {
+
+		default restype XslFile;
+
+		@{
+		protected override string GetResourceName (IBuildContext ctxt)
+		{
+			return "mkmstoc.xsl";
+		}
+		@}
+	}
+
+	rule CheatySubdir {
+
+		default string name;
+
+		build (MBDirectory res, ctxt)
+		@{
+			ctxt.SourceDirectory.CopyValueTo (res);
+			res.SubPath += (name + "/");
+			return false;
+		@}
+	}
+
+	rule MakeXhtmlToc : XslProcess {
+		MBDirectory htmlbase;
+		string title;
+
+		# FIXME: the output has embedded relative paths
+		# in it, which won't be valid if we try to build
+		# the docs from a different directory than the
+		# directory here.
+
+		default restype XmlFile;
+
+		@{
+
+		protected override bool InitializeArgs (XsltArgumentList xargs, IBuildContext ctxt)
+		{
+			xargs.AddParam ("htmlbase", "", ctxt.PathTo (htmlbase));
+			xargs.AddParam ("title", "", title);
+			return base.InitializeArgs (xargs, ctxt);
+		}
+
+		@}
+	}
+
+	# Source file generation
+
+	result MonodocSourceFile : XmlFile {}
+}

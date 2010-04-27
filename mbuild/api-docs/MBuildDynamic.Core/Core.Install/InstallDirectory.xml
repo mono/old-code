@@ -1,0 +1,16 @@
+﻿<result name="InstallDirectory">
+        <docs>
+                <summary>A string representing a directory to install into.</summary>
+
+                <remarks>
+		   <p>An InstallDirectory is actually a subclass of <gr href="T:Mono.Build.MBString">MBString</gr>, 
+		   not of
+		   <gr href="T:Mono.Build.MBDirectory">MBDirectory</gr>. This is because MBDirectories are
+		   supposed to exist before the build runs, while
+		   an installation directory might only be created when the install happens.
+		   </p>
+		</remarks>
+        </docs>
+</result>
+
+

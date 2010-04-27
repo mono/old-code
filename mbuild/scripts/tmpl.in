@@ -1,0 +1,10 @@
+#!/bin/sh
+# -*- shell-script -*-
+
+if test -f .monkeywrench.log ; then
+    echo "Running uninstalled @program@ executable!"
+    exec -a "$0" mono $MONO_FLAGS `mbuild --get-topbuilddir`/@subdir@@program@ "$@"
+else
+    exec -a "$0" mono $MONO_FLAGS "@location@/@program@" "$@"
+fi
+

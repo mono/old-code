@@ -1,0 +1,16 @@
+using [ Core 
+	Core.Clr
+	Languages.CSharp 
+	Tools.Jay 
+]
+
+mb-bundlegen.exe = [ 
+	@mb-bundlegen.exe.sources
+
+	/config/mbuild/Mono.GetOptions.dll
+	../Mono.Build.dll
+] with [
+	install = /config/mbuild/exe_installer
+]
+
+Parser.cs = [ Parser.jay ]

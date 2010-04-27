@@ -1,0 +1,3 @@
+using [ Core Languages.CSharp Tools.Jay ]
+
+BuildfileParser.cs = [ BuildfileParser.jay ]

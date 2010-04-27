@@ -1,0 +1,681 @@
+<Type Name="WrenchProject" FullName="Monkeywrench.WrenchProject">
+  <TypeSignature Language="C#" Value="public class WrenchProject : IBuildManager, ITargetRequestSink, IDisposable" Maintainer="auto" />
+  <AssemblyInfo>
+    <AssemblyName>Monkeywrench</AssemblyName>
+    <AssemblyPublicKey>
+    </AssemblyPublicKey>
+    <AssemblyVersion>0.0.0.0</AssemblyVersion>
+    <AssemblyCulture>neutral</AssemblyCulture>
+    <Attributes />
+  </AssemblyInfo>
+  <ThreadSafetyStatement>Gtk# is thread aware, but not thread safe; See the <link location="node:gtk-sharp/programming/threads">Gtk# Thread Programming</link> for details.</ThreadSafetyStatement>
+  <Docs>
+    <summary>To be added</summary>
+    <remarks>To be added</remarks>
+  </Docs>
+  <Base>
+    <BaseTypeName>System.Object</BaseTypeName>
+  </Base>
+  <Interfaces>
+    <Interface>
+      <InterfaceName>Mono.Build.IBuildManager</InterfaceName>
+    </Interface>
+    <Interface>
+      <InterfaceName>Monkeywrench.ITargetRequestSink</InterfaceName>
+    </Interface>
+    <Interface>
+      <InterfaceName>System.IDisposable</InterfaceName>
+    </Interface>
+  </Interfaces>
+  <Attributes />
+  <Members>
+    <Member MemberName="PublicStateBase">
+      <MemberSignature Language="C#" Value="public static string PublicStateBase;" />
+      <MemberType>Field</MemberType>
+      <ReturnValue>
+        <ReturnType>System.String</ReturnType>
+      </ReturnValue>
+      <Parameters>
+      </Parameters>
+      <Docs>
+        <summary>To be added</summary>
+        <remarks>To be added</remarks>
+      </Docs>
+    </Member>
+    <Member MemberName="PublicLogBase">
+      <MemberSignature Language="C#" Value="public static string PublicLogBase;" />
+      <MemberType>Field</MemberType>
+      <ReturnValue>
+        <ReturnType>System.String</ReturnType>
+      </ReturnValue>
+      <Parameters>
+      </Parameters>
+      <Docs>
+        <summary>To be added</summary>
+        <remarks>To be added</remarks>
+      </Docs>
+    </Member>
+    <Member MemberName="BasisToTopDots">
+      <MemberSignature Language="C#" Value="public static string BasisToTopDots (string basis);" />
+      <MemberType>Method</MemberType>
+      <ReturnValue>
+        <ReturnType>System.String</ReturnType>
+      </ReturnValue>
+      <Parameters>
+        <Parameter Name="basis" Type="System.String" />
+      </Parameters>
+      <Docs>
+        <summary>To be added</summary>
+        <param name="basis">a <see cref="T:System.String" /></param>
+        <returns>a <see cref="T:System.String" /></returns>
+        <remarks>To be added</remarks>
+      </Docs>
+    </Member>
+    <Member MemberName="RelPathToTopDots">
+      <MemberSignature Language="C#" Value="public static string RelPathToTopDots (string path);" />
+      <MemberType>Method</MemberType>
+      <ReturnValue>
+        <ReturnType>System.String</ReturnType>
+      </ReturnValue>
+      <Parameters>
+        <Parameter Name="path" Type="System.String" />
+      </Parameters>
+      <Docs>
+        <summary>To be added</summary>
+        <param name="path">a <see cref="T:System.String" /></param>
+        <returns>a <see cref="T:System.String" /></returns>
+        <remarks>To be added</remarks>
+      </Docs>
+    </Member>
+    <Member MemberName="BasisToRelPath">
+      <MemberSignature Language="C#" Value="public static string BasisToRelPath (string basis);" />
+      <MemberType>Method</MemberType>
+      <ReturnValue>
+        <ReturnType>System.String</ReturnType>
+      </ReturnValue>
+      <Parameters>
+        <Parameter Name="basis" Type="System.String" />
+      </Parameters>
+      <Docs>
+        <summary>To be added</summary>
+        <param name="basis">a <see cref="T:System.String" /></param>
+        <returns>a <see cref="T:System.String" /></returns>
+        <remarks>To be added</remarks>
+      </Docs>
+    </Member>
+    <Member MemberName="RerootBasisRelative">
+      <MemberSignature Language="C#" Value="public static string RerootBasisRelative (string path, string basis);" />
+      <MemberType>Method</MemberType>
+      <ReturnValue>
+        <ReturnType>System.String</ReturnType>
+      </ReturnValue>
+      <Parameters>
+        <Parameter Name="path" Type="System.String" />
+        <Parameter Name="basis" Type="System.String" />
+      </Parameters>
+      <Docs>
+        <summary>To be added</summary>
+        <param name="path">a <see cref="T:System.String" /></param>
+        <param name="basis">a <see cref="T:System.String" /></param>
+        <returns>a <see cref="T:System.String" /></returns>
+        <remarks>To be added</remarks>
+      </Docs>
+    </Member>
+    <Member MemberName="CombinePaths">
+      <MemberSignature Language="C#" Value="public static string CombinePaths (string prefix, string suffix);" />
+      <MemberType>Method</MemberType>
+      <ReturnValue>
+        <ReturnType>System.String</ReturnType>
+      </ReturnValue>
+      <Parameters>
+        <Parameter Name="prefix" Type="System.String" />
+        <Parameter Name="suffix" Type="System.String" />
+      </Parameters>
+      <Docs>
+        <summary>To be added</summary>
+        <param name="prefix">a <see cref="T:System.String" /></param>
+        <param name="suffix">a <see cref="T:System.String" /></param>
+        <returns>a <see cref="T:System.String" /></returns>
+        <remarks>To be added</remarks>
+      </Docs>
+    </Member>
+    <Member MemberName="PathToBuildRelative">
+      <MemberSignature Language="C#" Value="public string PathToBuildRelative (string subpath);" />
+      <MemberType>Method</MemberType>
+      <ReturnValue>
+        <ReturnType>System.String</ReturnType>
+      </ReturnValue>
+      <Parameters>
+        <Parameter Name="subpath" Type="System.String" />
+      </Parameters>
+      <Docs>
+        <summary>To be added</summary>
+        <param name="subpath">a <see cref="T:System.String" /></param>
+        <returns>a <see cref="T:System.String" /></returns>
+        <remarks>To be added</remarks>
+      </Docs>
+    </Member>
+    <Member MemberName="PathToSourceRelative">
+      <MemberSignature Language="C#" Value="public string PathToSourceRelative (string subpath);" />
+      <MemberType>Method</MemberType>
+      <ReturnValue>
+        <ReturnType>System.String</ReturnType>
+      </ReturnValue>
+      <Parameters>
+        <Parameter Name="subpath" Type="System.String" />
+      </Parameters>
+      <Docs>
+        <summary>To be added</summary>
+        <param name="subpath">a <see cref="T:System.String" /></param>
+        <returns>a <see cref="T:System.String" /></returns>
+        <remarks>To be added</remarks>
+      </Docs>
+    </Member>
+    <Member MemberName="PathToBasisBuild">
+      <MemberSignature Language="C#" Value="public string PathToBasisBuild (string basis);" />
+      <MemberType>Method</MemberType>
+      <ReturnValue>
+        <ReturnType>System.String</ReturnType>
+      </ReturnValue>
+      <Parameters>
+        <Parameter Name="basis" Type="System.String" />
+      </Parameters>
+      <Docs>
+        <summary>To be added</summary>
+        <param name="basis">a <see cref="T:System.String" /></param>
+        <returns>a <see cref="T:System.String" /></returns>
+        <remarks>To be added</remarks>
+      </Docs>
+    </Member>
+    <Member MemberName="PathToBasisSource">
+      <MemberSignature Language="C#" Value="public string PathToBasisSource (string basis);" />
+      <MemberType>Method</MemberType>
+      <ReturnValue>
+        <ReturnType>System.String</ReturnType>
+      </ReturnValue>
+      <Parameters>
+        <Parameter Name="basis" Type="System.String" />
+      </Parameters>
+      <Docs>
+        <summary>To be added</summary>
+        <param name="basis">a <see cref="T:System.String" /></param>
+        <returns>a <see cref="T:System.String" /></returns>
+        <remarks>To be added</remarks>
+      </Docs>
+    </Member>
+    <Member MemberName="PathTo">
+      <MemberSignature Language="C#" Value="public string PathTo (Mono.Build.MBDirectory dir);" />
+      <MemberType>Method</MemberType>
+      <ReturnValue>
+        <ReturnType>System.String</ReturnType>
+      </ReturnValue>
+      <Parameters>
+        <Parameter Name="dir" Type="Mono.Build.MBDirectory" />
+      </Parameters>
+      <Docs>
+        <summary>To be added</summary>
+        <param name="dir">a <see cref="T:Mono.Build.MBDirectory" /></param>
+        <returns>a <see cref="T:System.String" /></returns>
+        <remarks>To be added</remarks>
+      </Docs>
+    </Member>
+    <Member MemberName="DistPath">
+      <MemberSignature Language="C#" Value="public string DistPath (Mono.Build.MBDirectory dir);" />
+      <MemberType>Method</MemberType>
+      <ReturnValue>
+        <ReturnType>System.String</ReturnType>
+      </ReturnValue>
+      <Parameters>
+        <Parameter Name="dir" Type="Mono.Build.MBDirectory" />
+      </Parameters>
+      <Docs>
+        <summary>To be added</summary>
+        <param name="dir">a <see cref="T:Mono.Build.MBDirectory" /></param>
+        <returns>a <see cref="T:System.String" /></returns>
+        <remarks>To be added</remarks>
+      </Docs>
+    </Member>
+    <Member MemberName="RequestTarget">
+      <MemberSignature Language="C#" Value="public virtual void RequestTarget (string name);" />
+      <MemberType>Method</MemberType>
+      <ReturnValue>
+        <ReturnType>System.Void</ReturnType>
+      </ReturnValue>
+      <Parameters>
+        <Parameter Name="name" Type="System.String" />
+      </Parameters>
+      <Docs>
+        <summary>To be added</summary>
+        <param name="name">a <see cref="T:System.String" /></param>
+        <remarks>To be added</remarks>
+      </Docs>
+    </Member>
+    <Member MemberName="Warning">
+      <MemberSignature Language="C#" Value="public void Warning (string location, int category, string text, string detail);" />
+      <MemberType>Method</MemberType>
+      <ReturnValue>
+        <ReturnType>System.Void</ReturnType>
+      </ReturnValue>
+      <Parameters>
+        <Parameter Name="location" Type="System.String" />
+        <Parameter Name="category" Type="System.Int32" />
+        <Parameter Name="text" Type="System.String" />
+        <Parameter Name="detail" Type="System.String" />
+      </Parameters>
+      <Docs>
+        <summary>To be added</summary>
+        <param name="location">a <see cref="T:System.String" /></param>
+        <param name="category">a <see cref="T:System.Int32" /></param>
+        <param name="text">a <see cref="T:System.String" /></param>
+        <param name="detail">a <see cref="T:System.String" /></param>
+        <remarks>To be added</remarks>
+      </Docs>
+    </Member>
+    <Member MemberName="Error">
+      <MemberSignature Language="C#" Value="public void Error (string location, int category, string text, string detail);" />
+      <MemberType>Method</MemberType>
+      <ReturnValue>
+        <ReturnType>System.Void</ReturnType>
+      </ReturnValue>
+      <Parameters>
+        <Parameter Name="location" Type="System.String" />
+        <Parameter Name="category" Type="System.Int32" />
+        <Parameter Name="text" Type="System.String" />
+        <Parameter Name="detail" Type="System.String" />
+      </Parameters>
+      <Docs>
+        <summary>To be added</summary>
+        <param name="location">a <see cref="T:System.String" /></param>
+        <param name="category">a <see cref="T:System.Int32" /></param>
+        <param name="text">a <see cref="T:System.String" /></param>
+        <param name="detail">a <see cref="T:System.String" /></param>
+        <remarks>To be added</remarks>
+      </Docs>
+    </Member>
+    <Member MemberName="EvaluateTargets">
+      <MemberSignature Language="C#" Value="public virtual Mono.Build.Result[] EvaluateTargets (string [] targets);" />
+      <MemberType>Method</MemberType>
+      <ReturnValue>
+        <ReturnType>Mono.Build.Result[]</ReturnType>
+      </ReturnValue>
+      <Parameters>
+        <Parameter Name="targets" Type="System.String[]" />
+      </Parameters>
+      <Docs>
+        <summary>To be added</summary>
+        <param name="targets">a <see cref="T:System.String" /></param>
+        <returns>a <see cref="T:Mono.Build.Result[]" /></returns>
+        <remarks>To be added</remarks>
+      </Docs>
+    </Member>
+    <Member MemberName="EvaluateTarget">
+      <MemberSignature Language="C#" Value="public Mono.Build.Result EvaluateTarget (string target);" />
+      <MemberType>Method</MemberType>
+      <ReturnValue>
+        <ReturnType>Mono.Build.Result</ReturnType>
+      </ReturnValue>
+      <Parameters>
+        <Parameter Name="target" Type="System.String" />
+      </Parameters>
+      <Docs>
+        <summary>To be added</summary>
+        <param name="target">a <see cref="T:System.String" /></param>
+        <returns>a <see cref="T:Mono.Build.Result" /></returns>
+        <remarks>To be added</remarks>
+      </Docs>
+    </Member>
+    <Member MemberName="FixTargetValue">
+      <MemberSignature Language="C#" Value="public bool FixTargetValue (string target, Mono.Build.Result val);" />
+      <MemberType>Method</MemberType>
+      <ReturnValue>
+        <ReturnType>System.Boolean</ReturnType>
+      </ReturnValue>
+      <Parameters>
+        <Parameter Name="target" Type="System.String" />
+        <Parameter Name="val" Type="Mono.Build.Result" />
+      </Parameters>
+      <Docs>
+        <summary>To be added</summary>
+        <param name="target">a <see cref="T:System.String" /></param>
+        <param name="val">a <see cref="T:Mono.Build.Result" /></param>
+        <returns>a <see cref="T:System.Boolean" /></returns>
+        <remarks>To be added</remarks>
+      </Docs>
+    </Member>
+    <Member MemberName="CleanTarget">
+      <MemberSignature Language="C#" Value="public bool CleanTarget (string target);" />
+      <MemberType>Method</MemberType>
+      <ReturnValue>
+        <ReturnType>System.Boolean</ReturnType>
+      </ReturnValue>
+      <Parameters>
+        <Parameter Name="target" Type="System.String" />
+      </Parameters>
+      <Docs>
+        <summary>To be added</summary>
+        <param name="target">a <see cref="T:System.String" /></param>
+        <returns>a <see cref="T:System.Boolean" /></returns>
+        <remarks>To be added</remarks>
+      </Docs>
+    </Member>
+    <Member MemberName="UncacheTarget">
+      <MemberSignature Language="C#" Value="public bool UncacheTarget (string target);" />
+      <MemberType>Method</MemberType>
+      <ReturnValue>
+        <ReturnType>System.Boolean</ReturnType>
+      </ReturnValue>
+      <Parameters>
+        <Parameter Name="target" Type="System.String" />
+      </Parameters>
+      <Docs>
+        <summary>To be added</summary>
+        <param name="target">a <see cref="T:System.String" /></param>
+        <returns>a <see cref="T:System.Boolean" /></returns>
+        <remarks>To be added</remarks>
+      </Docs>
+    </Member>
+    <Member MemberName="DistTarget">
+      <MemberSignature Language="C#" Value="public bool DistTarget (string target);" />
+      <MemberType>Method</MemberType>
+      <ReturnValue>
+        <ReturnType>System.Boolean</ReturnType>
+      </ReturnValue>
+      <Parameters>
+        <Parameter Name="target" Type="System.String" />
+      </Parameters>
+      <Docs>
+        <summary>To be added</summary>
+        <param name="target">a <see cref="T:System.String" /></param>
+        <returns>a <see cref="T:System.Boolean" /></returns>
+        <remarks>To be added</remarks>
+      </Docs>
+    </Member>
+    <Member MemberName="InstallTarget">
+      <MemberSignature Language="C#" Value="public bool InstallTarget (string target, bool backwards);" />
+      <MemberType>Method</MemberType>
+      <ReturnValue>
+        <ReturnType>System.Boolean</ReturnType>
+      </ReturnValue>
+      <Parameters>
+        <Parameter Name="target" Type="System.String" />
+        <Parameter Name="backwards" Type="System.Boolean" />
+      </Parameters>
+      <Docs>
+        <summary>To be added</summary>
+        <param name="target">a <see cref="T:System.String" /></param>
+        <param name="backwards">a <see cref="T:System.Boolean" /></param>
+        <returns>a <see cref="T:System.Boolean" /></returns>
+        <remarks>To be added</remarks>
+      </Docs>
+    </Member>
+    <Member MemberName="EvaluteTargetIfTag">
+      <MemberSignature Language="C#" Value="public bool EvaluteTargetIfTag (string target, string tag, out Mono.Build.Result value);" />
+      <MemberType>Method</MemberType>
+      <ReturnValue>
+        <ReturnType>System.Boolean</ReturnType>
+      </ReturnValue>
+      <Parameters>
+        <Parameter Name="target" Type="System.String" />
+        <Parameter Name="tag" Type="System.String" />
+        <Parameter Name="value" Type="Mono.Build.Result&amp;" RefType="out" />
+      </Parameters>
+      <Docs>
+        <summary>To be added</summary>
+        <param name="target">a <see cref="T:System.String" /></param>
+        <param name="tag">a <see cref="T:System.String" /></param>
+        <param name="value">a <see cref="T:Mono.Build.Result" /></param>
+        <returns>a <see cref="T:System.Boolean" /></returns>
+        <remarks>To be added</remarks>
+      </Docs>
+    </Member>
+    <Member MemberName="Operate">
+      <MemberSignature Language="C#" Value="public bool Operate (string here, Monkeywrench.OperationScope scope, string tag, Monkeywrench.OperationFunc func);" />
+      <MemberType>Method</MemberType>
+      <ReturnValue>
+        <ReturnType>System.Boolean</ReturnType>
+      </ReturnValue>
+      <Parameters>
+        <Parameter Name="here" Type="System.String" />
+        <Parameter Name="scope" Type="Monkeywrench.OperationScope" />
+        <Parameter Name="tag" Type="System.String" />
+        <Parameter Name="func" Type="Monkeywrench.OperationFunc" />
+      </Parameters>
+      <Docs>
+        <summary>To be added</summary>
+        <param name="here">a <see cref="T:System.String" /></param>
+        <param name="scope">a <see cref="T:System.Int32" /></param>
+        <param name="tag">a <see cref="T:System.String" /></param>
+        <param name="func">a <see cref="T:Monkeywrench.OperationFunc" /></param>
+        <returns>a <see cref="T:System.Boolean" /></returns>
+        <remarks>To be added</remarks>
+      </Docs>
+    </Member>
+    <Member MemberName="Operate">
+      <MemberSignature Language="C#" Value="public bool Operate (string here, Monkeywrench.OperationScope scope, Monkeywrench.OperationFunc func);" />
+      <MemberType>Method</MemberType>
+      <ReturnValue>
+        <ReturnType>System.Boolean</ReturnType>
+      </ReturnValue>
+      <Parameters>
+        <Parameter Name="here" Type="System.String" />
+        <Parameter Name="scope" Type="Monkeywrench.OperationScope" />
+        <Parameter Name="func" Type="Monkeywrench.OperationFunc" />
+      </Parameters>
+      <Docs>
+        <summary>To be added</summary>
+        <param name="here">a <see cref="T:System.String" /></param>
+        <param name="scope">a <see cref="T:System.Int32" /></param>
+        <param name="func">a <see cref="T:Monkeywrench.OperationFunc" /></param>
+        <returns>a <see cref="T:System.Boolean" /></returns>
+        <remarks>To be added</remarks>
+      </Docs>
+    </Member>
+    <Member MemberName="OperateOne">
+      <MemberSignature Language="C#" Value="public bool OperateOne (string target, Monkeywrench.OperationFunc func);" />
+      <MemberType>Method</MemberType>
+      <ReturnValue>
+        <ReturnType>System.Boolean</ReturnType>
+      </ReturnValue>
+      <Parameters>
+        <Parameter Name="target" Type="System.String" />
+        <Parameter Name="func" Type="Monkeywrench.OperationFunc" />
+      </Parameters>
+      <Docs>
+        <summary>To be added</summary>
+        <param name="target">a <see cref="T:System.String" /></param>
+        <param name="func">a <see cref="T:Monkeywrench.OperationFunc" /></param>
+        <returns>a <see cref="T:System.Boolean" /></returns>
+        <remarks>To be added</remarks>
+      </Docs>
+    </Member>
+    <Member MemberName="Close">
+      <MemberSignature Language="C#" Value="public void Close ();" />
+      <MemberType>Method</MemberType>
+      <ReturnValue>
+        <ReturnType>System.Void</ReturnType>
+      </ReturnValue>
+      <Parameters />
+      <Docs>
+        <summary>To be added</summary>
+        <remarks>To be added</remarks>
+      </Docs>
+    </Member>
+    <Member MemberName="Dispose">
+      <MemberSignature Language="C#" Value="public virtual void Dispose ();" />
+      <MemberType>Method</MemberType>
+      <ReturnValue>
+        <ReturnType>System.Void</ReturnType>
+      </ReturnValue>
+      <Parameters />
+      <Docs>
+        <summary>To be added</summary>
+        <remarks>To be added</remarks>
+      </Docs>
+    </Member>
+    <Member MemberName="Info">
+      <MemberSignature Language="C#" Value="public Monkeywrench.ProjectInfo Info { get; };" />
+      <MemberType>Property</MemberType>
+      <ReturnValue>
+        <ReturnType>Monkeywrench.ProjectInfo</ReturnType>
+      </ReturnValue>
+      <Parameters />
+      <Docs>
+        <summary>To be added</summary>
+        <returns>a <see cref="T:Monkeywrench.ProjectInfo" /></returns>
+        <remarks>To be added</remarks>
+      </Docs>
+    </Member>
+    <Member MemberName="Log">
+      <MemberSignature Language="C#" Value="public Mono.Build.IWarningLogger Log { get; };" />
+      <MemberType>Property</MemberType>
+      <ReturnValue>
+        <ReturnType>Mono.Build.IWarningLogger</ReturnType>
+      </ReturnValue>
+      <Parameters />
+      <Docs>
+        <summary>To be added</summary>
+        <returns>a <see cref="T:Mono.Build.IWarningLogger" /></returns>
+        <remarks>To be added</remarks>
+      </Docs>
+    </Member>
+    <Member MemberName="Manager">
+      <MemberSignature Language="C#" Value="public Mono.Build.Bundling.BundleManager Manager { get; };" />
+      <MemberType>Property</MemberType>
+      <ReturnValue>
+        <ReturnType>Mono.Build.Bundling.BundleManager</ReturnType>
+      </ReturnValue>
+      <Parameters />
+      <Docs>
+        <summary>To be added</summary>
+        <returns>a <see cref="T:Mono.Build.Bundling.BundleManager" /></returns>
+        <remarks>To be added</remarks>
+      </Docs>
+    </Member>
+    <Member MemberName="TopDistPath">
+      <MemberSignature Language="C#" Value="public string TopDistPath { set; };" />
+      <MemberType>Property</MemberType>
+      <ReturnValue>
+        <ReturnType>System.String</ReturnType>
+      </ReturnValue>
+      <Docs>
+        <summary>To be added</summary>
+        <returns>a <see cref="T:System.String" /></returns>
+        <remarks>To be added</remarks>
+      </Docs>
+    </Member>
+    <Member MemberName="OnBeginBuildTarget">
+      <MemberSignature Language="C#" Value="public event Monkeywrench.TargetEvent OnBeginBuildTarget;" />
+      <MemberType>Event</MemberType>
+      <ReturnValue>
+        <ReturnType>Monkeywrench.TargetEvent</ReturnType>
+      </ReturnValue>
+      <Parameters />
+      <Docs>
+        <summary>To be added</summary>
+        <remarks>To be added</remarks>
+      </Docs>
+    </Member>
+    <Member MemberName="OnSkipBuildTarget">
+      <MemberSignature Language="C#" Value="public event Monkeywrench.TargetEvent OnSkipBuildTarget;" />
+      <MemberType>Event</MemberType>
+      <ReturnValue>
+        <ReturnType>Monkeywrench.TargetEvent</ReturnType>
+      </ReturnValue>
+      <Parameters />
+      <Docs>
+        <summary>To be added</summary>
+        <remarks>To be added</remarks>
+      </Docs>
+    </Member>
+    <Member MemberName="OnCleanTarget">
+      <MemberSignature Language="C#" Value="public event Monkeywrench.TargetEvent OnCleanTarget;" />
+      <MemberType>Event</MemberType>
+      <ReturnValue>
+        <ReturnType>Monkeywrench.TargetEvent</ReturnType>
+      </ReturnValue>
+      <Parameters />
+      <Docs>
+        <summary>To be added</summary>
+        <remarks>To be added</remarks>
+      </Docs>
+    </Member>
+    <Member MemberName="OnDistTarget">
+      <MemberSignature Language="C#" Value="public event Monkeywrench.TargetEvent OnDistTarget;" />
+      <MemberType>Event</MemberType>
+      <ReturnValue>
+        <ReturnType>Monkeywrench.TargetEvent</ReturnType>
+      </ReturnValue>
+      <Parameters />
+      <Docs>
+        <summary>To be added</summary>
+        <remarks>To be added</remarks>
+      </Docs>
+    </Member>
+    <Member MemberName="OnInstallTarget">
+      <MemberSignature Language="C#" Value="public event Monkeywrench.TargetEvent OnInstallTarget;" />
+      <MemberType>Event</MemberType>
+      <ReturnValue>
+        <ReturnType>Monkeywrench.TargetEvent</ReturnType>
+      </ReturnValue>
+      <Parameters />
+      <Docs>
+        <summary>To be added</summary>
+        <remarks>To be added</remarks>
+      </Docs>
+    </Member>
+    <Member MemberName="Initialize">
+      <MemberSignature Language="C#" Value="public bool Initialize (Monkeywrench.ProjectInfo pinfo);" />
+      <MemberType>Method</MemberType>
+      <ReturnValue>
+        <ReturnType>System.Boolean</ReturnType>
+      </ReturnValue>
+      <Parameters>
+        <Parameter Name="pinfo" Type="Monkeywrench.ProjectInfo" />
+      </Parameters>
+      <Docs>
+        <summary>To be added</summary>
+        <param name="pinfo">a <see cref="T:Monkeywrench.ProjectInfo" /></param>
+        <returns>a <see cref="T:System.Boolean" /></returns>
+        <remarks>To be added</remarks>
+      </Docs>
+    </Member>
+    <Member MemberName="Add">
+      <MemberSignature Language="C#" Value="public bool Add (string basis, Monkeywrench.IPersistentBuildProvider bp);" />
+      <MemberType>Method</MemberType>
+      <ReturnValue>
+        <ReturnType>System.Boolean</ReturnType>
+      </ReturnValue>
+      <Parameters>
+        <Parameter Name="basis" Type="System.String" />
+        <Parameter Name="bp" Type="Monkeywrench.IPersistentBuildProvider" />
+      </Parameters>
+      <Docs>
+        <summary>To be added</summary>
+        <param name="basis">a <see cref="T:System.String" /></param>
+        <param name="bp">a <see cref="T:Monkeywrench.IPersistentBuildProvider" /></param>
+        <returns>a <see cref="T:System.Boolean" /></returns>
+        <remarks>To be added</remarks>
+      </Docs>
+    </Member>
+    <Member MemberName=".ctor">
+      <MemberSignature Language="C#" Value="public WrenchProject (Mono.Build.Bundling.BundleManager bm, string topsrc_from_topbuild, string pwdpath, Mono.Build.IWarningLogger log);" />
+      <MemberType>Constructor</MemberType>
+      <ReturnValue />
+      <Parameters>
+        <Parameter Name="bm" Type="Mono.Build.Bundling.BundleManager" />
+        <Parameter Name="topsrc_from_topbuild" Type="System.String" />
+        <Parameter Name="pwdpath" Type="System.String" />
+        <Parameter Name="log" Type="Mono.Build.IWarningLogger" />
+      </Parameters>
+      <Docs>
+        <summary>To be added</summary>
+        <param name="bm">a <see cref="T:Mono.Build.Bundling.BundleManager" /></param>
+        <param name="topsrc_from_topbuild">a <see cref="T:System.String" /></param>
+        <param name="pwdpath">a <see cref="T:System.String" /></param>
+        <param name="log">a <see cref="T:Mono.Build.IWarningLogger" /></param>
+        <returns>a <see cref="T:Monkeywrench.WrenchProject" /></returns>
+        <remarks>To be added</remarks>
+      </Docs>
+    </Member>
+  </Members>
+</Type>

@@ -1,0 +1,25 @@
+using [
+	Core
+	Core.Clr
+	Core.Subst
+	Languages.CSharp
+]
+
+mb-import.exe = [
+	@mb-import.exe.sources
+
+	../Mono.Build.dll
+	../Monkeywrench.dll
+	../MBuildDynamic.Core.dll
+	/config/mbuild/Mono.GetOptions.dll
+] with [
+	install = /config/mbuild/exe_installer
+]
+
+#cnsubst = { compat_name = /config/env/compat_name }
+#
+#CompatName.cs-file = Subst [
+#	output = "CompatName.cs"
+#	CompatName.cs.in
+#	cnsubst
+#]

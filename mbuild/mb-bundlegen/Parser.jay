@@ -1,0 +1,785 @@
+%{
+//
+// Parser.jay: bundle generator jay grammar
+//
+
+using System;
+using System.Text;
+using System.Reflection;
+using System.Collections;
+using System.IO;
+using System.Security.Cryptography;
+using System.CodeDom;
+
+using Mono.Build;
+using Mono.Build.Bundling;
+
+namespace MBBundleGen {
+	
+	public partial class Parser {
+
+%}
+
+// stuff copied from cs-parser.jay
+
+%token EOF
+
+// keywords
+
+%token USING
+%token NAMESPACE
+%token RESULT
+%token PROVIDER
+%token RULE
+%token TRUE
+%token FALSE
+%token DEFAULT
+%token BUILD
+%token IMPLEMENTS
+%token MATCHER
+%token DEPENDENCY
+%token TRANSFORM
+%token TARGET
+%token REGEX
+%token SOURCEFILE
+%token TAGS
+%token ABSTRACT
+%token ORDERED
+%token ENUM
+%token RESTYPE
+%token BASIS
+%token PARAMETERS
+%token TEMPLATE
+%token DOT_TARGET
+
+// punctuation
+
+%token OPEN_BRACE    "{"
+%token CLOSE_BRACE   "}"
+%token OPEN_BRACKET  "["
+%token CLOSE_BRACKET "]"
+%token OPEN_PARENS   "("
+%token CLOSE_PARENS  ")"
+%token COMMA         ","
+%token COLON         ":"
+%token SEMICOLON     ";"
+%token EQUALS	     "="
+%token ATSIGN	     "@"
+%token BANG	     "!"
+%token PLUS	     "+"
+%token STAR	     "*"
+%token HUH	     "?"
+
+// the rest
+
+%token IDENTIFIER
+%token STRING
+%token NATIVE_CODE
+
+// grammar
+
+%start bundlefile
+
+%%
+
+bundlefile
+	: statements EOF
+	{
+		// pb.Done ();
+	}
+	;
+
+statements
+	: statement
+	| statements statement
+	;
+
+statement
+	: namespace_statement
+	;
+
+namespace_statement
+	: NAMESPACE IDENTIFIER OPEN_BRACE 
+	{
+		NewNamespace ((string) $2);
+	} 
+	in_namespace_statements CLOSE_BRACE
+	{
+		CloseNamespace ();
+	}
+	;
+
+in_namespace_statements
+	: in_namespace_statement
+	| in_namespace_statements in_namespace_statement
+	;
+
+in_namespace_statement
+	: result_statement
+	| enum_result_statement
+	| parameters_statement
+	| provider_statement
+	| matcher_statement
+	| rule_statement
+	| template_statement
+	| using_statement
+	; 
+
+using_statement
+	: USING namespace SEMICOLON
+	{
+		cur_ns.AddUsing ((string) $2);
+	}
+	| USING DEFAULT SEMICOLON
+	{
+		cur_ns.AddUsing ("Mono.Build");
+		cur_ns.AddUsing ("Mono.Build.Bundling");
+		cur_ns.AddUsing ("Mono.Build.RuleLib");
+	}
+	;
+
+/* Result */
+	
+result_statement
+	: opt_typeattr RESULT IDENTIFIER 
+	{
+		cur_res = new ResultBuilder ((string) $3, cur_ns, lexer.LinePragma, (TypeAttributes) $1);
+		cur_tei = cur_res;
+	}
+	opt_baseclass OPEN_BRACE opt_in_result_statements CLOSE_BRACE
+	{
+		cur_res = null;
+		cur_tei = null;
+	}
+	;
+
+in_result_statements
+	: in_result_statement
+	| in_result_statements in_result_statement
+	;
+
+opt_in_result_statements
+	: in_result_statements
+	| /* nothing */
+	;
+
+in_result_statement
+	: native_member
+	| implements_statement
+	| field_declaration
+	;
+
+field_declaration
+	: opt_default_kw classname IDENTIFIER SEMICOLON
+	{
+		cur_res.AddCompositeField ((bool) $1, (UserType) $2, (string) $3, lexer.LinePragma);
+	}
+	;
+
+/* Enum Result */
+	
+enum_result_statement
+	: opt_typeattr ENUM RESULT IDENTIFIER 
+	{
+		cur_enum = new EnumResultBuilder ((string) $4, cur_ns, lexer.LinePragma, (TypeAttributes) $1);
+	}
+	OPEN_BRACE opt_native_member in_enum_result_idents opt_native_member CLOSE_BRACE
+	{
+		cur_enum = null;
+	}
+	;
+
+in_enum_result_idents
+	: opt_default_kw IDENTIFIER
+	{
+		cur_enum.AddField ((string) $2, (bool) $1);
+	}
+	| opt_default_kw IDENTIFIER COMMA in_enum_result_idents
+	{
+		cur_enum.AddField ((string) $2, (bool) $1);
+	}
+	;
+
+opt_native_member
+	: native_member
+	| /* nothing */
+	;
+
+/* Parameters */
+
+parameters_statement
+	: opt_typeattr PARAMETERS 
+	{
+		cur_nsstruct = new StructureBuilder (cur_ns, lexer.LinePragma, (TypeAttributes) $1);
+		cur_tei = cur_nsstruct;
+	}
+	OPEN_BRACE opt_struct_params opt_native_member CLOSE_BRACE
+	{
+		cur_nsstruct = null;
+		cur_tei = null;
+	}
+	;
+
+opt_struct_params
+	: /* nothing */
+	| struct_params
+	;
+
+struct_params
+	: struct_param
+	| struct_params struct_param
+	;
+
+struct_param
+	: BASIS IDENTIFIER EQUALS IDENTIFIER SEMICOLON     
+	{ 
+		cur_nsstruct.AddBasisParam ((string) $2, (string) $4); 
+	}
+	| TARGET IDENTIFIER EQUALS IDENTIFIER SEMICOLON    
+	{ 
+		cur_nsstruct.AddTargetParam ((string) $2, (string) $4); 
+	}
+	| NAMESPACE IDENTIFIER SEMICOLON 
+	{ 
+		// Always defaults to the namespace itself ...
+		AddNamespaceParam ((string) $2); 
+	}
+	;
+
+/* Providers */
+
+provider_statement
+	: PROVIDER IDENTIFIER OPEN_BRACE 
+	{
+		cur_prov = new BGProviderBuilder ((string) $2, cur_ns);
+	} 
+	opt_in_provider_statements CLOSE_BRACE
+	{
+		cur_prov = null;
+	}
+	;
+
+opt_in_provider_statements
+	: in_provider_statements
+	| /* nothing */
+	;
+
+in_provider_statements
+	: in_provider_statement
+	| in_provider_statements in_provider_statement
+	;
+
+in_provider_statement
+	: literal_target_declaration
+	| built_target_declaration
+	| implements_statement
+	;
+
+literal_target_declaration
+	: IDENTIFIER EQUALS litresult SEMICOLON
+	{
+		cur_prov.AddLiteralTarget ((string) $1, (Result) $3);
+	}
+	;
+
+/* Templates */
+
+template_statement
+	: opt_typeattr TEMPLATE IDENTIFIER
+	{
+		cur_tmpl = new TemplateBuilder ((string) $3, cur_ns, lexer.LinePragma, (TypeAttributes) $1);
+
+		cur_tei = cur_tmpl;
+	}
+	opt_baseclass OPEN_BRACE opt_template_rule opt_template_deps
+	CLOSE_BRACE opt_template_tags
+	{
+		cur_tmpl = null;
+		cur_tei = null;
+	}
+	;
+
+opt_template_rule
+	: RULE classname SEMICOLON
+	{
+		cur_tmpl.RuleType = (UserType) $2;
+	}
+	| /* nothing */
+	;
+
+opt_template_deps
+	: template_deps
+	| /* nothing */
+	;
+
+template_deps
+	: template_dep
+	| template_deps COMMA template_dep
+	;
+
+template_dep
+	: single_value
+	{
+		cur_tmpl.AddDep ((SingleValue<string>) $1);
+	}
+	| IDENTIFIER EQUALS single_value
+	{
+		cur_tmpl.AddDep ((string) $1, (SingleValue<string>) $3);
+	}
+	;
+
+opt_template_tags
+	: template_tags
+	| /* nothing */
+	;
+
+template_tags
+	: TAGS OPEN_BRACE template_tag_definitions CLOSE_BRACE
+	;
+
+template_tag_definitions
+	: template_tag_definition
+	| template_tag_definitions template_tag_definition
+	;
+
+template_tag_definition
+	: STRING EQUALS single_value SEMICOLON
+	{
+		cur_tmpl.AddTag ((string) $1, (SingleValue<string>) $3);
+	}
+	;
+
+/* Targets (contained by providers) */
+
+built_target_declaration
+	: IDENTIFIER EQUALS classname OPEN_PARENS
+	{
+		cur_targ = new BGTargetBuilder ((string) $1, cur_prov);
+		cur_targ.Rule = (UserType) $3;
+	}
+	opt_built_target_deps CLOSE_PARENS
+	opt_provider_tags SEMICOLON
+	{
+		cur_targ = null;
+	}
+	;
+
+built_target_deps
+	: built_target_dep
+	| built_target_deps COMMA built_target_dep
+	;
+
+opt_built_target_deps
+	: built_target_deps
+	| /* nothing */
+	;
+
+built_target_dep
+	: single_value
+	{
+		cur_targ.AddDep ((SingleValue<string>) $1);
+	}
+	| IDENTIFIER EQUALS single_value
+	{
+		cur_targ.AddDep ((string) $1, (SingleValue<string>) $3);
+	}
+	;
+
+opt_provider_tags
+	: provider_tags
+	| /* nothing */
+	;
+
+provider_tags
+	: TAGS OPEN_BRACE provider_tag_definitions CLOSE_BRACE
+	;
+
+provider_tag_definitions
+	: provider_tag_definition
+	| provider_tag_definitions provider_tag_definition
+	;
+
+provider_tag_definition
+	: STRING EQUALS single_value SEMICOLON
+	{
+		cur_targ.AddTag ((string) $1, (SingleValue<string>) $3);
+	}
+	;
+
+/* Rules */
+
+rule_statement
+	: custom_rule_statement
+	| sourcefile_rule_statement
+	;
+
+custom_rule_statement
+	: opt_typeattr RULE IDENTIFIER
+	{
+		cur_rule = new MetaRuleBuilder ((string) $3, cur_ns, lexer.LinePragma, (TypeAttributes) $1);
+
+		cur_tei = cur_rule.Rule;
+	}
+	opt_rule_baseclass OPEN_BRACE opt_inside_rule_statements CLOSE_BRACE opt_rule_defaults
+	{
+		cur_rule = null;
+		cur_tei = null;
+	}
+	;
+
+opt_rule_baseclass
+	: COLON classname
+	{
+		cur_rule.BaseClass = (UserType) $2;
+	}
+	| /* nothing */
+	;
+
+opt_inside_rule_statements
+	: inside_rule_statements
+	| /* nothing */
+	;
+
+inside_rule_statements
+	: inside_rule_statement
+	| inside_rule_statements inside_rule_statement
+	;
+
+inside_rule_statement
+	: rule_arg_definition
+	| build_func_definition
+	| rule_tags_statement
+	| implements_statement
+	| specific_restype_statement
+	| general_restype_statement
+	| native_member
+	;
+
+rule_arg_definition
+	: opt_default_kw opt_ordered_kw classname opt_count IDENTIFIER SEMICOLON
+	{
+		cur_rule.Rule.AddArgument ((UserType) $3, (ArgCount) $4, (string) $5, (bool) $1, 
+		                          (bool) $2);
+	}
+	| opt_default_kw opt_ordered_kw DOT_TARGET opt_count IDENTIFIER SEMICOLON
+	{
+		cur_rule.Rule.AddTargetArgument ((ArgCount) $4, (string) $5, (bool) $1, 
+		                                (bool) $2);
+	}
+	;
+		
+build_func_definition
+	: BUILD OPEN_PARENS classname IDENTIFIER COMMA IDENTIFIER CLOSE_PARENS native_code
+	{
+		cur_rule.Rule.SetBuildFunc (false, (UserType) $3, (string) $4, (string) $6, (NativeCode) $8);
+	}
+	| BANG BUILD OPEN_PARENS classname COMMA IDENTIFIER CLOSE_PARENS native_code
+	{
+		cur_rule.Rule.SetBuildFunc (true, (UserType) $4, "unused", (string) $6, (NativeCode) $8);
+	}
+	;
+
+rule_tags_statement
+	: TAGS OPEN_BRACE rule_tag_definitions CLOSE_BRACE
+	;
+	
+rule_tag_definitions
+	: rule_tag_definition
+	| rule_tag_definitions rule_tag_definition
+	;
+
+rule_tag_definition
+	: STRING EQUALS single_value SEMICOLON
+	{
+		cur_rule.Template.AddTag ((string) $1, (SingleValue<string>) $3);
+	}
+	;
+
+single_value
+	: litresult
+	{
+		$$ = new SingleValue<string> ((Result) $1);
+	}
+	| IDENTIFIER
+	{
+		$$ = new SingleValue<string> ((string) $1);
+	}
+	;
+
+specific_restype_statement
+	: RESTYPE native_code
+	{
+		cur_rule.Rule.SpecificResultCode = (NativeCode) $2;
+	}
+	;
+
+general_restype_statement
+	: DEFAULT RESTYPE classname SEMICOLON
+	{
+		cur_rule.Rule.OverrideResultType = (UserType) $3;
+	}
+	;
+
+opt_default_kw
+	: DEFAULT
+	{
+		$$ = true;
+	}
+	| /* nothing */
+	{
+		$$ = false;
+	}
+	;
+
+opt_ordered_kw
+	: ORDERED
+	{
+		$$ = true;
+	}
+	| /* nothing */
+	{
+		$$ = false;
+	}
+	;
+
+opt_count
+	: PLUS
+	{
+		$$ = ArgCount.OneOrMore;
+	}
+	| STAR
+	{
+		$$ = ArgCount.ZeroOrMore;
+	}
+	| HUH
+	{
+		$$ = ArgCount.Optional;
+	}
+	| /* nothing */
+	{
+		$$ = ArgCount.Standard;
+	}
+	;
+
+opt_rule_defaults
+	: rule_defaults
+	| /* nothing */
+	;
+
+rule_defaults
+	: DEFAULT OPEN_BRACE rule_default_items CLOSE_BRACE
+	;
+
+rule_default_items
+	: rule_default_item
+	| rule_default_items rule_default_item
+	;
+
+rule_default_item
+	: IDENTIFIER EQUALS single_value SEMICOLON
+	{
+		cur_rule.Template.AddDefault ((string) $1, (SingleValue<string>) $3);
+	}
+	;
+
+/* Sourcefile rules */
+
+sourcefile_rule_statement
+	: SOURCEFILE RULE IDENTIFIER EQUALS classname SEMICOLON
+	{
+		SourcefileRuleBuilder sb = 
+			new SourcefileRuleBuilder ((string) $3, cur_ns, lexer.LinePragma, TypeAttributes.Public);
+		sb.ResultType = (UserType) $5;
+	}
+
+/* matchers */
+
+matcher_statement
+	: regex_matcher_statement
+	;
+
+/*
+matcher_statement
+	: custom_matcher_statement
+	| regex_matcher_statement
+	;
+
+custom_matcher_statement
+	: opt_typeattr matcher_kind MATCHER IDENTIFIER
+	{
+		NewCustomMatcher ((string) $4, (TypeAttributes) $1,
+		                     (CodeExpression) $2);
+	}
+	opt_baseclass OPEN_BRACE inside_matcher_statements CLOSE_BRACE
+	;
+*/
+
+matcher_kind
+	: DEPENDENCY
+	{
+		$$ = Mono.Build.Bundling.MatcherKind.Dependency;
+	}
+	| TRANSFORM
+	{
+		$$ = Mono.Build.Bundling.MatcherKind.DirectTransform;
+	}
+	| TARGET
+	{
+		$$ = Mono.Build.Bundling.MatcherKind.Target;
+	}
+	;
+
+/*
+inside_matcher_statements
+	: inside_matcher_statement
+	| inside_matcher_statements inside_matcher_statement
+	;
+
+inside_matcher_statement
+	: implements_statement
+	| native_member
+	;
+*/
+
+regex_matcher_statement
+	: matcher_kind REGEX MATCHER STRING EQUALS classname SEMICOLON
+	{
+		MatcherBuilder mb;
+
+		mb = new MatcherBuilder (cur_ns, lexer.LinePragma);
+
+		mb.Regex = (string) $4;
+		mb.Kind = (MatcherKind) $1;
+		mb.MatchType = (UserType) $6;
+	}
+	;
+
+/* general */
+
+native_member
+	: native_code
+	{
+		cur_tei.AddNativeMember ((NativeCode) $1);
+	}
+	;
+
+/* return an expression for creating the result */
+
+litresult
+	: STRING
+	{
+		$$ = new MBString ((string) $1);
+	}
+	| TRUE
+	{
+		$$ = MBBool.True;
+	}
+	| FALSE
+	{
+		$$ = MBBool.False;
+	}
+	;
+
+baseclass
+	: COLON classname
+	{
+		cur_tei.BaseClass = (UserType) $2;
+		$$ = $2;
+	}
+	;
+
+opt_baseclass
+	: baseclass
+	| /* nothing */
+	{
+		$$ = null;
+	}
+	;
+
+typeattr
+	: ABSTRACT
+	{
+		$$ = TypeAttributes.Abstract;
+	}
+	;
+
+opt_typeattr
+	: typeattr
+	| /* nothing */
+	{
+		$$ = 0;
+	}
+	;
+
+implements_statement
+	: IMPLEMENTS classname SEMICOLON
+	{
+		// VB-STYLE SYNTAX IN THA HOUSE!!!
+		cur_tei.AddInterfaceImpl ((UserType) $2);
+	}
+
+native_code
+	: NATIVE_CODE
+	{
+		$$ = new NativeCode ((string) $1, lexer.ChunkBeginLinePragma);
+	}
+	;
+
+classname
+	: BANG IDENTIFIER
+	{
+		$$ = new UserType ((string) $2);
+	}
+	| IDENTIFIER
+	{
+		string name = (string) $1;
+
+		// If the ident is eg "string", CodeDom will try to outsmart us and write
+		// "@string", so fake it out.
+
+		if (name == "bool")
+			$$ = new UserType (typeof (bool));
+		else if (name == "string")
+			$$ = new UserType (typeof (string));
+		else
+			$$ = new UserType (name);
+	}
+	;
+
+namespace
+	: BANG IDENTIFIER
+	{
+		string name = (string) $2;
+		string res = null;
+
+		switch (name) {
+		case "RuleLib":
+			res = "Mono.Build.RuleLib";
+			break;
+		case "Bundling":
+			res = "Mono.Build.Bundling";
+			break;
+		case "System":
+			// need this because System has no . in it for the check below
+			res = "System";
+			break;
+		}
+
+		if (res == null) {
+			if (name.IndexOf ('.') != -1)
+				res = name;
+			else
+				throw new Exception ("Unsupported special namespace !" + name);
+		}
+
+		$$ = res;
+	}
+	| IDENTIFIER
+	{
+		$$ = "MBuildDynamic." + (string) $1;
+	}
+	;
+
+%%
+
+}

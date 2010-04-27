@@ -1,0 +1,60 @@
+<Type Name="IPopulatingProvider" FullName="Monkeywrench.IPopulatingProvider">
+  <TypeSignature Language="C#" Value="public abstract interface IPopulatingProvider" Maintainer="auto" />
+  <AssemblyInfo>
+    <AssemblyName>Monkeywrench</AssemblyName>
+    <AssemblyPublicKey>
+    </AssemblyPublicKey>
+    <AssemblyVersion>0.0.0.0</AssemblyVersion>
+    <AssemblyCulture>neutral</AssemblyCulture>
+    <Attributes />
+  </AssemblyInfo>
+  <ThreadSafetyStatement>Gtk# is thread aware, but not thread safe; See the <link location="node:gtk-sharp/programming/threads">Gtk# Thread Programming</link> for details.</ThreadSafetyStatement>
+  <Docs>
+    <summary>To be added</summary>
+    <remarks>To be added</remarks>
+  </Docs>
+  <Base />
+  <Interfaces>
+    <Interface>
+      <InterfaceName>Mono.Build.IBuildProvider</InterfaceName>
+    </Interface>
+  </Interfaces>
+  <Attributes />
+  <Members>
+    <Member MemberName="GetSubBases">
+      <MemberSignature Language="C#" Value="public virtual System.Collections.IEnumerable GetSubBases ();" />
+      <MemberType>Method</MemberType>
+      <ReturnValue>
+        <ReturnType>System.Collections.IEnumerable</ReturnType>
+      </ReturnValue>
+      <Parameters />
+      <Docs>
+        <summary>To be added</summary>
+        <returns>a <see cref="T:System.Collections.IEnumerable" /></returns>
+        <remarks>To be added</remarks>
+      </Docs>
+    </Member>
+    <Member MemberName="LoadChildProvider">
+      <MemberSignature Language="C#" Value="public virtual Mono.Build.IBuildProvider LoadChildProvider (Monkeywrench.WrenchProject proj, string basis, string subbasis, out bool pub);" />
+      <MemberType>Method</MemberType>
+      <ReturnValue>
+        <ReturnType>Mono.Build.IBuildProvider</ReturnType>
+      </ReturnValue>
+      <Parameters>
+        <Parameter Name="proj" Type="Monkeywrench.WrenchProject" />
+        <Parameter Name="basis" Type="System.String" />
+        <Parameter Name="subbasis" Type="System.String" />
+        <Parameter Name="pub" Type="System.Boolean&amp;" RefType="out" />
+      </Parameters>
+      <Docs>
+        <summary>To be added</summary>
+        <param name="proj">a <see cref="T:Monkeywrench.WrenchProject" /></param>
+        <param name="basis">a <see cref="T:System.String" /></param>
+        <param name="subbasis">a <see cref="T:System.String" /></param>
+        <param name="pub">a <see cref="T:System.Boolean" /></param>
+        <returns>a <see cref="T:Mono.Build.IBuildProvider" /></returns>
+        <remarks>To be added</remarks>
+      </Docs>
+    </Member>
+  </Members>
+</Type>

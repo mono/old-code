@@ -1,0 +1,73 @@
+# Core Configuration support
+
+namespace Core.Config {
+
+	using default;
+	using Core;
+	using Core.Install;
+	using !System;
+
+	abstract rule ConfigBase {
+		tags {
+			"config" = true;
+			"config_group" = "undefined";
+			"prompt" = "Set a configuration prompt with the prompt tag";
+		}
+	}
+
+	rule ConfigBool : ConfigBase {
+		bool default_value;
+
+		build (MBBool res, ctxt) @{
+			res.Value = default_value;
+			return false;
+		@}
+	}
+
+	rule ConfigString : ConfigBase {
+		string default_value;
+
+		build (MBString res, ctxt) @{
+			res.Value = default_value;
+			return false;
+		@}
+	}
+
+	rule ConfigInstallDirectory : ConfigBase {
+		InstallDirectory default_value;
+
+		build (InstallDirectory res, ctxt) @{
+			default_value.CopyValueTo (res);
+			return false;
+		@}
+	}
+
+	rule ConfigDirectory : ConfigBase {
+
+		# "What?" you say. Well. The default is sometimes going to
+		# be some compiled-in value, which cannot be an MBDirectory
+		# because you cannot use an IExternalResult with the Static rule.
+		# (Otherwise, fingerprinting doesn't work. Since a configurable
+		# build or source directory doesn't make any sense, we just construct
+		# a System directory here.
+
+		string default_value;
+
+		build (MBDirectory res, ctxt) @{
+			// MBDirectories are always unix-style format -- so we
+			// don't use IO.Path.IsPathRooted here.
+ 
+			if (default_value[0] != '/') {
+				string s = String.Format ("The configured system directory \"{0}\" is not an absolute path", default_value);
+				ctxt.Logger.Error (3007, s, null);
+				return true;
+			}
+ 
+			if (default_value[default_value.Length - 1] != '/')
+				default_value += '/';
+ 
+			res.Init (ResultStorageKind.System, default_value);
+			return false;
+		@}
+	}
+}

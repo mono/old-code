@@ -1,0 +1,21 @@
+2006-07-12  Peter Williams  <peter@newton.cx>
+
+	* binary-graph-format.txt: File documenting the format of used
+	by BinaryGraphSerializer and BinaryLoadedGraph.
+
+2004-09-21  Peter Williams  <peter@newton.cx>
+
+	* error-codes.txt: W2044, substituting in a relative filename.
+	E1010, unequal key/val pairs in MakeDictionaryRule
+	E3018, exception during substitution processing.
+
+2004-09-06  Peter Williams  <peter@newton.cx>
+
+	* error-codes.txt: E2043, registering a preexisting provider.
+
+2004-08-30  Peter Williams  <peter@newton.cx>
+
+	* error-codes.txt: Add E3017, required system DLL not found.
+
+	* ChangeLog: start this file.
+

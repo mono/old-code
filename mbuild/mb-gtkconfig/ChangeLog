@@ -1,0 +1,41 @@
+2006-01-15  Peter Williams  <peter@newton.cx>
+
+	Patch from Mart Roosmaa <roosmaa@gmail.com>
+	
+	* Buildfile: Now that gtk-sharp-2.0 is out, use that rather
+	than 1.0.
+
+2005-10-10  Peter Williams  <peter@newton.cx>
+
+	* mb-gtkconfig.cs (LoadConfigItem): Handle BuiltItem changes.
+
+2005-09-24  Peter Williams  <peter@newton.cx>
+
+	* Buildfile (glade-sharp-pclibs): Mark this with default = false so that
+	we don't try to build it if the pccheck fails.
+
+2004-09-26  Peter Williams  <peter@newton.cx>
+
+	* mb-gtkconfig.cs: Rework to use new BuildServices class for operations.
+
+	* Buildfile (mb-gtkconfig.exe): Don't use csc_options, because
+	this exe isn't going to be gac'ed.
+
+2004-09-02  Peter Williams  <peter@newton.cx>
+
+	* Buildfile (glade-sharp-pccheck): A few miscellaneous cleanups.
+
+2004-08-30  Peter Williams  <peter@newton.cx>
+
+	* Buildfile: Use common /config/mbuild/Mono.GetOptions.dll
+	to avoid redundant check for the DLL.
+
+2004-08-30  Peter Williams  <peter@newton.cx>
+
+	* Buildfile: Install with exe_installer.
+
+2004-08-30  Peter Williams  <peter@newton.cx>
+
+	* Buildfile: Add dep on /config/mbuild/csc_options with
+	new C# compiler options support.
+

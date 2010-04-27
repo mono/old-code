@@ -1,0 +1,42 @@
+﻿<rule name="MakeInstallSubdirectory">
+        <docs>
+                <summary>Create an <lr ns="Core.Install" c="InstallDirectory" /> pointing to a subdirectory 
+		of an input <lr ns="Core.Install" c="InstallDirectory" />.</summary>
+
+		<remarks>
+		   <p>This rule is a simplified version of the <b>MakeInstallDirectory</b> rule. This
+		   version of the rule can only create a one-level subdirectory, so doesn't take
+		   an ordered argument.</p>
+
+		   <p>For example:</p>
+
+		   <code lang="mbuild">subdir = MakeInstallSubdirectory [
+	/config/install/libdir
+	"blah"
+]
+</code>
+
+<p>This will result in <b>subdir</b> being an <b>InstallDirectory</b> pointing to "/usr/local/lib/blah",
+under default conditions.</p>
+
+		</remarks>
+        </docs>
+        <argument name="base" exists_since="0.0.3.1">
+                <docs>
+                        <summary>The base <b>InstallDirectory</b>.</summary>
+                        <!-- <remarks>To be added.</remarks> -->
+                </docs>
+                <type>MBuildDynamic.Core.Install.InstallDirectory</type>
+                <flags></flags>
+        </argument>
+        <argument name="piece" exists_since="0.0.3.1">
+                <docs>
+                        <summary>The name of the subdirectory of <item>base</item> that will be returned .</summary>
+                        <!-- <remarks>To be added.</remarks> -->
+                </docs>
+                <type>Mono.Build.MBString</type>
+                <flags></flags>
+        </argument>
+</rule>
+
+

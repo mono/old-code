@@ -1,0 +1,10 @@
+﻿<regex_matcher name="\.pub$">
+        <docs>
+                <summary>To be added.</summary>
+                <remarks>To be added.</remarks>
+        </docs>
+        <regex>\.pub$</regex>
+        <rule>MBuildDynamic.Core.Clr.PublicKeySourcefileRule</rule>
+</regex_matcher>
+
+

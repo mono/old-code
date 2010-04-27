@@ -1,0 +1,20 @@
+﻿<result name="InterpreterBinaryInfo">
+        <docs>
+                <summary>To be added.</summary>
+                <remarks>To be added.</remarks>
+        </docs>
+        <dictitem name="Program" exists_since="0.0.3.1">
+                <docs>
+                        <summary>To be added.</summary>
+                        <remarks>To be added.</remarks>
+                </docs>
+        </dictitem>
+        <dictitem name="Runtime" exists_since="0.0.3.1">
+                <docs>
+                        <summary>To be added.</summary>
+                        <remarks>To be added.</remarks>
+                </docs>
+        </dictitem>
+</result>
+
+

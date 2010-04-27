@@ -1,0 +1,492 @@
+%{
+//
+// Parser.jay: buildfile jay grammar
+//
+
+using System;
+
+using Mono.Build;
+using Mono.Build.RuleLib;
+using Mono.Build.Bundling;
+
+namespace Monkeywrench.Compiler {
+	
+	public partial class BuildfileParser {
+
+%}
+
+// stuff copied from cs-parser.jay
+
+%token EOF
+%token ERROR
+
+// keywords
+
+%token USING
+%token PROJECT
+%token INSIDE
+%token TRUE
+%token FALSE
+%token SUBDIRS
+%token REF
+%token WITH
+%token LOAD
+%token APPLY
+
+// punctuation
+
+%token OPEN_BRACE    "{"
+%token CLOSE_BRACE   "}"
+%token OPEN_BRACKET  "["
+%token CLOSE_BRACKET "]"
+%token OPEN_PARENS   "("
+%token CLOSE_PARENS  ")"
+%token COMMA         ","
+%token COLON         ":"
+%token SEMICOLON     ";"
+%token EQUALS	     "="
+%token ATSIGN	     "@"
+%token NOT           "!"
+%token BOOL_AND      "&&"
+%token BOOL_OR       "||"
+%token PERCENT	     "%"
+%token QUESTION	     "?"
+
+// the rest
+
+%token IDENTIFIER
+%token STRING
+
+%left BOOL_OR
+%left BOOL_AND
+
+// grammar
+
+%start buildfile
+
+%%
+
+buildfile
+	: statements EOF
+	;
+
+statements
+	: statement
+	| statements statement
+	;
+
+statement
+	: using_statement
+	| project_statement
+	| inside_statement
+	| subdirs_statement
+	| load_statement
+	| rule_target_statement
+	| copy_target_statement
+	| apply_statement
+	;
+
+/* Using */
+
+using_statement
+	: USING OPEN_BRACKET using_items CLOSE_BRACKET
+	;
+
+using_items
+	: using_item
+	| using_items using_item
+	;
+
+using_item
+	: IDENTIFIER
+	{
+		UseNamespace ((string) $1);
+	}
+	;
+
+/* Project statement */
+
+project_statement
+	: PROJECT OPEN_BRACKET
+	{
+		StartProjectInfo ();
+	}
+	project_properties CLOSE_BRACKET
+	;
+
+project_properties
+	: project_property
+	| project_properties project_property
+	;
+
+project_property
+	: IDENTIFIER EQUALS IDENTIFIER
+	{
+		AddProjectProperty ((string) $1, (string) $3);
+	}
+	| REF OPEN_BRACKET references CLOSE_BRACKET
+	;
+
+references
+	: reference
+	| references reference
+	;
+
+reference
+	: IDENTIFIER
+	{
+		AddUnversionedReference ((string) $1);
+	}
+	| IDENTIFIER EQUALS IDENTIFIER
+	{
+		AddVersionedReference ((string) $1, (string) $3);
+	}
+	;
+
+/* Inside statements */
+
+inside_statement
+	: INSIDE OPEN_BRACKET 
+	{
+		StartInside ();
+	}
+	inside_items CLOSE_BRACKET 
+	OPEN_BRACKET inside_ok_statements CLOSE_BRACKET
+	{
+		FinishInside ();
+	}
+	;
+		
+inside_items
+	: inside_item
+	| inside_items inside_item
+	;
+
+inside_item
+	: IDENTIFIER
+	{
+		AddInsideBasis ((string) $1);
+	}
+	;
+
+inside_ok_statements
+	: inside_ok_statement
+	| inside_ok_statements inside_ok_statement
+	;
+
+inside_ok_statement
+	: using_statement
+	;
+
+/* Subdirs */
+
+subdirs_statement
+	: SUBDIRS OPEN_BRACKET subdir_items CLOSE_BRACKET
+	;
+
+subdir_items
+	: subdir_item
+	| subdir_items subdir_item
+	;
+
+subdir_item
+	: IDENTIFIER
+	{
+		AddSubdir ((string) $1);
+	}
+	;
+
+/* Load statement */
+
+load_statement
+	: LOAD IDENTIFIER INSIDE IDENTIFIER
+	{
+		DoLoadStatement ((string) $2, (string) $4);
+	}
+	;
+
+/* Rule target definitions */
+
+rule_target_statement
+	: IDENTIFIER EQUALS opt_tmplname OPEN_BRACKET 
+	{
+		StartTarget ((string) $1);
+
+		if ($3 != null)
+			SetTargetTemplateName ((string) $3);
+
+	}
+	opt_dependencies CLOSE_BRACKET opt_with
+	{
+		FinishTarget ();
+	}
+	;
+
+opt_tmplname
+	: /* empty */
+	| IDENTIFIER
+	;
+
+opt_dependencies
+	: /* empty */
+	| dependencies
+	;
+
+dependencies
+	: dependency
+	| dependencies dependency
+	;
+
+dependency
+	: dependency_item
+	| IDENTIFIER EQUALS 
+	{
+		cur_arg_name = (string) $1;
+	}
+	dependency_item
+	{
+		cur_arg_name = null;
+	}
+	;
+
+dependency_item
+	: single_value
+	{
+		AddDepCurrent ((SingleValue<string>) $1);
+	}
+	| ordered_dependency
+	{
+		ApplyOrderedDeps ((LinkList) $1);
+	}
+	| ATSIGN IDENTIFIER
+	{
+		AddResponseDependencies ((string) $2);
+	}
+	;
+
+ordered_dependency
+	: OPEN_BRACKET ordered_values CLOSE_BRACKET
+	{
+		$$ = $2;
+	}
+	;
+
+ordered_values
+	: single_value
+	{
+		$$ = new LinkList ((SingleValue<string>) $1);
+	}
+	| ordered_values COMMA single_value
+	{
+		$$ = new LinkList ((SingleValue<string>) $3, (LinkList) $1);
+	}
+	;
+
+opt_with
+	: /* empty */
+	| WITH OPEN_BRACKET with_properties CLOSE_BRACKET
+	;
+
+with_properties
+	: with_property
+	| with_properties with_property
+	;
+
+with_property
+	: IDENTIFIER EQUALS single_value
+	{
+		// See WrenchTarget for an explanation of what's going on here.
+		cur_targ.AddWaitTag ((string) $1, (SingleValue<string>) $3);
+	}
+	;
+
+/* Straight-copy target */
+
+copy_target_statement
+	: IDENTIFIER EQUALS nontarget_value
+	{
+		StartTarget ((string) $1);
+		SetTargetAsValue ((SingleValue<string>) $3);
+	}
+	opt_with
+	{
+		FinishTarget ();
+	}
+	;
+
+/* template apply */
+
+apply_statement
+	: APPLY IDENTIFIER OPEN_BRACKET 
+	{
+		cur_apply_name = (string) $2;
+	}
+	apply_idents CLOSE_BRACKET
+	{
+		cur_apply_name = null;
+	}
+	;
+
+apply_idents
+	: apply_ident
+	| apply_idents apply_ident
+	;
+
+apply_ident
+	: IDENTIFIER
+	{
+		ApplyTemplate ((string) $1);
+	}
+	;
+
+/* low-level */
+
+single_value
+	: nontarget_value
+	| target_name
+	{
+		$$ = new SingleValue<string> ((string) $1);
+	}
+	;
+
+nontarget_value
+	: litresult
+	{
+		$$ = new SingleValue<string> ((Result) $1);
+	}
+	| constructed_result
+	{
+		$$ = new SingleValue<string> ((string) $1);
+	}
+	;
+
+target_name
+	: IDENTIFIER
+	;
+
+litresult
+	: STRING
+	{
+		$$ = new MBString ((string) $1);
+	}
+	| TRUE
+	{
+		$$ = MBBool.True;
+	}
+	| FALSE
+	{
+		$$ = MBBool.False;
+	}
+	;
+
+constructed_result
+	: constructed_dictionary
+	| constructed_boolops
+	| constructed_strformat
+	| constructed_conditional
+	;
+
+/* Constructed result: Dictionaries */
+
+constructed_dictionary
+	: OPEN_BRACE
+	{
+		StartConstructed ();
+		SetDictionaryRule ();
+	}
+	dictitems CLOSE_BRACE
+	{
+		$$ = cur_constructed.tb.Name;
+		FinishConstructed ();
+	}
+	;
+
+dictitems
+	: dictitem
+	| dictitems COMMA dictitem
+	;
+
+dictitem
+	: IDENTIFIER EQUALS single_value
+	{
+		AddDictionaryValue (cur_constructed.tb, (string) $1, (SingleValue<string>) $3);
+	}
+	;
+
+/* Constructed result: boolean expressions */
+
+constructed_boolops
+	: boolops
+	{
+		StartConstructed ();
+		SetBoolOpsRule ();
+		DecodeBoolOps ((BoolOps) $1);
+		$$ = cur_constructed.tb.Name;
+		FinishConstructed ();
+	}
+	;
+
+boolops
+	: OPEN_PARENS boolops_or_value CLOSE_PARENS
+	{
+		$$ = $2;
+	}
+	| unary_boolop boolops_or_value
+	{
+		$$ = ((BoolOps) $2).CombineUnary ((OpCode) $1);
+	}
+	| boolops_or_value binary_boolop boolops_or_value
+	{
+		$$ = ((BoolOps) $1).CombineBinary ((OpCode) $2, (BoolOps) $3);
+	}
+	;
+
+boolops_or_value
+	: boolops
+	/* literals and constructeds don't make sense as
+	 * inputs to a bool ops, so use target_name, not 
+	 * single_value 
+	 */
+	| target_name
+	{
+		$$ = new BoolOps ((string) $1);
+	}
+	;
+
+binary_boolop
+	: BOOL_AND { $$ = OpCode.And; }
+	| BOOL_OR { $$ = OpCode.Or; }
+	;
+
+unary_boolop
+	: NOT { $$ = OpCode.Not; }
+	;
+
+/* Constructed result: formatted string */
+
+constructed_strformat
+	: STRING PERCENT ordered_dependency
+	{
+		StartConstructed ();
+		SetupFormat ((string) $1, (LinkList) $3);
+		$$ = cur_constructed.tb.Name;
+		FinishConstructed ();
+	}
+	;
+		
+/* Constructed result: conditional */
+
+constructed_conditional
+	: single_value QUESTION single_value COLON single_value
+	{
+		StartConstructed ();
+		SetupConditional ((SingleValue<string>) $1, (SingleValue<string>) $3, 
+		                  (SingleValue<string>) $5);
+		$$ = cur_constructed.tb.Name;
+		FinishConstructed ();
+	}
+	;
+		
+%%
+
+}

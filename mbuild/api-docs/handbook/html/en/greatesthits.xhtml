@@ -1,0 +1,226 @@
+<?xml version="1.0" encoding="utf-8"?>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:monodoc="http://www.go-mono.org/xml/monodoc">
+<head>
+        <title>Autotools' Greatest Hits</title>
+        <link rel="stylesheet" type="text/css" href="style.css" />
+</head>
+<body>
+
+<h2>Autotools' Greatest Hits</h2>
+ 
+<p>Since I decided to start writing MBuild, I've been collecting
+a list of the reasons why I felt it was necessary. Again, the GNU
+autotools system is extremely portable and has been a mainstay for me
+and many other hackers ... but it does have its rough edges:</p>
+
+<pre class="code">make[3]: Entering directory `/home/peter/build/xine-lib/src/libtheora'
+make[3]: Nothing to be done for `all'.
+make[3]: Leaving directory `/home/peter/build/xine-lib/src/libtheora'
+Making all in libspeex
+<b>/bin/sh: line 1: cd: libspeex: No such file or directory</b>
+make[2]: *** [all-recursive] Error 1
+make[2]: Leaving directory `/home/peter/build/xine-lib/src'
+</pre>
+
+<p>The classic "New subdirectory in the build wasn't created because
+<tt>config.status</tt> wasn't rerun" problem. I believe there's some
+code in newer <tt>autoconf</tt>s to address this -- I recall seeing
+them running <tt>config.status</tt> without the <tt>--recheck</tt> parameter.
+</p>
+
+<pre class="code">config.status: creating src/libvorbis/Makefile
+config.status: creating src/libtheora/Makefile
+config.status: creating src/libspeex/Makefile
+<b>config.status: error: cannot find input file: src/libspeex/Makefile.in</b>
+</pre>
+
+<p>Oops! Forgot to rerun automake!
+</p>
+
+<pre class="code">[peter@beta gal]$ automake-1.4
+<b>configure.in: 89: required file `./_AM_File,.in' not found
+configure.in: 89: required file `./[$2],.in' not found
+configure.in: 89: required file `./[$3])].in' not found</b>
+</pre>
+
+<p>Oops! Now you ran the wrong version of automake! I like this one
+because of the sheer insanity of the error message it gives.
+</p>
+
+<pre class="code">make -C src
+make[1]: Entering directory `/home/peter/src/audacity-src-1.1.3/src'
+ar rcs libaudacity.a obj/BlockFile.o obj/FileFormats.o obj/SampleFormat.o obj/blockfile/SimpleBlockFile.o obj/blockfile/PCMAliasBlockFile.o
+<b>make[1]: *** No rule to make target `../lib-src/libsamplerate/src/.libs/libsamplerate.a', needed by `../audacity'.  Stop.</b>
+make[1]: Leaving directory `/home/peter/src/audacity-src-1.1.3/src'
+make: *** [audacity] Error 2
+</pre>
+
+<p>No idea what's going on here. Maybe static library builds were
+turned off and only <tt>libsamplerate.so</tt> was compiled?
+</p>
+
+<pre class="code">cd . &amp;&amp; /bin/sh /home/peter/cvs/mono/missing --run aclocal-1.6
+cd . &amp;&amp; \
+  /bin/sh /home/peter/cvs/mono/missing --run automake-1.6 --foreign  Makefile
+<b>Makefile.am:5: bad macro name `'
+Makefile.am:4: SUBDIRS multiply defined in condition TRUE
+  SUBDIRS (User, where = Makefile.am:4) =
+  {
+    TRUE => mono doc docs scripts man data
+  }</b>
+make: *** [Makefile.in] Error 1
+</pre>
+
+<p>Hm. Bad use of <tt>AM_CONDITIONAL</tt>s? Some kind of CVS conflict
+marker causing problems?
+</p>
+
+<pre class="code">source='error.c' object='error.lo' libtool=yes \
+depfile='.deps/error.Plo' tmpdepfile='.deps/error.TPlo' \
+depmode=gcc3 <b>/bin/sh ../../depcomp \
+/bin/sh ../../libtool --mode=compile gcc</b> -DHAVE_CONFIG_H ...
+</pre>
+
+<p>Not an error per se. But these are the hoops that we need to jump
+through to compile a source file. Of course, C compilation is hard and
+MBuild can't even do it yet. Still, invoking two layers of shell
+scripts per source file is a performance hit.
+</p>
+
+<pre class="code">checking whether to build static libraries... no
+checking whether -lc should be explicitly linked in... no
+creating libtool
+checking gcc argument to enable C99... -std=c99
+<b>./configure: line 8431: syntax error near unexpected token `error'
+./configure: line 8431: `GNOME_COMPILE_WARNINGS(error)'</b>
+make: *** [config.status] Error 2
+</pre>
+
+<p>My second-most common error. Bad <tt>aclocal</tt> flags. A classic.
+</p>
+
+<pre class="code">/bin/sh ../libtool --mode=link gcc  -g -O2    -o libmonkey-media.la -rpath /usr/lib -export-dynamic monkey-media.lo monkey-media-stream-info.lo monkey-media-player-xine.lo monkey-media-player-gst.lo monkey-media-player-gst-tmp.lo monkey-media-audio-quality.lo monkey-media-audio-cd.lo sha1.lo monkey-media-musicbrainz.lo monkey-media-marshal.lo ../src/stream-info-impl/libstream-info-impl.la -pthread -Wl,--export-dynamic -lgnome-2 -lbonobo-2 -lgconf-2 -lgnomevfs-2 -lbonobo-activation -lORBit-2 -llinc -lgmodule-2.0 -ldl -lgobject-2.0 -lgthread-2.0 -lglib-2.0 -lxml2 -lz -lm   -Wl,--export-dynamic -pthread -lgstcontrol-0.6 -lgstgconf-0.6 -lgstreamer-0.6 -lgobject-2.0 -lgmodule-2.0 -ldl -lgthread-2.0 -lxml2 -lz -lm -lglib-2.0   -lmusicbrainz -lstdc++ -lm   -lz -L/usr/lib -logg -L/usr/lib -lvorbis -lm -lvorbisfile -lFLAC
+grep: /usr/lib/liblinc.la: No such file or directory
+<b>/bin/sed: can't read /usr/lib/liblinc.la: No such file or directory</b>
+libtool: link: `/usr/lib/liblinc.la' is not a valid libtool archive
+make[3]: *** [libmonkey-media.la] Error 1
+make[3]: Leaving directory `/home/peter/cvs/monkey-media/src'
+</pre>
+
+<p>This one is mostly my fault, I admit. First I compiled my own
+<tt>ORBit</tt> so that <tt>.la</tt> files were install for all its
+shared libraries. Then at some point I replaced it with an RPM
+installation and the <tt>liblinc.la</tt> file got deleted one way or
+another. But in the meantime I had compiled another package that
+linked to <tt>liblinc.so</tt>, so a dependency on <tt>liblinc.la</tt>
+was embedded in its <tt>.la</tt> file. And when I tried to compile
+against that library, the dependency on the <tt>.la</tt> file
+failed. In other words, portable shared library compilation sucks.
+</p>
+
+<pre class="code">gcc -DHAVE_CONFIG_H -I. -I../../../../../../cvs/xine-lib/src/post/deinterlace/plugins -I../../../.. -I../../../../../../cvs/xine-lib -I../../../../include -I../../../../../../cvs/xine-lib/include -I../../../../../../cvs/xine-lib/src -I../../../../src/xine-engine -I../../../../../../cvs/xine-lib/src/xine-engine -I../../../../../../cvs/xine-lib/src/xine-utils -I../ -Wall -D_REENTRANT -D_FILE_OFFSET_BITS=64 -DXINE_COMPILE -O3 -pipe -fomit-frame-pointer -falign-functions=4 -falign-loops=4 -falign-jumps=4 -mpreferred-stack-boundary=2 -fexpensive-optimizations -fschedule-insns2 -fno-strict-aliasing -ffast-math -funroll-loops -finline-functions -mcpu=pentiumpro -I/usr/include/kde/artsc -c ../../../../../../cvs/xine-lib/src/post/deinterlace/plugins/double.c -MT double.lo -MD -MP -MF .deps/double.TPlo  -DPIC -o double.lo
+<b>../../../../../../cvs/xine-lib/src/post/deinterlace/plugins/double.c:27:20: speedy.h: No such file or directory
+../../../../../../cvs/xine-lib/src/post/deinterlace/plugins/double.c:28:25: deinterlace.h: No such file or directory</b>
+</pre>
+
+<p>Somebody forgot to add a <tt>$(srcdir)</tt> prefix to their
+<tt>-I</tt> flags! This happens so often! Arg! I don't even try to do
+out-of-place builds anymore because pretty much no nontrivial project
+gets this right. I guess the <tt>xine</tt> folks don't <tt>make
+distcheck</tt> very often ...
+</p>
+
+<pre class="code">source='../../../../cvs/xine-lib/src/xine-utils/memcpy.c' object='memcpy.lo' libtool=yes \
+depfile='.deps/memcpy.Plo' tmpdepfile='.deps/memcpy.TPlo' \
+depmode=gcc3 /bin/sh ../../../../cvs/xine-lib/depcomp \
+/bin/sh ../../libtool-nofpic --mode=compile gcc -DHAVE_CONFIG_H -I. -I../../../../cvs/xine-lib/src/xine-utils -I../.. -I../../../../cvs/xine-lib -I../../include -I../../../../cvs/xine-lib/include -I../../../../cvs/xine-lib/src -I../../src/xine-engine -I../../../../cvs/xine-lib/src/xine-engine -I../../../../cvs/xine-lib/src/xine-utils     -I/usr/X11R6/include -Wchar-subscripts -Wmissing-declarations -Wmissing-prototypes -Wnested-externs -Wcast-align -Wpointer-arith -Wall -D_REENTRANT -D_FILE_OFFSET_BITS=64 -DXINE_COMPILE  -O3 -pipe -fomit-frame-pointer -falign-functions=4 -falign-loops=4 -falign-jumps=4  -mpreferred-stack-boundary=2 -fexpensive-optimizations -fschedule-insns2 -fno-strict-aliasing -ffast-math -funroll-loops -finline-functions -mcpu=pentiumpro   -I/usr/include/kde/artsc  -c -o memcpy.lo `test -f '../../../../cvs/xine-lib/src/xine-utils/memcpy.c' || echo '../../../../cvs/xine-lib/src/xine-utils/'`../../../../cvs/xine-lib/src/xine-utils/memcpy.c
+gcc -DHAVE_CONFIG_H -I. -I../../../../cvs/xine-lib/src/xine-utils -I../.. -I../../../../cvs/xine-lib -I../../include -I../../../../cvs/xine-lib/include -I../../../../cvs/xine-lib/src -I../../src/xine-engine -I../../../../cvs/xine-lib/src/xine-engine -I../../../../cvs/xine-lib/src/xine-utils -I/usr/X11R6/include -Wchar-subscripts -Wmissing-declarations -Wmissing-prototypes -Wnested-externs -Wcast-align -Wpointer-arith -Wall -D_REENTRANT -D_FILE_OFFSET_BITS=64 -DXINE_COMPILE -O3 -pipe -fomit-frame-pointer -falign-functions=4 -falign-loops=4 -falign-jumps=4 -mpreferred-stack-boundary=2 -fexpensive-optimizations -fschedule-insns2 -fno-strict-aliasing -ffast-math -funroll-loops -finline-functions -mcpu=pentiumpro -I/usr/include/kde/artsc -c ../../../../cvs/xine-lib/src/xine-utils/memcpy.c -MT memcpy.lo -MD -MP -MF .deps/memcpy.TPlo  -DPIC -o memcpy.lo
+<b>mv: overwrite `.deps/memcpy.Plo', overriding mode 0664? y</b>
+</pre>
+
+<p>No idea why this particular problem happens -- it's
+intermittent. Still, there's no fun like firing off a build and coming
+back an hour later, only to see that it froze after five minutes
+because a shell program tried to prompt you!
+</p>
+
+<pre class="code">Running automake --gnu  ...
+<b>libmacl/Makefile.am:3: library used but `RANLIB' is undefined</b>
+libmacl/Makefile.am:3:
+libmacl/Makefile.am:3: The usual way to define `RANLIB' is to add `AC_PROG_RANLIB'
+libmacl/Makefile.am:3: to `configure.ac' and run `autoconf' again.
+**Error**: automake failed.
+</pre>
+
+<p>Forgot to add <tt>AM_PROG_LIBTOOL</tt>, I think it was.
+</p>
+
+<pre class="code">make[2]: Entering directory `/home/peter/src/rise-calc/libmacl'
+cd .. &amp;&amp; \
+  /bin/sh /home/peter/src/rise-calc/missing --run automake-1.7 --gnu  libmacl/Makefile
+<b>libmacl/Makefile.am:13: use `libmacl_a_LIBADD', not `libmacl_a_LDADD'</b>
+make[2]: *** [Makefile.in] Error 1
+</pre>
+
+<p>Oops, forgot which of two extremely similar variable names to use.
+</p>
+
+<pre class="code">make  all-recursive
+make[1]: Entering directory `/home/peter/cvs/rhythmbox'
+Making all in lib
+make[2]: Entering directory `/home/peter/cvs/rhythmbox/lib'
+<b>Makefile:372: .deps/disclosure-widget.Plo: No such file or directory
+Makefile:373: .deps/eel-gconf-extensions.Plo: No such file or directory
+Makefile:374: .deps/eggtrayicon.Plo: No such file or directory
+Makefile:375: .deps/gsequence.Plo: No such file or directory
+Makefile:376: .deps/rb-atomic.Plo: No such file or directory
+Makefile:377: .deps/rb-bonobo-helpers.Plo: No such file or directory
+Makefile:378: .deps/rb-cut-and-paste-code.Plo: No such file or directory
+Makefile:379: .deps/rb-debug.Plo: No such file or directory
+Makefile:380: .deps/rb-dialog.Plo: No such file or directory
+Makefile:381: .deps/rb-file-helpers.Plo: No such file or directory
+Makefile:382: .deps/rb-file-monitor.Plo: No such file or directory
+Makefile:383: .deps/rb-glade-helpers.Plo: No such file or directory
+Makefile:384: .deps/rb-marshal.Plo: No such file or directory
+Makefile:385: .deps/rb-playlist.Plo: No such file or directory
+Makefile:386: .deps/rb-stock-icons.Plo: No such file or directory
+Makefile:387: .deps/rb-string-helpers.Plo: No such file or directory
+Makefile:388: .deps/rb-thread-helpers.Plo: No such file or directory
+Makefile:389: .deps/rb-tree-dnd.Plo: No such file or directory
+Makefile:390: .deps/rb-util.Plo: No such file or directory</b>
+make[2]: *** No rule to make target `.deps/rb-util.Plo'.  Stop.
+make[2]: Leaving directory `/home/peter/cvs/rhythmbox/lib'
+make[1]: *** [all-recursive] Error 1
+make[1]: Leaving directory `/home/peter/cvs/rhythmbox'
+make: *** [all] Error 2
+</pre>
+
+<p>I guess something went wrong in the black magic that's used to do
+dependency tracking of C source files. Again, I recognize that this is
+a hard problem to solve. I don't think I ever figured out what exactly
+was going wrong here -- rerunning <tt>automake</tt> fixed it, I think.
+</p>
+
+<pre class="code">[peter@beta gst-plugins]$ /usr/bin/time automake-1.8
+<b>291.74user 1.91system 5:20.85elapsed 91%CPU</b> (0avgtext+0avgdata 0maxresident)k
+0inputs+0outputs (0major+27947minor)pagefaults 0swaps
+</pre>
+
+<p>On a 1.1 Ghz processor with 384 MB of RAM. <tt>gst-plugins</tt> has
+a lot of subdirectories; <tt>automake</tt> gets slow quickly in those conditions.
+</p>
+
+<!--
+<pre class="code">
+</pre>
+
+<p>
+</p>
+
+-->
+
+<!-- <p><b>Next: <a href=".xhtml">NEXT</a></b></p> -->
+
+</body>
+</html>

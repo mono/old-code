@@ -1,0 +1,32 @@
+﻿<rule name="FindTool">
+        <docs>
+                <summary>To be added.</summary>
+                <remarks>To be added.</remarks>
+        </docs>
+        <argument name="names" exists_since="0.0.3.1">
+                <docs>
+                        <summary>To be added.</summary>
+                        <remarks>To be added.</remarks>
+                </docs>
+                <type>Mono.Build.MBString</type>
+                <flags>default </flags>
+        </argument>
+        <argument name="trybind" exists_since="0.0.3.1">
+                <docs>
+                        <summary>To be added.</summary>
+                        <remarks>To be added.</remarks>
+                </docs>
+                <type>Mono.Build.MBString</type>
+                <flags>optional </flags>
+        </argument>
+        <argument name="args" exists_since="0.0.3.1">
+                <docs>
+                        <summary>To be added.</summary>
+                        <remarks>To be added.</remarks>
+                </docs>
+                <type>Mono.Build.MBString</type>
+                <flags>optional </flags>
+        </argument>
+</rule>
+
+

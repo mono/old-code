@@ -1,0 +1,61 @@
+using [ Core Core.Xml Tools.Monodoc ]
+
+inside [
+	Mono.Build
+	Mono.Build/Mono.Build
+	Mono.Build/Mono.Build.Bundling
+	Mono.Build/Mono.Build.RuleLib
+	Monkeywrench
+	Monkeywrench/Monkeywrench
+	handbook
+	handbook/html
+	handbook/html/en
+] [ 
+	using [ Core.Xml Tools.Monodoc ]
+]
+
+hbdir = CheatySubdir [ "handbook/html/en" ]
+
+mbuild-Mono.Build = AssembleEcmaDocs [ 
+	@mbuild-Mono.Build.sources
+	"mbuild-libraries"
+]
+
+mbuild-Monkeywrench = AssembleEcmaDocs [ 
+	@mbuild-Monkeywrench.sources
+	"mbuild-libraries"
+]
+
+# FIXME: set default stylesheet so user doesn't need to
+# manually specify the mkmstoc_xsl param
+
+handbook.xml = MakeXhtmlToc [ 
+	/config/tools/monodoc/mkmstoc_xsl
+	handbook/toc.xml
+	hbdir
+	title = "MBuild Handbook"
+]
+
+mbuild-handbook = AssembleXhtmlDocs [ 
+	@mbuild-handbook.sources
+	toc = handbook.xml 
+	"mbuild-handbook" 
+]
+
+mbuild.source = [ 
+	mbuild.source-tmpl.xml
+
+	mbuild-Mono.Build
+	mbuild-Monkeywrench
+	mbuild-handbook
+]
+
+# Shame! But if you can't get MBuild working and there's
+# no Makefile, you can't read the documentation to fix it...
+
+Makefile = TextSource []
+
+# And the Makefile doesn't generate mbuild.source, so we
+# need to include a copy of the file
+
+mbuild.source.manual = TextSource []

@@ -1,0 +1,14 @@
+using [ Core 
+	Core.Clr
+	Languages.CSharp 
+]
+
+mb-bundledoc.exe = [ 
+	@mb-bundledoc.exe.sources
+
+	/config/mbuild/Mono.GetOptions.dll
+	../Mono.Build.dll
+] with [
+	default = true
+	install = /config/mbuild/exe_installer
+]

@@ -1,0 +1,75 @@
+MBuild - A Mono-based build tool
+http://www.newton.cx/~peter/mbuild/
+
+ABOUT
+
+MBuild is a build tool. It performs the same sorts of tasks as GNU
+make, GNU autoconf, and GNU automake. Unlike these tools, however,
+MBuild has been designed from the start to integrate the work of
+these tools in one cohesive design and takes advantage of the
+features of the .Net framework to be portable and easy to develop
+for.
+
+INSTALLATION
+
+MBuild requires Mono 1.0.1 or newer. Building and viewing the
+documentation requires the Monodoc system, which should come with
+any good distribution of Mono itself. MBuild will eventually work
+correctly on Windows, but at the moment any success in using it
+will be entirely lucky.
+
+To build and install MBuild, start with the usual 'configure' followed
+by 'make'. (New features in MBuild are often used when building
+itself, so even if you have a previous version of MBuild installed,
+this step is necessary.) If you have a copy of MBuild from the
+developer repository, you should start by running 'autogen.sh'. But
+if you have downloaded a release, the steps look like:
+
+	$ ./configure
+	$ make
+	$ su 
+	# make install
+
+Next, manually build and install the documentation:
+
+	$ cd api-docs
+	$ make
+	$ su
+	# make install
+
+(Once you have installed MBuild this way and familiarized yourself
+with how it works, it's recommended that you build and install MBuild
+with an installed copy of itself whenever possible. Makefiles will
+always be maintained to allow for bootstrapping, but they are not
+guaranteed to build and install everything included in the MBuild
+distribution.)
+
+GETTING STARTED
+
+For a general introduction to how MBuild works, you'll want to read
+the Monodoc documentation. See the "Introducing MBuild" section of the
+"MBuild Handbook", under the "Various" section in the tree. The
+documentation is still incomplete, but it should provide a small
+introduction into how MBuild works. Beyond that, the best examples of
+how to use MBuild right now are the MBuild sources and Buildfiles
+themselves.
+
+For a messy list of tasks remaining, see TODO.
+
+For a list of the major changes in each release, see NEWS.
+
+DISCLAIMER
+
+In general, I still consider MBuild an informal piece of software.
+That means:
+
+	* Not much real documentation
+	* Not much real testing
+	* Still pretty slow
+
+But it's coming along pretty well.
+
+QUASILEGAL
+
+MBuild is licensed under the GNU General Public License version 2.
+It was written by Peter Williams <peter@newton.cx>.

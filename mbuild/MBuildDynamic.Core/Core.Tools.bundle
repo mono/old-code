@@ -1,0 +1,63 @@
+# Core tool finding support
+
+namespace Core.Tools {
+
+	using default;
+
+	using !System;
+	using !System.Text;
+
+	rule FindTool {
+		default string names;
+		string* args;
+
+		# The default value for 'names' should begin with an exclamation point (!)
+		# followed by a space-separated list of possible basenames for the tool. If
+		# the exclamation point is not present, the entire string will be parsed
+		# as a unix-style program specification ("ENV1=val1 ENV2=val2 progname arg1 arg2").
+		# This allows the user to easily override the names input argument with a custom
+		# program specification if the path searching doesn't behave as desired.
+
+		@{
+
+		protected bool InitializeResult (IBuildContext ctxt, ExternalBinaryInfo info, 
+		                                 out string[] nameout)
+		{
+			if (names[0] != '!') {
+				// User-overridden tool spec
+				// FIXME: ignoring return code
+				info.SetFromUnixStyle (names, ctxt);
+				nameout = null;
+				return true;
+			}
+ 
+			nameout = names.Substring (1).Split (' ');
+
+			if (args.Length > 0)
+				info.ForcedArgs = String.Join (" ", args);
+
+			return false;
+		}
+
+		@}
+
+		build (ExternalBinaryInfo info, ctxt) @{
+			string[] names;
+
+			if (InitializeResult (ctxt, info, out names))
+				return false;
+
+			string chosen = Programs.GetFirstInPath (names);
+ 
+			if (chosen == null) {
+				// XXX FIXME: allow this to be a warning only?
+				ctxt.Logger.Error (3006, "Couldn't find any of the following tool " +
+				                   "names in the path.", String.Join (" ", names));
+				return true;
+			}
+ 
+			info.Program = chosen;
+  			return false;
+		@}
+	}
+}

@@ -1,0 +1,324 @@
+using [ Core
+	Core.Clr
+	Core.Install
+	Core.Subst
+	Core.Config
+	Languages.CSharp
+	Tools.Bundlegen
+]
+
+# information about this project
+
+project [ 
+	name = mbuild 
+	version = 0.0.4.0
+
+	# This is a 'compatibility code'; a standard piece
+	# of text that should be munged into names
+	# of installed files if you want to be able
+	# to do parallel installs. For instance, header files
+	# should be installed into ${includedir}/${name}-${compat-code}.
+	# More to the point, there should be infrastructure
+	# to make this easy. More useful is /config/env/compat_name,
+	# which is the string "${name}-${compat-code}". For instance,
+	# our assemblies are installed with a Mono gacutil 'package'
+	# of compat_name. Anyway, typically this should be the upper
+	# two pieces of the version number, but you can choose
+	# something else if you want.
+
+	compat-code = 0.0
+
+	# Versioned assembly references pulled
+	# from the GAC. No more aclocal hell!
+
+	ref [ 
+		Languages.CSharp = 0.0.4.0
+		Tools.Jay = 0.0.4.0
+		Tools.PkgConfig = 0.0.4.0
+		Tools.Bundlegen = 0.0.4.0
+		Tools.Monodoc = 0.0.4.0
+	]
+]
+
+# There are also Buildfiles in these
+# subdirectories.
+
+subdirs [ 
+	doc 
+	scripts 
+	Monkeywrench/Monkeywrench.Compiler 
+	#mb-import
+	#mb-install-client-src
+	mb-bundlegen 
+	#mb-bundledoc
+	mb-bd2xhtml
+	#mb-gtkconfig
+	api-docs 
+	test
+]
+
+# Instead of creating mostly-blank Buildfiles
+# in these directories, we can implicitly define
+# their contents.
+
+inside [ 
+	Mono.Build 
+	Mono.Build/Assembly
+	Mono.Build/Mono.Build
+	Mono.Build/Mono.Build.Bundling
+	Mono.Build/Mono.Build.RuleLib
+	MBuildDynamic.Core
+	Monkeywrench
+	Monkeywrench/Monkeywrench
+	mbuild
+	resources
+] [
+	using [ Core
+		Core.Clr
+		Core.Subst # for resources - need to improve inside syntax
+		Languages.CSharp
+		Tools.Bundlegen # for Core
+	]
+]
+
+# Load a separate file of configuration options
+# in a virtual prefix
+
+load Buildfile.config inside config/mbuild
+
+disable-minimal-build = ConfigBool [ true ] with [
+	prompt = "Only build the resources needed to compile mbuild itself."
+]
+
+# Load a response file to get the list of sources
+# Use a custom installer that installs the DLL into
+# the GAC, not just libdir. Also use a set of compiler
+# options defined in Buildfile.config
+
+Mono.Build.dll = [
+	@Mono.Build.dll.sources
+	/config/mbuild/System.Xml.dll
+	# FIXME - would be nice to avoid this dep this low
+	/config/mbuild/Mono.Posix.dll
+	/config/mbuild/gac_csc_options
+] with [ install = /config/mbuild/gac_installer ]
+
+# Now we declare "bundles", sets of rules used by mbuild. They
+# are generated with a special tool called mb-bundlegen.exe.
+# Bundlegen makes it so you don't need to worry about writing a 
+# lot of boilerplate code to create new build rules.
+
+# First, we define a program that is the mb-bundlegen binary compiled in this tree,
+# instead of the default system-wide one. This will implicitly
+# execute it with the default runtime (specified in /config/clr/runtime).
+
+our_bundlegen = MakeClrBinaryInfo [ mb-bundlegen/mb-bundlegen.exe ]
+
+# Now, declare all the bundles. Again, install them into
+# the GAC, not into libdir. We could include the C# files
+# in the .dll.sources list, but the Makefile we use just
+# adds the .dll.sources file to the command line, and it
+# of course is not smart enough to know to add the /n:
+# flag to those files.
+
+MBuildDynamic.Core.dll = BundlegenProcess [
+	@MBuildDynamic.Core.dll.sources
+	MBuildDynamic.Core/ArchCanonicalize.cs
+	MBuildDynamic.Core/ArchDetect.cs
+	Mono.Build.dll
+	mbuild.snk
+	our_bundlegen
+] with [ install = /config/mbuild/gac_installer ]
+
+# Language bundles. These define not only compilers and compiler
+# options (or at least an interpreter), but also a set of result types
+# that will likely be used by several tools or frameworks.
+
+MBuildDynamic.Languages.CSharp.dll = BundlegenProcess [
+	Languages.CSharp.bundle
+	resources = resources/csharp-check-template.cs.in
+	MBuildDynamic.Core.dll
+	Mono.Build.dll
+	mbuild.snk
+	our_bundlegen
+] with [ install = /config/mbuild/gac_installer ]
+
+MBuildDynamic.Languages.CrappyC.dll = BundlegenProcess [
+	Languages.CrappyC.bundle
+	resources = resources/c-check-template.c.in
+	MBuildDynamic.Core.dll
+	Mono.Build.dll
+	mbuild.snk
+	our_bundlegen
+] with [ 
+	install = /config/mbuild/gac_installer 
+	default = /disable-minimal-build
+]
+
+# Framework bundles. A 'framework' is vaguely defined to
+# be something more general than a 'tool' (below) that is
+# not a language. It might involve some command-line programs,
+# but will probably define several rules and result types
+# that are more tightly integrated into a package's build
+# design.
+
+MBuildDynamic.Frameworks.Gettext.dll = BundlegenProcess [
+	Frameworks.Gettext.bundle
+	MBuildDynamic.Core.dll
+	Mono.Build.dll
+	mbuild.snk
+	our_bundlegen
+] with [ 
+	install = /config/mbuild/gac_installer 
+	default = /disable-minimal-build
+]
+
+MBuildDynamic.Frameworks.AutoheaderCompat.dll = BundlegenProcess [
+	Frameworks.AutoheaderCompat.bundle
+	MBuildDynamic.Core.dll
+	MBuildDynamic.Languages.CrappyC.dll
+	Mono.Build.dll
+	mbuild.snk
+	our_bundlegen
+] with [ 
+	install = /config/mbuild/gac_installer
+	default = /disable-minimal-build
+]
+
+MBuildDynamic.Frameworks.Intltool.dll = BundlegenProcess [
+	# This is a little gross. Or maybe it isn't. People will have
+	# a bunch of different versions of intltool installed. We could
+	# detect a system-installed intltool, determine its version, and
+	# set the version of this bundle to track that. But a) this requires
+	# MBuild builders to have intltool installed, b) it will be hard to
+	# get everyone building a project to use the same version of intltool,
+	# and c) we don't have private rule support, so the "determine its
+	# version" part of the above scenario is sadly difficult. By copying
+	# the intltool files manually, everyone gets the same version. Of course,
+	# a) we now are responsible for making sure that everyone who uses 
+	# MBuild is happy with the bundled version of intltool, b) copying
+	# code like this is lame, and c) this setup is hard to extend for
+	# people who want a private, newer version of intltool support.
+
+	# Track the version of the intltool files we bundle. The .0 at the end
+	# can track changes between our rule implementations; very much like
+	# some packaging versioning conventions.
+
+	version = "0.34.2.0" 
+
+	Frameworks.Intltool.bundle
+	resources = resources/intltool-extract.in
+	resources = resources/intltool-merge.in
+	resources = resources/intltool-update.in
+
+	MBuildDynamic.Core.dll
+	MBuildDynamic.Frameworks.Gettext.dll
+	Mono.Build.dll
+	mbuild.snk
+	our_bundlegen
+] with [ 
+	install = /config/mbuild/gac_installer 
+	default = /disable-minimal-build
+]
+
+# Tools -- rules that allow MBuild to interact with
+# command-line programs that have a fairly small
+# scope in the build process. Might depend on a framework
+# or a language, but other things will probably not
+# depend on a set of Tool rules.
+
+MBuildDynamic.Tools.Bundlegen.dll = BundlegenProcess [
+	Tools.Bundlegen.bundle
+	MBuildDynamic.Core.dll
+	Mono.Build.dll
+	mbuild.snk
+	resources = mbuild.snk
+	our_bundlegen
+] with [ install = /config/mbuild/gac_installer ]
+
+MBuildDynamic.Tools.PkgConfig.dll = BundlegenProcess [
+	Tools.PkgConfig.bundle
+	MBuildDynamic.Core.dll
+	Mono.Build.dll
+	mbuild.snk
+	our_bundlegen
+] with [ install = /config/mbuild/gac_installer ]
+
+MBuildDynamic.Tools.Jay.dll = BundlegenProcess [
+	Tools.Jay.bundle
+	MBuildDynamic.Core.dll
+	MBuildDynamic.Languages.CSharp.dll
+	Mono.Build.dll
+	mbuild.snk
+	our_bundlegen
+] with [ install = /config/mbuild/gac_installer ]
+
+MBuildDynamic.Tools.Monodoc.dll = BundlegenProcess [
+	Tools.Monodoc.bundle
+	MBuildDynamic.Core.dll
+	MBuildDynamic.Tools.PkgConfig.dll
+	Mono.Build.dll
+	resources = api-docs/mkmstoc.xsl
+	mbuild.snk
+	our_bundlegen
+] with [ install = /config/mbuild/gac_installer ]
+
+MBuildDynamic.Tools.GLibGenmarshal.dll = BundlegenProcess [
+	Tools.GLibGenmarshal.bundle
+	MBuildDynamic.Core.dll
+	MBuildDynamic.Languages.CrappyC.dll
+	Mono.Build.dll
+	mbuild.snk
+	our_bundlegen
+] with [ 
+	install = /config/mbuild/gac_installer 
+	default = /disable-minimal-build
+]
+
+# Back to regular compiles. Monkeywrench is the on-disk implementation
+# of mbuild logic: it has the parser for this file, code to cache results
+# in files, etc.
+ 
+Monkeywrench.dll = [@Monkeywrench.dll.sources Mono.Build.dll mbuild.snk]
+
+# The command-line client.
+
+mbuild.exe = [
+	@mbuild.exe.sources 
+	Monkeywrench.dll 
+	Mono.Build.dll 
+	System.Runtime.Remoting.dll
+	Mono.Posix.dll # fixme -- if not available try .NET native / windows priv dropping
+	/config/mbuild/Mono.GetOptions.dll
+] with [
+	install = /config/mbuild/exe_installer
+]
+
+# Build the install client wrapper here so that if we
+# run MBuild from the build directory it finds the wrapper.
+# Note pkglibdir_installer, not bindir_installer.
+
+#mb-install-client = Subst [ scripts/tmpl.in scripts/ic_map ] with [
+#	install = /config/install/pkglibdir_installer 
+#	default = true
+#]
+
+# Guess what this is analogous to ...
+
+apply ExtraDist [
+	Makefile.in
+	prefix-config.xml.in
+	configure.ac
+	configure
+	autogen.sh
+]
+
+TODO = TextSource[] 
+	with [ install = /config/mbuild/doc_installer ]
+README = TextSource[] 
+	with [ install = /config/mbuild/doc_installer ]
+INSTALL = TextSource[] 
+	with [ install = /config/mbuild/doc_installer ]
+NEWS = TextSource[] 
+	with [ install = /config/mbuild/doc_installer ]
+

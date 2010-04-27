@@ -1,0 +1,9 @@
+@prologue@
+
+int
+main (argc, argv)
+int argc;
+int argv;
+{
+@code@
+}

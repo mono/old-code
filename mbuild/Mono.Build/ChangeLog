@@ -1,0 +1,847 @@
+2006-12-28  Peter Williams  <peter@newton.cx>
+
+	* Mono.Build.Bundling/BundleManagerBase.cs: Refactor. Drop all
+	the flexibility with structure templates and just have one
+	template per namespace. Simplifies a lot of code.
+
+	* Mono.Build.Bundling/StructureTemplate.cs: Add an ApplyDefaults
+	abstract function to merge in the functionality of 
+	StructureDefaulter.
+
+	* Mono.Build.Bundling/StructureParameterAttribute.cs: Rename
+	from StructureArgumentAttribute, and have a Kind enum instead
+	of several different attribute classes. I made the same mistake
+	before. Why do I keep on doing this?
+
+	* Mono.Build.Bundling/StructureParameterKind.cs: New enum, list
+	... kinds of structure parameters.
+
+	* Mono.Build.Bundling/StructureBindingAttribute.cs: Add a
+	UsesStructure member to clarify the semantics of this 
+	attribute.
+
+	* Mono.Build.RuleLib/RegexMatcher.cs: Add a StructureBinding
+	attribute for proper structure dependency inheritance.
+	* Mono.Build.Bundling/TargetTemplate.cs: Same, and add a 
+	proper constructor.
+
+	* Mono.Build.Bundling/TargetArgumentAttribute.cs: Deleted. No
+	longer needed.
+	* Mono.Build.Bundling/StructureArgumentAttribute.cs: Same.
+	* Mono.Build.Bundling/BasisArgumentAttribute.cs: Same.
+	* Mono.Build.Bundling/NamespaceMasterAttribute.cs: Same.
+	* Mono.Build.Bundling/ProviderPrefixAttribute.cs: Same.
+	* Mono.Build.Bundling/StructureDefaulter.cs: Same.
+	
+	* Mono.Build/CompositeResult.cs: Fix unused variable warning.
+
+	* Mono.Build/MBFile.cs: Fix unused variable warning.
+
+2006-09-03  Peter Williams  <peter@newton.cx>
+
+	A few updates for Unitary.
+	
+	* Mono.Build/RuntimeEnvironment.cs: New file, abstract cross-platform
+	considerations a bit.
+
+	* Mono.Build/MBFile.cs: Use RuntimeEnvironment versus our previous
+	cut-and-pasted tests.
+
+	* Mono.Build.RuleLib/OutputFileRule.cs: Make the name of the
+	'output' argument configurable. Basically only for SourcefileRule.
+
+	* Mono.Build.RuleLib/SourcefileRule.cs: Override the output
+	argument to 'input' since that makes way more sense for this rule.
+
+2006-09-03  Peter Williams  <peter@newton.cx>
+
+	* Mono.Build.Bundling/TargetInfoHolder.cs: I kept on writing
+	classes that maintained a list of target-like state, so
+	let's just centralize all that code once and for all in here.
+	It has four generic parameters, but it's good, honest. Now
+	we have a canonical 'target-like object' interface.
+
+	* Mono.Build.Bundling/TargetBuilder.cs: Now a subclass of
+	TargetInfoHolder. Rename 'Add' to 'AddDep' for greater clarity.
+	We still have a whole passel of Add* methods that convert
+	strings into TargetBuilders.
+
+	* Mono.Build.Bundling/ProviderBuilder.cs (DefineConstantTarget): 
+	Track Add -> AddDep.
+
+2006-09-02  Peter Williams  <peter@newton.cx>
+
+	* Mono.Build/MBDirectory.cs: Tweak ToString() to prettify.
+
+2006-09-01  Peter Williams  <peter@newton.cx>
+
+	* Mono.Build.Bundling/TargetBuilder.cs: Oops, left in some debug code.
+
+	* Mono.Build/TagTargetBase.cs: Delete, unused.
+	* Mono.Build/ITarget.cs: Same.
+	
+2006-09-01  Peter Williams  <peter@newton.cx>
+
+	* Mono.Build.Bundling/ProjectBuilder.cs: New abstract class,
+	gives generic interface for creating providers and requesting
+	targets. For use by StructureTemplates.
+
+	* Mono.Build.Bundling/TargetBuilder.cs: New abstract class,
+	allows StructureTemplates to create targets directly. 
+
+	* Mono.Build.Bundling/ProviderBuilder.cs: You get the idea.
+
+	* Mono.Build.Bundling/BundleManagerBase.cs: Move most
+	of the Monkeywrench BundleManager type management code into here,
+	because the bundling interface is at the level of Mono.Build,
+	not Monkeywrench, and we need to use it in ProjectBuilder to 
+	lookup namespace master structures.
+
+	* Mono.Build.Bundling/TypeResolver.cs: Similar to the above,
+	does NameLookupContext-y kind of stuff for the TargetBuilder
+	rule resolution code.
+	
+	* Mono.Build.Bundling/StructureTemplate.cs: Abstract baseclass
+	for classes that define a set of providers, targets, rules,
+	and matchers that work in concert. The bases of these things
+	are configurable so that you can instantiate similar but
+	different versions of the structure with tweaked parameters
+	(eg, compile both C# 1.0 and 2.0).
+
+	* Mono.Build.Bundling/StructureBindingAttribute.cs: New file,
+	decorates a type that can needs to be constructed with
+	reference to some StructureTemplate so that it can grab
+	the structure's configuration parameters.
+
+	* Mono.Build.Bundling/TargetTemplate.cs: New abstract class
+	for something that does something to a TargetBuilder. These
+	are usually constructed with reference to a StructureTemplate
+	via the StructureBindingAttribute.
+
+	* Mono.Build.Bundling/StructureDefaulter.cs: A class that
+	applies default values to the configuration parameters of
+	a StructureTemplate instance. Also uses the StructureBindingAttribute
+	to indicate which StructureTemplate subclass it applies to.
+
+	* Mono.Build.Bundling/RuleBindingAttribute.cs: Similar to
+	StructureBindingAttribute, but describes a TargetTemplate
+	that is associated with a rule. Used so that a rule subclass
+	can also create an associated target template subclass to
+	allow propagation of the defaults associated with the base class.
+
+	* Mono.Build/Rule.cs: This class no longer has anything to do
+	with tagging. Instead, bundlegen creates a TargetTemplate associated
+	with a rule that handles tagging and defaulting.
+
+	* Mono.Build.Bundling/NamespaceMasterAttribute.cs: New attr,
+	marks that a given StructureTemplate is to be associated with
+	the namespace that it lives in. Probably soon to be removed
+	once I clean up this rat's nest of code.
+
+	* Mono.Build.Bundling/IMatcher.cs: Updated to return an
+	instantiated TargetTemplate rather than just a type, so 
+	that we can use our fancy new templating stuff.
+
+	* Mono.Build.Bundling/TargetArgumentAttribute.cs: New file,
+	marks a target argument field of a StructureTemplate.
+	* Mono.Build.Bundling/StructureArgumentAttribute.cs: Analogous
+	* Mono.Build.Bundling/BasisArgumentAttribute.cs: Analogous
+
+	* Mono.Build.Bundling/DepRuleMatcherAttribute.cs: Deleted in
+	favor of use of MatcherKind enum.
+	* Mono.Build.Bundling/TargetRuleMatcherAttribute.cs: Same.
+	* Mono.Build.Bundling/DirectTransformMatcherAttribute.cs: Same.
+	* Mono.Build.Bundling/MonoBuildDictItemAttribute.cs: Same.
+
+	* Mono.Build.Bundling/MatcherAttribute.cs: Just one attribute
+	that has a MatcherKind property.
+	* Mono.Build.Bundling/MatcherKind.cs: Enum of kinds of matchers.
+
+	* Mono.Build/ITarget.cs: Random changes, this is going to get
+	nuked soon too.
+
+	* Mono.Build/MBFile.cs: Munge in the type name even if we don't
+	have a directory specified.
+
+	* Mono.Build/EnumResult.cs: Move to generics as threatened.
+
+	* Mono.Build/StrUtils.cs (CanonicalizeTarget): Put the One True
+	Target Name Canonicalization Function here.
+
+	* Mono.Build/ExHelp.cs: Add a helper for InvalidOperationException.
+
+	* Mono.Build/IArgInfoSink.cs: Argument defaults are now not per-rule
+	but per-target.
+
+	* Mono.Build.Bundling/SingleValue.cs: Useful class that abstracts
+	away "literal result or target reference" objects in a single struct.
+
+	* Mono.Build/TagTargetBase.cs: A few random changes, this is going
+	to get blown away real soon.
+
+	* Mono.Build.RuleLib/ArchKindResult.cs: Migrate to new generics-based
+	EnumResult.
+
+	* Mono.Build.RuleLib/RegexMatcher.cs: Migrate to new TargetTemplate-based
+	IMatcher system.
+
+2006-08-09  Peter Williams  <peter@newton.cx>
+
+	* Mono.Build.Bundling/StructureTemplate.cs: New class; the
+	mechanism by which bundles define target structural patterns.
+
+	* Mono.Build.Bundling/TargetTemplate.cs: New class; fills in
+	values in a TargetBuilder; used in a variety of places.
+
+	* Mono.Build/ConstantTarget.cs: Eliminate.
+	* Mono.Build/IBuildProvider.cs: Same.
+	* Mono.Build/ITarget.cs: Same.
+	* Mono.Build/SimpleProvider.cs: Same.
+	* Mono.Build/SimpleTarget.cs: Same.
+	* Mono.Build.Bundling/DepRuleMatcherAttribute.cs: Same.
+	* Mono.Build.Bundling/DirectTransformMatcherAttribute.cs: Same.
+	* Mono.Build.Bundling/MonoBuildDictItemAttribute.cs: Same.
+	
+	* Mono.Build/IInstallerService.cs: Move to Monkeywrench.
+	* Mono.Build/IDependencyVisitor.cs: Move to Monkeywrench.
+
+	* Mono.Build.Bundling/TargetValidity.cs: Moved from Monkeywrench.
+
+	* Mono.Build.Bundling/BasisArgumentAttribute.cs: New file,
+	marks a StructureTemplate argument property.
+	* Mono.Build.Bundling/StructureArgumentAttribute.cs: Similar.
+	* Mono.Build.Bundling/TargetArgumentAttribute.cs: Similar.
+	* Mono.Build.Bundling/StructureDefaulterAttribute.cs: Similar,
+	marks members of StructureTemplates that set default parameters.
+
+	* Mono.Build.Bundling/MatcherAttribute.cs: New file,
+	marks what kind of matcher an IMatcher implementor is.
+
+	* Mono.Build.Bundling/MatcherKind.cs: New enumeration;
+	list matcher kinds here instead of having three parallel functions
+	for the current matcher kinds everywhere.
+
+	* Mono.Build.Bundling/BundleManagerBase.cs: New file, move
+	interesting BundleManager type manipulation code here. Rework
+	to support The New Regime.
+
+	* Mono.Build.Bundling/IUsable.cs: New interface, declares something
+	that can look up names.
+
+	* Mono.Build.Bundling/ProjectBuilder.cs: New class, implements
+	generic, bundle-exposed whole-project interface. Can create providers,
+	look up absolute target names, etc. Based on GraphBuilder.
+
+	* Mono.Build.Bundling/ProviderBuilder.cs: New class, similar to
+	above, based on Monkeywrench ProviderBuilder.
+
+	* Mono.Build.Bundling/TargetBuilder.cs: New class, similar to
+	above, based on Monkeywrench TargetBuilder.
+
+	* Mono.Build/TagTargetBase.cs: Futz around with the API. This class
+	is essentially useless now and will be eliminated after the major
+	changes are checked in.
+
+2006-07-29  Peter Williams  <peter@newton.cx>
+
+	* Mono.Build/SingleValue.cs: New struct, will start making use
+	of it once the major changes settle down.
+
+2006-07-21  Peter Williams  <peter@newton.cx>
+
+	* Mono.Build/Fingerprint.cs (ImportXml): I *knew* that somewhere in
+	the .Net system libraries there had to be a base64 decode function.
+	Use it.
+
+2006-07-18  Peter Williams  <peter@newton.cx>
+
+	Another touch-all-bundles change. In preparation for better
+	buildfile manipulations, we want to be able to interrogate the
+	Type of result that a given rule returns. We can statically guess
+	a vaguely correct type, but we can always return an exact answer
+	if we're given the types of the arguments. (The exact answer is
+	important to have: without knowing about its argument, we can
+	only say that the Clone rule returns a Result. Given its argument,
+	we know exactly the type that it returns.) And if we go to that
+	length, we might as well construct the return value of each Build
+	function using that information, to make sure that it's indeed
+	correct and clean up some rules. We this incorporate this
+	information into the Rule class and tweak the Build function
+	implementation to take a preconstructed argument of the specified
+	type. This necessitates changing moving some result initialization
+	code from constructors to new Init () functions and allow
+	Clone()ing to a constructed Result object, but these are not huge
+	changes.
+
+	For more information on the implementation, see Rule.cs. This
+	change theoretically allows us to move ArgCollector back to
+	Mono.Build and have it do all of the argument assignments during
+	the compilation phase. That's kind of cool, but it's also pretty
+	invasive, and it will be put off for now.
+	
+	* Mono.Build/Rule.cs (GeneralResultType): New property.
+	(SpecificResultType): Same.
+	(CreateResultObject): New helper function.
+	(SpecificResultTypeVaries): New property.
+
+	* Mono.Build.RuleLib/CloneRule.cs: Move to the new preconstructed
+	result model. Just implement {General,Specific}ResultType.
+
+	* Mono.Build.RuleLib/SourcefileRule.cs (Build): Use CreateResultObject
+	instead of our old homegrown system.
+
+	* Mono.Build/MBDirectory.cs (Init): New function to help with
+	preconstructed results. Contains the old parametrized .ctor functionality
+	but can be called on an existing instance.
+
+	* Mono.Build.RuleLib/ProcessorBaseRule.cs (GetOutputAndTemp): More
+	adaptation to preconstructed results. Instead of taking an 
+	'out MBFile output', just take a by-ref argument and set the fields.
+	Better idea anyway.
+
+	* Mono.Build.RuleLib/ExternalBinaryInfo.cs (SetFromUnixStyle): Move
+	the bulk of ParseFromUnixStyle into this nonstatic function, to allow
+	initialization in non-constructors for preconstructed results.
+
+	* Mono.Build.RuleLib/ExtractAssemblyResource.cs (Build): Use the
+	new CreateResultObject instead of a homegrown solution.
+
+	* Mono.Build.RuleLib/CopyInstaller.cs (Init): Add a constructor-like
+	function to help preconstructed results.
+
+	* Mono.Build/Result.cs (CopyValueTo): New member, like a public
+	CloneTo (), to help the preconstructed-result change needed for
+	rule return type interrogation.
+
+2006-07-12  Peter Williams  <peter@newton.cx>
+
+	One last infrastructure tweak to enable the binary graph:
+	implement Equals and GetHashCode for all results, since sort of
+	by definition they should have something smarter than reference
+	equality checking.
+	
+	* Mono.Build/Result.cs: Implement the common bits of the above 
+	functions and stub out abstract members ContentEquals and
+	InternalHash for subclasses to implement.
+	
+	* Mono.Build/CompositeResult.cs: Implement ContentEquals and 
+	InternalHash.
+	* Mono.Build/Fingerprint.cs: Same.
+	* Mono.Build/MBFile.cs: Same.
+	* Mono.Build/MBDirectory.cs: Same.
+	* Mono.Build/MBString.cs: Same.
+	* Mono.Build/MBBool.cs: Same.
+	* Mono.Build/EnumResult.cs: Same.
+	* Mono.Build/MBDictionary.cs: Same.
+	
+	* Mono.Build/ExHelp.cs (Range): New wrapper for 
+	ArgumentOutOfRangeException.
+
+2006-07-12  Peter Williams  <peter@newton.cx>
+
+	* Mono.Build/ExHelp.cs (Argument): Renamed from
+	ThrowArgument. Have the caller throw the exception (ie, just
+	return a new exception here) so that the compiler knows that the
+	function doesn't return.
+	(App): Return a new ApplicationException.
+
+	* Mono.Build/Rule.cs: Track ExHelp.
+
+2006-07-10  Peter Williams  <peter@newton.cx>
+
+	* Mono.Build/PreferredHash.cs: Make this a static class since it is
+	one.
+
+2006-07-09  Peter Williams  <peter@newton.cx>
+
+	* Mono.Build/Rule.cs: Rework argument handling. Instead of
+	creating an ArgCollector, we now enumerate our arguments into an
+	IArgInfoSink interface. This is done using ID numbers so that we
+	can reference arguments with IDs later. We then later get arg
+	values with a call to FetchArgValues taking in an
+	IArgValueSource. The values are stored in protected members with
+	appropriate conversions from Result[] to the native type so that
+	lots of casting isn't needed. (This is possible thanks to
+	generics). Finally the members are clear with ClearArgValues if
+	the rule is to be invoked more than once.
+
+	* Mono.Build/IArgInfoSink.cs: New interface supporting the above.
+	
+	* Mono.Build/IArgValueSource.cs: Same.
+	
+	* Mono.Build/IConvertibleResult.cs: New interface helping with conversion
+	of Results into basic types (eg, MBString -> string).
+	
+	* Mono.Build/IRefTypeResult.cs: Implements above, for those results
+	that map to reference type values (MBString -> string).
+	
+	* Mono.Build/IValueTypeResult.cs: Implements IConvertibleResult, for those results
+	that map to value type values (MBBool -> bool).
+	
+	* Mono.Build.RuleLib/ExtractAssemblyResource.cs: Track rule API changes.
+
+	* Mono.Build.RuleLib/CloneRule.cs: Same.
+
+	* Mono.Build.RuleLib/SourcefileRule.cs: Same.
+
+	* Mono.Build.RuleLib/OutputFileRule.cs: Same.
+
+	* Mono.Build.RuleLib/ProcessorBaseRule.cs: Same.
+
+	* Mono.Build/IDependencyVisitor.cs: Add a dependency on Taid, the argument ID type.
+
+	* Mono.Build/Fingerprint.cs (FromBuild): Remove to get rid of
+	ArgCollector dep.
+
+	* Mono.Build/MBString.cs: Implement IRefTypeResult<string>.
+
+	* Mono.Build/ArgInfo.cs: Deleted; merged code in with ArgCollector.
+
+	* Mono.Build/MBBool.cs: Implement IValueTypeResult<bool>.
+
+	* Mono.Build/ArgFlags.cs: Renamed from ArgInfoFlags.
+
+	* Mono.Build/TagTargetBase.cs: Track IDependencyVisitor change.
+	* Mono.Build/ITarget.cs: Same.
+	* Mono.Build/ConstantTarget.cs: Same.
+	* Mono.Build/SimpleTarget.cs: Same.
+
+	* Mono.Build/ArgCollector.cs: Moved to Monkeywrench since not 
+	needed by the new Rule API.
+
+	* Mono.Build/IBuildManager.cs: Moved to Monkeywrench since only 
+	used by ArgCollector.
+
+	* Mono.Build/ExHelp.cs: Little helper class for 'throw new Exception (String.Format (...))'
+	type constructions. Sadly can't do ExHelp.Throw<Exception> (....) because the only
+	allowed constructor signature is .ctor(void) in generic type argument?
+	
+2006-07-06  Peter Williams  <peter@newton.cx>
+
+	* Mono.Build/IWarningLogger.cs (Location): New accessor to get
+	current location, for new LoggingData.
+
+2006-07-05  Peter Williams  <peter@newton.cx>
+
+	* Mono.Build/ITarget.cs: Tweak the API for interrogation rather
+	than use in a build engine. Return a rule Type instead of
+	instance.  Add functions to visit dependencies and tags.
+
+	* Mono.Build/ITagVisitor.cs: New interface for the above. It
+	uses generics, so this branch must now be compiled with GMCS. Setting
+	/config/lang/csharp/csc_names to "!gmcs" should do the job. The
+	generics will probably become much more widely used once I get
+	GMCS nicely supported in Languages.CSharp. Sadly, the extremely-useful
+	'var' keyword is C# 3.0 so it will not be usable for a while.
+
+	* Mono.Build/IDependencyVisitor.cs: As above.
+	
+	* Mono.Build/ITaggable.cs: Reindent and rename functions more sensibly.
+	Maybe should just overload the names, but not sure how that will interact
+	with CodeDom.
+
+	* Mono.Build/TagTargetBase.cs: Rework to follow new ITarget API. Provide
+	visitor functions for tags and stub out an abstract dep visitor. Also
+	reindent.
+
+	* Mono.Build/SimpleTarget.cs: Take advantage of the better TagTargetBase.
+
+	* Mono.Build/ConstantTarget.cs: Change to new ITarget. Use the CloneRule
+	and a single Result dep instead of a constructed ConstantRule.
+
+	* Mono.Build/Fingerprint.cs (FromText): Instead of throwing an exception
+	on null input, return GenericFingerprints.Null. Helpful for composite string
+	members which may be null. Also default to UTF8 encoding which will be
+	many fewer bytes for most of the characters we encounter.
+
+	* Mono.Build/ConstantRule.cs: Deleted. Was clever but real Rules must
+	have parameterless constructors. Superseded by CloneRule + Result dep.
+	
+2006-07-03  Peter Williams  <peter@newton.cx>
+
+	* Mono.Build/ArgCollector.cs: Change from string target names to
+	integers.  Should start using C#/runtime 2.0 and make it a generic
+	parameter. The target defaulting system is broken because the
+	default target reference is a compile-time string but the value is run-time
+	int.
+
+	* Mono.Build/Result.cs (MyCreateInstance): Use this function in ImportXml.
+	It is Sys.Activator.CreateInstance that also uses protected ctors. For
+	de-XML-izing Fingerprints.
+
+	* Mono.Build/EnumResult.cs: Calculate fingerprints the correct way, from the
+	bytes of the integer enum value. (I forgot about BitConverter.)
+
+	* Mono.Build/IBuildManager.cs: Change to use integer target IDs .. except
+	for a hack to allow the now-broken 'argument default value' stuff to work.
+	This could be done with generics to make life a little less unreasonable.
+
+	* Mono.Build/TagTargetBase.cs: Hack this up so that we can probe the 
+	tags from other classes (for graph serialization).
+
+	* Mono.Build/Fingerprint.cs (FromText): New function, replaces useless
+	TextFingerprint subclass - can just be a static function in this class.
+	(FromStream): Same for StreamFingerprint.
+	(FromBuild): Same for BuildFingerprint.
+	(FromConstant): Same for ConstantFingerprint. A little weird with 
+	GenericFingerprints.Constant () too.
+	Also make the type not abstract and allow it to be saved to and restored 
+	from XML.
+	
+	* Mono.Build/BuildFingerprint.cs: Deleted.
+	* Mono.Build/ConstantFingerprint.cs: Same
+	* Mono.Build/StreamFingerprint.cs: Same
+	* Mono.Build/TextFingerprint.cs: Same
+	* Mono.Build/ITagged.cs: Same, not really needed anymore.
+
+	* Mono.Build/MBDirectory.cs: Track Fingerprint evolution.
+	* Mono.Build/MBString.cs: Same.
+	* Mono.Build/MBFile.cs: Same.
+	* Mono.Build/GenericFingerprints.cs: Same.
+
+	* Mono.Build/ITarget.cs: Should be phased out. Commented ApplyDependencies
+	for the time being.
+	* Mono.Build/SimpleTarget.cs: As above. Need to rethink this class now that
+	it is just a vessel for storing deps, not something that does anything with
+	them.
+
+2006-06-28  Peter Williams  <peter@newton.cx>
+
+	* Mono.Build/SimpleTarget.cs (GetUnnamedTargetDeps): Temporary accessor 
+	function to allow bundle providers to be integrated into the target graph.
+	(GetUnnamedConstantDeps): Same.
+	(GetNamedDeps): Same.
+
+	* Mono.Build/ConstantTarget.cs (GetValue): Same.
+
+	* Mono.Build/TagTargetBase.cs (GetTagValueNoeval): Same.
+
+	* Mono.Build.RuleLib/CloneRule.cs: New simple rule to clone its
+	argument. Same thing as MBuildDynamic.Core.Clone; needed for the
+	new ProviderCopyLoader.
+
+2006-06-23  Peter Williams  <peter@newton.cx>
+
+	* Mono.Build/MBFile.cs (LinkFromOrCopyTo): Utility generic symlink-type
+	function.
+	(MakeExecutable): Clean a bit.
+
+	* Mono.Build.RuleLib/CopyInstaller.cs (CopyFile): Also catch
+	UnauthorizedAccessException.
+
+	* Mono.Build.RuleLib/SubstSink.cs (AddDictionary): Code copied from
+	the Subst rule, utility to import dictionary items as substitutions into
+	the SubstSink.
+
+	* Mono.Build.RuleLib/ExtractAssemblyResource.cs: Tweak the API a bit to
+	allow the resource name to be a function of the rule args.
+
+2006-06-17  Peter Williams  <peter@newton.cx>
+
+	* Mono.Build/EnumResult.cs: New abstract class supporting results that
+	store enums. Should really use generics.
+
+	* Mono.Build.RuleLib/CopyInstaller.cs: Add a virtual member to make a
+	bit more flexible as required by Tools.Gettext.
+
+	* Mono.Build.RuleLib/ArchKindResult.cs: New file, result encapsulating
+	an ArchKind enum, which is one of Build Host Target.
+
+	* Mono.Build.RuleLib/BinaryInfo.cs: Add an ArchKind member so we
+	can make sure we don't try to exec something built for the wrong arch.
+
+	* Mono.Build.RuleLib/FileBinaryInfo.cs: Track the ArchKind.
+
+	* Mono.Build.RuleLib/Launcher.cs (GetToolStdout): More overloads with
+	various parameter combinations
+	(SaveToolStdout): Similar to GetToolStdout, but save the output to a file
+	(EscapeForShell): Does what it says.
+
+	* Mono.Build.RuleLib/ExternalBinaryInfo.cs: Take a ctxt and report an
+	error if parsing fails. Also reindent a bit.
+
+2006-06-05  Peter Williams  <peter@newton.cx>
+
+	* Mono.Build.RuleLib/Launcher.cs (GetToolStdout): Yet another overload,
+	with a bool telling whether to report the error.
+
+	* Mono.Build/MBFile.cs (SetFromSystemPath): New routine to set a
+	file to point at a path in the general filesystem.
+	(CreateAsTemporary): New routine to do the above with 
+	Path.GetTempFileName (), to create a secure temporary file.
+
+2006-06-03  Peter Williams  <peter@newton.cx>
+
+	* Mono.Build.RuleLib/CopyInstaller.cs (MutateDestDir): Add this
+	member to allow the destination directory name to be modified by
+	subclasses. Used for PO file installation right now.
+	(MakeDestination): Utility, create the final destination MBFile.
+	(DescribeAction): Make the ultimate destination and print its path,
+	rather than just printing the directory.
+
+2006-05-30  Peter Williams  <peter@newton.cx>
+
+	* Mono.Build/BuiltItem.cs: Tiny formatting cleaning.
+
+2006-05-30  Peter Williams  <peter@newton.cx>
+
+	* Mono.Build.Bundling/BundleManager.cs: Replace explicit 
+	ConstructorInfo invocation with System.Activator.
+
+	* Mono.Build.Bundling/NameLookupContext.cs (CreateType): Kill,
+	redundant with Sys.Activator.CreateInstance. Similar changes as
+	above.
+
+	* Mono.Build/SimpleTarget.cs (Rule): Same.
+
+	* Mono.Build/Result.cs (Clone): Same.
+
+2006-01-15  Peter Williams  <peter@newton.cx>
+
+	Patch from Mart Roosmaa <roosmaa@gmail.com>
+	
+	* Mono.Build/MBFile.cs: Track the evolving Mono.Posix API.
+
+2005-12-01  Peter Williams  <peter@newton.cx>
+
+	* Mono.Build/MBFile.cs: Use better method for setting
+	execute bit on the file, although we now depend on Mono.Posix.dll.
+
+2005-10-10  Peter Williams  <peter@newton.cx>
+
+	Fix build fingerprints. Add a BuiltItem struct, which passes
+	around a (Result, result fingerprint, build fingerprint)
+	tuple. This way an ArgCollector gets correct, up-to-date 
+	fingerprints of its args. And these fingerprints are generated
+	during the build/cache recovery of the dependent results, so
+	we can use cached fingerprints sanely to avoid recomputes.
+	
+	* Mono.Build/BuiltItem.cs: New file. Small struct that holds
+	a (Result, Result fingerprint, build fingerprint) tuple.
+
+	* Mono.Build/BuildFingerprint.cs: Don't inherit from
+	CompositeFingerprint, because we have nonstandard semantics
+	that don't map well to it.
+
+	* Mono.Build/ArgCollector.cs: No longer IFingerprintable.
+	(info): Make this a sorted list so our fingerprint ordering
+	is consistent.
+	(ArgData): Also keep a list of result fingerprints.
+	(AddArg): StrUtils.StartsWith.
+	(AddToAD): Take a fingerprint arg too with the Result. Use it
+	to cache the FP in the ArgData.
+	(AddNamed): Rename from AddInternal to reflect better the 
+	distinction between this and Add().
+	(Add*): Add Fingerprint args and overloads that replicate the 
+	original signatures by passing null for the FP.
+	(FinalizeOneArg): Use BuiltItems. Pass the FP in to Add* so
+	that we don't need to recalc it.
+	(FinalizeArgs): Same.
+	(CopyFingerprintData): Based on old GetFingerprint. Use the stored
+	fingerprints instead of trying to recalculate the old ones with
+	cached data. Use SortedLists and fingerprint values to make
+	the fingerprint value more well-behaved: invariant to reorderings
+	in unordered args; invariant to reorderings of arg definitions;
+	variant on reorderings of ordered args.
+
+	* Mono.Build/CompositeFingerprint.cs (Calculate): Make this
+	static with an argument so other code (BuildFingerprint) can
+	use the function.
+
+	* Mono.Build/TagTargetBase.cs (GetTagValue): Use BuiltItems,
+	not Results.
+
+	* Mono.Build/IBuildManager.cs: Return BuiltItem[] instead of
+	Result[].
+
+	* Mono.Build/MBFile.cs (GetFingerprint): Add some commented out
+	debugging code; add a using() line for better resource management.
+
+	* Mono.Build/StrUtils.cs: New file, copied from Mono's
+	System.Web. Probably need to go through and fix string compares
+	too; or just replace string target names with ID numbers.
+
+2005-09-06  Peter Williams  <peter@newton.cx>
+
+	Rework fingerprints to avoid as many recalculations of hashes as possible
+	and to avoid those exceptions during long builds.
+	
+	* Mono.Build/Fingerprint.cs: Rework to hash the inputs in the 
+	constructor, instead of lazily (which did not make much sense.) Also
+	serialize automatically instead of with ISerializable. And clone the
+	same way as other results (not clear why the different system was used).
+
+	* Mono.Build/CompositeFingerprint.cs: Improve the implementation here.
+	Remove a bunch of dead code, and make sure that callers have to provide
+	a cached fingerprint to avoid hash recomputations.
+
+	* Mono.Build/BuildFingerprint.cs: Use the newer better CompositeFingerprint
+	API so that we honor the cached fingerprint.
+
+	* Mono.Build/TextFingerprint.cs: Update to hash in ctor and serialize
+	directly instead of via ISerializable.
+
+	* Mono.Build/StreamFingerprint.cs: Same.
+
+	* Mono.Build/ConstantFingerprint.cs: Same.
+
+	* Mono.Build/MBFile.cs (GetFingerprint): Log when we fingerprint a file so
+	we can check for spurious hash recalcs.
+
+	* Mono.Build/ArgCollector.cs (GetFingerprint): Make this broken in a
+	different way -- at least now we honor the cached fingerprint, usually.
+
+	* Mono.Build/MBDictionary.cs: Dictionaries aren't used to implement
+	composite results anymore, so get rid of the implementation_code stuff.
+	(GetFingerprint): Use the new CompositeFingerprint ctor that honors the
+	cached fingerprint.
+	
+	* Mono.Build/GenericFingerprints.cs (GetFingerprint): Change
+	prototype to take a ctxt and cached fp to pass to GetFingerprint
+	if needed. Add convenience overload to pass them as null.
+
+	* Mono.Build/MBBool.cs (GetFingerprint): Update to new 
+	GenericFingerprints.GetFingerprint prototype.
+
+2005-09-01  Peter Williams  <peter@newton.cx>
+
+	* Mono.Build/IBuildLogger.cs: Don't have the OnWarning and OnError events
+	here, they don't make sense. Just put them in the LoggingData.
+
+	* Mono.Build.RuleLib/CopyInstaller.cs: Change some 2000 error codes to 
+	the appropriate 3000 (execution error, not specifcation error.)
+
+	* Mono.Build/IInstallerService.cs: Ongoing work for install client stuff.
+	
+2005-08-29  Peter Williams  <peter@newton.cx>
+
+	* Mono.Build/CompositeResult.cs: Use 'as' instead of a cast to not bomb
+	on null compositeresult members.
+
+2005-08-26  Peter Williams  <peter@newton.cx>
+
+	* Mono.Build.Bundling/NameLookupContext.cs: Add suggestion to error
+	2023.
+
+2005-08-16  Peter Williams  <peter@newton.cx>
+
+	* Mono.Build/Fingerprint.cs: Fix the oh-so-helpful warning CS0253.
+	Never would have caught that without the smart compiler.
+
+2005-07-14  Peter Williams  <peter@newton.cx>
+
+	* Mono.Build/Result.cs: Get rid of the IResultTypeLookup argument
+	since I figured out how to be able to load these based on
+	fully-qualified type names: gotta load them into the
+	AppDomain. Mmm.
+
+	* Mono.Build/MBString.cs: No more IResultTypeLookup.
+
+	* Mono.Build/CompositeResult.cs: Same.
+
+	* Mono.Build/Fingerprint.cs: Same.
+
+	* Mono.Build/MBBool.cs: Same.
+
+	* Mono.Build/MBDictionary.cs: Same.
+
+	* Mono.Build/MBDirectory.cs: Same.
+
+	* Mono.Build/MBFile.cs: Same.
+
+	* Mono.Build.Bundling/BundleManager.cs: Don't implement the now-useless
+	IResultTypeLookup.
+
+2005-05-19  Peter Williams  <peter@newton.cx>
+
+	* Mono.Build/CompositeResult.cs (FindCompatible): Move the former
+	WrenchOperations.FindInstallCompatibleResult here and make a little
+	more generic.
+
+2005-01-19  Peter Williams  <peter@newton.cx>
+
+	* Mono.Build.RuleLib/Programs.cs: Unused variable warning.
+
+2004-11-12  Peter Williams  <peter@newton.cx>
+
+	* Mono.Build/ExternalResult.cs (Kind): Add a set accessor because results are generally
+	mutable.
+
+	* Mono.Build/MBFile.cs: Add set accessor for Kind that forwards to the MBDirectory.
+
+	* Mono.Build.RuleLib/ExecutableCopyInstaller.cs: Durr, don't try to chmod the file
+	on uninstallation.
+
+2004-09-29  Peter Williams  <peter@newton.cx>
+
+	* Mono.Build/IResultInstaller.cs: New interface based on MBInstaller, didn't
+	make any sense for the latter to be a base class.
+	
+	* Mono.Build.RuleLib/CopyInstaller.cs: Make this an MBDictionary
+	implementing IResultInstaller, as it should have been all
+	along. Separate out copying routines into CopyFile function.  Take
+	advantage of OtherType checking. Add DescribeAction
+	implementation.
+
+	* Mono.Build.RuleLib/ExecutableCopyInstaller.cs: Add an action description.
+
+	* Mono.Build/TextFingerprint.cs (TextFingerprint): Deprivatize. Convert null arguments
+	into empty string for Encoding.GetBytes.
+
+	* Mono.Build/MBDictionary.cs (SetString): If setting a null value, set the entry to
+	null, not 'new MBString(null)'.
+
+2004-09-26  Peter Williams  <peter@newton.cx>
+
+	* Mono.Build/ArgCollector.cs: Add an ArgsFinalized property.
+
+2004-09-21  Peter Williams  <peter@newton.cx>
+
+	* Mono.Build/MBFile.cs (MakeExecutable): Cheesy hack, set the executable bit
+	on the file if we're on the mono runtime. 
+	(*): Remove the now-unneeded System.IO prefixing.
+
+	* Mono.Build.RuleLib/ExecutableCopyInstaller.cs: New CopyInstaller subclass;
+	sets the executable bit on the dest file.
+
+2004-09-21  Peter Williams  <peter@newton.cx>
+
+	* Mono.Build.Bundling/BundleManager.cs: Rework how bundles are stored,
+	just cleans some stuff up.
+
+2004-09-21  Peter Williams  <peter@newton.cx>
+
+	* Mono.Build.RuleLib/IOSink.cs: Add a DrainStream overload for MBFiles.
+
+	* Mono.Build.RuleLib/SubstSink.cs: Kill some unused fields.
+
+2004-09-13  Peter Williams  <peter@newton.cx>
+
+	* Mono.Build.RuleLib/IOSink.cs: Add check for null arguments to get a
+	better exception if that's the case.
+
+2004-09-02  Peter Williams  <peter@newton.cx>
+
+	* Mono.Build.Bundling/BundleManager.cs: Add functions for converting
+	Buildfile bundle references into AssemblyNames. Do the type prefixing
+	here, instead of in BuildfileParser, so that now fully-qualified type names
+	work from within Buildfiles.
+
+2004-09-02  Peter Williams  <peter@newton.cx>
+
+	* Mono.Build.RuleLib/SubstSink.cs: Add a 'Dos' substitution style,
+	%VAR%.
+
+2004-08-30  Peter Williams  <peter@newton.cx>
+
+	* Mono.Build.RuleLib/MiniStream.cs: De-protected-ify some members.
+
+	* Mono.Build.RuleLib/SedSink.cs: Rewrite this to use ArrayLists and be 
+	changeable after construction. Was a bad design. Useful now.
+
+	* Mono.Build.RuleLib/SubstSink.cs: As above.
+
+	* Mono.Build.RuleLib/IOSink.cs (SendLine): Add a WriteLine so that our
+	output gets newlines. Oops.
+
+	* ChangeLog: start this file

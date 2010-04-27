@@ -1,0 +1,424 @@
+* sync the .state file every so often so if we crash we don't lose
+  the record of the work that we've done. SORT OF FIXED: catch more
+  exceptions, have good error handling
+
+* srcdir / builddir stuff still not worked out sufficiently: a tool
+may put something in builddir, but if other people don't have the
+tool, its result should go in srcdir. ie, we should determine
+dynamically whether it goes in srcdir or builddir. SORT OF FIXED: I think
+all we need is the "distbuilt" tag mentioned below
+
+* FIXED! actually save log data, and allow log browsing
+
+* FIXED! allow user-defined boolean operations at the least:
+	mybool = { this || that && (string != "yo momma") }
+shouldn't be too hard
+
+* target proliferation: defining foo.exe automatically defines foo.exe+install, the
+installed version. Maybe. Hard to configure. similarly, foo.exe+script, a unix wrapper
+shell script for running foo.exe. Anyway, not these specific things, but the infrastructure,
+unless a better model exists somewhere.
+
+* figure out how to install things, on windows in particular. (Not thrilled by
+the idea of running MBuild as superuser.) SORT OF FIXED: I like the MBInstaller 
+idea. Unfortunately, need to address serialized installation operations.
+
+* FIXED, pretty much. signing, versioning, documentation of bundles. FIXED first two. Go GAC.
+
+* FIXED: redesigned out of existence. figure out that weird iterator exception in WrenchProject
+
+* NEVER MIND: maybe allow indexing into dictionaries inside Buildfiles? probably don't need it
+
+* FIXED. fix ArgCollector to not always evaluate default argument values somehow.
+
+* FIXED. maybe narrow down some base classes so we need less casting? FIXED. Good idea.
+
+* might block trying to read stderr from a program if it doesn't print anything? 
+  MAYBE FIXED: Abuse of threads. But I have had problems in certain cases (not sure
+  if I can reproduce, something like Jay exiting on error.)
+
+* FIXED with TargetState. on error building target, give up trying to build it!
+-> Partially fixed: will give up the current operation but won't
+   save meaningful state.
+
+* defaulting of config variables is brizzzoken -- 9/28/04: is it?
+
+02/24/04:
+
+* FIXED. Investigate INullable for empty results (either that or Results.Null)
+  -> Only in System.Data, trivially recreatable. Results.Null seems better.
+  FIXED. Don't bother.
+
+* [FeatureSince(1.6)] attribute for figuring out compatibility of buildfiles
+
+* Operations that can/should be run in batches (? do they exist?)
+
+* FIXED extract doc templates from bundles.
+
+* FIXED. keep list of trusted pubkeys, only load trusted bundles
+  FIXED. Just have the one mbuild.snk
+
+* FIXED Allow creation of dictionaries inside a buildfile
+
+03/02/04:
+
+* ~FIXED Keep a list of targets currently being built; use it to avoid
+  recursion and also enable parallel builds. FIXED partially: we have the
+  list and avoid recursion.
+
+03/05/04:
+
+* FIXED. Make sure we use using's correctly in C#: 'foo = new Text.StringBuilder' is 
+  not legal. (FIXED)
+
+06/21/04:
+
+* FIXED. 'clean' only works on external results; how to clean bad configuration results?
+  FIXED. Added -U argument
+
+* FIXED: XML export would be cool for something. Maybe.
+
+* some kind of way to 'lock' filenames in the current build directory to allow
+  parallelized builds to work. For instance, we want to copy an SNK file to builddir
+  in order to sign an assembly; it's bad to have two tasks trying to do this at once.
+  So we do something like:
+
+	ctxt.LockInBuilddir ("filename.snk");
+	RunTool (compiler ...);
+	ctxt.UnlockInBuilddir ("filename.snk");
+
+  Somehow need to work out what to do if the filename is already locked and LockInBuilddir
+  is called.
+  
+  (Note: this particular example is not valid; I didn't know about the /snkfile argument
+   to mcs/csc).
+
+06/30/04:
+
+ * Don't try to have installation integrated into the build system. Just do it sanely, relying
+   on results in the build tree with some kind of reversible methods.
+   FIXED
+
+ * For 'generated sources' srcdir/builddir problem, maybe just have a 'distbuilt' tag that marks
+   a non-source result as something that should be copied into the source tree; when building, check
+   for such a result in the source directory and copy it into the build tree if needed. Needs careful
+   thinking of course. Then maybe have something like 'mbuild --sourcemirror' that will copy these built
+   results back into the source tree (so they can be CVS added or whatnot.)
+
+* FIXED: XML export: basics with XML serialization of results ...
+
+07/01/04:
+
+* FIXED: Capture compiler warnings somehow. Currently I think they are lost.
+
+08/14/04:
+
+* Monodoc building won't work, I think, due to relative paths getting embedded
+  inside the zip file:
+
+Archive:  api-docs/mbuild-handbook.zip   53063 bytes   12 files
+-rw----     2.0 fat     1013 bx defN 14-Aug-04 01:37 ./../api-docs/handbook/html/en//preface.xhtml
+-rw----     2.0 fat     8171 bx defN 14-Aug-04 01:37 ./../api-docs/handbook/html/en//whybother.xhtml
+
+  Figure out a workaround, or implement directory changing in IBuildContext.
+  SOMEWHAT FIXED: it works if you do this, so long as you create the toc file and
+  the zip file from the same directory. But it looks ugly.
+
+* Allow bundles to enforce some constraints on the build structure. Specifically,
+  some kind of infrastructure that would allow some GNUProject bundle to
+  check that /NEWS, /README, etc all exist.
+
+* Mechanism to reverse map filenames to targets, for better command-line interaction.
+
+* Monodoc bundle has to look at some /config/generic/enable_docs and add a default tag
+  if it's true and monodoc can be found; also toggle the installer based on the same
+  criteria. FIXED, and don't toggle the installer: the default tag is the gate.
+
+* FIXED: the correct infrastructure is there now. Add more locations to error messages
+
+* FIXED. Absolute type name references don't work, because the MBuildDynamic prefix is
+  added to namespaces, not type names. Absolute name -> no namespace added -> no prefix.
+
+08/17/04:
+
+* Some kind of 'mbuild --prune' that removes old results from the build state files.
+  Ie, if you rename a target, its cached value under the old name just sits around forever.
+
+* FIXED? Clean up logging infrastructure. Figure out relationship between warning/error logging
+  and action logging. UPDATE: this is a lot better now.
+
+08/25/04:
+
+* Make monodoc bundle not automatically look for monodoc, etc. Ie, just adding a 
+  'using Tools.Monodoc' shouldn't change what happens in a build. Sound practice to allow
+  buildfile authors maximal flexibility. SOMEWHAT FIXED: 'prereq = /config/generic/build_docs'
+  now. Good enough?
+
+* The monodoc toc file generation embeds relative paths into the output file. This is much
+  like serializing a GetPath() in a result -- a no-no, because it breaks when you build from
+  a different directory. How do we fix this? Can we make sure that people don't do this?
+
+08/30/04:
+
+* FIXED mcs now generates .mdb files when given the debug switch. What do we do? Sort
+  of the same problem as the mb-bd2xhtml tool: more than one interesting output from
+  a tool, and yet we really don't want to have to have a bunch of dictionaries and then
+  look at items in the dictionaries. Maybe time for a return of the Proxy result, if 
+  there's a sane way to make it work. SEE IIndirectResult idea below.
+  FIXED: with new CompositeResult implementation of compiler results·
+
+* XOR fingerprint values in rules, because changing a superclass method won't cause the
+  fingerprint of its subclass to change. (Similar to what we already do for dictionary
+  item codes. Man, that was a clever idea.)
+
+* Arrays in dictionaries. Needed. How?
+  SORT OF FIXED: can be done with CompositeResults the way it should be. I think?
+
+09/23/04:
+
+* Implement environment_bind tag and an option to activate it. (Should automatically be
+  turned on during init.) See docs/special-tags.txt
+
+* Add tool to check for bundles in $srcdir/.monkeywrench-resources and install them into
+  the GAC if needed. User should be prompted to do this during init.
+
+* FIXED. To resolve the "combined .dll / .mdb result" problem: maybe have some kind of IIndirectResult
+  interface? { Result PrimaryValue { get; } }, so primary value is used in all build operations
+  and things. But implementations that know what they're doing can poke inside. (And, ex, install
+  the .mdb file too.) Also seems promising from idea of keeping rules compatible between updates.
+  DONE, sort of: CompositeResult class. I like how it works, though it seems to need a lot of
+  custom handling to drill down inside members. But I think that's a resonable price to pay.
+
+09/27/04:
+
+* FIXED! Write a buildfile compiler. Recompile the buildfile whenever it or any of its parent files
+  changes. Totally eliminate the overhead of parsing. Doesn't sound so hard to do, really,
+  and the speed gains would be quite nice. Volunteers? :-)
+
+* FIXED! Serialize target references into ( provider, target ) id pairs: two ints instead of a string. 
+  Save massive amounts of heap. Giving providers an ID isn't hard; giving targets ID's isn't so
+  hard either, because we have a "done requesting" call. Getting arbitrary cross-references to
+  work sounds harder. It would be nice to only save the pairs into compiled buildfiles, but
+  that sounds hard: we need to load every provider that the current Buildfile references. Anyway
+  then all the foundational code would need to work with these ID pairs instead of strings,
+  which is kind of a drag.
+
+  Perhaps instead of a 'provider ID' we just have a pointer to the BuildProvider object, although
+  that pointer can't be serialized.
+
+  ADDENDUM: don't even need two ints, really -- 16 bits of providers and 16 bits of targets;
+  four billion targets *ought* to be enough ...
+
+* To address circular-dep-type situations, say C compilation : [C deps file] <- [C source file] <- 
+  [C deps file]. Add an attribute to on of the targets in the chain, "cycle_break" or something.
+  When the loop is encountered, don't build that target; the loop is broken by simply not adding 
+  that target's result as a dep of whatever depends on it. Ie the result of the cycle_break
+  is optional to the thing that depends on it. Build around in a circle until the cycle_break
+  target is built successfully. At which point we need, in theory, to rebuild the thing that depends
+  on it, but maybe we can get away without doing so. (If we can't, then we have to compile every
+  C source file twice on our first pass. Eew.) 
+
+09/29/04:
+
+* FIXED A 'show what would be installed' mode for the client would be nice. Needs a new function for
+  the MBInstaller class? MBInstaller should totally be an interface. What was I thinking?
+  FIXED: mbuild --describe-install. Also, I was thinking that installers are Results and we
+  can't interrogate result interfaces. (...yet?)
+
+05/28/04:
+
+* Save 'configured targets' (things set with mbuild -C) to some kind of robust XML format, so that
+  even if the serialization format changes, the target data won't be lost. This isn't such a
+  big deal with most targets since they can be rebuilt, but we don't want to lose configuration
+  information between format changes.
+
+  NOTE: we now have XML export/import which is the first half of this.
+
+07/14/05:
+
+* Allow dynamic defaults for rule arguments, not just absolute target references. Call a static method
+  on the rule class or something. Allows us to eg collapse
+
+  	foo = Subst [ foo.in map ]
+
+  into
+
+	foo = Subst [ map ]
+
+  since we can intelligently assume that the input file is OutputFile + ".in".
+
+  NOTE: Duh. We can just do this by looking at .target.
+
+  NOTE 2: But we need some way to make sure that we respond to changes in the source file.
+  Maybe some kind of mechanism like 
+
+	Result { 
+		protected override Result TargetNameToResult (string target_name,
+			IBuildContext ctxt);
+	}
+
+  NOTE 3: The new compiler should make this way better, but haven't thought about the problem
+  lately.
+
+* FIXED: Figure out that weird problem on long builds where we get an AccessDenied exception
+  when trying to generate fingerprints from built files. WTF?
+  Just calculate fp's on construction, not delayed.
+
+08/26/05:
+
+* Create a default hashtable for substing: things like prefix, version, libdir, compat,
+  etc.
+
+01/15/06:
+
+* Add an 'allowed' property that is similar to 'default', but if we try
+  to build the target and 'allowed' is false, signal an error. Not sure
+  if allowed = true should imply default = true; almost certainly not,
+  actually. Also not sure if this is even needed.
+
+* I just committed a patch to allow spaces in subdirectory names, but I
+  don't think I should have. It's easy to specify a subdirectory with
+  a space in its name as a literal string:
+
+        subdirs [ a b c "hey a space" d ]
+
+  but then you can't refer to a target inside that subdirectory:
+
+        foo.exe = [ a.cs "path with space/b.cs" ]
+
+  because that can't be disambiguated from a literal string, and it is
+  pretty ugly. The proper solution is probably to implement escaping
+  of some sort:
+
+        subdirs [ a b c hey%20a%20space d ]
+
+  this is awkward but if you're going to put spaces in your names then
+  a little extra work is not unreasonable. If we do this, though, it
+  brings up whether we should allow, say, arbitrary Unicode characters
+  to be put into identifiers. But we support UTF-8 buildfiles, so you
+  can already put arbitrary Unicode characters in your buildfiles
+  except for those that the tokenizer cares about. If we add escaping,
+  maybe just have buildfiles be ASCII? Less redundant, but I am 99%
+  sure that that is just a horribly bad idea. Then do we have a special
+  syntax for escaping just spaces, or just characters special to the
+  tokenizer? just backslashes?
+
+06/03/06:
+
+* Target templates. Allow Buildfiles and bundles to specify target templates,
+  which are basically a tuple of (rule to use, deps to add, tags to add). 
+  Actual targets are instantiated from templates, with custom deps and tags
+  (and maybe rules) added to the template-specified values. Chaining of templates
+  is obvious abstractly (although syntax for it might be dicey). This is useful
+  for targets that are small permutations on each other (eg, very similar sets of
+  substitutions) AND we can simplify rules: they need no longer supply tags and
+  default arguments can go away. That functionality can instead by implemented
+  by a template taking the rule's old name. This seems like a nice construct
+  to have, although the name munging may get kind of icky: we might need to do
+  something like "rule Foo" -> "FooRule" and "template Foo" -> "FooTemplate", then
+  check for both class names in the reflection.
+  
+  Also, we could do something like this:
+
+	template extra_dist = TextSource []
+	apply extra_dist [ Makefile.in configure.ac autogen.sh ChangeLog ]
+
+	template docfile = TextSource [] with [ install = /config/mbuild/doc_installer ]
+	apply docfile [ TODO README INSTALL NEWS ]
+
+  which would be equivalent to
+
+	Makefile.in = TextSource[]
+	configure.ac = TextSource[]
+	... etc ...
+
+  Or, hypothetically:
+
+	apply Tools.Gettext.POFiles [ bg ca cs da el .... ]
+
+  (Would need some kind of argument transform method in the applier, but that's
+  not a big deal.) 
+
+  Some kind of argument system might be useful, something that allows new arguments
+  to become defaults after old ones are filled in. Eg,
+
+	template resourcething = CompileExe [ generalfile.cs resources = !default ] 
+
+  then
+
+	weird.exe = resourcething [ resource.cs ] 
+
+  is equivalent to
+
+	weird.exe = CompileExe [ generalfile.cs resources = resource.cs ]
+
+06/16/06:
+
+* FIXED. If a rule returns null, make sure that an error was reported. Somehow.
+  Otherwise the user is extremely confused.
+
+06/21/06:
+
+* 'errnote' tag on targets that causes additional text to be printed if an error
+  is encountered during a build. Needed for project-specific guidance when
+  building prereqs.
+
+06/23/06:
+
+* Issue a warning if a target has the tag 'installer' (not 'install') set? I've
+  made this mistake a few times.
+
+* FIXED. Uh, now that arguments to a rule are all always evaluated, we can just make
+  arguments members of a Rule instance. That might make life a little bit more
+  straightforward. Especially if we move to gmcs and use nullable types: we can
+  map "MBBool? foo" to a "bool? foo;" field, for example.
+
+* Related: now that arguments to a rule are now all known at buildfile parse time,
+  how on earth do we use C dependency information that the compiler generates?
+
+09/03/06:
+
+* Some kind of good support for a Windows-style build directory. That is, some
+  directory where, eg., you dump all your .exe and .dll files during compilation
+  so that they all reference each other easily. Presumably this could also be
+  useful when dealing with native shlibs. The lack of doing this has been bugging
+  me with MBuild, but I'm not sure what to do about it. I could add some way to 
+  force target-specific context BuildDirectories, but I think a more global 
+  approach is needed.
+
+12/19/06:
+
+* Instead of putting bundles in the GAC, put them in a special MBuild libdir.
+  We will kind of pollute the GAC and we don't need quite all the features that
+  it offers. Of course, we need many of the features that it does, and having
+  two such parallel systems seems wasteful ...
+
+12/26/06:
+
+* Many modern 'configure' scripts for complex packages will print out a 
+  "Configuration Summary" after execution completes, printing out a ... summary
+  of the build configuration. The details of the configuration are elided, but
+  the important major features are show. For example, you might print
+
+	Font backend: XFT
+
+  or
+
+	SSL enabled: no
+
+  MBuild should provide a mechanism for doing this. My current idea is to add
+  a 'config_endpoint' tag. After the completion of mbuild -i (or, one could imagine,
+  upon execution of something like 'mbuild --showconfig'), mbuild can print out
+  the values of the targets marked with this tag. The value of the tag can be
+  the string that will be printed. We can even allow some crafty formatting:
+  something like ssl_enabled = [] with [ config_endpoint = "SSL enabled: {0:yn}" ]
+  will print out the SSL example above. (The ":yn" format specifier could let you
+  print out the boolean value as either "yes" or "no", not "true" or "false". 
+
+* Internationalization of strings in buildfiles. Strings like the config_endpoint
+  example above, or the config_group tag, are presented to the MBuild user, and 
+  as such should be translatable. A companion tool should create a fake header file
+  or something that gettext can read so that the strings can be translated using
+  the usual gettext mechanisms. Or maybe we could just generate a .pot file
+  automatically with the name '{project}_build_strings'. Although I assume potfile
+  merging is nontrivial.

@@ -1,0 +1,340 @@
+<Type Name="ArgCollector" FullName="Mono.Build.ArgCollector">
+  <TypeSignature Language="C#" Value="public class ArgCollector" Maintainer="auto" />
+  <AssemblyInfo>
+    <AssemblyName>Mono.Build</AssemblyName>
+    <AssemblyPublicKey>[00 24 00 00 04 80 00 00 94 00 00 00 06 02 00 00 00 24 00 00 52 53 41 31 00 04 00 00 11 00 00 00 F5 C4 9D D0 0C 3C 7B 78 63 91 17 5B 7D F6 FD 4A A9 50 31 82 44 76 CF D8 68 14 88 FD C8 8F 0F 8D 0F FE B2 24 19 8D F2 C1 9F 2F 14 C8 B5 47 12 08 FD A2 C5 F9 60 77 91 22 44 72 9D 61 96 65 EE 38 88 EA 48 A6 D4 66 4A 4A 8A 6A F9 B4 4D 2D 62 51 97 7D F9 0D AD 80 DC EE E9 66 C7 F3 B5 8C 89 27 5E 02 F6 8B 15 67 70 36 ED B7 53 2E 70 B1 98 04 39 2C D6 EE 3C 18 D0 76 4D 66 68 2B D6 A3 AC AB]</AssemblyPublicKey>
+    <AssemblyVersion>0.0.0.0</AssemblyVersion>
+    <AssemblyCulture>neutral</AssemblyCulture>
+    <Attributes />
+  </AssemblyInfo>
+  <ThreadSafetyStatement>Gtk# is thread aware, but not thread safe; See the <link location="node:gtk-sharp/programming/threads">Gtk# Thread Programming</link> for details.</ThreadSafetyStatement>
+  <Docs>
+    <summary>Describes the arguments accepted by a <see cref="T:Mono.Build.Rule" /> and marshals them.</summary>
+    <remarks>
+      <para>The <see cref="T:Mono.Build.ArgCollector" /> class is used to marshal the arguments passed to a <see cref="T:Mono.Build.Rule" />. It abstracts the communication between the rule implementation (which knows which arguments it needs) and the build system (which knows which arguments it can provide).</para>
+      <para>The typical lifecycle of an <see cref="T:Mono.Build.ArgCollector" /> object is:
+
+<list type="bullet">
+          <item>
+            <term>A <see cref="T:Mono.Build.Rule" /> implementation creates the object and calls <see cref="M:Mono.Build.ArgCollector.AddArg" /> methods to define arguments</term>
+          </item>
+          <item>
+            <term>The build system calls <see cref="M:Mono.Build.ArgCollector.Add" /> methods to marshal arguments to the collector.</term>
+          </item>
+          <item>
+            <term>The collector is passed back to the rule implementation, which calls <see cref="M:Mono.Build.ArgCollector.EvaluateArg" /> methods to obtain the actual values of the arguments.</term>
+          </item>
+        </list></para>
+    </remarks>
+  </Docs>
+  <Base>
+    <BaseTypeName>System.Object</BaseTypeName>
+  </Base>
+  <Interfaces />
+  <Attributes />
+  <Members>
+    <Member MemberName="AddArg">
+      <MemberSignature Language="C#" Value="public void AddArg (Mono.Build.ArgInfo ai);" />
+      <MemberType>Method</MemberType>
+      <ReturnValue>
+        <ReturnType>System.Void</ReturnType>
+      </ReturnValue>
+      <Parameters>
+        <Parameter Name="ai" Type="Mono.Build.ArgInfo" />
+      </Parameters>
+      <Docs>
+        <summary>Define an argument.</summary>
+        <param name="ai">A <see cref="T:Mono.Build.ArgInfo" /> describing the argument.</param>
+        <remarks>The other overloads of this function will construct a new <see cref="T:Mono.Build.ArgInfo" /> and call this function; it's less typing to use them.</remarks>
+      </Docs>
+    </Member>
+    <Member MemberName="AddArg">
+      <MemberSignature Language="C#" Value="public void AddArg (string name, Type type, Mono.Build.ArgInfoFlags flags);" />
+      <MemberType>Method</MemberType>
+      <ReturnValue>
+        <ReturnType>System.Void</ReturnType>
+      </ReturnValue>
+      <Parameters>
+        <Parameter Name="name" Type="System.String" />
+        <Parameter Name="type" Type="System.Type" />
+        <Parameter Name="flags" Type="Mono.Build.ArgInfoFlags" />
+      </Parameters>
+      <Docs>
+        <summary>Define a new argument.</summary>
+        <param name="name">The name of the new argument.</param>
+        <param name="type">The type of the argument. Should be a subclass of <see cref="T:Mono.Build.Result" />.</param>
+        <param name="flags">A <see cref="T:Mono.Build.ArgInfoFlags" /> describing the argument's properties.</param>
+        <remarks>This function just creates a new <see cref="T:Mono.Build.ArgInfo" /> structure and passes it to <see cref="M:Mono.Build.ArgCollector.AddArg(Mono.Build.ArgInfo)" />.</remarks>
+      </Docs>
+    </Member>
+    <Member MemberName="AddArg">
+      <MemberSignature Language="C#" Value="public void AddArg (string name, Type type, string dflt, Mono.Build.ArgInfoFlags flags);" />
+      <MemberType>Method</MemberType>
+      <ReturnValue>
+        <ReturnType>System.Void</ReturnType>
+      </ReturnValue>
+      <Parameters>
+        <Parameter Name="name" Type="System.String" />
+        <Parameter Name="type" Type="System.Type" />
+        <Parameter Name="dflt" Type="System.String" />
+        <Parameter Name="flags" Type="Mono.Build.ArgInfoFlags" />
+      </Parameters>
+      <Docs>
+        <summary>Define a new argument.</summary>
+        <param name="name">The name of the new argument.</param>
+        <param name="type">The type of the new argument.</param>
+        <param name="dflt">The absolute target name of the default value of the argument.</param>
+        <param name="flags">A <see cref="T:Mono.Build.ArgInfoFlags" /> describing the new argument's properties.</param>
+        <remarks>This function just creates a new <see cref="T:Mono.Build.ArgInfo" /> structure and passes it to <see cref="M:Mono.Build.ArgCollector.AddArg(Mono.Build.ArgInfo)" />.</remarks>
+      </Docs>
+    </Member>
+    <Member MemberName="Contains">
+      <MemberSignature Language="C#" Value="public bool Contains (string arg);" />
+      <MemberType>Method</MemberType>
+      <ReturnValue>
+        <ReturnType>System.Boolean</ReturnType>
+      </ReturnValue>
+      <Parameters>
+        <Parameter Name="arg" Type="System.String" />
+      </Parameters>
+      <Docs>
+        <summary>Check if the collector contains the named argument.</summary>
+        <param name="arg">The name of the argument to query.</param>
+        <returns>True if the ArgCollector has the named argument defined.</returns>
+        <remarks>To be added</remarks>
+      </Docs>
+    </Member>
+    <Member MemberName=".ctor">
+      <MemberSignature Language="C#" Value="public ArgCollector (System.Collections.IEnumerable args);" />
+      <MemberType>Constructor</MemberType>
+      <ReturnValue />
+      <Parameters>
+        <Parameter Name="args" Type="System.Collections.IEnumerable" />
+      </Parameters>
+      <Docs>
+        <summary>Creates a new <see cref="T:Mono.Build.ArgCollector" /> and defines some arguments.</summary>
+        <param name="args">An enumerable list of <see cref="T:Mono.Build.ArgInfo" /> structures, which are added to the list of supported arguments.</param>
+        <returns>A new instance of <see cref="T:Mono.Build.ArgCollector" /> with the specified arguments defined.</returns>
+        <remarks>Behavior is as if <see cref="T:Mono.Build.ArgCollector.AddArg" /> has been called for each <see cref="T:Mono.Build.ArgInfo" /> in the enumerable.</remarks>
+      </Docs>
+    </Member>
+    <Member MemberName=".ctor">
+      <MemberSignature Language="C#" Value="public ArgCollector ();" />
+      <MemberType>Constructor</MemberType>
+      <ReturnValue />
+      <Parameters />
+      <Docs>
+        <summary>Creates a new <see cref="T:Mono.Build.ArgCollector" />.</summary>
+        <returns>A new <see cref="T:Mono.Build.ArgCollector" />.</returns>
+        <remarks>This creates a new instance of the <see cref="T:Mono.Build.ArgCollector" /> class. You should call <see cref="M:Mono.Build.ArgCollector.AddArg" /> methods to define arguments before using the instance.</remarks>
+      </Docs>
+    </Member>
+    <Member MemberName="GetFingerprint">
+      <MemberSignature Language="C#" Value="public virtual Mono.Build.Fingerprint GetFingerprint (Mono.Build.IBuildContext ctxt, Mono.Build.Fingerprint cached);" />
+      <MemberType>Method</MemberType>
+      <ReturnValue>
+        <ReturnType>Mono.Build.Fingerprint</ReturnType>
+      </ReturnValue>
+      <Parameters>
+        <Parameter Name="ctxt" Type="Mono.Build.IBuildContext" />
+        <Parameter Name="cached" Type="Mono.Build.Fingerprint" />
+      </Parameters>
+      <Docs>
+        <summary>Get a fingerprint of the entire state of the ArgCollector.</summary>
+        <returns>A <see cref="T:Mono.Build.Fingerprint" /> that represents the argument values assigned to the ArgCollector.</returns>
+        <param name="ctxt">A <see cref="T:Mono.Build.IBuildContext" /> for evaluating fingerprints</param>
+        <param name="cached">A cached <see cref="T:Mono.Build.Fingerprint" /> (ignored)</param>
+      </Docs>
+    </Member>
+    <Member MemberName="Add">
+      <MemberSignature Language="C#" Value="public bool Add (Mono.Build.Result r, Mono.Build.IWarningLogger logger);" />
+      <MemberType>Method</MemberType>
+      <ReturnValue>
+        <ReturnType>System.Boolean</ReturnType>
+      </ReturnValue>
+      <Parameters>
+        <Parameter Name="r" Type="Mono.Build.Result" />
+        <Parameter Name="logger" Type="Mono.Build.IWarningLogger" />
+      </Parameters>
+      <Docs>
+        <summary>Add an unnamed result to the list of argument values, inferring which argument it should be assigned to.</summary>
+        <param name="r">A <see cref="T:Mono.Build.Result" /> that should be added to the list of argument values. The argument that the result gets assigned to will be inferred from its type.</param>
+        <param name="logger">a <see cref="T:Mono.Build.IWarningLogger" /></param>
+        <remarks>To be added</remarks>
+      </Docs>
+    </Member>
+    <Member MemberName="Add">
+      <MemberSignature Language="C#" Value="public void Add (string target);" />
+      <MemberType>Method</MemberType>
+      <ReturnValue>
+        <ReturnType>System.Void</ReturnType>
+      </ReturnValue>
+      <Parameters>
+        <Parameter Name="target" Type="System.String" />
+      </Parameters>
+      <Docs>
+        <summary>Add the value of a target to the list of argument values, inferring which argument it should be assigned to.</summary>
+        <param name="target">The absolute name of the target dependency to add. For example, "/config/env/mbuild_version".</param>
+        <remarks>The specified target will be added to a list of "deferred" argument values. When the first argument is evaluated with a call to <see cref="M:Mono.Build.ArgCollector.EvaluteArg" />, all deferred values will be evaluated using the <see cref="T:Mono.Build.IBuildManager" /> passed to the EvaluateArg call. The value associated with the specified target is then assigned to an argument in the collector using the usual algorithm.</remarks>
+      </Docs>
+    </Member>
+    <Member MemberName="Add">
+      <MemberSignature Language="C#" Value="public bool Add (string arg, Mono.Build.Result r, Mono.Build.IWarningLogger logger);" />
+      <MemberType>Method</MemberType>
+      <ReturnValue>
+        <ReturnType>System.Boolean</ReturnType>
+      </ReturnValue>
+      <Parameters>
+        <Parameter Name="arg" Type="System.String" />
+        <Parameter Name="r" Type="Mono.Build.Result" />
+        <Parameter Name="logger" Type="Mono.Build.IWarningLogger" />
+      </Parameters>
+      <Docs>
+        <summary>Add a result to a specific argument's list of values.</summary>
+        <param name="arg">The name of the argument that this result should be assigned to.</param>
+        <param name="r">The <see cref="T:Mono.Build.Result" /> value.</param>
+        <param name="logger">a <see cref="T:Mono.Build.IWarningLogger" /></param>
+        <remarks>To be added</remarks>
+      </Docs>
+    </Member>
+    <Member MemberName="AddDefaultOrdered">
+      <MemberSignature Language="C#" Value="public bool AddDefaultOrdered (Mono.Build.Result r, Mono.Build.IWarningLogger logger);" />
+      <MemberType>Method</MemberType>
+      <ReturnValue>
+        <ReturnType>System.Boolean</ReturnType>
+      </ReturnValue>
+      <Parameters>
+        <Parameter Name="r" Type="Mono.Build.Result" />
+        <Parameter Name="logger" Type="Mono.Build.IWarningLogger" />
+      </Parameters>
+      <Docs>
+        <summary>Add a result value to the list of argument values for the default ordered argument.</summary>
+        <param name="r">The value to add.</param>
+        <param name="logger">a <see cref="T:Mono.Build.IWarningLogger" /></param>
+        <remarks>See <see cref="T:Mono.Build.ArgInfoFlags" /> for a description of why ordered arguments need to be treated specially.
+</remarks>
+      </Docs>
+    </Member>
+    <Member MemberName="AddDefaultOrdered">
+      <MemberSignature Language="C#" Value="public bool AddDefaultOrdered (string target, Mono.Build.IWarningLogger logger);" />
+      <MemberType>Method</MemberType>
+      <ReturnValue>
+        <ReturnType>System.Boolean</ReturnType>
+      </ReturnValue>
+      <Parameters>
+        <Parameter Name="target" Type="System.String" />
+        <Parameter Name="logger" Type="Mono.Build.IWarningLogger" />
+      </Parameters>
+      <Docs>
+        <summary>Add the value of a target to the list of values for the default ordered argument.</summary>
+        <param name="target">The absolute name of the target whose value will be added.</param>
+        <param name="logger">a <see cref="T:Mono.Build.IWarningLogger" /></param>
+        <returns>a <see cref="T:System.Boolean" /></returns>
+        <remarks>See <see cref="T:Mono.Build.ArgInfoFlags" /> for a description of why ordered arguments need to be treated specially.
+</remarks>
+      </Docs>
+    </Member>
+    <Member MemberName="AddTargetName">
+      <MemberSignature Language="C#" Value="public bool AddTargetName (string name, Mono.Build.IWarningLogger logger);" />
+      <MemberType>Method</MemberType>
+      <ReturnValue>
+        <ReturnType>System.Boolean</ReturnType>
+      </ReturnValue>
+      <Parameters>
+        <Parameter Name="name" Type="System.String" />
+        <Parameter Name="logger" Type="Mono.Build.IWarningLogger" />
+      </Parameters>
+      <Docs>
+        <summary>Define the name of the target represented by this ArgCollector.</summary>
+        <param name="name">The name of the target.</param>
+        <param name="logger">a <see cref="T:Mono.Build.IWarningLogger" /></param>
+        <returns>a <see cref="T:System.Boolean" /></returns>
+        <remarks>This value can be extracted by evaluating the ".target" argument. The owner of the ArgCollector should define an argument called ".target" that is a subclass of <see cref="T:Mono.Build.MBString" />. This inconvenience gives the ArgCollector's owner the ability to define whether the ".target" argument is optional or not.</remarks>
+      </Docs>
+    </Member>
+    <Member MemberName="FinalizeArgs">
+      <MemberSignature Language="C#" Value="public bool FinalizeArgs (Mono.Build.IBuildManager manager, Mono.Build.IWarningLogger logger);" />
+      <MemberType>Method</MemberType>
+      <ReturnValue>
+        <ReturnType>System.Boolean</ReturnType>
+      </ReturnValue>
+      <Parameters>
+        <Parameter Name="manager" Type="Mono.Build.IBuildManager" />
+        <Parameter Name="logger" Type="Mono.Build.IWarningLogger" />
+      </Parameters>
+      <Docs>
+        <summary>Evaluate all deferred arguments -- target names whose values have not been resolved.</summary>
+        <param name="manager">A <see cref="T:Mono.Build.IBuildManager" /> that will be used to evaluate the targets.</param>
+        <param name="logger">a <see cref="T:Mono.Build.IWarningLogger" /></param>
+        <returns>True if there was an error in the course of evaluating the deferred values. False otherwise.</returns>
+        <remarks>This function will be called on the first call to <see cref="M:Mono.Build.ArgCollector.EvaluateArg" />, because the deferred values need to be known so that argument assignment can be performed.</remarks>
+      </Docs>
+    </Member>
+    <Member MemberName="EvaluateArg">
+      <MemberSignature Language="C#" Value="public Mono.Build.Result[] EvaluateArg (string arg);" />
+      <MemberType>Method</MemberType>
+      <ReturnValue>
+        <ReturnType>Mono.Build.Result[]</ReturnType>
+      </ReturnValue>
+      <Parameters>
+        <Parameter Name="arg" Type="System.String" />
+      </Parameters>
+      <Docs>
+        <summary>Evaluate an argument.</summary>
+        <param name="arg">The name of the argument to evaluate.</param>
+        <returns>An array of <see cref="T:Mono.Build.Result" />. The array items will all be subclasses of the type given in the argument's definition.
+
+<para>If the argument is marked with the Optional flag (see <see cref="T:Mono.Build.ArgInfoFlags" />), the length of the array may be 0. If the argument is marked with the Multi flag, the length of the array may be greater than 1. In the standard case, however, the array will only contain one element.</para></returns>
+        <remarks>To be added</remarks>
+      </Docs>
+    </Member>
+    <Member MemberName="Item">
+      <MemberSignature Language="C#" Value="public Mono.Build.Result [] Item { get; };" />
+      <MemberType>Property</MemberType>
+      <ReturnValue>
+        <ReturnType>Mono.Build.Result[]</ReturnType>
+      </ReturnValue>
+      <Parameters>
+        <Parameter Name="arg" Type="System.String" />
+      </Parameters>
+      <Docs>
+        <summary>To be added</summary>
+        <param name="arg">a <see cref="T:System.String" /></param>
+        <returns>a <see cref="T:Mono.Build.Result[]" /></returns>
+        <remarks>To be added</remarks>
+      </Docs>
+    </Member>
+    <Member MemberName="GetEnumerator">
+      <MemberSignature Language="C#" Value="public virtual System.Collections.IEnumerator GetEnumerator ();" />
+      <MemberType>Method</MemberType>
+      <ReturnValue>
+        <ReturnType>System.Collections.IEnumerator</ReturnType>
+      </ReturnValue>
+      <Parameters />
+      <Docs>
+        <summary>To be added</summary>
+        <returns>a <see cref="T:System.Collections.IEnumerator" /></returns>
+        <remarks>To be added</remarks>
+      </Docs>
+    </Member>
+    <Member MemberName="Add">
+      <MemberSignature Language="C#" Value="public bool Add (string arg, string target, Mono.Build.IWarningLogger logger);" />
+      <MemberType>Method</MemberType>
+      <ReturnValue>
+        <ReturnType>System.Boolean</ReturnType>
+      </ReturnValue>
+      <Parameters>
+        <Parameter Name="arg" Type="System.String" />
+        <Parameter Name="target" Type="System.String" />
+        <Parameter Name="logger" Type="Mono.Build.IWarningLogger" />
+      </Parameters>
+      <Docs>
+        <summary>Add the value of a target to a specific argument's list of values.</summary>
+        <param name="arg">The name of the argument to assign the target value to.</param>
+        <param name="target">The absolute name of the target whose value will be added.</param>
+        <param name="logger">a <see cref="T:Mono.Build.IWarningLogger" /></param>
+        <returns>True if there was an error adding the value (the argument does not exist). False on success.</returns>
+      </Docs>
+    </Member>
+  </Members>
+</Type>

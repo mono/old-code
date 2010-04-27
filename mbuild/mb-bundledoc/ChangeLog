@@ -1,0 +1,36 @@
+2006-07-09  Peter Williams  <peter@newton.cx>
+
+	* synchronizers.cs (RuleArgumentSynchronizer): A little bit of 
+	migration to the new API. Still doesn't work (mb-bundledoc
+	temporarily disabled).
+
+2006-07-05  Peter Williams  <peter@newton.cx>
+
+	* synchronizers.cs (SynchronizeItem): Track change in ITarget.
+
+2005-10-10  Peter Williams  <peter@newton.cx>
+
+	* synchronizers.cs: Use StrUtils.StartsWith.
+
+2005-01-19  Peter Williams  <peter@newton.cx>
+
+	* BundleDocumenter.cs: Unused variable warning.
+
+2004-08-30  Peter Williams  <peter@newton.cx>
+
+	* Buildfile: Use common Mono.GetOptions.dll instead of
+	doing a redundant check for it.
+
+2004-08-30  Peter Williams  <peter@newton.cx>
+
+	* BundleDocumenter.cs: Don't keep on appending newlines to the
+	XML files. But now newly-generated files don't get the newline
+	at the end and emacs whines. Sigh.
+
+2004-08-30  Peter Williams  <peter@newton.cx>
+
+	* Buildfile: Install with exe_installer, instead of into bindir.
+	Also add +default.
+
+	* ChangeLog: start this file.
+

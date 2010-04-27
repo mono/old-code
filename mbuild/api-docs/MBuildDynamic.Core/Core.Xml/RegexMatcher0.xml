@@ -1,0 +1,10 @@
+﻿<regex_matcher name="\.xml$">
+        <docs>
+                <summary>To be added.</summary>
+                <remarks>To be added.</remarks>
+        </docs>
+        <regex>\.xml$</regex>
+        <rule>MBuildDynamic.Core.Xml.XmlSourcefileRule</rule>
+</regex_matcher>
+
+

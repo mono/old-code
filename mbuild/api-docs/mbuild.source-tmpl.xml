@@ -1,0 +1,10 @@
+<?xml version="1.0"?>
+<monodoc>
+  <node label="Mono Build System" name="mbuild" >
+    <node label="MBuild Handbook" name="mbuild-handbook" />
+    <node label="MBuild Extension Guide" name="mbuild-extension" />
+    <node label="MBuild Class Libraries" name="mbuild-libraries" />
+  </node>
+
+</monodoc>
+

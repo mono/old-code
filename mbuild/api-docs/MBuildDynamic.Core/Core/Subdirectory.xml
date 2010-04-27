@@ -1,0 +1,24 @@
+﻿<rule name="Subdirectory">
+        <docs>
+                <summary>To be added.</summary>
+                <remarks>To be added.</remarks>
+        </docs>
+        <argument name="base" exists_since="0.0.3.1">
+                <docs>
+                        <summary>To be added.</summary>
+                        <remarks>To be added.</remarks>
+                </docs>
+                <type>Mono.Build.MBDirectory</type>
+                <flags></flags>
+        </argument>
+        <argument name="extra" exists_since="0.0.3.1">
+                <docs>
+                        <summary>To be added.</summary>
+                        <remarks>To be added.</remarks>
+                </docs>
+                <type>Mono.Build.MBString</type>
+                <flags></flags>
+        </argument>
+</rule>
+
+

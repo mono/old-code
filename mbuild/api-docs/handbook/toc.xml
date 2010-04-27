@@ -1,0 +1,22 @@
+<monkeyguide>
+   <intro>
+      <doc name="Preface" href="preface.xhtml"/>
+   </intro>
+   
+   <part name="Introducing MBuild">
+      <doc name="Why Bother Writing a New Build System?" href="whybother.xhtml" />
+      <doc name="A First Look" href="firstlook.xhtml" />
+      <doc name="The MBuild Architecture" href="architecture.xhtml" />
+      <doc name="F-Spot Migration Case Study" href="fspot-migration.xhtml" />
+      
+      <!--
+      <chapter name="Test">
+	 <doc name="First doc" href="test.xhtml" />
+      </chapter>
+      -->
+   </part>
+   
+   <appendices>
+      <doc name="Autotools' Greatest Hits" href="greatesthits.xhtml" />
+   </appendices>
+</monkeyguide>

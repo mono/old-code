@@ -1,0 +1,1402 @@
+<?xml version="1.0" encoding="utf-8"?>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:monodoc="http://www.go-mono.org/xml/monodoc">
+<head>
+        <title>F-Spot Migration Case Study</title>
+        <link rel="stylesheet" type="text/css" href="style.css" />
+</head>
+<body>
+
+<h2>F-Spot Migration Case Study</h2>
+
+<p>If you're interested in using MBuild for one of your projects,
+you're probably curious about how one transitions from a build system
+based on <tt>autoconf</tt> and <tt>automake</tt> to one based on
+MBuild. This section will go through a detailed example involving the
+popular photo management application <a
+href="http://f-spot.org">F-Spot</a>. Like many of the applications at
+which MBuild is aimed, the F-Spot build involves C# libraries, C#
+executables, C libraries, and miscellaneous support files that help
+F-Spot integrate with the <a href="http://www.gnome.org">GNOME</a>
+desktop environment. This makes it a good candidate for an MBuild
+migration case study.</p>
+
+<p>Of course, when I say "migrate to MBuild", that doesn't mean that
+one has to stop using the autotools. MBuild <tt>Buildfile</tt>s can
+coexist with autotools files -- namely, <tt>configure.in</tt> and
+<tt>Makefile.am</tt> -- without problems. In fact, as I will describe
+below, it is important to reference the preexisting build system while
+writing new MBuild files so that unexpected changes don't cause
+unforseen difficulties for developers, packagers, and users.</p>
+
+<h2>General Migration Approach</h2>
+
+<p>I'll start off by describing the general approach to writing
+<tt>Buildfile</tt>s for an <tt>autoconf</tt>- and
+<tt>automake</tt>-based project. The task is generally one of
+drudgery, not creativity, since all build tools are basically
+expressing similar ideas in different languages. It is especially
+straightforward when translating from the autotools because there is
+essentially a one-to-one correspondence between <tt>Makefile.am</tt>s
+and <tt>Buildfile</tt>s. The only twist is that the commands in
+<tt>configure.in</tt> also need to be translated into the MBuild
+model, since MBuild incorporates the functionality of
+<tt>autoconf</tt>. It's best to start by translating
+<tt>configure.in</tt> since it is lowest in the dependency stack, in a
+way: "normal" targets will rely on the values of configuration
+targets, but not the other way around. The <tt>configure.in</tt> file
+also contains the project-wide information (e.g., package name and
+version) that goes in the toplevel <tt>Buildfile</tt>.</p>
+
+<p>Once the configury has been translated, one can just create a
+<tt>Buildfile</tt> in every directory in which there is a
+<tt>Makefile.am</tt> and translate targets one-by-one. All this task
+requires is patience, a good understanding of <tt>automake</tt>
+idioms, and a knowledge of the library of bundles that come with
+MBuild. Presuming that most people do not have the latter, I'll
+describe the F-Spot migration in detail in the next section, showing
+the recommended ways to do <tt>pkg-config</tt> checks, build C
+libraries, compile C#, perform <tt>autoconf</tt>-style substitutions,
+and do other tasks that are commonplace in Linux builds.</p>
+
+<p>Once translation has been completed, it is important to
+check one's results. There are two key areas that need verification:
+the result of installing the built package, and the contents of a
+generated source distribution. In both cases, MBuild has a few rough
+edges that mean that identical installations and distributions are
+unlikely to be obtained, but the directories and major files involved
+should agree. One way to compare installation results is to
+perform a <tt>make install</tt> with <tt>DESTDIR</tt> set to some
+temporary directory. Running <tt>find <i>DESTDIR</i>
+-print</tt> will then produce a listing of all the file installed
+(except in some rare cases where files are installed with special code
+that is buggy and doesn't know about DESTDIR). Running <tt>mbuild
+--describe-install</tt> will produce a similar listing of operations,
+and the two lists can be compared. Comparing distributions is easy,
+although of course a distribution created with <tt>mbuild -d</tt>
+won't include files like <tt>config.sub</tt>, <tt>configure.in</tt>,
+and so on.</p>
+
+<p>Of course, if one finds oneself moving to building a package solely
+with MBuild, it might be reasonable to polish the initial
+<tt>Buildfile</tt>s into what might be called "idiomatic MBuild." At
+that point it might make sense to rename installation directories, for
+instance to take advantage of the "compatibility code" concept that
+MBuild uses. But such polish is beyond the scope of this page.</p>
+
+<p>Here's a shortened version of the above advice, with some more
+pointers thrown that will be explained in the following section:</p>
+
+<ol>
+<li>Create a toplevel <tt>Buildfile</tt> and transcribe the basic
+project information from <tt>configure.in</tt>.</li>
+<li>Convert the checks from <tt>configure.in</tt> into MBuild targets
+in the toplevel <tt>Buildfile</tt>.</li>
+<li>If necessary, create comments in subdirectory <tt>Buildfile</tt>s
+reminding yourself of files created with <tt>AC_CONFIG_FILES</tt> or
+<tt>AC_OUTPUT</tt> or of the contents of <tt>ALL_LINGUAS</tt>.</li>
+<li>Transcribe any targets defined in the toplevel
+<tt>Makefile.am</tt> into the toplevel <tt>Buildfile</tt>.</li>
+<li>Create <tt>Buildfile</tt>s in the subdirectories listed in
+<tt>SUBDIRS</tt>, in that order, and transcribe them from their
+corresponding <tt>Makefile.am</tt>s. Proceed recursively.</li>
+<li>If you feel like it, put any common constructions, such as shared installation
+directories or system library references, in the toplevel
+<tt>Buildfile</tt>, and eliminate the redundant targets.</li>
+<li>Once all the transcription seems to be done, compare the results of a <tt>make
+install</tt> with those of a <tt>mbuild -I</tt> or <tt>mbuild
+--describe-install</tt>. Make sure that you can run the results of an
+MBuild-based installation with all other files removed from your system.</li>
+<li>Once those agree, compare the results of a <tt>make dist</tt> with
+those of a <tt>mbuild -d</tt>. Make sure that you can build from a
+bare distribution.</li>
+</ol>
+
+<h2>F-Spot: The Gory Details</h2>
+
+<p>We'll get started by translating <tt>configure.in</tt> for the
+reasons mentioned in the previous section. We start by opening a blank
+toplevel <tt>Buildfile</tt> in an editor and looking at
+<tt>configure.in</tt> in another window. The first few lines are:</p>
+
+<pre class="code"><tt>AC_INIT(src/main.cs)
+
+<b>...</b>
+
+AM_INIT_AUTOMAKE(<b>f-spot</b>, <b>0.1.11</b>)
+
+AM_MAINTAINER_MODE
+
+<b>...</b>
+
+AC_PROG_CC
+AC_ISC_POSIX
+AC_HEADER_STDC
+AM_PROG_LIBTOOL
+</tt></pre>
+
+<p>The <tt>AC_INIT</tt> line is, as you might guess, essentially
+boilerplate. (The "src/main.cs" argument gives <tt>autoconf</tt> a
+tool for guessing where the source directory is; in MBuild, the user
+must specify it explicitly.) The <tt>AM_INIT_AUTOMAKE</tt> line
+gives us the official package name and version. The other macros are
+basically boilerplate and tell us what we already know: we're going to
+need to compile C shared libraries. From these lines we can write the
+beginnings of our toplevel <tt>Buildfile</tt>:</p>
+
+<pre class="code"><tt>using [
+	# Almost always want to include this
+        Core 
+
+	<b># Will add more namespaces as needed by the toplevel
+	# rules</b>
+]
+
+project [
+        name = f-spot
+        version = 0.1.11
+
+	# F-Spot doesn't version its install directories,
+	# so this doesn't really matter, but the recommended
+	# compatibility code would be something like this
+
+        compat-code = 0.1
+
+        ref [
+                Languages.CSharp = 0.0.4.0
+		# MBuild's C compilation support is still tentative,
+		# so we reflect that in the name of the bundle.
+                Languages.CrappyC = 0.0.4.0
+
+		<b># Will add more as needed in the project</b>
+        ]
+]
+
+subdirs [
+	<b># We'll fill in the subdirectories here from
+	# the SUBDIRS list in Makefile.am</b>
+]
+</tt></pre>
+
+<p>Now there are a few more preamble lines that tell us about the
+bundles that we'll need to use:</p>
+
+<pre class="code"><tt>AM_CONFIG_HEADER(config.h)
+
+<b>...</b>
+
+AC_PROG_INTLTOOL([0.21])
+</tt></pre>
+
+<p>The <tt>AM_CONFIG_HEADER</tt> line tells
+us that the C code in F-Spot will expect a standard <tt>config.h</tt>
+file. MBuild comes with a bundle that can create an
+<tt>autoheader</tt>-style <tt>config.h</tt> called
+<tt>Frameworks.AutoheaderCompat</tt>, so we should add a reference to
+that in the <tt>project</tt> section. Similarly, MBuild supports
+<tt>intltool</tt> with the <tt>Frameworks.Intltool</tt> bundle. This
+latter bundle is a little unusual because it actually includes the
+files from the <tt>intltool</tt> package. Because of this, the version
+of the <tt>Frameworks.Intltool</tt> bundle tracks the version of
+<tt>intltool</tt> that it bundles. Our <tt>project</tt> section now
+looks like:</p>
+
+<pre class="code"><tt>project [
+        name = f-spot
+        version = 0.1.11
+        compat-code = 0.1
+
+        ref [
+                Languages.CSharp = 0.0.4.0
+                Languages.CrappyC = 0.0.4.0
+                <b>Frameworks.Gettext = 0.0.4.0 # required by intltool.
+                Frameworks.Intltool = 0.34.2.0
+                Frameworks.AutoheaderCompat = 0.0.4.0</b>
+        ]
+]
+</tt></pre>
+
+<p>Now we get to the actual prerequisite checks in the
+<tt>configure.in</tt> file:</p>
+
+<pre class="code"><tt>AC_PATH_PROG(MONO, mono)
+AC_PATH_PROG(MCS, mcs)
+</tt></pre>
+
+<p>MBuild finds these programs automatically, so we don't need to do anything
+about these lines.</p>
+
+<pre class="code"><tt>AC_MSG_CHECKING([for mono.pc])
+if test -z `$PKG_CONFIG --variable=prefix mono`; then
+  AC_MSG_ERROR([missing the mono.pc file, usually found in the mono-devel package])
+else
+  AC_MSG_RESULT([found])
+fi
+</tt></pre>
+
+<p>This is a check to see if the Mono development files are
+installed. MBuild comes with a bundle that supports common <tt>pkg-config</tt>
+options called <tt>Tools.PkgConfig</tt>. First, we reference the bundle in
+the <tt>project</tt> section and use it in the <tt>using</tt>
+section. Then a simple prerequisite that a certain <tt>pkg-config</tt>
+module be installed can be expressed in the <tt>Buildfile</tt> as:</p>
+
+<pre class="code"><tt>mono-pclibs = [ "mono" ]
+</tt></pre>
+
+<p>The <tt>Tools.PkgConfig</tt> bundle includes a rule that matches any
+target name ending in "-pclibs" to the <tt>PkgConfigLibs</tt> rule,
+which calls <tt>pkg-config --libs</tt> with the specified packages and
+returns an error if the packages aren't installed. The target is also
+automatically decorated with the <tt>prereq</tt> tag, so that the
+libraries will be checked for whenever a new build directory is
+initialized.</p>
+
+<pre class="code"><tt>needed_dlls="Mono.Data.SqliteClient Mono.Posix System.Runtime.Remoting System.Web System.Web.Services"
+for i in $needed_dlls; do
+  AC_MSG_CHECKING([for $i.dll])
+  if test ! -e `$PKG_CONFIG --variable=prefix mono`/lib/mono/1.0/$i.dll; then
+    AC_MSG_ERROR([missing required mono DLL: $i.dll])
+  else
+    AC_MSG_RESULT([found])
+  fi
+done
+</tt></pre>
+
+<p>This code checks and sees if certain C# libraries are
+available. The MBuild C# bundle includes a rule that will
+automatically check for referenced DLLs, so we could ignore these checks
+and just reference the desired DLLs in thet appropriate places. But it
+never hurts to centralize things, and we can invoke the DLL check
+rules explicitly:</p>
+
+<pre class="code"><tt>Mono.Data.SqliteClient.dll = CSharpSystemDllCheck []
+Mono.Posix.dll = CSharpSystemDllCheck []
+Mono.Security.dll = CSharpSystemDllCheck []
+System.Runtime.Remoting.dll = CSharpSystemDllCheck []
+System.Web.dll = CSharpSystemDllCheck []
+System.Web.Services.dll = CSharpSystemDllCheck []
+ICSharpCode.SharpZipLib.dll = CSharpSystemDllCheck []
+</tt></pre>
+
+<p>For consistency with the existing checks, we've also added checks
+for a few DLLs referenced by <tt>f-spot.exe</tt> that doxn't appear
+in <tt>configure.in</tt>. The next chunk of configury code is:</p>
+
+<pre class="code"><tt>LIBGNOME_REQUIRED=2.2
+LIBGNOMEUI_REQUIRED=2.2
+LIBEXIF_REQUIRED_MIN=0.5.7
+LIBEXIF_REQUIRED_MAX=0.7.0
+GTKSHARP_REQUIRED=2.7
+MONO_REQUIRED=1.1.7
+GTK_REQUIRED=2.6
+DBUS_SHARP=0.23
+
+dnl -- this check is
+LCMS_REQUIRED=1.12
+dnl -- LIBGPHOTO2_REQUIRED=2.1.4
+
+PKG_CHECK_MODULES(F, libgnome-2.0 &gt;= $LIBGNOME_REQUIRED libgnomeui-2.0 &gt;= $LIBGNOMEUI_REQUIRED <b>\</b>
+ libexif &gt;= $LIBEXIF_REQUIRED_MIN libexif &lt; $LIBEXIF_REQUIRED_MAX gtkhtml-sharp-2.0 &gt;= <b>\</b>
+ $GTKSHARP_REQUIRED gconf-sharp-2.0 &gt;= $GTKSHARP_REQUIRED glade-sharp-2.0 &gt;= $GTKSHARP_REQUIRED <b>\</b>
+ gnome-vfs-sharp-2.0 &gt;= $GTKSHARP_REQUIRED gtk+-2.0 &gt;= $GTK_REQUIRED <b>\</b>
+ mono &gt;= $MONO_REQUIRED dbus-sharp &gt;= $DBUS_SHARP)
+AC_SUBST(F_CFLAGS)
+AC_SUBST(F_LIBS)
+</tt></pre>
+
+<p>This code checks for the bulk of the libraries required by
+F-Spot. The MBuild form for checking for them is a logical extension
+of the Mono case earlier:</p>
+
+<pre class="code"><tt>fspot-pclibs = [
+        "gtkhtml-sharp-2.0 &gt;= 2.7"
+        "gconf-sharp-2.0 &gt;= 2.7"
+        "glade-sharp-2.0 &gt;= 2.7"
+        "gnome-vfs-sharp-2.0 &gt;= 2.7"
+        "dbus-sharp &gt;= 0.23"
+]
+
+fspot-pcflags = [
+        "libgnome-2.0 &gt;= 2.2"
+        "libgnomeui-2.0 &gt;= 2.2"
+        "libexif &gt;= 0.5.7"
+        "libexif &lt;= 0.7.0"
+        "gtk+-2.0 &gt;= 2.6"
+]
+
+misc-prereq-pclibs = [ "mono &gt;= 1.1.7" ]
+</tt></pre>
+
+<p>The F-Spot <tt>configure.in</tt> checks for all these items in one
+lump using the <tt>PKG_CHECK_MODULES</tt> macro. We do not do this for
+a good reason: the <tt>pkg-config</tt> call includes both C and C#
+modules, resulting in a strange set of values in the <tt>CFLAGS</tt>
+variable if the two kinds are lumped together. (For example, it
+contains flags such as
+<tt>-I:/usr/lib/pkgconfig/../../share/gapi-2.0/gnome-api.xml</tt>.)
+Fortunately, the only <tt>pkg-config</tt> information needed for C
+libraries is <tt>CFLAGS</tt>, while the only information needed for C#
+libaries is <tt>LIBS</tt>, so the two kinds of libraries can be
+separated easily without redundancy. (The fact that this is possible
+is not obvious <i>a priori</i>; I was only able to make the separation
+after writing <tt>Buildfile</tt> code for all the targets in the build.)</p>
+
+<pre class="code"><tt>AC_PATH_PROG(GCONFTOOL, gconftool-2, no)
+AM_GCONF_SOURCE_2
+</tt></pre>
+
+<p>GConf is not currently used in F-Spot, so we ignore this bit. (As
+you might guess, I haven't implemented a GConf bundle yet.)</p>
+
+<pre class="code"><tt>AC_CHECK_LIB(jpeg, jpeg_start_decompress, [],
+             [AC_MSG_ERROR([libjpeg not found])], -lm)
+AC_CHECK_HEADER(jpeglib.h, , [AC_MSG_ERROR([libjpeg not found])])
+LIBJPEG='-ljpeg'
+</tt></pre>
+
+<p>This is a classic pair of checks for a C library and its header
+files. The <tt>Languages.CrappyC</tt> bundle includes a rule that
+performs these checks:</p>
+
+<pre class="code"><tt>libjpeg.so = CLibraryDevelCheck [
+        "jpeglib.h"
+        { "stdio.h", "stdlib.h" }
+        func = "jpeg_start_decompress"
+]
+</tt></pre>
+
+<p>Here the name of the library to check for is guessed from the name
+of the target ("libjpeg.so") and the name of a header and a function
+to look for are given. The list of "stdio.h" and "stdlib.h" gives
+headers that are included before "jpeglib.h" itself is. At the moment,
+the MBuild rule doesn't allow for specifying other libraries to link
+to, unlike the equivalent configure check with its "-lm"
+argument. This will be added at some point, but we can often get away
+without it on Linux systems.</p>
+
+<pre class="code"><tt>PKG_CHECK_MODULES(SQLITE, sqlite, have_sqlite2="yes", have_sqlite2="no")
+PKG_CHECK_MODULES(SQLITE, sqlite3, have_sqlite3="yes", have_sqlite3="no")
+
+if test "x$have_sqlite2" = "xno" -a "x$have_sqlite3" = "xno"; then
+        AC_MSG_ERROR([You need to install either sqlite2 or sqlite3])
+fi
+</tt></pre>
+
+<p>This configure check is fairly self-explanatory. So is the
+analogous MBuild code:</p>
+
+<pre class="code"><tt>sqlite2-pcprobe = [ "sqlite" ]
+sqlite3-pcprobe = [ "sqlite3" ]
+
+have-sqlite = <b>sqlite2-pcprobe || sqlite3-pcprobe</b>
+
+assert-sqlite = <b>Assert</b> [ have-sqlite ] with [
+        errnote = "You need the pkg-config development files for sqlite version 2 or sqlite version 3 to be installed."
+]
+</tt></pre>
+
+<p>A target with a "-pcprobe" suffix checks for a <tt>pkg-config</tt>
+package, but doesn't signal an error if the package isn't
+installed. Then the target "have-sqlite" is defined to be the logical
+"or" of the two <tt>pkg-config</tt> checks. (Note how much nicer it is
+to do this logic with genuine boolean values, instead of semi-portable
+shell script.) Finally, "assert-sqlite" is built with a special rule
+that signals an error if its argument is not true. Once again, the
+target is automatically decorated with the <tt>prereq</tt> tag so that
+it is checked upon initialization of the build directory. The
+<tt>errnote</tt> tag gives a more informative error message that is
+displayed if the assertion is failed. (FIXME: that bit is not
+implemented.)</p>
+
+<pre class="code"><tt>PKG_CHECK_MODULES(LCMS, lcms &gt;= $LCMS_REQUIRED, [],
+        [AC_CHECK_LIB(lcms, cmsCreateBCHSWabstractProfile, [],
+                     [AC_MSG_ERROR([liblcms not found])], -lm)
+        AC_CHECK_HEADER(lcms.h, , [AC_MSG_ERROR([liblcms not found])])
+        LCMS_LIBS='-llcms'
+        LCMS_CFLAGS=''])
+</tt></pre>
+
+<p>This mess checks if we have the LCMS library using both
+<tt>pkg-config</tt> and a plain check for the library and header. We
+can use the same rules that we've used before:</p>
+
+<pre class="code"><tt>lcms-pcflags = [ "lcms &gt;= 1.12" ]
+
+liblcms.so = CLibraryDevelCheck [
+        "lcms.h"
+        { "stdio.h", "stdlib.h" }
+        func = "cmsCreateBCHSWabstractProfile"
+]
+</tt></pre>
+
+<p>We skip over a plain <tt>pkg-config</tt> check for
+<tt>libgphoto2</tt>. Then we find:</p>
+
+<pre class="code"><tt>LIBEXIF_API_CHANGE=0.6.0
+PKG_CHECK_MODULES(LIBEXIF_API_CHECK, libexif >= $LIBEXIF_API_CHANGE, have_old_libexif=no, have_old_libexif=yes)
+
+if test "x$have_old_libexif" = "xyes"; then
+        EXIF_SOVERSION=9
+else
+        PKG_CHECK_MODULES(LIBEXIF_VERSION_CHECK, libexif >= 0.6.12, EXIF_SOVERSION=12, EXIF_SOVERSION=10)
+fi
+AC_SUBST(EXIF_SOVERSION)
+</tt></pre>
+
+<p>Depending on the version of <tt>libexif</tt> installed, the value
+of <tt>EXIF_SOVERSION</tt> is set to track the version of the shared
+library installed. We can implement this in MBuild with more
+<tt>pkg-config</tt> probes and a rule for conditional-type
+expressions:</p>
+
+<pre class="code"><tt>oldapi-exif-pcprobe = [ "libexif &lt; 0.6.0" ]
+
+newapi-exif-pcprobe = [ "libexif &gt;= 0.6.12" ]
+
+exif-soversion = Switch [
+        cases = { oldapi-exif-pcprobe, newapi-exif-pcprobe, true }
+        { "9", "12", "10" }
+]
+</tt></pre>
+
+<p>The first two targets are self-explanatory. The <tt>Switch</tt>
+rule is a builtin rule that can be used to emulate if-else
+expressions. It takes two arguments: a list of booleans, a list of
+results. Both lists are marked as "ordered", which means that the
+order of the arguments to the lists matters and is preserved inside
+MBuild. (This is why the lists are in braces and separated by commas.)
+The <tt>Switch</tt> rule walks down the list of booleans until it
+finds one that is true; it then returns the result in the
+corresponding position of the other list. In this case, the literal
+<tt>true</tt> value at the end of the list allows a default case to be
+specified. So the pseudocode equivalent of the above target is:</p>
+
+<pre class="code"><tt>exif-soversion = {
+	if oldapi-exif-pcprobe:
+		return "9";
+	else if newpi-exif-pcprobe:
+		return "12";
+	else
+		return "10";
+}
+</tt></pre>
+
+<p>This rule may seem gross as things stand, but I'd like to
+point out that with a little syntactic sugar it would seem completely
+natural and reasonable.</p>
+
+<pre class="code"><tt>AC_ARG_WITH(gnome-screensaver,[ --with-gnome-screensaver=PREFIX  set gnome gnome-screensaver prefix])
+
+if test "x$with_gnome_screensaver" != "x"; then
+        gnome_screensaver_prefix=$with_gnome_screensaver
+else
+        gnome_screensaver_prefix=$prefix
+fi
+
+if test -d $gnome_screensaver_prefix/lib/gnome-screensaver; then
+        GNOME_SCREENSAVER_SAVERDIR=$gnome_screensaver_prefix/lib/gnome-screensaver/gnome-screensaver
+else
+        GNOME_SCREENSAVER_SAVERDIR=$gnome_screensaver_prefix/libexec/gnome-screensaver
+fi
+
+GNOME_SCREENSAVER_THEMESDIR=$gnome_screensaver_prefix/share/gnome-screensaver/themes
+
+AC_SUBST(GNOME_SCREENSAVER_SAVERDIR)
+AC_SUBST(GNOME_SCREENSAVER_THEMESDIR)
+</tt></pre>
+
+<p>This bunch of code configures some paths related to
+<tt>gnome-screensaver</tt>. The equivalent MBuild syntax is
+(currently) a little verbose, but roughly analogous:</p>
+
+<pre class="code"><tt>gnome-screensaver-prefix = Clone [ /config/install/prefix_dir ] with [
+        config = true
+        prompt = "The prefix in which the files for gnome-screensaver are installed"
+]
+
+gnome-screensaver-themedir = MakeInstallSubdirectory [
+        gnome-screensaver-prefix
+        "share/gnome-screensaver/themes"
+]
+
+lib-gss-dir = MakeInstallSubdirectory [
+        gnome-screensaver-prefix "lib/gnome-screensaver/gnome-screensaver"
+]
+
+libexec-gss-dir = MakeInstallSubdirectory [
+        gnome-screensaver-prefix "libexec/gnome-screensaver"
+]
+
+have-lib-gss-dir = <b>ProbeInstallDirectory</b> [ lib-gss-dir ]
+
+gnome-screensaver-saverdir = Switch [
+        cases = { have-lib-gss-dir, true }
+        { lib-gss-dir, libexec-gss-dir }
+]
+</tt></pre>
+
+<p>Here, the differences between the <tt>autoconf</tt> and MBuild
+configuration systems become apparent. Instead of defining a flag that
+the <tt>configure</tt> script takes, we define a regular target and
+mark it with the <tt>config</tt> tag, indicating that the user might
+want to manually set its value. (This can be done with <tt>mbuild
+-C</tt> or with <tt>mb-gtkconfig</tt>.) The default value of the
+argument is made explicit and the relation between the configured
+variable and the rest of the build is much clearer in MBuild than it
+is with <tt>autoconf</tt> (in my opinion, of course). The
+<tt>MakeInstallSubdirectory</tt> rules just take a given directory and
+appends a string to it. (For somewhat arcane reasons, MBuild has
+an <tt>InstallDirectory</tt> type that is a subclass of
+<tt>MBString</tt> rather than <tt>MBDirectory</tt>, so it requires its
+own set of rules to manipulate.) The
+<tt>ProbeInstallDirectory</tt> returns a boolean indicating whether
+the specified directory exists. (This rule feels like something of a
+hack, but will probably be needed in many situations in which
+distributions disagree about where to install certain files, as is the
+case here.)</p>
+
+<p>After skipping some more unused checks, we find:</p>
+
+<pre class="code"><tt>ALL_LINGUAS="bg ca cs da de el <b>...</b> sv th vi zh_CN zh_TW"
+
+GETTEXT_PACKAGE=f-spot
+AC_SUBST(GETTEXT_PACKAGE)
+AC_DEFINE_UNQUOTED(GETTEXT_PACKAGE,"$GETTEXT_PACKAGE", [Gettext package])
+AM_GLIB_GNU_GETTEXT
+</tt></pre>
+
+<p>This is the usual <tt>gettext</tt> configuration. Because you can
+put configuration-type rules anywhere in an MBuild project, we'll move
+this stuff into the <tt>Buildfile</tt> inside the <tt>po</tt>
+subdirectory. The only information we really need to propagate is the
+list of languages, which we can paste into <tt>po/Buildfile</tt> in a
+temporary comment.</p>
+
+<pre class="code"><tt>AC_SUBST(LIBJPEG)
+AC_SUBST(LCMS_LIBS)
+AC_SUBST(LCMS_CFLAGS)
+AC_SUBST(CFLAGS)
+AC_SUBST(CPPFLAGS)
+AC_SUBST(LDFLAGS)
+</tt></pre>
+
+<p>Don't need these in MBuild -- these are just artifacts of the
+separation of configuration and the rest of the build that one finds
+in the autotools.</p>
+
+<pre class="code"><tt>expanded_libdir=`( case $prefix in NONE) prefix=$ac_default_prefix ;; *) ;; esac
+                   case $exec_prefix in NONE) exec_prefix=$prefix ;; *) ;; esac
+                   eval echo $libdir )`
+AC_SUBST(expanded_libdir)
+</tt></pre>
+
+<p>Nor do we need this. People who try to use <tt>autoconf</tt>
+variables like <tt>$libdir</tt> quickly find out that there is a
+bizarre system in which the variables refer to other variables and may
+be set to NONE as a default. MBuild can do proper dependencies on
+string variables and hence has no need for painful code like that seen
+above.</p>
+
+<pre class="code"><tt>AC_CONFIG_FILES([src/f-spot],[chmod +x src/f-spot])
+</tt></pre>
+
+<p>This is telling us that <tt>src/f-spot</tt> is created from
+<tt>src/f-spot.in</tt>. MBuild has builtin support for substitutions
+using the <tt>Core.Subst</tt> namespace, so implementation is not a
+problem. Again, because we are much more flexible than the autotools
+in where we do things, we will just put a comment in a newly-created
+<tt>src/Buildfile</tt> reminding ourselves to add code to create the
+<tt>f-spot</tt> wrapper script.</p>
+
+<pre class="code"><tt>GNOME_ICON_THEME_PREFIX=`$PKG_CONFIG --variable=prefix gnome-icon-theme`
+AC_SUBST(GNOME_ICON_THEME_PREFIX)
+</tt></pre>
+
+<p>Once again the <tt>Tools.PkgConfig</tt> bundle gives us what we
+need compactly:</p>
+
+<pre class="code"><tt>gnome-icon-theme-prefix = <b>PkgConfigVar</b> [ 
+	"gnome-icon-theme" 
+	<b>variable = "prefix"</b>
+]
+</tt></pre>
+
+<p>Finally, the traditional <tt>AC_OUTPUT</tt> at the end of the
+file:</p>
+
+<pre class="code"><tt>AC_OUTPUT([
+Makefile
+FlickrNet/Makefile
+icons/Makefile
+libeog/Makefile
+libeog/cursors/Makefile
+libjpegtran/Makefile
+libfspot/Makefile
+libgphoto2-sharp/Makefile
+semweb/Makefile
+tools/Makefile
+po/Makefile.in
+src/Defines.cs
+src/f-spot.exe.config
+src/Makefile
+f-spot.spec
+f-spot.desktop.in
+])
+</tt></pre>
+
+<p>We can of course ignore all the Makefile outputs. We should create
+reminders in the appropriate <tt>Buildfile</tt>s for the other created
+files though: <tt>src/Defines.cs</tt>, <tt>src/f-spot.exe.config</tt>,
+<tt>f-spot.spec</tt>, and <tt>f-spot.desktop.in</tt>. We can implement
+these latter two targets right away using the aforementioned
+<tt>Core.Subst</tt> rules:</p>
+
+<pre class="code"><tt>versubst = { VERSION = /project/version }
+
+f-spot.desktop.in = <b>Subst</b> [
+	f-spot.desktop.in.in
+	versubst
+]
+
+f-spot.spec = Subst [
+	f-spot.spec.in
+	versubst
+]
+</tt></pre>
+
+<p>The target <tt>versubst</tt> is a dictionary that maps strings
+(<tt>VERSION</tt> in this configuration) to results (the value of the
+target <tt>/project/version</tt> here). The <tt>Subst</tt> rule takes
+such a dictionary as input and performs substitutions in the standard
+<tt>autoconf</tt> style, replacing <tt>@VERSION@</tt> with the string
+value of the <tt>/project/version</tt> target.</p>
+
+<p>At this point, we've finished going through <tt>configure.in</tt>.
+We can check to see that everything is good so far by seeing if MBuild
+is happy with our Buildfile so far:</p>
+
+<pre class="code"><tt>f-spot$ <b>mkdir BUILD</b>
+f-spot$ <b>cd BUILD</b>
+BUILD$ <b>mbuild -i ..</b>
+[<i>Hopefully no errors</i>]
+</tt></pre>
+
+<p>Once everything checks out, we can now start the second step of
+MBuild migration: translating the <tt>Makefile.am</tt>s. Starting at
+the toplevel, we see:</p>
+
+<pre class="code"><tt>SUBDIRS =               \
+        FlickrNet       \
+        icons           \
+        libeog          \
+        libjpegtran     \
+        libfspot        \
+        libgphoto2-sharp \
+        semweb          \
+        tools           \
+        po              \
+        src
+</tt></pre>
+
+<p>This maps directly on to the <tt>subdirs []</tt> section of the
+toplevel <tt>Buildfile</tt>. One thing to recall is that the order of
+the subdirectories matters to <tt>automake</tt>, because it can't
+handle dependencies between targets in different directories. MBuild
+has no problem with such dependencies, so after the migration is
+complete we might as well alphabetize the list. But it still makes
+sense to translate files in approximate dependency order, so for now
+we do this:</p>
+
+<pre class="code"><tt>subdirs [
+	<b># Uncomment each subdirectory after we write its Buildfile
+	# and then rerun mbuild to check that our new file is
+	# valid</b>
+
+        #FlickrNet
+        #icons
+        #libeog
+        #libjpegtran
+        #libfspot
+        #libgphoto2-sharp
+        #semweb
+        #tools
+        #po
+        #src
+]
+</tt></pre>
+
+<p>The next group of commands in the <tt>Makefile.am</tt> after the
+<tt>SUBDIRS</tt> definition is:</p>
+
+<pre class="code"><tt>desktop_in_files=       \
+        f-spot.desktop.in       \
+        f-spot-view.desktop.in
+
+desktop_files=$(desktop_in_files:.desktop.in=.desktop)
+@INTLTOOL_DESKTOP_RULE@
+
+Applicationsdir = $(datadir)/applications
+Applications_DATA = $(desktop_files)
+</tt></pre>
+
+<p>This group of commands defines two <a
+href="http://www.freedesktop.org/">XDG</a> desktop files that should
+have translations merged from template files. (The fact that
+<tt>automake</tt> can't have its suite of canned rules extended is the
+reason that this ugly code is needed.) These files should then be
+installed in <tt>$(datadir)/applications</tt>. The equivalent code in
+MBuild takes advantage of the matchers in the
+<tt>Frameworks.Intltool</tt> bundle so that the necessary rule
+(<tt>MergeDesktopTranslations</tt>) doesn't even need to be explicitly
+specified:</p>
+
+<pre class="code"><tt>appsdir = MakeInstallSubdirectory [ /config/install/datadir "applications" ]
+appsinstaller = MakeCopyInstaller [ appsdir ]
+
+f-spot.desktop = [ f-spot.desktop.in ] with [
+        install = appsinstaller
+        default = true
+]
+
+f-spot-view.desktop = [ f-spot-view.desktop.in ]  with [
+        install = appsinstaller
+        default = true
+]
+</tt></pre>
+
+<p>The rest of the toplevel <tt>Makefile.am</tt> is just
+bookkeeping:</p>
+
+<pre class="code"><tt>CLEANFILES =                    \
+        intltool-extract        \
+        intltool-update         \
+        intltool-merge
+
+EXTRA_DIST =                    \
+        MAINTAINERS             \
+        intltool-extract.in     \
+        intltool-merge.in       \
+        intltool-update.in      \
+        f-spot.spec             \
+        $(desktop_in_files)     \
+        $(desktop_files)
+
+DISTCLEANFILES = \
+        intltool-extract        \
+        intltool-merge          \
+        intltool-update         \
+        $(desktop_files)
+</tt></pre>
+
+<p>No analogue of this code is necessary in MBuild because its
+knowledge of file types automatically enables it to know what files
+should be cleaned and distributed.</p>
+
+<p>We can now descend into the subdirectories of the <tt>f-spot</tt>
+source code. Following the <tt>Makefile.am</tt>, we start with
+<tt>FlickrNet</tt> and find:</p>
+
+<pre class="code"><tt>LIBFLICKRNET_CSFILES =                          \
+        $(srcdir)/AssemblyInfo.cs \
+        $(srcdir)/Auth.cs \
+        $(srcdir)/Blogs.cs \
+	<b>...</b>
+        $(srcdir)/UploadProgressEvent.cs \
+        $(srcdir)/User.cs \
+        $(srcdir)/Utils.cs
+
+libflickrnetlibdir = $(libdir)/f-spot
+libflickrnetlib_DATA =          \
+        FlickrNet.dll
+
+FlickrNet.dll: $(LIBFLICKRNET_CSFILES)
+        $(CSC) -r:System.Web.dll -out:$@ /target:library $(LIBFLICKRNET_CSFILES)
+
+all: FlickrNet.dll
+
+EXTRA_DIST =                                                    \
+        $(LIBFLICKRNET_CSFILES) \
+        License.txt
+
+CLEANFILES =                                                    \
+        FlickrNet.dll
+</tt></pre>
+
+<p>Once more, much of this code is essentially boilerplate. It can be
+expressed much more concisely with MBuild:</p>
+
+<pre class="code"><tt>using [
+        Core
+        Core.Clr
+        Languages.CSharp
+]
+
+FlickrNet.dll = [
+        @FlickrNet.dll.sources
+        /System.Web.dll
+] with [
+        install = /cslib-installer
+]
+
+<b>License.txt = TextSource []</b>
+</tt></pre>
+
+<p>This file is made shorter, of course, by moving the list of source
+files into a separate <tt>.sources</tt> file. (Doing so is not
+necessary, but is more aesthetically pleasing to this author.) Note
+the reference to the <tt>/System.Web.dll</tt> target defined in the
+toplevel <tt>Buildfile</tt>. The matchers in the
+<tt>Languages.CSharp</tt> library would allow a bare reference to
+<tt>System.Web.dll</tt>, but then there would be two redundant checks
+for the DLL, one in the toplevel directory and one in
+<tt>FlickrNet</tt>. We also see that in some places, MBuild is no more
+elegant than <tt>automake</tt>: the latter's <tt>EXTRA_DIST</tt>
+variable is here approximated by defining <tt>License.txt</tt> as a
+do-nothing target. Finally, the <tt>install</tt> tag points to a new
+target that we define in the toplevel buildfile because it will likely
+be shared amongst several subdirectories:</p>
+
+<pre class="code"><tt>flibdir = MakeInstallSubdirectory [ /config/install/libdir "f-spot" ]
+
+lib-installer = MakeCCShlibOutputInstaller [ flibdir ]
+cslib-installer = MakeCSharpCompilerOutputInstaller [ flibdir ]
+</tt></pre>
+
+<p>Normally, instead of defining <tt>flibdir</tt>, one would use the
+predefined <tt>/config/install/pkglibdir</tt>, which evaluates to
+<tt><i>prefix</i>/lib/<i>package</i>-<i>compat-code</i></tt>. But we
+are seeking to maintain compatibility with the F-Spot Makefiles, so we
+define the directory and some installers manually.</p>
+
+<p>The next subdirectory, <tt>icons</tt>, contains a bunch of PNG
+images that must be distributed with the source and one that gets
+installed.</p>
+
+<pre class="code"><tt>noinst_DATA =                                   \
+        f-spot-adjust-colors.png                \
+        f-spot-browse.png                       \
+        f-spot-camera.png                       \
+	<b>...</b>
+        f-spot.js                               \
+        f-spot-simple.css                       \
+        f-spot-simple-white.css
+
+pixmapdir = $(datadir)/pixmaps
+pixmap_DATA = f-spot-logo.png
+
+EXTRA_DIST = $(noinst_DATA) $(pixmap_DATA)
+</tt></pre>
+
+<p> Here, the MBuild language shows its current
+limitations:</p>
+
+<pre class="code"><tt>using [
+        Core
+        Core.Install
+]
+
+pixmapdir = MakeInstallSubdirectory [
+        /config/install/datadir
+        "pixmaps"
+]
+
+pixmapinst = MakeCopyInstaller [ pixmapdir ]
+
+f-spot-logo.png = BinSource [] with [
+        install = pixmapinst
+        default = true
+]
+
+f-spot-adjust-colors.png = BinSource []
+f-spot-browse.png = BinSource []
+f-spot-camera.png = BinSource []
+<b>...</b>
+f-spot.js = TextSource []
+f-spot-simple.css = TextSource []
+f-spot-simple-white.css = TextSource []
+</tt></pre>
+
+<p>Because there is no builtin matcher for guessing what kind of file
+a <tt>.png</tt> file is, each one has to be explicitly declared as a
+binary file. (Updates to the MBuild language should make constructions
+like this obsolete.)</p>
+
+<p>The next subdirectory, <tt>libeog</tt>, defines a C library:</p>
+
+<pre class="code"><tt>SUBDIRS = cursors
+
+INCLUDES =                                                      \
+        -DG_LOG_DOMAIN=\"libfspoteog\"                          \
+        -DDATADIR=\""$(datadir)"\"                              \
+        -DLIBEOG_ETTORE_CHANGES=1                               \
+        -I$(srcdir) -I$(top_srcdir)                             \
+        -I$(top_srcdir)/src                                     \
+        -I$(top_builddir)                                       \
+        $(F_CFLAGS)                                             \
+        $(LCMS_CFLAGS)
+
+fspotlibdir = $(libdir)/f-spot
+fspotlib_LTLIBRARIES = libfspoteog.la
+
+libfspoteog_files =                             \
+        access.c                                \
+        access.h                                \
+	<b>...</b>
+        zoom.c                                  \
+        zoom.h
+
+libfspoteog_la_SOURCES = $(libfspoteog_files)
+</tt></pre>
+
+<p>The <tt>cursors</tt> subdirectory just <tt>EXTRA_DIST</tt>s a few
+data files and can be skipped over in this discussion. The equivalent
+<tt>Buildfile</tt> for this directory starts with:</p>
+
+<pre class="code"><tt>using [
+        Languages.CrappyC
+]
+
+subdirs [ cursors ]
+
+qdatadir = DefAddQuotes [ /config/install/datadir ]
+
+defs = { LIBEOG_ETTORE_CHANGES = "1",
+        G_LOG_DOMAIN = "\"libfspoteog\"",
+        DATADIR = qdatadir
+}
+
+ccopts = MakeCCOptions [
+        defs
+        /fspot-pcflags
+        /lcms-pcflags
+]
+
+libfspoteog.so = CompileShlib [
+        @libfspoteog.so.sources
+        /config.h
+        ccopts
+] with [
+        install = /lib-installer
+]
+</tt></pre>
+
+<p>Here we define the C compiler options <tt>ccopts</tt> by combining
+a dictionary of <tt>#define</tt> constants (similar to what we saw
+with the <tt>Subst</tt> rule) and a set of opaque compiler flags
+obtained from <tt>pkg-config</tt>. We do not include the <tt>-I</tt>
+include path options because MBuild will automatically add such flags
+pointing to the directories in which the header file arguments to the
+<tt>CompileShlib</tt> rule can be found. This is something of a hack
+-- for instance, code may depend on <tt>foo/bar/bam.h</tt> but
+<tt>#include "bar/bam.h"</tt> in the source, while MBuild will blindly
+add a <tt>-I<i>top_srcdir</i>/foo/bar</tt> argument to the compiler
+command line. Facts like this are why the current C language
+implementation is called <tt>CrappyC</tt>. Another hack is the
+<tt>DefAddQuotes</tt> rule, which just surrounds a string in quotation
+marks, thus turning what would be an identifier in C
+(<tt>/usr/share</tt>) into a string (<tt>"/usr/share"</tt>). Yet
+another problem is that limitations in the current bundle interface
+make it so that intermediate object files aren't generated; instead,
+every time <tt>libfspoteog.so</tt> needs to be recompiled, <i>all</i> of the
+source files must be compiled from scratch. And, most
+importantly, MBuild does not use libtool, so its shared-library
+compilation is most likely limited to Linux and GCC only at the
+moment, and probably yields incorrect results at times even then.</p>
+
+<p>There is another section to <tt>libeog/Makefile.am</tt>:</p>
+
+<pre class="code"><tt>libeog-marshal.h: libeog-marshal.list
+        ( @GLIB_GENMARSHAL@ --prefix=libeog_marshal $(srcdir)/libeog-marshal.list --header &gt; libeog-marshal.tmp \
+        &amp;&amp; mv libeog-marshal.tmp libeog-marshal.h ) \
+        || ( rm -f libeog-marshal.tmp &amp;&amp; exit 1 )
+
+libeog-marshal.c: libeog-marshal.h
+        ( @GLIB_GENMARSHAL@ --prefix=libeog_marshal $(srcdir)/libeog-marshal.list --body &gt; libeog-marshal.tmp \
+        &amp;&amp; mv libeog-marshal.tmp libeog-marshal.c ) \
+        || ( rm -f libeog-marshal.tmp &amp;&amp; exit 1 )
+
+MARSHAL_GENERATED = libeog-marshal.c libeog-marshal.h
+
+BUILT_SOURCES = $(MARSHAL_GENERATED)
+EXTRA_DIST = libeog-marshal.list
+</tt></pre>
+
+<p>Again, code like this is easily dealt with in MBuild, because the
+build rules for <tt>glib-genmarshal</tt> can get first-class
+treatment, with all the same matching support that other, more
+commonly-used constructions get:</p>
+
+<pre class="code"><tt>using [
+        Languages.CrappyC
+        Tools.GLibGenmarshal
+]
+
+<b>...</b>
+
+libeog-marshal.c = [ libeog-marshal.list "libeog_marshal" ]
+libeog-marshal.h = [ libeog-marshal.list "libeog_marshal" ]
+</tt></pre>
+
+<p>The next subdirectory, <tt>libjpegtran</tt>, presents no new issues
+above what we've seen. The subdirectory after that one,
+<tt>libfspot</tt>, is also similar, although it exposes more
+weaknesses in the MBuild syntax. The <tt>Makefile.am</tt> of that
+directory is fairly uninteresting, so I will skip to showing you the
+corresponding <tt>Buildfile</tt>, with rough edges highlighted:</p>
+
+<pre class="code"><tt>using [
+        Languages.CrappyC
+        Tools.GLibGenmarshal
+]
+
+defs = { LIBEOG_ETTORE_CHANGES = "1",
+        G_LOG_DOMAIN = "\"libf\"",
+        G_DISABLE_DEPRECATED = true,
+        GTK_DISABLE_DEPRECATED = true,
+        GDK_DISABLE_DEPRECATED = true,
+        GNOME_DISABLE_DEPRECATED = true,
+
+        <b># Problem: using AutoheaderCompat should somehow cause
+	# something like this to be automatically added to the 
+	# default C compiler flags
+        HAVE_CONFIG_H = true</b>
+}
+
+ccopts = MakeCCOptions [
+        defs
+        /fspot-pcflags
+        /lcms-pcflags
+        <b># Problem: haven't gotten around to implementing the
+	# infrastructure needed to optionally add the -Werror 
+	# flag that is included here.</b>
+]
+
+<b>topsrcdir = SourceDirHack [ "" ]</b>
+
+libfspot.so = CompileShlib [
+        @libfspot.so.sources
+
+        /config.h
+        <b># Problem: This is the temporary ugly workaround to
+	# avoid a failure in the naive scheme that MBuild uses 
+	# to guess what -I flags to give to the compiler
+	# (as discussed above).
+	topsrcdir</b>
+        ccopts
+        /exif-pclibs
+
+        /libjpegtran/libfspotjpegtran.so
+        /libeog/libfspoteog.so
+
+	<b># Problem: Currently need to manually specify rpath
+	# directories to feed to the linker.
+        rpaths = /flibdir</b>
+] with [
+        install = /lib-installer
+]
+
+f-marshal.h = [ f-marshal.list "f_marshal" ]
+f-marshal.c = [ f-marshal.list "f_marshal" ]
+</tt></pre>
+
+<p>It should be emphasized that all of the problem spots mentioned
+above are due to limitations in the <tt>Languages.CrappyC</tt> bundle,
+not in the MBuild architecture itself. With more work, the
+C language implementation should become much cleaner.</p>
+
+<p>The subdirectories <tt>libgphoto2-sharp</tt> and <tt>semweb</tt> define C# libraries
+that are also nearly trivial to build. For instance, the <tt>Buildfile</tt>
+inside the former subdirectory is just:</p>
+
+<pre class="code"><tt>using [
+        Core.Clr
+        Languages.CSharp
+]
+
+libgphoto2-sharp.dll = [
+        @libgphoto2-sharp.dll.sources
+        <b>unsafe = true</b>
+        libgphoto2-sharp.dll.config
+] with [
+        install = /cslib-installer
+]
+</tt></pre>
+
+<p>The <tt>tools</tt> subdirectory contains some miscellaneous files
+that need to be installed. The <tt>Buildfile</tt> is again a little verbose:</p>
+
+<pre class="code"><tt>using [
+        Core
+        Core.Install
+        Core.Subst
+        Frameworks.Intltool
+]
+
+# Translation-merged desktop file.
+
+theme-installer = MakeExecutableCopyInstaller [ /gnome-screensaver-themedir ]
+
+f-spot-screensaver.desktop = [ f-spot-screensaver.desktop.in ] with [
+        install = theme-installer
+]
+
+# Photo importer wrapper.
+
+f-spot-import = TextSource [] with [
+        install = /config/install/bindir_installer
+        default = true
+]
+
+# Screensaver wrapper script.
+
+screensaver-installer = MakeExecutableCopyInstaller [ /gnome-screensaver-saverdir ]
+
+f-spot-screensaver = TextSource [] with [
+        install = screensaver-installer
+        default = true
+]
+</tt></pre>
+
+<p>One thing that seems obvious in retrospect but is easy to forget is
+the application of the <tt>default</tt> tags. Many targets are not
+given this tag by default, and so in the usual circumstances they will
+only be built if referenced by other targets. This is usually
+desirable, but small utility files such as these tend not to be
+referenced by other targets and tend to be built with low-level rules
+that do not add the <tt>default</tt> tag to the target. (We can't
+assume that a target with an <tt>install</tt> tag should also have the
+<tt>default</tt> tag set to true, since it may be conditionally
+built.) The problem only manifests itself because running <tt>mbuild
+-I</tt> doesn't install these files, even though they're marked with
+an <tt>install</tt> tag. In fact, I only discovered these omissions by
+comparing a list of files installed by <tt>make install</tt> with one
+of the files installed by <tt>mbuild -I</tt>.</p>
+
+<p>Next comes the <tt>po</tt> subdirectory. This directory is special
+in autotools projects; it has no <tt>Makefile.am</tt>, so we have no
+step-by-step transcription process. For the time being, the
+<tt>Buildfile</tt> presented below can be considered to be a kind of
+boilerplate; as with the autotools equivalent, the only real variable
+is the list of translations. Unfortunately, MBuild's implementation of
+the functionality of the <tt>gettext</tt> and <tt>intltool</tt> build
+suite is severely limited. Again, with more effort put into the
+<tt>Frameworks.Gettext</tt> and <tt>Frameworks.Intltool</tt> bundles,
+these deficiencies should be fixed. In the meantime, a bare minimum of
+functionality is available: <tt>.po</tt> files can be converted to
+<tt>.mo</tt> files and installed into the appropriate directories:</p>
+
+<pre class="code"><tt>using [ 
+	Core
+	Frameworks.Gettext 
+]
+
+<b># We do this because our GETTEXT_PACKAGE is
+# just "f-spot", not "f-spot-0.1" as the MBuild
+# default is. If it were "f-spot-0.1", we could
+# skip defining this installer and not have to
+# manually override the install tag on each target.</b>
+
+mo-installer = MakeMOFileInstaller [ 
+	/config/install/datadir
+	package = /project/name 
+]
+
+POTFILES.in = TextSource []
+POTFILES.skip = TextSource []
+
+<b># Currently, each file must be declared separately!
+# This is unfortunate but will be fixed.</b>
+
+bg.mo = [ bg.po ] with [ install = mo-installer ]
+ca.mo = [ ca.po ] with [ install = mo-installer ]
+<b>...</b>
+zh_CN.mo = [ zh_CN.po ] with [ install = mo-installer ]
+zh_TW.mo = [ zh_TW.po ] with [ install = mo-installer ]
+</tt></pre>
+
+<p>Finally, we get to the last directory in the project:
+<tt>src</tt>. Within it the <tt>f-spot.exe</tt> executable is
+built. It puts the <tt>Languages.CSharp</tt> bundle through a bit of
+work, but C# is very easy to build, so the code is still quite
+easy. The <tt>Makefile.am</tt> is not very pretty:</p>
+
+<pre class="code"><tt>CSC = mcs
+CSFLAGS = -unsafe -debug -nowarn:0618 -nowarn:0169 -nowarn:0612 -d:TEST_METADATA
+
+F_SPOT_CSDISTFILES =                            \
+        $(srcdir)/Cairo/Cairo.cs                \
+        $(srcdir)/Cairo/Surface.cs              \
+        $(srcdir)/Cairo/FontOptions.cs          \
+	<b>...</b>
+        $(srcdir)/X3fFile.cs                    \
+        $(srcdir)/XmpFile.cs                    \
+        $(srcdir)/main.cs
+
+ASSEMBLIES =                                    \
+        -r:$(top_builddir)/libgphoto2-sharp/libgphoto2-sharp.dll   \
+        -r:$(top_builddir)/semweb/SemWeb.dll    \
+        -r:$(top_builddir)/FlickrNet/FlickrNet.dll      \
+        -r:System.Data                          \
+        -r:System.Web                           \
+        -r:Mono.Data.SqliteClient               \
+        -r:Mono.Posix                           \
+        -r:Mono.Security                        \
+        -r:ICSharpCode.SharpZipLib              \
+        -pkg:dbus-sharp                         \
+        -pkg:gtkhtml-sharp-2.0                  \
+        -pkg:glade-sharp-2.0                    \
+        -pkg:gnome-vfs-sharp-2.0                \
+        -pkg:gconf-sharp-2.0
+
+RESOURCES =                                                                             \
+        -resource:$(top_srcdir)/icons/f-spot-adjust-colors.png,f-spot-adjust-colors.png         \
+        -resource:$(top_srcdir)/icons/f-spot-browse.png,f-spot-browse.png               \
+        -resource:$(top_srcdir)/icons/f-spot-crop.png,f-spot-crop.png                   \
+	<b>...</b>
+        -resource:$(top_srcdir)/icons/f-spot.js,f-spot.js       \
+        -resource:$(srcdir)/dces.rdf,dces.rdf                   \
+        -resource:$(srcdir)/f-spot.glade,f-spot.glade
+
+fspotlibdir = $(libdir)/f-spot
+fspotlib_DATA = f-spot.exe.config       \
+                f-spot.exe
+
+bin_SCRIPTS = f-spot
+
+F_SPOT_CSFILES = $(F_SPOT_CSDISTFILES) Defines.cs
+
+f-spot.exe: $(F_SPOT_CSFILES) f-spot.glade dces.rdf
+        $(CSC) -out:$@ $(CSFLAGS) $(F_SPOT_CSFILES) $(ASSEMBLIES) $(RESOURCES)
+
+all: f-spot.exe
+</tt></pre>
+	
+<p>The equivalent <tt>Buildfile</tt> is more concise:</p>
+
+<pre class="code"><tt>using [
+        Core
+        Core.Clr
+        Core.Install
+        Core.Subst
+        Languages.CSharp
+        Tools.PkgConfig
+]
+
+<b># Don't need a full Buildfile in the Cairo subdir.
+inside [ Cairo ] [ using [ Languages.CSharp ] ]</b>
+
+defs = { TEST_METADATA = true }
+
+f-spot.exe = [
+        @f-spot.exe.sources
+        <b>@f-spot.exe.resources</b>
+        f-spot.exe.config
+
+        unsafe = true
+        nowarn = "0618,0169,0612"
+        defs
+
+        /fspot-pclibs
+        /System.Data.dll
+        /System.Web.dll
+        /Mono.Data.SqliteClient.dll
+        /Mono.Posix.dll
+        /Mono.Security.dll
+        /ICSharpCode.SharpZipLib.dll
+        /libgphoto2-sharp/libgphoto2-sharp.dll
+        /semweb/SemWeb.dll
+        /FlickrNet/FlickrNet.dll
+] with [
+        install = /cslib-installer
+]
+</tt></pre>
+
+<p>Here we have used the <tt>inside</tt> syntax, which makes it so we
+don't even have to write a <tt>Buildfile</tt> for the <tt>Cairo</tt>
+subdirectory: the matchers defined in the <tt>Languages.CSharp</tt>
+bundle are sufficient. The <tt>f-spot.exe.resources</tt> file can just list a bunch of
+files such as <tt>/icons/f-spot-crop.png</tt>: any listed file that is
+not C# source is added to the command line as a resource file, as we
+might wish. There are numerous compiler flags and assembly references,
+but they are mostly straightforward enough. One item to note is that
+we have replaced the <tt>-pkg:foo</tt> command-line arguments to
+<tt>mcs</tt> with the results of separate invocations of
+<tt>pkg-config</tt> saved in in the We must also remember to
+create the files generated from templates by
+<tt>config.status</tt>:</p>
+
+<pre class="code"><tt># Defines.cs.
+
+defsubsts = {
+        VERSION = /project/version,
+        PACKAGE = /project/name,
+        prefix = /config/install/prefix,
+        libdir = /config/install/libdir,
+        GNOME_ICON_THEME_PREFIX = /gnome-icon-theme-prefix
+}
+
+Defines.cs = Subst [
+        Defines.cs.in
+        <b>typeref = main.cs # hacky</b>
+        defsubsts
+]
+
+# f-spot.exe.config
+
+cfgsubsts = {
+        expanded_libdir = /config/install/libdir,
+        EXIF_SOVERSION = /exif-soversion
+}
+
+f-spot.exe.config = Subst [
+        f-spot.exe.config.in
+        <b>typeref = /libgphoto2-sharp/libgphoto2-sharp.dll.config</b>
+        cfgsubsts
+]
+
+# f-spot wrapper
+
+f-spot = Subst [
+        f-spot.in
+        defsubsts # Just reuse this
+] with [
+        install = /config/install/bindir_installer
+        default = true
+]
+</tt></pre>
+
+<p>The <tt>typeref</tt> argument to the <tt>Subst</tt> rules is a
+moderately-sized hack. The <tt>Subst</tt> rule doesn't know what kinds
+of files it is working with, and so by default it just creates an
+output of type <tt>TextFile</tt>. However, when using the resulting
+file as an input to a complex rule such as <tt>CompileExe</tt>, the
+type of the file may matter: for instance, <tt>Defines.cs</tt> must be
+of type <tt>CSSource</tt> so that it gets added to the C# compiler
+command line; a more generic type will be treated as a resource to
+insert into the assembly, like the icons above. The <tt>typeref</tt>
+argument gives the <tt>Subst</tt> rule an "example" result of the
+appropriate type; if present, the rule returns a result of the same
+type as that argument.</p>
+
+<p>It may have been tedious, but we've made it all the way through the
+F-Spot build system and translated everything. Of course, all the
+examples that I've shown above are the result of an iterative process:
+once the <tt>Buildfile</tt>s were written, I tweaked things until
+F-Spots installation and distributions created with the two systems
+were essentially identical. I also didn't describe how I wrote bundles
+to implement the functionality I needed as the migration process went
+along. Unsurprisingly, the latter activity actually took most of my
+time; however, as the library of bundles grows in size, writing new
+code should become less and less necessary. (By the way, a currently
+missing feature -- and major priority -- is to make it possible for
+custom bundles to be included with source distributions. Obviously the
+standard suite of MBuild rules can't be expected to cover the needs of
+every project out there, and no doubt some of the rules have bugs that
+will require workarounds. Custom rule bundles will at least make this
+problem addressable.)</p>
+
+<p><b>Next: <a href="preface.xhtml">FIXME: Back to the Begining</a></b></p>
+
+</body>
+</html>

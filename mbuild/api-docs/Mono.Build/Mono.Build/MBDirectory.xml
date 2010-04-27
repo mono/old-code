@@ -1,0 +1,273 @@
+<Type Name="MBDirectory" FullName="Mono.Build.MBDirectory">
+  <TypeSignature Language="C#" Value="public class MBDirectory : Mono.Build.ExternalResult, IFingerprintable, ICloneable" Maintainer="auto" />
+  <AssemblyInfo>
+    <AssemblyName>Mono.Build</AssemblyName>
+    <AssemblyPublicKey>[00 24 00 00 04 80 00 00 94 00 00 00 06 02 00 00 00 24 00 00 52 53 41 31 00 04 00 00 11 00 00 00 F5 C4 9D D0 0C 3C 7B 78 63 91 17 5B 7D F6 FD 4A A9 50 31 82 44 76 CF D8 68 14 88 FD C8 8F 0F 8D 0F FE B2 24 19 8D F2 C1 9F 2F 14 C8 B5 47 12 08 FD A2 C5 F9 60 77 91 22 44 72 9D 61 96 65 EE 38 88 EA 48 A6 D4 66 4A 4A 8A 6A F9 B4 4D 2D 62 51 97 7D F9 0D AD 80 DC EE E9 66 C7 F3 B5 8C 89 27 5E 02 F6 8B 15 67 70 36 ED B7 53 2E 70 B1 98 04 39 2C D6 EE 3C 18 D0 76 4D 66 68 2B D6 A3 AC AB]</AssemblyPublicKey>
+    <AssemblyVersion>0.0.0.0</AssemblyVersion>
+    <AssemblyCulture>neutral</AssemblyCulture>
+    <Attributes />
+  </AssemblyInfo>
+  <ThreadSafetyStatement>Gtk# is thread aware, but not thread safe; See the <link location="node:gtk-sharp/programming/threads">Gtk# Thread Programming</link> for details.</ThreadSafetyStatement>
+  <Docs>
+    <summary>To be added</summary>
+    <remarks>To be added</remarks>
+  </Docs>
+  <Base>
+    <BaseTypeName>Mono.Build.ExternalResult</BaseTypeName>
+  </Base>
+  <Interfaces>
+    <Interface>
+      <InterfaceName>Mono.Build.IFingerprintable</InterfaceName>
+    </Interface>
+    <Interface>
+      <InterfaceName>System.ICloneable</InterfaceName>
+    </Interface>
+  </Interfaces>
+  <Attributes />
+  <Members>
+    <Member MemberName="invalid_modtime">
+      <MemberSignature Language="C#" Value="protected static DateTime invalid_modtime;" />
+      <MemberType>Field</MemberType>
+      <ReturnValue>
+        <ReturnType>System.DateTime</ReturnType>
+      </ReturnValue>
+      <Parameters>
+      </Parameters>
+      <Docs>
+        <summary>To be added</summary>
+        <remarks>To be added</remarks>
+      </Docs>
+    </Member>
+    <Member MemberName="kind">
+      <MemberSignature Language="C#" Value="protected Mono.Build.ExternalResultKind kind;" />
+      <MemberType>Field</MemberType>
+      <ReturnValue>
+        <ReturnType>Mono.Build.ExternalResultKind</ReturnType>
+      </ReturnValue>
+      <Parameters>
+      </Parameters>
+      <Docs>
+        <summary>To be added</summary>
+        <remarks>To be added</remarks>
+      </Docs>
+    </Member>
+    <Member MemberName="subpath">
+      <MemberSignature Language="C#" Value="protected string subpath;" />
+      <MemberType>Field</MemberType>
+      <ReturnValue>
+        <ReturnType>System.String</ReturnType>
+      </ReturnValue>
+      <Parameters>
+      </Parameters>
+      <Docs>
+        <summary>To be added</summary>
+        <remarks>To be added</remarks>
+      </Docs>
+    </Member>
+    <Member MemberName="modtime">
+      <MemberSignature Language="C#" Value="protected DateTime modtime;" />
+      <MemberType>Field</MemberType>
+      <ReturnValue>
+        <ReturnType>System.DateTime</ReturnType>
+      </ReturnValue>
+      <Parameters>
+      </Parameters>
+      <Docs>
+        <summary>To be added</summary>
+        <remarks>To be added</remarks>
+      </Docs>
+    </Member>
+    <Member MemberName="ToString">
+      <MemberSignature Language="C#" Value="public static string ToString (Mono.Build.ExternalResultKind k);" />
+      <MemberType>Method</MemberType>
+      <ReturnValue>
+        <ReturnType>System.String</ReturnType>
+      </ReturnValue>
+      <Parameters>
+        <Parameter Name="k" Type="Mono.Build.ExternalResultKind" />
+      </Parameters>
+      <Docs>
+        <summary>To be added</summary>
+        <param name="k">a <see cref="T:System.Int32" /></param>
+        <returns>a <see cref="T:System.String" /></returns>
+        <remarks>To be added</remarks>
+      </Docs>
+    </Member>
+    <Member MemberName="CreateTo">
+      <MemberSignature Language="C#" Value="public void CreateTo (Mono.Build.IBuildContext ctxt);" />
+      <MemberType>Method</MemberType>
+      <ReturnValue>
+        <ReturnType>System.Void</ReturnType>
+      </ReturnValue>
+      <Parameters>
+        <Parameter Name="ctxt" Type="Mono.Build.IBuildContext" />
+      </Parameters>
+      <Docs>
+        <summary>To be added</summary>
+        <param name="ctxt">a <see cref="T:Mono.Build.IBuildContext" /></param>
+        <remarks>To be added</remarks>
+      </Docs>
+    </Member>
+    <Member MemberName="GetModTime">
+      <MemberSignature Language="C#" Value="protected DateTime GetModTime (Mono.Build.IBuildContext ctxt);" />
+      <MemberType>Method</MemberType>
+      <ReturnValue>
+        <ReturnType>System.DateTime</ReturnType>
+      </ReturnValue>
+      <Parameters>
+        <Parameter Name="ctxt" Type="Mono.Build.IBuildContext" />
+      </Parameters>
+      <Docs>
+        <summary>To be added</summary>
+        <param name="ctxt">a <see cref="T:Mono.Build.IBuildContext" /></param>
+        <returns>a <see cref="T:System.DateTime" /></returns>
+        <remarks>To be added</remarks>
+      </Docs>
+    </Member>
+    <Member MemberName="Check">
+      <MemberSignature Language="C#" Value="public override bool Check (Mono.Build.IBuildContext ctxt);" />
+      <MemberType>Method</MemberType>
+      <ReturnValue>
+        <ReturnType>System.Boolean</ReturnType>
+      </ReturnValue>
+      <Parameters>
+        <Parameter Name="ctxt" Type="Mono.Build.IBuildContext" />
+      </Parameters>
+      <Docs>
+        <summary>To be added</summary>
+        <param name="ctxt">a <see cref="T:Mono.Build.IBuildContext" /></param>
+        <returns>a <see cref="T:System.Boolean" /></returns>
+        <remarks>To be added</remarks>
+      </Docs>
+    </Member>
+    <Member MemberName="Clean">
+      <MemberSignature Language="C#" Value="public override void Clean (Mono.Build.IBuildContext ctxt);" />
+      <MemberType>Method</MemberType>
+      <ReturnValue>
+        <ReturnType>System.Void</ReturnType>
+      </ReturnValue>
+      <Parameters>
+        <Parameter Name="ctxt" Type="Mono.Build.IBuildContext" />
+      </Parameters>
+      <Docs>
+        <summary>To be added</summary>
+        <param name="ctxt">a <see cref="T:Mono.Build.IBuildContext" /></param>
+        <remarks>To be added</remarks>
+      </Docs>
+    </Member>
+    <Member MemberName="DistClone">
+      <MemberSignature Language="C#" Value="public override void DistClone (Mono.Build.IBuildContext ctxt);" />
+      <MemberType>Method</MemberType>
+      <ReturnValue>
+        <ReturnType>System.Void</ReturnType>
+      </ReturnValue>
+      <Parameters>
+        <Parameter Name="ctxt" Type="Mono.Build.IBuildContext" />
+      </Parameters>
+      <Docs>
+        <summary>To be added</summary>
+        <param name="ctxt">a <see cref="T:Mono.Build.IBuildContext" /></param>
+        <remarks>To be added</remarks>
+      </Docs>
+    </Member>
+    <Member MemberName="GetFingerprint">
+      <MemberSignature Language="C#" Value="public override Mono.Build.Fingerprint GetFingerprint (Mono.Build.IBuildContext ctxt, Mono.Build.Fingerprint cached);" />
+      <MemberType>Method</MemberType>
+      <ReturnValue>
+        <ReturnType>Mono.Build.Fingerprint</ReturnType>
+      </ReturnValue>
+      <Parameters>
+        <Parameter Name="ctxt" Type="Mono.Build.IBuildContext" />
+        <Parameter Name="cached" Type="Mono.Build.Fingerprint" />
+      </Parameters>
+      <Docs>
+        <summary>To be added</summary>
+        <param name="ctxt">a <see cref="T:Mono.Build.IBuildContext" /></param>
+        <param name="cached">a <see cref="T:Mono.Build.Fingerprint" /></param>
+        <returns>a <see cref="T:Mono.Build.Fingerprint" /></returns>
+        <remarks>To be added</remarks>
+      </Docs>
+    </Member>
+    <Member MemberName="CloneTo">
+      <MemberSignature Language="C#" Value="protected override void CloneTo (Mono.Build.Result dest);" />
+      <MemberType>Method</MemberType>
+      <ReturnValue>
+        <ReturnType>System.Void</ReturnType>
+      </ReturnValue>
+      <Parameters>
+        <Parameter Name="dest" Type="Mono.Build.Result" />
+      </Parameters>
+      <Docs>
+        <summary>To be added</summary>
+        <param name="dest">a <see cref="T:Mono.Build.Result" /></param>
+        <remarks>To be added</remarks>
+      </Docs>
+    </Member>
+    <Member MemberName="ToString">
+      <MemberSignature Language="C#" Value="public override string ToString ();" />
+      <MemberType>Method</MemberType>
+      <ReturnValue>
+        <ReturnType>System.String</ReturnType>
+      </ReturnValue>
+      <Parameters />
+      <Docs>
+        <summary>To be added</summary>
+        <returns>a <see cref="T:System.String" /></returns>
+        <remarks>To be added</remarks>
+      </Docs>
+    </Member>
+    <Member MemberName=".ctor">
+      <MemberSignature Language="C#" Value="public MBDirectory ();" />
+      <MemberType>Constructor</MemberType>
+      <ReturnValue />
+      <Parameters />
+      <Docs>
+        <summary>To be added</summary>
+        <returns>a <see cref="T:Mono.Build.MBDirectory" /></returns>
+        <remarks>To be added</remarks>
+      </Docs>
+    </Member>
+    <Member MemberName=".ctor">
+      <MemberSignature Language="C#" Value="public MBDirectory (Mono.Build.ExternalResultKind kind, string subpath);" />
+      <MemberType>Constructor</MemberType>
+      <ReturnValue />
+      <Parameters>
+        <Parameter Name="kind" Type="Mono.Build.ExternalResultKind" />
+        <Parameter Name="subpath" Type="System.String" />
+      </Parameters>
+      <Docs>
+        <summary>To be added</summary>
+        <param name="kind">a <see cref="T:System.Int32" /></param>
+        <param name="subpath">a <see cref="T:System.String" /></param>
+        <returns>a <see cref="T:Mono.Build.MBDirectory" /></returns>
+        <remarks>To be added</remarks>
+      </Docs>
+    </Member>
+    <Member MemberName="SubPath">
+      <MemberSignature Language="C#" Value="public string SubPath { set; get; };" />
+      <MemberType>Property</MemberType>
+      <ReturnValue>
+        <ReturnType>System.String</ReturnType>
+      </ReturnValue>
+      <Parameters />
+      <Docs>
+        <summary>To be added</summary>
+        <returns>a <see cref="T:System.String" /></returns>
+        <remarks>To be added</remarks>
+      </Docs>
+    </Member>
+    <Member MemberName="Kind">
+      <MemberSignature Language="C#" Value="public override Mono.Build.ExternalResultKind Kind { set; get; };" />
+      <MemberType>Property</MemberType>
+      <ReturnValue>
+        <ReturnType>Mono.Build.ExternalResultKind</ReturnType>
+      </ReturnValue>
+      <Parameters />
+      <Docs>
+        <summary>To be added</summary>
+        <returns>a <see cref="T:Mono.Build.ExternalResultKind" /></returns>
+        <remarks>To be added</remarks>
+      </Docs>
+    </Member>
+  </Members>
+</Type>

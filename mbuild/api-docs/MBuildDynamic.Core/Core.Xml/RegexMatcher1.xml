@@ -1,0 +1,10 @@
+﻿<regex_matcher name="\.xsl$">
+        <docs>
+                <summary>To be added.</summary>
+                <remarks>To be added.</remarks>
+        </docs>
+        <regex>\.xsl$</regex>
+        <rule>MBuildDynamic.Core.Xml.XslSourcefileRule</rule>
+</regex_matcher>
+
+

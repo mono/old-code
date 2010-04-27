@@ -1,0 +1,10 @@
+﻿<regex_matcher name="\.dll$">
+        <docs>
+                <summary>To be added.</summary>
+                <remarks>To be added.</remarks>
+        </docs>
+        <regex>\.dll$</regex>
+        <rule>MBuildDynamic.Core.Clr.SystemDllRule</rule>
+</regex_matcher>
+
+

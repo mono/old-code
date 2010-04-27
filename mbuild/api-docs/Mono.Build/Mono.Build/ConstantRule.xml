@@ -1,0 +1,105 @@
+<Type Name="ConstantRule" FullName="Mono.Build.ConstantRule">
+  <TypeSignature Language="C#" Value="public class ConstantRule : Mono.Build.Rule, IFingerprintable, ITagger" Maintainer="auto" />
+  <AssemblyInfo>
+    <AssemblyName>Mono.Build</AssemblyName>
+    <AssemblyPublicKey>[00 24 00 00 04 80 00 00 94 00 00 00 06 02 00 00 00 24 00 00 52 53 41 31 00 04 00 00 11 00 00 00 F5 C4 9D D0 0C 3C 7B 78 63 91 17 5B 7D F6 FD 4A A9 50 31 82 44 76 CF D8 68 14 88 FD C8 8F 0F 8D 0F FE B2 24 19 8D F2 C1 9F 2F 14 C8 B5 47 12 08 FD A2 C5 F9 60 77 91 22 44 72 9D 61 96 65 EE 38 88 EA 48 A6 D4 66 4A 4A 8A 6A F9 B4 4D 2D 62 51 97 7D F9 0D AD 80 DC EE E9 66 C7 F3 B5 8C 89 27 5E 02 F6 8B 15 67 70 36 ED B7 53 2E 70 B1 98 04 39 2C D6 EE 3C 18 D0 76 4D 66 68 2B D6 A3 AC AB]</AssemblyPublicKey>
+    <AssemblyVersion>0.0.0.0</AssemblyVersion>
+    <AssemblyCulture>neutral</AssemblyCulture>
+    <Attributes />
+  </AssemblyInfo>
+  <ThreadSafetyStatement>Gtk# is thread aware, but not thread safe; See the <link location="node:gtk-sharp/programming/threads">Gtk# Thread Programming</link> for details.</ThreadSafetyStatement>
+  <Docs>
+    <summary>A rule that has no arguments and returns a specified result.</summary>
+    <remarks />
+  </Docs>
+  <Base>
+    <BaseTypeName>Mono.Build.Rule</BaseTypeName>
+  </Base>
+  <Interfaces>
+    <Interface>
+      <InterfaceName>Mono.Build.IFingerprintable</InterfaceName>
+    </Interface>
+    <Interface>
+      <InterfaceName>Mono.Build.ITagger</InterfaceName>
+    </Interface>
+  </Interfaces>
+  <Attributes />
+  <Members>
+    <Member MemberName="GetCollector">
+      <MemberSignature Language="C#" Value="public override Mono.Build.ArgCollector GetCollector ();" />
+      <MemberType>Method</MemberType>
+      <ReturnValue>
+        <ReturnType>Mono.Build.ArgCollector</ReturnType>
+      </ReturnValue>
+      <Parameters />
+      <Docs>
+        <summary>Returns an empty ArgCollector.</summary>
+        <returns>A <see cref="T:Mono.Build.ArgCollector" /> with no arguments defined.</returns>
+        <remarks>This rule accepts no arguments.</remarks>
+      </Docs>
+    </Member>
+    <Member MemberName=".ctor">
+      <MemberSignature Language="C#" Value="public ConstantRule (Mono.Build.Result res);" />
+      <MemberType>Constructor</MemberType>
+      <ReturnValue />
+      <Parameters>
+        <Parameter Name="res" Type="Mono.Build.Result" />
+      </Parameters>
+      <Docs>
+        <summary>Create a new constant rule.</summary>
+        <param name="res">The <see cref="T:Mono.Build.Result" /> that this rule's Build function will return.</param>
+        <returns>A newly-constructed <see cref="T:Mono.Build.ConstantRule" />.</returns>
+        <remarks />
+      </Docs>
+    </Member>
+    <Member MemberName="GetFingerprint">
+      <MemberSignature Language="C#" Value="public override Mono.Build.Fingerprint GetFingerprint (Mono.Build.IBuildContext ctxt, Mono.Build.Fingerprint cached);" />
+      <MemberType>Method</MemberType>
+      <ReturnValue>
+        <ReturnType>Mono.Build.Fingerprint</ReturnType>
+      </ReturnValue>
+      <Parameters>
+        <Parameter Name="ctxt" Type="Mono.Build.IBuildContext" />
+        <Parameter Name="cached" Type="Mono.Build.Fingerprint" />
+      </Parameters>
+      <Docs>
+        <summary>Get the fingerprint of this rule.</summary>
+        <param name="ctxt">a <see cref="T:Mono.Build.IBuildContext" /></param>
+        <param name="cached">a <see cref="T:Mono.Build.Fingerprint" /></param>
+        <returns>The rule's <see cref="T:Mono.Build.Fingerprint" />.</returns>
+        <remarks>The value returned by this function is actually the
+fingerprint of the <see cref="T:Mono.Build.Result" /> passed to the
+constructor. This is because the ConstantRule class is something of a
+cheat; "real" rules do not take parameters in their constructors and
+have no internal state. This class, on the other hand, keeps a <see cref="T:Mono.Build.Result" /> internally. In a sense, it's a shortcut
+to having an arbitrary number of rule classes that always return one
+predefined result.
+
+<para>One way of thinking about this is to remember the invariant that
+two build operations with the same fingerprint should return the same
+result. If this function returned <see cref="F:Mono.Build.GenericFingerprints.Null" />, for example, two
+build operations could have the same fingerprint (ConstantRule, no
+arguments) and return different results, if they happened to involve
+two different instances of ConstantRule.  </para></remarks>
+      </Docs>
+    </Member>
+    <Member MemberName="Build">
+      <MemberSignature Language="C#" Value="public override Mono.Build.Result Build (Mono.Build.ArgCollector args, Mono.Build.IBuildContext ctxt);" />
+      <MemberType>Method</MemberType>
+      <ReturnValue>
+        <ReturnType>Mono.Build.Result</ReturnType>
+      </ReturnValue>
+      <Parameters>
+        <Parameter Name="args" Type="Mono.Build.ArgCollector" />
+        <Parameter Name="ctxt" Type="Mono.Build.IBuildContext" />
+      </Parameters>
+      <Docs>
+        <summary>Return the <see cref="T:Mono.Build.Result" /> passed to the constructor.</summary>
+        <param name="args">a <see cref="T:Mono.Build.ArgCollector" /></param>
+        <param name="ctxt">a <see cref="T:Mono.Build.IBuildContext" /></param>
+        <returns>A clone of the <see cref="T:Mono.Build.Result" /> that was passed to the constructor.</returns>
+        <remarks>This build function takes no arguments.</remarks>
+      </Docs>
+    </Member>
+  </Members>
+</Type>

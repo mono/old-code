@@ -1,0 +1,618 @@
+<?xml version="1.0" encoding="utf-8"?>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:monodoc="http://www.go-mono.org/xml/monodoc">
+<head>
+        <title>A First Look at MBuild</title>
+        <link rel="stylesheet" type="text/css" href="style.css" />
+</head>
+<body>
+
+<h2>A First Look at MBuild</h2>
+ 
+<p>Let's see some of the features that you get when working with
+MBuild. This walkthrough will assume that you have the MBuild source
+available; if you don't, it still ought to be somewhat useful.</p>
+
+<p>Let's look at the file called "Buildfile," which is the MBuild
+equivalent of a Makefile. It defines what gets built in the toplevel
+directory.</p>
+
+<pre class="code"><tt>using [ Core
+        Core.Clr
+        Core.Install
+        Languages.CSharp
+        Tools.Bundlegen
+]
+
+# information about this project
+
+project [
+        name = mbuild
+        version = 0.0.3.1
+
+        # Versioned assembly references pulled
+        # from the GAC. No more aclocal hell!
+
+        ref [
+                Languages.CSharp = 0.0.3.1
+                Tools.Jay = 0.0.3.1
+                Tools.PkgConfig = 0.0.3.1
+                Tools.Bundlegen = 0.0.3.1
+                Tools.Monodoc = 0.0.3.1
+        ]
+]
+
+# There are also Buildfiles in these
+# subdirectories.
+
+subdirs [
+        doc
+        scripts
+        demo
+        Monkeywrench/Monkeywrench
+        mb-bundlegen
+        api-docs
+]
+
+<b>...</b>
+
+# Load a response file to get the list of sources
+# Use a custom installer that installs the DLL into
+# the GAC, not just libdir.
+ 
+Mono.Build.dll = [@Mono.Build.dll.sources mbuild.snk]
+         with [ install = /config/mbuild/gac_installer ]
+
+<b>...</b>
+
+MBuildDynamic.Tools.Monodoc.dll = BundlegenProcess [
+        Tools.Monodoc.bundle
+        MBuildDynamic.Core.dll
+        Mono.Build.dll
+        resources = api-docs/mkmstoc.xsl
+        mbuild.snk
+        our_bundlegen
+] with [ install = /config/mbuild/gac_installer ]
+</tt></pre>
+
+<p>Even if the exact details of how MBuild works aren't clear, I hope
+that the general idea of what's going on in MBuild comes through.</p>
+
+<h2>The Basics</h2>
+
+<p>The first time that you run MBuild for a project, you need to tell
+it where to find the source code. This is because MBuild has builtin
+support for out-of-place builds ("$srcdir != $builddir"), so the
+source code won't always be in same place that you run the build
+from. We're going to show off this feature:</p>
+
+<pre class="code"><tt>mbuild$ <b>mkdir BUILD</b>
+mbuild$ <b>cd BUILD</b>
+BUILD$ <b>mbuild -i ..</b>
+Initializing with source directory `..' and buildfiles called `Buildfile'
+Building `/config/tools/pkgconfig/pkgconfig_name' ...
+Building `/config/tools/pkgconfig/pkgconfig_binary' ...
+Building `/config/tools/monodoc/monodoc_name' ...
+Building `/config/tools/monodoc/monodoc_binary' ...
+Building `/config/tools/monodoc/monodoc_program' ...
+Building `/config/tools/jay/jay_name' ...
+Building `/config/tools/jay/jay_binary' ...
+Building `/mb-gtkconfig/glade-sharp-pclibs' ...
+Building `/mb-gtkconfig/glade-sharp-pccheck' ...
+Building `/config/clr/gacutil_names' ...
+Building `/config/clr/gacutil_binary' ...
+Building `/config/clr/gacutil_program' ...
+Building `/config/clr/sn_names' ...
+Building `/config/clr/sn_binary' ...
+Building `/config/clr/sn_program' ...
+Building `/config/tools/bundlegen/bundlegen_name' ...
+Building `/config/tools/bundlegen/bundlegen_binary' ...
+Built 17 targets, 4 did not need rebuilding (with dups).
+</tt></pre>
+
+<p>The <tt>-i</tt> argument stands for "initialize", and the
+.. points to the source directory. If you just want to run your builds
+in-place, you can just run <tt>mbuild -i .</tt> from the source
+directory.</p>
+
+<p>When you run MBuild with the <tt>-i</tt> argument, it merely runs
+some configuration checks; it doesn't execute a full build. To do
+that, just run the tool without any command-line arguments:</p>
+
+<pre class="code"><tt>BUILD$ <b>mbuild</b>
+Building `/mb-bundlegen/Mono.GetOptions.dll' ...
+Building `/mb-bundlegen/AssemblyInfo.cs' ...
+Building `/project/version' ...
+Building `/mb-bundlegen/GeneratedAssemblyVersionInfo.cs' ...
+Building `/mb-bundlegen/mb-bundlegen.cs' ...
+Building `/mb-bundlegen/Tokenizer.cs' ...
+Building `/mb-bundlegen/Parser.jay' ...
+Building `/config/tools/jay/default_skeleton_dir' ...
+Building `/config/tools/jay/default_skeleton_name' ...
+Building `/config/tools/jay/default_skeleton' ...
+Building `/config/tools/jay/default_flags' ...
+Building `/mb-bundlegen/Parser.cs' ...
+warning 3010: Jay printed warnings:
+   /usr/bin/jay: 2 rules never reduced
+   /usr/bin/jay: 6 shift/reduce conflicts.
+Building `/config/generic/enable_debug' ...
+Building `/config/lang/csharp/enable_debug' ...
+Building `/config/lang/csharp/csc_names' ...
+Building `/config/lang/csharp/csc' ...
+Building `/mb-bundlegen/mb-bundlegen.exe' ...
+<b>...</b>
+Built 150 targets, 2045 did not need rebuilding (with dups).
+1 warnings, 0 errors
+</tt></pre>
+
+<p>One convenient thing about MBuild is that it doesn't use file
+modification times to detect changes:</p>
+
+<pre class="code"><tt>BUILD$ <b>touch ../mbuild/mbuild.cs</b>
+BUILD$ <b>mbuild</b>
+[<i> Nothing is built </i>]
+</tt></pre>
+
+<h2>Cleaning</h2>
+
+<p>MBuild also has builtin support for "cleaning" built objects. The
+command-line argument <tt>-c</tt> puts MBuild in "clean mode". For
+instance, we can clean one file like this:</p>
+
+<pre class="code"><tt>BUILD$ <b>ls -l mbuild.exe</b>
+-rwxrwxr-x  1 peter peter 13312 Aug 13 15:00 mbuild.exe
+BUILD$ <b>mbuild -c mbuild.exe</b>
+Cleaned 1 targets
+BUILD$ <b>ls -l mbuild.exe</b>
+ls: mbuild.exe: No such file or directory
+</tt></pre>
+
+<p>Of course, you don't <em>have</em> to clean files through
+MBuild. It will notice if you just delete a file from under it.</p>
+
+<pre class="code"><tt>BUILD$ <b>mbuild mbuild.exe</b>
+[<i> mbuild.exe is rebuilt </i>]
+BUILD$ <b>rm mbuild.exe</b>
+BUILD$ <b>mbuild</b>
+/mbuild.exe: warning 3008: The cached external result for /mbuild.exe was not valid; rebuilding.
+   $builddir/mbuild.exe
+Building `/mbuild.exe' ...
+Built 1 targets, 1826 did not need rebuilding (with dups).
+1 warnings, 0 errors
+</tt></pre>
+
+<p>We see that MBuild will complain if you do this, but it knows what to do in
+response.</p>
+
+<p>MBuild is also aware of recursion. You can move into
+subdirectories and MBuild will run a build for the files in that
+subdirectory of sources. First, we clean <em>all</em> built objects by
+giving MBuild the <tt>-a</tt> flag. (There is a subtle difference between
+<tt>mbuild -c</tt> and <tt>mbuild -ca</tt>. More on that later.)</p>
+
+<pre class="code"><tt>BUILD$ <b>mbuild -ca</b>
+Cleaned 17 targets
+BUILD$ <b>cd mb-bundlegen</b>
+mb-bundlegen$ <b>mbuild</b>
+Building `/mb-bundlegen/GeneratedAssemblyVersionInfo.cs' ...
+Building `/mb-bundlegen/Parser.cs' ...
+warning 3010: Jay printed warnings:
+   /usr/bin/jay: 2 rules never reduced
+   /usr/bin/jay: 6 shift/reduce conflicts.
+Building `/mb-bundlegen/mb-bundlegen.exe' ...
+Built 3 targets, 21 did not need rebuilding (with dups).
+1 warnings, 0 errors
+</tt></pre>
+
+<p>Unlike any other recursive make tool that I've seen, MBuild still
+knows about targets above the working directory. You can tell MBuild
+to look at them with the <tt>-g</tt> ("global") option. We'll also
+throw in the <tt>--debug-logs</tt> option, which gets MBuild to tell
+you what commands that it's running. It shows that MBuild is actually
+using relative paths with <tt>..</tt> in them to get the build output
+in the right place.</p>
+
+<pre class="code"><tt>mb-bundlegen$ <b>mbuild -g --debug-logs</b>
+[<i> A lot of build output </i>]
+</tt></pre>
+
+<p>Pretty cool, huh?</p>
+
+<h2>Operations and Tags</h2>
+
+<p>Now, the difference between the <tt>-a</tt> and
+the <tt>-g</tt> option is probably not immediately obvious. I'll try
+to work up to explaining what's going on there. The basic thing to
+know is that the MBuild command-line client has two inputs:</p>
+
+<ul>
+<li><p>A list of <em>targets</em> to operate on.</p></li>
+
+<li><p>The <em>operation</em> to perform on those targets.</p></li>
+</ul>
+
+<p>"Operations" are basic build tasks; they'll make sense if you've
+used <tt>make</tt> before. In <tt>make</tt>, build operations are
+usually implemented with "pseudotargets", which don't actually
+correspond to a file: they're called <tt>all</tt>, <tt>clean</tt>,
+<tt>install</tt>, <tt>dist</tt>, etc. In MBuild, you specify the
+operation to execute separately from the targets to execute it
+on. (Or, if you prefer, think about it as activating a certain mode in
+the tool.) Instead of <tt>make clean</tt>, we specify a "clean"
+operation with <tt>mbuild -c</tt>. Instead of <tt>make install</tt>,
+we put the tool in install mode with <tt>mbuild -I</tt>. Instead of
+<tt>make dist</tt>, we have <tt>mbuild -d</tt>. And the default
+operation in mbuild is just to build targets, similar to <tt>make
+all</tt>.</p>
+
+<p>Where does MBuild get its list of targets to operate on? There are
+four basic <em>scopes</em> that MBuild works inside:</p>
+
+<ul>
+<li><p>By default, MBuild looks at all the targets in and below the
+current working directory.</p></li>
+
+<li><p>The <tt>-g</tt> flag tells MBuild to look at targets
+<em>globally</em>, even ones that live above the current working
+directory.</p></li>
+
+<li><p>The <tt>-l</tt> flag tells MBuild to look at targets
+<em>locally</em>, ignoring ones that that live below the current
+working directory.</p></li>
+
+<li><p>The <tt>-b prefix</tt> option makes MBuild use the default
+here-and-below behavior, but as if you were working in the prefix
+you specify. Not terribly useful or important.</p></li>
+</ul>
+
+<p>MBuild then prunes this list of targets by looking at
+<em>tags</em>. A tag is a piece of metadata attached to a target; it
+can be automatically defined by build rules, specified by the
+Buildfile author, or dynamically determined at build time. Tags have a
+name and a value; usually, the value is boolean. MBuild uses tags to
+filter its list of targets:</p>
+
+<ul>
+<li><p>By default, MBuild only operates on targets that have a tag
+called <tt>default</tt> set to <tt>true</tt>. "Important" targets
+should have this flag set; turning it on is sort of like
+making your target a dependency of "make all" in <tt>make</tt>.
+</p></li>
+
+<li><p>If you give MBuild the <tt>-a</tt> flag, it will operate on
+<em>all</em> targets, regardless of any flags.</p></li>
+
+<li><p>You can also specify another tag to check for. The command
+<tt>mbuild +tagname</tt> will only operate on those targets that have
+a <tt>true</tt> boolean value for the tag <tt>tagname</tt>. For
+instance, in a well-designed build, <tt>mbuild +docs</tt> will only
+build documentation files. You can give more then one set of tags at
+once: <tt>mbuild +docs +config +default</tt>.</p></li>
+
+<li><p>Or you can just give a target name to act on. Target names look
+like Unix path names but live in different namespace. A
+well-structured build system, however, will have a close
+correspondence between files and targets, so that <tt>mbuild
+mbuild.exe</tt> will operate on <tt>mbuild.exe</tt>. Again, you can
+specify more than one target name: <tt>mbuild mbuild.exe
+/config/install/prefix
+Monkeywrench/Monkeywrench/BuildfileParser.cs</tt>.</p></li>
+
+</ul>
+
+<p>You see that this system is better than the "pseudotarget" route
+that <tt>Makefile</tt> authors are forced to go. Say you've just added
+a new major target to your <tt>make</tt> project -- an executable, a
+library, etc. You remember to add it to the dependencies of your
+<tt>all</tt> target, so that it gets build when you run <tt>make
+all</tt>. But often enough you forget to add it to the rule for
+<tt>install</tt> target, and then later realize that you forgot to add
+code for it in the <tt>clean</tt> target. Now, tools such as
+<tt>automake</tt> avoid many of these problems, but the MBuild
+approach is <em>inherently</em> more reliable. Once you add the
+<tt>default</tt> tag to your target, <tt>mbuild</tt> will
+automatically build it, <tt>mbuild -c</tt> will automatically clean
+it, and <tt>mbuild -I</tt> will automatically install it. Even better,
+you can actually run these operations in a limited scope: <tt>mbuild
+-I +docs</tt> will install only documentation, without any special
+support needed in the <tt>Buildfile</tt>s.</p>
+
+<p>So, back to examples. One boring mode that I haven't mentioned is
+the <tt>--print-targets</tt> mode; it justs prints out the names of
+the targets that you've selected. Let's combine it with what we just
+learned.</p>
+
+<pre class="code"><tt>mb-bundlegen$ <b>cd ..</b>
+BUILD$ <b>mbuild --print-targets</b>
+[<i> List of default targets is printed </i>]
+BUILD$ <b>mbuild --print-targets +default</b>
+[<i> The same list is printed </i>]
+BUILD$ <b>mbuild --print-targets +docs</b>
+[<i> A list of documentation targets is printed </i>]
+</tt></pre>
+
+<p>We can also demonstrate the differences between the default,
+global, and local operation scopes:</p>
+
+<pre class="code"><tt>BUILD$ <b>cd api-docs</b>
+api-docs$ <b>mbuild --print-targets -a</b>
+[<i> A long list of files is printed </i>]
+api-docs$ <b>mbuild --print-targets -a -l</b>
+[<i> A much shorter list is printer </i>]
+api-docs$ <b>mbuild --print-targets -a -g</b>
+[<i> A very long list is printed </i>]
+</tt></pre>
+
+<h2>Showing Target Values</h2>
+
+<p>In MBuild, targets are more than just files -- they are entries in
+a namespace that have values associated with them. (A fuller
+explanation is forthcoming in the next section.) You can get MBuild
+to show these values with the "show" operation, activated with the
+<tt>-s</tt> option:</p>
+
+<pre class="code"><tt>api-docs$ <b>cd ..</b>
+BUILD$ <b>mbuild -s</b>
+/mb-bundlegen/mb-bundlegen.exe = $builddir/mb-bundlegen/mb-bundlegen.exe
+/MBuildDynamic.Tools.PkgConfig.dll = $builddir/MBuildDynamic.Tools.PkgConfig.dll
+/MBuildDynamic.Tools.Monodoc.dll = $builddir/MBuildDynamic.Tools.Monodoc.dll
+/Mono.Build.dll = $builddir/Mono.Build.dll
+/MBuildDynamic.Tools.Bundlegen.dll = $builddir/MBuildDynamic.Tools.Bundlegen.dll
+/mbuild.exe = $builddir/mbuild.exe
+/MBuildDynamic.Languages.CSharp.dll = $builddir/MBuildDynamic.Languages.CSharp.dll
+/MBuildDynamic.Tools.Jay.dll = $builddir/MBuildDynamic.Tools.Jay.dll
+/Monkeywrench.dll = $builddir/Monkeywrench.dll
+/MBuildDynamic.Core.dll = $builddir/MBuildDynamic.Core.dll
+/mb-gtkconfig/mb-gtkconfig.exe = $builddir/mb-gtkconfig/mb-gtkconfig.exe
+/mb-gtkconfig/glade-sharp-pclibs = "-r:/usr/lib/mono/gtk-sharp/glade-sharp.dll ..."
+/mb-gtkconfig/glade-sharp-pccheck = True
+/scripts/mb-gtkconfig = $srcdir/scripts/mb-gtkconfig
+/scripts/mb-bundlegen = $srcdir/scripts/mb-bundlegen
+/scripts/mbuild = $srcdir/scripts/mbuild
+</tt></pre>
+
+<p>You can see that this mode is similar to the
+<tt>--print-targets</tt> mode, but each target's value is also
+evaluated and printed. In this case, almost all of the
+<tt>default</tt> targets have file values, so their values look like
+filenames as well. But note that <tt>glade-sharp-pclibs</tt> is a
+string. We can also see the values of, say, configuration items in
+MBuild. Configuration targets are labeled with the tag
+<tt>config</tt>, so we can see their values with the following
+commands:</p>
+
+<pre class="code"><tt>BUILD$ <b>mbuild -s +config</b>
+Building `/config/generic/build_tests' ...
+/config/generic/build_tests = True
+Building `/config/generic/enable_optimize' ...
+/config/generic/enable_optimize = True
+Building `/config/generic/build_docs' ...
+/config/generic/build_docs = True
+/config/generic/enable_debug = True
+Building `/config/generic/build_examples' ...
+/config/generic/build_examples = True
+Building `/config/install/default_prefix' ...
+Building `/config/install/prefix' ...
+/config/install/prefix = "/usr/local"
+Building `/config/mbuild/good_example' ...
+/config/mbuild/good_example = True
+/config/lang/csharp/enable_debug = True
+/config/tools/bundlegen/enable_debug = True
+Built 7 targets, 5 did not need rebuilding (with dups).
+BUILD$ <b>ls config</b>
+ls: config: No such file or directory
+</tt></pre>
+
+<p>The <tt>ls</tt> command is supposed to emphasize that these
+configuration targets exist in MBuild's namespace, but not on the
+filesystem.</p>
+
+<h2>Configuration</h2>
+
+<p>The MBuild command-line client will use the <tt>config</tt> tag get
+a list of targets that represent configuration options. You can then
+change their values in the "config" mode (<tt>-C</tt>). By default,
+the config mode acts on only targets with the <tt>config</tt> tag, but
+you can change that if you want. In general, however, the MBuild
+equivalent of <tt>./configure</tt> is <tt>mbuild -C</tt>:</p>
+
+<pre class="code"><tt>BUILD$ <b>mbuild -C</b>
+Build tests by default? (y/n, default: y)
+[<i> hit enter </i>]
+(Didn't understand; going with the default.)
+Enable optimization options? (y/n, default: y)
+[<i> hit enter </i>]
+(Didn't understand; going with the default.)
+Build documentation by default? (y/n, default: y)
+[<i> hit enter </i>]
+(Didn't understand; going with the default.)
+Enable debugging options? (y/n, default: y)
+[<i> hit enter </i>]
+(Didn't understand; going with the default.)
+Build examples by default? (y/n, default: y)
+[<i> hit enter </i>]
+(Didn't understand; going with the default.)
+Specify the prefix of directories that files will be installed into (default: /usr/local)
+[<i> enter /tmp/mbuild-install </i>]
+This is an example configuration option. Ok? (y/n, default: y)
+[<i> enter n </i>]
+Compile C# programs with debugging symbols? (y/n, default: y)
+[<i> hit enter </i>]
+(Didn't understand; going with the default.)
+Generate debugging information for MBuild bundles? (y/n, default: y)
+[<i> hit enter </i>]
+(Didn't understand; going with the default.)
+Built 1 targets, 11 did not need rebuilding (with dups).
+BUILD$ <b>mbuild -s +config</b>
+/config/generic/build_tests = True
+/config/generic/enable_optimize = True
+/config/generic/build_docs = True
+/config/generic/enable_debug = True
+/config/generic/build_examples = True
+/config/install/prefix = <b>"/tmp/mbuild-install"</b>
+/config/mbuild/good_example = <b>False</b>
+/config/lang/csharp/enable_debug = True
+/config/tools/bundlegen/enable_debug = True
+</tt></pre>
+
+<p>We set up a bunch of generic configuration options, and few that
+were actually relevant to MBuild. Obviously, the interface for
+configuring is kind of lame at the moment. There is a prototype
+graphical configurator called <tt>mb-gtkconfig.exe</tt>, which is
+built in the <tt>mb-gtkconfig/</tt> directory of the MBuild source.
+It seems to work, but it's not been very well tested so far.</p>
+
+<p>The configuration prompts are derived from another tag on the
+configuration targets called, sensibly, <tt>prompt</tt>. See
+<tt>Buildfile.config</tt> for an example:</p>
+
+<pre class="code"><tt>BUILD$ <b>cat ../Buildfile.config</b>
+using [
+        Core.Config
+        Core.Clr
+        Core.Install
+        Tools.PkgConfig
+]
+
+<b>...</b>
+
+good_example = ConfigBool[true] with [
+        prompt = "This is an example configuration option. Ok?"
+]
+<b>...</b>
+</tt></pre>
+
+<h2>Installation</h2>
+
+<p>Now that we've changed the install prefix into something
+unprivileged, we can run an install.</p>
+
+<pre class="code"><tt>BUILD$ <b>mbuild -I</b>
+Installing ...
+Building `/config/install/prefix_dir' ...
+Building `/config/install/bindir' ...
+Building `/config/install/bindir_installer' ...
+ + /mb-bundlegen/mb-bundlegen.exe
+Building `/config/install/libdir' ...
+Building `/config/mbuild/gac_installer' ...
+ + /MBuildDynamic.Tools.PkgConfig.dll
+ + /MBuildDynamic.Tools.Monodoc.dll
+ + /Mono.Build.dll
+ + /MBuildDynamic.Tools.Bundlegen.dll
+ + /mbuild.exe
+ + /MBuildDynamic.Languages.CSharp.dll
+ + /MBuildDynamic.Tools.Jay.dll
+Building `/config/install/libdir_installer' ...
+ + /Monkeywrench.dll
+ + /MBuildDynamic.Core.dll
+ + /scripts/mb-gtkconfig
+ + /scripts/mb-bundlegen
+ + /scripts/mbuild
+Built 9 targets, 2071 did not need rebuilding (with dups).
+Installed 13 targets
+</tt></pre>
+
+<p>What are these "installer" targets that are getting built? Well,
+MBuild's method for installation is clever -- probably too clever for
+its own good, but that's another story. MBuild figures out which
+targets to install by looking at a tag called <tt>install</tt>
+(surprise, amazement). However, this tag is not just a boolean
+value. It points to a special kind of target called an installer. An
+installer is a built object that contains code to run an installation
+routine. That routine is passed the value of the target possessing the
+<tt>install</tt> tag, and it does whatever makes sense with that
+target. Usually, this is just a file copy, as we can see by looking at
+some of these installer targets:</p>
+
+<pre class="code"><tt>BUILD$ <b>mbuild -s /config/install/bindir_installer</b>
+/config/install/bindir_installer = [copy to /tmp/mbuild-install/bin]
+BUILD$ <b>mbuild -s /config/mbuild/gac_installer</b>
+/config/mbuild/gac_installer = [install into gac, root = /tmp/mbuild-install/lib, 
+program = { GacutilProgram::Program = [program: gacutil ] }, package = mbuild]
+</tt></pre>
+
+<p>These installer targets also implement uninstallation, so MBuild
+should support perfectly that least-tested operation, <tt>make
+uninstall</tt>. The MBuild option to activate this mode is
+<tt>--uninstall</tt>:</p>
+
+<pre class="code"><tt>BUILD$ <b>mbuild --uninstall</b>
+Unnstalling ...
+ + /mb-bundlegen/mb-bundlegen.exe
+ + /MBuildDynamic.Tools.PkgConfig.dll
+ + /MBuildDynamic.Tools.Monodoc.dll
+ + /Mono.Build.dll
+ + /MBuildDynamic.Tools.Bundlegen.dll
+ + /mbuild.exe
+ + /MBuildDynamic.Languages.CSharp.dll
+ + /MBuildDynamic.Tools.Jay.dll
+ + /Monkeywrench.dll
+ + /MBuildDynamic.Core.dll
+ + /scripts/mb-gtkconfig
+ + /scripts/mb-bundlegen
+ + /scripts/mbuild
+Uninstalled 13 targets
+BUILD$ <b>find /tmp/mbuild-install -type f</b>
+[ <i>Nothing.</i> ]
+</tt></pre>
+
+<p>As you might guess from the presence of <tt>/tmp/mbuild-install</tt>
+in the value of <tt>bindir_installer</tt>, the latter has a dependency
+on the former:</p>
+
+<pre class="code"><tt>BUILD$ <b>mbuild -C /config/install/prefix</b>
+Specify the prefix of directories that files will be installed into (default: /tmp/mbuild-install)
+<i>[ enter /tmp/mbuild-install2 ]</i>
+BUILD$ <b>mbuild -s /config/install/bindir_installer</b>
+Building `/config/install/prefix_dir' ...
+Building `/config/install/bindir' ...
+Building `/config/install/bindir_installer' ...
+/config/install/bindir_installer = [copy to /tmp/mbuild-install2/bin]
+Built 3 targets, 2 did not need rebuilding (with dups).
+</tt></pre>
+
+<p>We see that <tt>bindir_installer</tt> needs to be rebuilt after we
+change the value of <tt>/config/install/prefix</tt>.</p>
+
+<h2>Distribution</h2>
+
+<p>Finally, MBuild can also copy files into a directory for
+distribution. It won't actually tar that directory up, but baby steps,
+baby steps...</p>
+
+<pre class="code"><tt>BUILD$ <b>mbuild -d</b>
+Distributing to `mbuild-0.0.3.1' ...
+ + /Monkeywrench/Monkeywrench/OperationFunc.cs
+ + /Monkeywrench/Monkeywrench/ProviderBuilder.cs
+ + /Monkeywrench/Monkeywrench/ITargetRequestSink.cs
+Building `/Monkeywrench/Monkeywrench/.monkeywrench_resource_0' ...
+ + /Monkeywrench/Monkeywrench/.monkeywrench_resource_0
+ + /Monkeywrench/Monkeywrench/BuildfileProvider.cs
+<b>...</b>
+Building `/project/compat-code' ...
+ + /scripts/mb-gtkconfig
+ + /scripts/mb-bundlegen
+ + /scripts/mbuild
+Building `/scripts/.monkeywrench_resource_0' ...
+ + /scripts/.monkeywrench_resource_0
+Built 171 targets, 2830 did not need rebuilding (with dups).
+Copied 263 targets for distribution
+2 warnings, 0 errors
+</tt></pre>
+
+<p>A distribution should include <i>all</i> components of the source
+tree, so you will see that MBuild builds some various targets that
+haven't been built before. The <tt>.monkeywrench_resource_</tt>
+targets, for example, are targets pointing to <tt>Buildfile</tt>s and
+source listing files. Anyway, if you've ever tried to get <tt>make dist</tt>
+working, you know how much of a pain it can be. Look through the
+MBuild <tt>Buildfile</tt>s and try and find any code needed to get
+distribution working. None.</p>
+
+<p>Well, that's a quick tour of the frontend of MBuild. Now, let's see
+how it all works under the hood...</p>
+
+<p><b>Next: <a href="architecture.xhtml">The MBuild Architecture</a></b></p>
+
+</body>
+</html>

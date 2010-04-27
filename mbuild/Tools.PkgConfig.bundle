@@ -1,0 +1,252 @@
+# pkg-config support
+
+namespace Tools.PkgConfig {
+
+	using default;
+	using Core.Tools;
+	using Core.Install;
+	using !System.Text;
+	using !System;
+
+	parameters {
+		basis Config = /config/tools/pkgconfig;
+		namespace Core.Install;
+	}
+
+	provider Config {
+
+		pkgconfig_name = "!pkg-config";
+
+		pkgconfig_binary = FindTool (pkgconfig_name) tags {
+			"prereq" = true;
+		};
+
+		install_dir = MakePkgConfigInstallDir (Install.Config/libdir);
+
+		installer = MakeCopyInstaller (install_dir);
+	}
+
+	abstract rule PkgConfigBase {
+
+		default string* query;
+		BinaryInfo pkgconfig;
+		.target tname;
+
+		@{
+                protected string RunOnce (BinaryInfo pkgconfig, string[] qarr, string extra_args, 
+				out int exit_code, out string stderr, IBuildContext ctxt) {
+                        // user args
+ 
+                        StringBuilder sb = new StringBuilder ();
+                        sb.Append ("--print-errors ");
+                        sb.Append (extra_args);
+
+			foreach (string s in qarr)
+ 				sb.AppendFormat (" {0}", s);
+ 
+                        // run that mofo. We must handle error reporting!
+ 
+                        return Launcher.GetToolStdout (pkgconfig, sb.ToString (), 
+				out exit_code, out stderr, ctxt);
+                }
+
+		// This was written before the 'bool report' overload of GetToolStdout was added,
+		// but keep this behavior because the custom error message is important, I think.
+ 
+                protected string RunOnce (BinaryInfo pkgconfig, string[] qarr, string extra_args, IBuildContext ctxt) {
+			int exit_code;
+			string stderr;
+
+			string r = RunOnce (pkgconfig, qarr, extra_args, out exit_code, out stderr, ctxt);
+
+			if (exit_code != 0) {
+				ctxt.Logger.Error (3003, "pkg-config returned an error. You most " +
+					"likely need to install the development package for one " +
+					"of the libraries this program requires.",
+					pkgconfig.ToUnixStyle (ctxt) + " " + extra_args + ":\n" + stderr);
+				return null;
+			}
+
+			return r;
+                }
+ 
+                protected virtual BinaryInfo GetProgram () {
+			return pkgconfig;
+                }
+                                                                                                                                                             
+                protected virtual string[] GetQuery (string suffix, IBuildContext ctxt) {
+			if (query.Length > 0)
+				return query;
+
+			if (suffix != null && tname != null) {
+				if (tname.EndsWith (suffix)) {
+					string q = tname.Substring (0, tname.Length - suffix.Length);
+					return new string[] { q };
+				}
+			}
+
+			ctxt.Logger.Error (2040, "Cannot determine pkg-config query -- no query argument, " + 
+				"not guessable from target name", null);
+			return null;
+                }
+
+		protected virtual string[] GetQuery (IBuildContext ctxt) {
+			return GetQuery (null, ctxt);
+		}
+
+		@} 
+
+		tags {
+			"prereq" = true;
+			"default" = true;
+		}
+	} default {
+		pkgconfig = Config/pkgconfig_binary;
+	}
+
+	rule PkgConfig : PkgConfigBase {
+
+		build (PkgConfigInfo res, ctxt) @{
+                        string[] query = GetQuery (ctxt);
+                        BinaryInfo prog = GetProgram ();
+ 
+			if (query == null)
+				return true;
+
+                        res.CFlags = RunOnce (prog, query, "--cflags", ctxt);
+                        if (res.CFlags == null)
+                                return true;
+ 
+                        res.Libs = RunOnce (prog, query, "--libs", ctxt);
+                        if (res.Libs == null)
+                                return true;
+ 
+                        return false;
+		@}
+	}
+
+	rule PkgConfigLibs : PkgConfigBase {
+
+		build (MBString res, ctxt) @{
+                        string[] query = GetQuery ("-pclibs", ctxt);
+                        BinaryInfo prog = GetProgram ();
+ 
+			if (query == null)
+				return true;
+
+                        string libs = RunOnce (prog, query, "--libs", ctxt);
+                        if (libs == null)
+                                return true;
+ 
+                        res.Value = libs;
+			return false;
+		@}
+	}
+
+	rule PkgConfigCFlags : PkgConfigBase {
+
+		build (MBString res, ctxt) @{
+                        string[] query = GetQuery ("-pcflags", ctxt);
+                        BinaryInfo prog = GetProgram ();
+ 
+			if (query == null)
+				return true;
+
+                        string cflags = RunOnce (prog, query, "--cflags", ctxt);
+                        if (cflags == null)
+                                return true;
+ 
+                        res.Value = cflags;
+			return false;
+		@}
+	}
+
+	rule PkgConfigCheck : PkgConfigBase {
+
+		build (MBBool res, ctxt) @{
+                        string[] query = GetQuery ("-pccheck", ctxt);
+                        BinaryInfo prog = GetProgram ();
+ 
+			if (query == null)
+				return true;
+
+                        res.Value = (RunOnce (prog, query, "", ctxt) == null);
+
+                        return false;
+		@}
+	}
+
+	rule PkgConfigProbe : PkgConfigBase {
+
+		build (MBBool res, ctxt) @{
+                        string[] query = GetQuery ("-pcprobe", ctxt);
+                        BinaryInfo prog = GetProgram ();
+			int exit_code;
+			string stderr;
+ 
+			if (query == null)
+				return true;
+
+			// Ignore output, just check error condition
+                        RunOnce (prog, query, "", out exit_code, out stderr, ctxt);
+
+			res.Value = (exit_code == 0);
+ 
+                        return false;
+		@}
+
+		# We intentionally are not default. If this is a probe,
+		# there's no need to build this except for use by some
+		# other target.
+
+		tags {
+			"prereq" = false;
+		}
+	}
+
+	rule PkgConfigVar : PkgConfigBase {
+
+		string variable;
+
+		build (MBString res, ctxt) @{
+                        string[] query = GetQuery (ctxt);
+                        BinaryInfo prog = GetProgram ();
+ 
+			if (query == null)
+				return true;
+
+                        string arg = String.Format ("--variable={0}", variable);
+                        string result = RunOnce (prog, query, arg, ctxt);
+ 
+                        if (result == null)
+                                return true;
+ 
+                        res.Value = result;
+			return false;
+		@}
+	}
+
+	dependency regex matcher "-pclibs$" = PkgConfigLibs;
+	dependency regex matcher "-pcflags$" = PkgConfigCFlags;
+	dependency regex matcher "-pccheck$" = PkgConfigCheck;
+	dependency regex matcher "-pcprobe$" = PkgConfigProbe;
+	target regex matcher "-pclibs$" = PkgConfigLibs;
+	target regex matcher "-pcflags$" = PkgConfigCFlags;
+	target regex matcher "-pccheck$" = PkgConfigCheck;
+	target regex matcher "-pcprobe$" = PkgConfigProbe;
+
+	rule MakePkgConfigInstallDir {
+
+		InstallDirectory basedir;
+
+		build (InstallDirectory res, ctxt) @{
+			res.Value = System.IO.Path.Combine (basedir.Value, "pkgconfig");
+			return false;
+		@}
+	}
+
+	result PkgConfigInfo : CompositeResult {
+		string CFlags;
+		string Libs;
+	}
+}

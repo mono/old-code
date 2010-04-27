@@ -1,0 +1,34 @@
+﻿<rule name="MakeGacutilInstaller">
+        <docs>
+                <summary>To be added.</summary>
+                <remarks>To be added.</remarks>
+        </docs>
+        <argument name="gacutil" exists_since="0.0.3.1">
+                <docs>
+                        <summary>To be added.</summary>
+                        <remarks>To be added.</remarks>
+                </docs>
+                <type>MBuildDynamic.Core.Clr.GacutilProgram</type>
+                <default_to>/config/clr/gacutil_program</default_to>
+                <flags></flags>
+        </argument>
+        <argument name="rootdir" exists_since="0.0.3.1">
+                <docs>
+                        <summary>To be added.</summary>
+                        <remarks>To be added.</remarks>
+                </docs>
+                <type>Mono.Build.MBString</type>
+                <default_to>/config/install/libdir</default_to>
+                <flags></flags>
+        </argument>
+        <argument name="package" exists_since="0.0.3.1">
+                <docs>
+                        <summary>To be added.</summary>
+                        <remarks>To be added.</remarks>
+                </docs>
+                <type>Mono.Build.MBString</type>
+                <flags>optional default </flags>
+        </argument>
+</rule>
+
+

@@ -1,0 +1,193 @@
+<?xml version="1.0" encoding="utf-8"?>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:monodoc="http://www.go-mono.org/xml/monodoc">
+<head>
+        <title>Why Bother Writing a New Build System?</title>
+        <link rel="stylesheet" type="text/css" href="style.css" />
+</head>
+<body>
+
+<h2>Why Bother Writing a New Build System?</h2>
+
+<p>I wrote MBuild from scratch. You might ask -- why bother? There are
+already plenty of build systems out there. Among others, you find
+<tt>make</tt>, <tt>automake</tt>, <tt>ant</tt>, Python
+<tt>distutils</tt>, <tt>jam</tt>, and the Linux kernel build system. And
+that is by no means a comprehensive list.</p>
+
+<!--
+<p>Now it does behoove us to step back and consider what a build
+system really is all about. You can take the concrete viewpoint: it's
+the thing I use to compile my damn program and I just want it to
+work. Or you can take an abstract view: it's an engine for stepping
+through DAGs and running arbitrary tasks. Not surprisingly, I'm
+somewhere in the middle. I think that a build system should provide
+the infrastructure for all the elements of 
+-->
+
+<h2>Design Goals</h2>
+
+<p>Now I can't say that I have used all of these systems
+extensively. But I've been a reluctant GNU autotools junkie for a
+while, and gave some other systems a try. I haven't found any with the
+right balance of features that I'd like to see, namely:</p>
+
+<ul>
+<li><p><em>High-level design</em>. The ability to express logic like "if
+$debug is true, compile all programs with debugging symbols" or
+"install all files as normal, but prefix all the destinations with
+/tmp/rpmbuild-1405". You <i>can</i> do this sort of stuff with
+<tt>automake</tt>, but after the umpteenth time that your out-of-place
+build fails because the <tt>Makefile.am</tt> author forgot the
+difference between <tt>$(srcdir)</tt> and <tt>$(builddir)</tt>, you
+start losing patience.
+</p></li>
+
+<li><p><em>Extensibility</em>. The ability to add chunks of new
+logic to the build system in a way that scales well and integrates
+into the rest of the system. Something more robust than the fragments
+of shell script that we get with <tt>aclocal</tt>.
+</p></li>
+
+<li><p><em>Flexibility</em>. The ability to manage truly complicated
+builds. Systems like <tt>ant</tt> work well for most cases, but every
+so often you need build logic like "If I am building for
+a sparc machine and libgc is installed and the following test program
+demonstrates a bug, define GC_STACK_WORKAROUND when compiling
+mymem.c". (I am not very familiar with <tt>ant</tt>. Maybe I am not
+being fair to it here. But my understanding is that it does not support
+this sort of logic very well.) Oh, and good handling of build trees
+with subdirectories, unlike plain old <tt>make</tt>.
+</p></li>
+
+<li><p><em>Interrogability</em>. The ability to examine the build tree
+systematically. "Give me a list of all the executables compiled in
+this package." "Give me a list of all the source files in this
+package." "Give me a list of all the configuration options in this
+package." Then, instead of having some custom hack to generate an RPM
+spec file for a package, a nice external tool can do it cleanly. Or a
+software author can just have a better idea of the pieces that make up
+a large project.
+</p></li>
+
+<li><p><em>Compactness</em>. The ability to do all this without having to
+be insanely verbose. An XML syntax gets heavy awfully fast. Ideally, I
+should be able to say "program.exe: program.cs" and have the right
+thing happen.
+</p></li>
+
+<li><p><em>Portability</em>. This one is kind of tough -- make things
+too portable, and you've abstracted away a lot of useful
+integration. But it would be nice to be able to share a build system
+across all sorts of platforms.
+</p></li>
+</ul>
+
+<p>(For a blunter rationale, see my collection of the <a
+href="greatesthits.xhtml">Autotools' Greatest Hits</a>.)</p>
+
+<p>MBuild aspires to meet all these goals. I think it does a pretty
+good job right now, and can meet them all in the future. It takes
+advantage of some of the very good design choices made in the .NET
+framework to try and make a modular, extensible, fast system that
+encourages good build practices. The build is abstracted slightly more
+than in most systems, so that components can fit into a general
+framework that is known to work. But there are provisions to Do The
+Right Thing by default, so that you don't need a CS degree to write
+correct build files.</p>
+
+<h2>Design Decisions</h2>
+
+<p>Let me make it clear that I think all the other build tools that
+I've mentioned are competently written and I'm not denigrating the
+work that's been put into them. <tt>autoconf</tt> has been around
+forever and will last for years. And I don't envision MBuild as a
+"<tt>make</tt> replacement": for some tasks, <tt>make</tt> is
+fine. (See <tt>/var/yp/Makefile</tt>). But for the task of building
+software, I don't like the overall design that the existing build
+tools have, and I think MBuild has a better approach. Specifically, I
+made the following decisions when writing MBuild:</p>
+
+<ul> 
+<li><p>The system has to track dependencies on more than just
+files. Say you have the following <tt>Makefile</tt> fragment:</p>
+
+<pre class="code">VERSION=0.10
+
+myprogram: main.c test.c
+	gcc -o myprogram -DVERSION=$(VERSION) main.c test.c
+</pre>
+<p>If you change the value of <tt>$(VERSION)</tt>, <tt>make</tt> isn't
+smart enough to recompile for you. If the dependency on
+<tt>$(VERSION)</tt> can be tracked by the build software, this problem
+is avoided.
+</p></li>
+
+<li><p>The system must make it so you don't have to write your own
+rules. If you wanted to write the canonical build example</p>
+
+<pre class="code">myprogram: main.c test.c
+	gcc -o myprogram -DVERSION=$(VERSION) main.c test.c
+</pre>
+
+<p>in C-like syntax, you'd end up saying</p>
+
+<pre class="code">myprogram = compile_c_program (main.c, test.c, $(VERSION));
+</pre>
+
+<p>Or something along those lines. And yet <tt>make</tt> forces you to
+effectively <em>write out the code</em> for compile_c_program
+every time you want to call it. That's nuts.
+</p></li>
+
+<li><p>The system must make it so you <i>can</i> write your own
+rules. <tt>Automake</tt> solves the "no canned rules" problem that
+<tt>make</tt> has. But there's no way to extend <tt>automake</tt>'s
+library of rules!  You end up with monstrosities like the intltools
+aclocal macros, which expand out to Makefile rules:</p>
+
+<pre class="code">desktop_DATA = myprogram.desktop
+
+@INTLTOOL_DESKTOP_RULE@
+</pre>
+
+<p>becomes</p>
+
+<pre class="code">desktop_DATA = myprogram.desktop
+
+%.desktop:   %.desktop.in   $(INTLTOOL_MERGE) $(wildcard $(top_srcdir)/po/*.po) ; LC_ALL=C $(INTLTOOL_MERGE) $(top_srcdir)/po $&lt; [$]@ -d -u -c $(top_builddir)/po/.intltool-merge-cache'
+</pre>
+
+<p>(And of course it took the <tt>intltool</tt> hackers about four tries to get
+this expansion to work in a way that interacted nicely with all the
+other elements of the GNU autotools chain.) Apparently this sort of
+pluggable functionality is on the way with <tt>automake</tt>, though
+it remains to be seen how well it will work. Seeing as
+<tt>automake</tt> is a gigantic Perl script, I'm not getting my hopes
+up. (No slur on Tom Tromey or the other authors of <tt>automake</tt>;
+I'm just a Perl hater.)  </p></li>
+
+<li><p>The most important input to the system is the dependency. Every time
+you say that "A depends on B", you're encoding a piece of very
+important information -- that dependency isn't just there for fun,
+there's some reason why it exists. The build system should be able to
+exploit this fact to maximum effect.
+</p></li>
+
+<li><p>The system should be unified. At least three different
+languages go into the GNU autotools setup. The system works, but every
+so often M4 quoting rules bite you in the ass. All relevant aspects of
+the build system should be based on a single foundation that provides
+the basics but isn't overly restrictive.</p></li>
+
+</ul> 
+
+<p>MBuild tries to meet all of these needs. But let's look at some
+concrete examples first, putting the <tt>mbuild</tt> command-line
+client through its paces.
+</p>
+
+<p><b>Next: <a href="firstlook.xhtml">A First Look at MBuild</a></b></p>
+
+</body> 
+</html>

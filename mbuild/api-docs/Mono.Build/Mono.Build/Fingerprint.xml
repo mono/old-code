@@ -1,0 +1,246 @@
+<Type Name="Fingerprint" FullName="Mono.Build.Fingerprint">
+  <TypeSignature Language="C#" Value="public abstract class Fingerprint : Mono.Build.Result, IComparable, ISerializable, IFingerprintable, ICloneable" Maintainer="auto" />
+  <AssemblyInfo>
+    <AssemblyName>Mono.Build</AssemblyName>
+    <AssemblyPublicKey>[00 24 00 00 04 80 00 00 94 00 00 00 06 02 00 00 00 24 00 00 52 53 41 31 00 04 00 00 11 00 00 00 F5 C4 9D D0 0C 3C 7B 78 63 91 17 5B 7D F6 FD 4A A9 50 31 82 44 76 CF D8 68 14 88 FD C8 8F 0F 8D 0F FE B2 24 19 8D F2 C1 9F 2F 14 C8 B5 47 12 08 FD A2 C5 F9 60 77 91 22 44 72 9D 61 96 65 EE 38 88 EA 48 A6 D4 66 4A 4A 8A 6A F9 B4 4D 2D 62 51 97 7D F9 0D AD 80 DC EE E9 66 C7 F3 B5 8C 89 27 5E 02 F6 8B 15 67 70 36 ED B7 53 2E 70 B1 98 04 39 2C D6 EE 3C 18 D0 76 4D 66 68 2B D6 A3 AC AB]</AssemblyPublicKey>
+    <AssemblyVersion>0.0.0.0</AssemblyVersion>
+    <AssemblyCulture>neutral</AssemblyCulture>
+    <Attributes />
+  </AssemblyInfo>
+  <ThreadSafetyStatement>Gtk# is thread aware, but not thread safe; See the <link location="node:gtk-sharp/programming/threads">Gtk# Thread Programming</link> for details.</ThreadSafetyStatement>
+  <Docs>
+    <summary>A digital fingerprint of a <see cref="T:Mono.Build.Result" />.</summary>
+    <remarks>Instead of comparing modification times of files like "make", Mono.Build compares cryptographic fingerprints of <see cref="T:Mono.Build.Result" />s. This provides two benefits:
+
+
+<list type="bullet">
+        <item>
+          <term>Updating a file's modification time won't trigger a rebuild; system clock differences are not important</term>
+        </item>
+        <item>
+          <term>Results not stored directly in the filesystem (such as strings or booleans) can be first-class members of the build system.</term>
+        </item>
+      </list><para>Note that Fingerprints are <see cref="T:Mono.Build.Result" />s themselves. This is because they perfectly fit the definition of what characterizes a Result (see the remarks for that class). However, this interesting fact is not exploited in MBuild at the moment.
+</para></remarks>
+  </Docs>
+  <Base>
+    <BaseTypeName>Mono.Build.Result</BaseTypeName>
+  </Base>
+  <Interfaces>
+    <Interface>
+      <InterfaceName>System.IComparable</InterfaceName>
+    </Interface>
+    <Interface>
+      <InterfaceName>System.Runtime.Serialization.ISerializable</InterfaceName>
+    </Interface>
+    <Interface>
+      <InterfaceName>Mono.Build.IFingerprintable</InterfaceName>
+    </Interface>
+    <Interface>
+      <InterfaceName>System.ICloneable</InterfaceName>
+    </Interface>
+  </Interfaces>
+  <Attributes />
+  <Members>
+    <Member MemberName="cached">
+      <MemberSignature Language="C#" Value="protected byte [] cached;" />
+      <MemberType>Field</MemberType>
+      <ReturnValue>
+        <ReturnType>System.Byte[]</ReturnType>
+      </ReturnValue>
+      <Parameters>
+      </Parameters>
+      <Docs>
+        <summary>The cached binary value of this Fingerprint.</summary>
+        <remarks>Will be null if the fingerprint's binary value hasn't been evaluated yet.</remarks>
+      </Docs>
+    </Member>
+    <Member MemberName="Calculate">
+      <MemberSignature Language="C#" Value="protected virtual byte [] Calculate ();" />
+      <MemberType>Method</MemberType>
+      <ReturnValue>
+        <ReturnType>System.Byte[]</ReturnType>
+      </ReturnValue>
+      <Parameters />
+      <Docs>
+        <summary>Determine the binary representation of this fingerprint.</summary>
+        <returns>A byte array of length <see cref="P:Mono.Build.PreferredHash.Length" />.</returns>
+        <remarks>This function usually takes a representation of the <see cref="T:Mono.Build.Result" /> it references and performs a cryptographic hash of it using the algorithm returned by <see cref="M:Mono.Build.PreferredHash.Algo" />.</remarks>
+      </Docs>
+    </Member>
+    <Member MemberName="ContentClone">
+      <MemberSignature Language="C#" Value="protected virtual Mono.Build.Fingerprint ContentClone ();" />
+      <MemberType>Method</MemberType>
+      <ReturnValue>
+        <ReturnType>Mono.Build.Fingerprint</ReturnType>
+      </ReturnValue>
+      <Parameters />
+      <Docs>
+        <summary>Clone the fingerprint field-by-field.</summary>
+        <returns>A clone of the instance upon which this method was invoked.</returns>
+        <remarks>This generates a field-by-field clone of the fingerprint, not just a clone of its binary value.</remarks>
+      </Docs>
+    </Member>
+    <Member MemberName="Equals">
+      <MemberSignature Language="C#" Value="public override bool Equals (object o);" />
+      <MemberType>Method</MemberType>
+      <ReturnValue>
+        <ReturnType>System.Boolean</ReturnType>
+      </ReturnValue>
+      <Parameters>
+        <Parameter Name="o" Type="System.Object" />
+      </Parameters>
+      <Docs>
+        <summary>Check if this fingerprint equals another.</summary>
+        <param name="o">Any object.</param>
+        <returns>True if the other object is a Fingerprint and both have the same binary value. False otherwise.</returns>
+        <remarks>To be added</remarks>
+      </Docs>
+    </Member>
+    <Member MemberName="GetHashCode">
+      <MemberSignature Language="C#" Value="public override int GetHashCode ();" />
+      <MemberType>Method</MemberType>
+      <ReturnValue>
+        <ReturnType>System.Int32</ReturnType>
+      </ReturnValue>
+      <Parameters />
+      <Docs>
+        <summary>Return a hash code of this Fingerprint's binary value.</summary>
+        <returns>A hash code.</returns>
+        <remarks>Just returns the hashcode of the binary value of this fingerprint.</remarks>
+      </Docs>
+    </Member>
+    <Member MemberName="CompareTo">
+      <MemberSignature Language="C#" Value="public virtual int CompareTo (object obj);" />
+      <MemberType>Method</MemberType>
+      <ReturnValue>
+        <ReturnType>System.Int32</ReturnType>
+      </ReturnValue>
+      <Parameters>
+        <Parameter Name="obj" Type="System.Object" />
+      </Parameters>
+      <Docs>
+        <summary>Compare this instance to another Fingerprint.</summary>
+        <param name="obj">The Fingerprint to compare to.</param>
+        <returns>A number less than 0 if this Fingerprint is smaller than the argument; a number greater than 0 if it is larger; and 0 if they are the same.</returns>
+        <remarks>This compares the binary representations of the fingerprints, not how they are derived. So two distinct objects that happen to have the same fingerprint will be reported as equal. Fortunately, this will never happen by chance in the lifetime of the universe.</remarks>
+      </Docs>
+    </Member>
+    <Member MemberName="ToString">
+      <MemberSignature Language="C#" Value="public override string ToString ();" />
+      <MemberType>Method</MemberType>
+      <ReturnValue>
+        <ReturnType>System.String</ReturnType>
+      </ReturnValue>
+      <Parameters />
+      <Docs>
+        <summary>Return a hexadecimal representation of this fingerprint's value.</summary>
+        <returns>A hexadecimal representation of this fingerprint's value.</returns>
+        <remarks>To be added</remarks>
+      </Docs>
+    </Member>
+    <Member MemberName="GetObjectData">
+      <MemberSignature Language="C#" Value="public virtual void GetObjectData (System.Runtime.Serialization.SerializationInfo info, System.Runtime.Serialization.StreamingContext ctxt);" />
+      <MemberType>Method</MemberType>
+      <ReturnValue>
+        <ReturnType>System.Void</ReturnType>
+      </ReturnValue>
+      <Parameters>
+        <Parameter Name="info" Type="System.Runtime.Serialization.SerializationInfo" />
+        <Parameter Name="ctxt" Type="System.Runtime.Serialization.StreamingContext" />
+      </Parameters>
+      <Docs>
+        <summary>Serialization helper routine.</summary>
+        <param name="info">a <see cref="T:System.Runtime.Serialization.SerializationInfo" /></param>
+        <param name="ctxt">a <see cref="T:System.Runtime.Serialization.StreamingContext" /></param>
+        <remarks>Used to serialize Fingerprints. Should be chained to by subclasses.</remarks>
+      </Docs>
+    </Member>
+    <Member MemberName="Clone">
+      <MemberSignature Language="C#" Value="public override object Clone ();" />
+      <MemberType>Method</MemberType>
+      <ReturnValue>
+        <ReturnType>System.Object</ReturnType>
+      </ReturnValue>
+      <Parameters />
+      <Docs>
+        <summary>Duplicate this object.</summary>
+        <returns>A duplicate of this fingerprint.</returns>
+        <remarks>To be added</remarks>
+      </Docs>
+    </Member>
+    <Member MemberName="CloneTo">
+      <MemberSignature Language="C#" Value="protected override void CloneTo (Mono.Build.Result dest);" />
+      <MemberType>Method</MemberType>
+      <ReturnValue>
+        <ReturnType>System.Void</ReturnType>
+      </ReturnValue>
+      <Parameters>
+        <Parameter Name="dest" Type="Mono.Build.Result" />
+      </Parameters>
+      <Docs>
+        <summary>Clone data fields to another instance.</summary>
+        <param name="dest">Another fingerprint object that will be modified to be a clone of this object.</param>
+        <remarks>To be added</remarks>
+      </Docs>
+    </Member>
+    <Member MemberName=".ctor">
+      <MemberSignature Language="C#" Value="protected Fingerprint ();" />
+      <MemberType>Constructor</MemberType>
+      <ReturnValue />
+      <Parameters />
+      <Docs>
+        <summary>Protected constructor.</summary>
+        <returns>a <see cref="T:Mono.Build.Fingerprint" /></returns>
+        <remarks>Currently does nothing.</remarks>
+      </Docs>
+    </Member>
+    <Member MemberName=".ctor">
+      <MemberSignature Language="C#" Value="protected Fingerprint (System.Runtime.Serialization.SerializationInfo info, System.Runtime.Serialization.StreamingContext ctxt);" />
+      <MemberType>Constructor</MemberType>
+      <ReturnValue />
+      <Parameters>
+        <Parameter Name="info" Type="System.Runtime.Serialization.SerializationInfo" />
+        <Parameter Name="ctxt" Type="System.Runtime.Serialization.StreamingContext" />
+      </Parameters>
+      <Docs>
+        <summary>Deserialization constructor.</summary>
+        <param name="info">a <see cref="T:System.Runtime.Serialization.SerializationInfo" /></param>
+        <param name="ctxt">a <see cref="T:System.Runtime.Serialization.StreamingContext" /></param>
+        <returns>a <see cref="T:Mono.Build.Fingerprint" /></returns>
+        <remarks>This loads the saved binary value of the fingerprint so that it doesn't need to be recalculated.</remarks>
+      </Docs>
+    </Member>
+    <Member MemberName="Value">
+      <MemberSignature Language="C#" Value="public byte [] Value { get; };" />
+      <MemberType>Property</MemberType>
+      <ReturnValue>
+        <ReturnType>System.Byte[]</ReturnType>
+      </ReturnValue>
+      <Parameters />
+      <Docs>
+        <summary>The binary value of this Fingerprint.</summary>
+        <returns>A byte array of length <see cref="P:Mono.Build.PreferredHash.Length" />.</returns>
+        <remarks>This value is evaluated once by the method <see cref="M:Mono.Build.Fingerprint.Calculate" />, then cached and returned without further calculation thereafter.</remarks>
+      </Docs>
+    </Member>
+    <Member MemberName="GetFingerprint">
+      <MemberSignature Language="C#" Value="public override Mono.Build.Fingerprint GetFingerprint (Mono.Build.IBuildContext ctxt, Mono.Build.Fingerprint cached);" />
+      <MemberType>Method</MemberType>
+      <ReturnValue>
+        <ReturnType>Mono.Build.Fingerprint</ReturnType>
+      </ReturnValue>
+      <Parameters>
+        <Parameter Name="ctxt" Type="Mono.Build.IBuildContext" />
+        <Parameter Name="cached" Type="Mono.Build.Fingerprint" />
+      </Parameters>
+      <Docs>
+        <summary>"Fingerprint" this fingerprint.</summary>
+        <param name="ctxt">a <see cref="T:Mono.Build.IBuildContext" /></param>
+        <param name="cached">a <see cref="T:Mono.Build.Fingerprint" /></param>
+        <returns>Itself.</returns>
+        <remarks>This function is needed for Fingerprint to be a subclass of <see cref="T:Mono.Build.Result" />.</remarks>
+      </Docs>
+    </Member>
+  </Members>
+</Type>

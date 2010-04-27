@@ -1,0 +1,39 @@
+<rule name="JoinPath">
+   <docs>
+      <summary>
+	 Create an InstallDirectory based on a parent InstallDirectory.
+      </summary>
+      
+      <remarks>
+	 <p>The result is also an InstallDirectory. It is a path created by appending
+	 each item in the <b>pieces</b> argument to the path stored in <b>base</b>. For instance, 
+	 the following code:</p>
+
+	 <code lang="mbuild">
+result = JoinPath [ 
+        /config/install/bindir
+	{ "one", "two", "three" } 
+]</code>
+      
+          <p>will give a result of "/usr/local/bin/one/two/three", under default conditions.</p>
+     </remarks>
+  </docs>
+  <argument name="base" exists_since="0.0.3.1">
+     <docs>
+	<summary>The base InstallDirectory.</summary>
+	<!-- <remarks>To be added.</remarks> -->
+     </docs>
+     <type>MBuildDynamic.Core.Install.InstallDirectory</type>
+     <flags></flags>
+  </argument>
+  <argument name="pieces" exists_since="0.0.3.1">
+     <docs>
+	<summary>An ordered list of subdirectory names to append to <b>base</b>.</summary>
+	<!-- <remarks>To be added.</remarks> -->
+     </docs>
+     <type>Mono.Build.MBString</type>
+     <flags>multi ordered default_ordered </flags>
+  </argument>
+</rule>
+
+

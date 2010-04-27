@@ -1,0 +1,154 @@
+2006-09-01  Peter Williams  <peter@newton.cx>
+
+	* mbuild.cs: Create the toplevel dist directory before attempting to
+	dist. Oops.
+
+2006-08-08  Peter Williams  <peter@newton.cx>
+
+	* InstallerServiceNotify.cs: Track that IInstallerServiceNotify is now
+	in Monkeywrench.
+
+2006-07-30  Peter Williams  <peter@newton.cx>
+
+	* mbuild.cs (Launch): Better double-init error message.
+
+2006-07-19  Peter Williams  <peter@newton.cx>
+
+	* mbuild.cs (NotifyRecompile): Hook up to the new OnRecompile event here.
+
+2006-07-18  Peter Williams  <peter@newton.cx>
+
+	* mbuild.cs (Launch): Make the printed text after initialization even more
+	helpful, because I feel that it will be very useful for first-timers.
+
+2006-07-12  Peter Williams  <peter@newton.cx>
+
+	* mbuild.cs (DoOperation): Track the new operation model. Get a list of
+	tags and filter it instead of putting all the logic in WrenchProject.Operate.
+	(*): Also add more command-line arg validation: complain on more incompatible
+	flags.
+
+2006-07-07  Peter Williams  <peter@newton.cx>
+
+	* mbuild.cs (profile_graph): New command-line option that triggers
+	use of the GraphStateProfiler class.
+
+2006-07-06  Peter Williams  <peter@newton.cx>
+
+	* mbuild.cs: Track LoggingData -> ActionLog rename.
+
+2006-07-06  Peter Williams  <peter@newton.cx>
+
+	* mbuild.cs (SetMajorMode): Quick function to try and signal an 
+	error if conflicting 'major modes' (eg, install and distribute) are
+	specified.
+	(ShowLog): Add a --last mode that causes the most recent build 
+	actions to be printed out from the now-saved build log.
+
+	* BuildLoggerProxy.cs: Track IWarningLogger.
+
+	* WarningLoggerProxy.cs: Track IWarningLogger.
+
+2006-07-05  Peter Williams  <peter@newton.cx>
+
+	* mbuild.cs: For now, make the XML graph indented by default.
+
+2006-07-03  Peter Williams  <peter@newton.cx>
+
+	* mbuild.cs: Uncomment everything; WrenchProject works again.
+
+2006-06-28  Peter Williams  <peter@newton.cx>
+
+	* mbuild.cs: Comment out large portions until Monkeywrench settles
+	down. Now just creates the ProjectManager and loads stuff. Also change the 
+	initial log loading a bit with the related changes.
+
+2006-06-23  Peter Williams  <peter@newton.cx>
+
+	* mbuild.cs (Launch): Catch exceptions during build so we can clean up.
+
+2006-06-17  Peter Williams  <peter@newton.cx>
+
+	* mbuild.cs: Reindent a bit.
+	(MBuildClient): Add a '--force' option to force a build.
+	(Launch): Add a message after init telling what to do to
+	recheck the prereqs, because I keep on rerunning mbuild with
+	the -i flag.
+	
+2005-10-10  Peter Williams  <peter@newton.cx>
+
+	* mbuild.cs: Handle Result -> BuiltItem in BuildServices.
+
+2005-09-01  Peter Williams  <peter@newton.cx>
+
+	* mbuild.cs: Ifdef out some using statements too.
+
+2005-09-01  Peter Williams  <peter@newton.cx>
+
+	* mbuild.cs: Start work on a separate install client. The idea is that
+	we spawn off a separate privileged process to do the installs, while we
+	build and write logs as the owner of .monkeywrench.log. This way the
+	.monkeywrench files don't get taken over by root and if we need to build
+	anything it won't be root-owned. Unfortunately, you can't setuid() a Mono
+	process because the Wapi stuff won't be able to read its files and will
+	panic. So need another solution, probably involving a C helper program.
+	Yes, I know the TcpChannel stuff is insecure too, I'll copy Martin's
+	debugger code once the other stuff is ironed out.
+
+2005-08-29  Peter Williams  <peter@newton.cx>
+
+	* mbuild.cs (DoInitMode): if ~/.mbuild-init.config exists, import it as
+	an XML file.
+	(ImportXml): Don't necessarily exit after doing an import.
+	(DoXmlExportMode): If no filename given, export to stdout
+
+2005-07-14  Peter Williams  <peter@newton.cx>
+
+	* mbuild.cs (ImportXml): Don't need to pass the IResultTypeLookup anymore.
+
+2005-05-19  Peter Williams  <peter@newton.cx>
+
+	* mbuild.cs (DescribeInstall): Track changes to compat finder.
+
+2005-03-05  Peter Williams  <peter@newton.cx>
+
+	* mbuild.cs (DescribeInstall): Let the compat finder report the error if necessary.
+	Pass it a logger, set location.
+
+2005-01-19  Peter Williams  <peter@newton.cx>
+
+	* mbuild.cs (BeforeCleanEvent): Print a marker when cleaning.
+
+2004-12-06  Peter Williams  <peter@newton.cx>
+
+	* mbuild.cs (RunQuery): The logical improvement: also let the user specify the basis
+	on the command line, ie 'mbuild --get-builddir /Mono.Build/Mono.Build.RuleLib'; keep
+	the --get-top{src,build}dir options.
+
+2004-12-06  Peter Williams  <peter@newton.cx>
+
+	* mbuild.cs (RunQuery): New function. Allows you to query useful build variables
+	from the command line: mbuild --get-DIR, where DIR is one of topsrcdir, topbuilddir,
+	or srcdir.
+
+2004-09-29  Peter Williams  <peter@newton.cx>
+
+	* mbuild.cs (DoDescribeMode): New command-line option, --describe-install
+	(DescribeInstall): New operation, describes what installation steps would
+	be run. Fair amount of duplication with WrenchOperations.Install.
+
+2004-09-27  Peter Williams  <peter@newton.cx>
+
+	* mbuild.cs: Helpful param names from Mono.GetOptions. Cute feature.
+
+2004-09-26  Peter Williams  <peter@newton.cx>
+
+	* mbuild.cs: Rework to use BuildServices for operations. Use
+	WrenchOperations members for the common operations instead of
+	using the WrenchProject helper functions. Hook up to WrenchOperation
+	events instead of WrenchProject events.
+
+2004-09-15  Peter Williams  <peter@newton.cx>
+
+	* mbuild/mbuild.cs: Clarify the need-init printout a bit.
+

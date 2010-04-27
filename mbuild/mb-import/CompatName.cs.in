@@ -1,0 +1,8 @@
+namespace MBImport {
+
+	public class Config {
+
+		public const string CompatName = "@compat_name@";
+
+	}
+}

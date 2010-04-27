@@ -1,0 +1,229 @@
+# Core CLR support
+
+namespace Core.Clr {
+
+	using default;
+	using Core.Tools;
+	using Core.Install;
+	using !System;
+
+	parameters {
+		basis Config = /config/clr;
+		namespace Core.Install;
+	}
+
+	provider Config {
+		runtime_names = "!mono";
+
+		runtime = FindTool (runtime_names);
+
+		sn_names = "!sn";
+		sn_binary = FindTool (sn_names);
+		sn_program = ConfigureStrongnameProgram (sn_binary) tags {
+			"prereq" = true;
+		};
+
+		gacutil_names = "!gacutil";
+		gacutil_binary = FindTool (gacutil_names);
+		gacutil_program = ConfigureGacutilProgram (gacutil_binary) tags {
+			"prereq" = true;
+		};
+
+		gacutil_installer = MakeGacutilInstaller ();
+	}
+
+	rule MakeClrBinaryInfo {
+		MBFile program;
+		BinaryInfo runtime;
+
+		build (ClrBinaryInfo res, ctxt) @{
+			res.Init (program, runtime);
+			return false;
+		@}
+	} default {
+		runtime = Config/runtime;
+	}
+
+	rule MakeGacutilInstaller {
+		GacutilProgram gacutil;
+		string rootdir;
+		default string? package;
+
+		build (GacutilInstaller res, ctxt)
+		@{
+			res.Init (gacutil, rootdir, package);
+			return false;
+		@}
+	} default {
+		gacutil = Config/gacutil_program;
+		rootdir = Install.Config/libdir; # ??? detect mono's prefix?
+	}
+
+	result AssemblyFile : BinFile {}
+	result DllAssembly : AssemblyFile {}
+	result ExeAssembly : AssemblyFile {}
+	result PublicKeyFile : BinFile {}	
+	result StrongnameKeypairFile : BinFile {}	
+	result AssemblyConfigFile : TextFile {}
+
+	result SystemDll : MBString {
+		@{
+			public SystemDll (string name) : base (name) { }
+
+			public override string ToString ()
+			{
+				return String.Format ("<system CLR DLL \"{0}\">", Value);
+			}
+		@}
+	}
+
+	result StrongnameProgram : CompositeResult {
+		BinaryInfo Program;
+
+		@{
+
+		public void Init (BinaryInfo program) 
+		{
+			Program = program;
+		}
+
+		public bool StrongnameAssembly (AssemblyFile assy, 
+			StrongnameKeypairFile snk, 
+			IBuildContext ctxt)	
+		{
+			// Check that Program != null? Blah.
+
+			string args = String.Format ("-q -R {0} {1}", assy.GetPath (ctxt),
+				snk.GetPath (ctxt));
+
+			return 0 != Launcher.RunTool (Program, args, ctxt, 
+				"Strong-naming tool returned an error.");
+		}
+
+		@}
+	}
+
+	result GacutilProgram : CompositeResult {
+		BinaryInfo Program;
+
+		# TODO: see if gacutil supports /package
+
+		@{
+
+		public void Init (BinaryInfo program) 
+		{
+			Program = program;
+		}
+
+		public bool InstallAssembly (AssemblyFile assy, 
+			string root,
+			string package,
+			bool backwards, 
+			IBuildContext ctxt)	
+		{
+			string install_flag;
+
+			if (backwards)
+				install_flag = "/u";
+			else
+				install_flag = "/i";
+
+			string assembly_name = assy.GetPath (ctxt);
+
+			if (backwards)
+				// Need just the base name, not the file path
+				assembly_name = System.IO.Path.GetFileNameWithoutExtension (assembly_name);
+
+			// Check that Program != null? Blah.
+
+			string args = String.Format ("{0} {1} /f /root {2}", 
+				install_flag, assembly_name, root);
+
+			if (package != null)
+				args += String.Format (" /package {0}", package);
+
+			return 0 != Launcher.RunTool (Program, args, ctxt, 
+				"Gacutil tool returned an error.");
+		}
+
+		@}
+	}
+
+	result GacutilInstaller : CompositeResult {
+
+		implements IResultInstaller;
+
+		GacutilProgram Gacutil;
+		string RootDir;
+		string Package;
+
+		@{
+
+		public void Init (GacutilProgram gacutil, string rootdir, string package)
+		{
+			this.Gacutil = gacutil;
+			this.RootDir = rootdir;
+			this.Package = package;
+		}
+
+		public Type OtherType { get { return typeof (AssemblyFile); } }
+
+		public bool InstallResult (Result r, bool backwards, IBuildContext ctxt)
+		{
+			AssemblyFile assy = (AssemblyFile) r;
+
+			return Gacutil.InstallAssembly (assy, RootDir, Package, backwards, ctxt);
+		}
+
+		public string DescribeAction (Result other, IBuildContext ctxt) {
+			return String.Format ("Install {0} into the GAC with \"{1}\" (package {2}, root {3})", 
+					      ((MBFile) other).GetPath (ctxt), 
+					      Gacutil.Program.ToUnixStyle (ctxt),
+					      Package, RootDir);
+		}
+
+		@}
+	}
+
+	rule ConfigureStrongnameProgram {
+		BinaryInfo program;
+
+		build (StrongnameProgram res, ctxt) @{
+			res.Init (program);
+			return false;
+		@}
+	}
+
+	rule ConfigureGacutilProgram {
+		BinaryInfo program;
+
+		# TODO: check for support of /package option
+
+		build (GacutilProgram res, ctxt) @{
+			res.Init (program);
+			return false;
+		@}
+	}
+
+	# We used to have:
+	#
+	#dependency regex matcher "\\.dll$" = SystemDllRule;
+	# 
+	# But .NET languages should implement their own such matchers,
+	# so that they can use the compiler to check that the DLL
+	# in question is actually available
+
+	dependency regex matcher "\\.pub$" = PublicKeySourcefileRule;
+	dependency regex matcher "\\.snk$" = StrongnameKeypairSourcefileRule;
+	dependency regex matcher "\\.dll\\.config$" = AssemblyConfigSourcefileRule;
+	dependency regex matcher "\\.exe\\.config$" = AssemblyConfigSourcefileRule;
+
+	sourcefile rule PublicKeySourcefileRule = PublicKeyFile;
+	sourcefile rule StrongnameKeypairSourcefileRule = StrongnameKeypairFile;
+	sourcefile rule AssemblyConfigSourcefileRule = AssemblyConfigFile;
+	sourcefile rule DllAssemblySource = DllAssembly;
+	sourcefile rule ExeAssemblySource = ExeAssembly;
+
+	result ClrBinaryInfo : InterpreterBinaryInfo {}
+
+}

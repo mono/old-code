@@ -1,0 +1,101 @@
+namespace Tools.GLibGenmarshal {
+
+	using default;
+	using Core;
+	using Core.Tools;
+	using Languages.CrappyC;
+	using !System.Text;
+
+	parameters {
+		basis Config = /config/tools/glib_genmarshal;
+	}
+
+	provider Config {
+
+		genmarshal_name = "!glib-genmarshal";
+
+		genmarshal_binary = FindTool (genmarshal_name) tags {
+			"prereq" = true;
+		};
+	}
+
+	abstract rule GenmarshalProcess : OutputFileRule {
+		GenmarshalListFile list;
+		default string? prefix; # needs default to override the outputfilerule 'output'
+		bool? skip_source;
+		bool? nostdinc;
+
+		BinaryInfo genmarshal;
+
+		@{
+
+		protected abstract string GetOtherArgs (IBuildContext ctxt);
+
+		@}
+
+		build (CCodeFile res, ctxt) @{
+			string destname = GetOutputName (ctxt);
+			if (destname == null)
+				return true;
+
+			StringBuilder sb = new StringBuilder (GetOtherArgs (ctxt));
+
+			if (prefix != null) 
+				sb.AppendFormat (" --prefix={0}", prefix);
+
+			if (skip_source == true)
+				sb.Append (" --skip-source");
+
+			if (nostdinc == true)
+				sb.Append (" --nostdinc");
+
+			sb.AppendFormat (" {0}", list.GetPath (ctxt));
+
+			res.Dir = ctxt.WorkingDirectory;
+			res.Name = destname;
+			
+                        if (Launcher.SaveToolStdout (genmarshal, sb.ToString (), res, ctxt,
+				"glib-genmarshal tool returned an error") != 0)
+                                return true;
+
+			return false;
+                @}
+	} default {
+		genmarshal = Config/genmarshal_binary;
+	}
+
+	rule GenmarshalBody : GenmarshalProcess {
+		@{
+
+		protected override string GetOtherArgs (IBuildContext ctxt)
+		{
+			return "--body";
+		}
+
+		@}
+
+		default restype CSource;
+	}
+
+	rule GenmarshalHeader : GenmarshalProcess {
+		@{
+
+		protected override string GetOtherArgs (IBuildContext ctxt)
+		{
+			return "--header";
+		}
+
+		@}
+
+		default restype CHeader;
+	}
+
+	target regex matcher "\\-marshal.c$" = GenmarshalBody;
+	target regex matcher "\\-marshal.h$" = GenmarshalHeader;
+
+	result GenmarshalListFile : TextFile {}
+
+	sourcefile rule GenmarshalListSourcefileRule = GenmarshalListFile;
+
+	dependency regex matcher "\\.list$" = GenmarshalListSourcefileRule;
+}

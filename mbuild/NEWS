@@ -1,0 +1,76 @@
+0.0.3.1
+====================
+
+* Massive internal cleanups. No one will appreciate this because they
+  never saw the previous messy code, but it's much better. Trust me.
+
+* Added mb-bundlegen, a tool for generation MBuild bundles using
+  CodeDom. Very very very useful for writing bundle code.
+
+* Added mb-gtkconfig, a simple graphical build configurator. It
+  generates UIs on the fly, so it's ugly, but it's good enough.
+
+* Wrote API documentation of some of Mono.Build.dll and began the
+  MBuild Handbook.
+
+* Versioned bundle loading from the GAC. Pure sweetness.
+
+* Support for installing. So so so so clever. Too clever for my own
+  good. But I don't care.
+
+* Robust error and warning reporting system.
+
+* Reworked ArgCollector to be much more satisfactory.
+
+* Tagging is much more widely used.
+
+* Beginnings of bundle documentation system, with mb-bundledoc and
+  mb-bd2xhtml.
+
+* I think MBuild is now realistically usable for C# projects.
+
+0.0.2
+====================
+
+* Begin Mono.Build.RuleLib, a library of useful functions
+  for rules (autoconf-y stuff.) So far we have some structure
+  for invoking other programs: BinaryInfo, ClrInfo, Launcher
+  class. There are also classes for stream processing a la
+  grep, sed, etc; not used or very tested yet but they will be
+  a basis for these common operations. Also a class for finding
+  tools in the environment (probably needs a lot of fixing).
+
+* Added Tools.Jay bundle
+
+* Moved System.CLR.CSharp to Languages.CSharp
+
+* Moved System.CLR to System.Clr
+
+* Added MakeFile rule in System bundle (not recommended, I'm
+  not sure of the wisdom of this design.)
+
+* Fleshed out logging infrastructure
+
+* Also began error checking / reporting infrastructure
+
+* Futzed around with ArgCollectors: can set default values for
+  arguments now. Still not satisfactory though.
+
+* Fixed it so that changed ConstantTargets show up (because their
+  rule fingerprint is now the static result's fingerprint. Deviously
+  clever if I do say so myself.)
+
+* First stab at tagging targets
+
+* Added --below, --debug-logs, --all arguments.
+
+* Added '+foo' syntax to build targets matching tag 'foo'.
+
+* Add 'load FILE inside BASIS' syntax in Buildfiles
+
+* A few optimizations.
+
+0.0.1
+====================
+
+* Initial public release. Spotty functionality.

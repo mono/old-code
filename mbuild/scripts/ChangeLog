@@ -1,0 +1,42 @@
+2006-07-19  Peter Williams  <peter@newton.cx>
+
+	* Buildfile: Use fewer explicit targets with our better grammar.
+
+2006-06-16  Peter Williams  <peter@newton.cx>
+
+	* mb-gtkconfig.in: Add -a argument to exec. New file, calls
+	gtk-config not trying to run it from the build dir, since it
+	will always be called in a build dir.
+	* mbuild.in: Same.
+	* tmpl.in: Same.
+
+2005-09-01  Peter Williams  <peter@newton.cx>
+
+	* Buildfile: Rearrange to have most scripts be generated
+	from a common template, with a wrapper that executes the
+	local copy of the prog if we're in builddir.
+
+2005-07-14  Peter Williams  <peter@newton.cx>
+
+	* Buildfile (mb-import): Comment out mb-import since that's
+	unfinished at the moment.
+
+2004-08-30  Peter Williams  <peter@newton.cx>
+
+	* mb-bundledoc: Oops, create this.
+
+	* Buildfile (mb-bd2xhtml): And fix this : bd2, not mb2
+
+2004-08-30  Peter Williams  <peter@newton.cx>
+
+	* Buildfile: Install all the wrappers; if we're using the Buildfile,
+	then everything is built.
+
+	* mb-bd2xhtml, mb-bundlegen, mbuild, mb-gtkconfig: Reference binaries
+	in {libdir}/{compat-name} instead of {bindir}. Need to generate these
+	from .in files for Makefile installation ... sigh.
+	
+2004-08-30  Peter Williams  <peter@newton.cx>
+
+	* mb-bd2xhtml: Add this. Start ChangeLog.
+

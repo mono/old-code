@@ -1,0 +1,171 @@
+2006-12-28  Peter Williams  <peter@newton.cx>
+
+	* *.bundle: ANOTHER pervasive change. Make the structure templating
+	system a lot simpler. These files probably need to be reindented.
+
+	* Core.Native.bundle (SetFromString): Fix unused variable warning.
+
+2006-09-03  Peter Williams  <peter@newton.cx>
+
+	* Core.bundle (DependentFile): Make it so that the copy's Name
+	is the target name by default. Add an optional 'output' argument
+	allowing changing of the output file's name. I think this yields
+	the most reasonable semantics.
+	
+	* Core.Clr.bundle: Add DllAssemblySource and ExeAssemblySource rules
+	so that people can reference assemblies distributed in binary form
+	with their source code.
+
+2006-09-02  Peter Williams  <peter@newton.cx>
+
+	* Core.bundle: Add an ExtraDist template.
+
+2006-08-09  Peter Williams  <peter@newton.cx>
+
+	* *.bundle: Yay, another pervasive change. Move to the StructureTemplate 
+	model of ... templating structure.
+
+2006-07-19  Peter Williams  <peter@newton.cx>
+
+	* Core.bundle (FormatHelper): Rename from format; shouldn't really be
+	invoked explicitly since we have the nice syntax for it now.
+
+2006-07-18  Peter Williams  <peter@newton.cx>
+
+	* *.bundle: Remove 'field' keywords.
+
+2006-07-18  Peter Williams  <peter@newton.cx>
+
+	* Core.bundle (Switch): Of course. Preconstructed results fundamentally
+	don't work with Switch. Use the new 'manual build' syntax to avoid this
+	problem.
+
+2006-07-18  Peter Williams  <peter@newton.cx>
+
+	* Core.Tools.bundle: Another new syntax: the preconstructed-result /
+	result type inference change.
+
+	* Core.Subst.bundle: Same.
+
+	* Core.Config.bundle: Same.
+
+	* Core.Install.bundle: Same.
+
+	* Core.Xml.bundle: Same.
+
+	* Core.Clr.bundle: Same.
+
+	* Core.Native.bundle: Same.
+
+	* Core.bundle: Same.
+
+2006-07-09  Peter Williams  <peter@newton.cx>
+
+	* Move to new bundle syntax: No more 'args' argument, and result values are
+	stored in fields in the Rule object, so no need to pass around
+	ArgCollectors or convert items from Result[] to the appropriate type.
+
+2006-06-28  Peter Williams  <peter@newton.cx>
+
+	* Core.bundle (DependentFile): Use LinkFromOrCopyTo.
+
+	* Core.Native.bundle: Oops, fix up the deps on the _naming targets.
+
+2006-06-23  Peter Williams  <peter@newton.cx>
+
+	* Core.Native.bundle: Add versioning to NativeSharedLibraries. Requires another
+	result type and some support rules.
+
+	* Core.Install.bundle (ProbeInstallDirectory): Hacky rule for f-spot; tests
+	if an InstallDirectory exists.
+
+	* Core.bundle: Add an empty /config/fx provider for Frameworks. Add some
+	utility rules: Switch for conditional-type processing; BooleanHelper for
+	boolean expressions in Buildfiles; MakeInterpretedProgram for ... yeah.
+
+	* Core.Subst.bundle: Add a 'typeref' optional argument that allows the
+	buildfile author to (indirectly) specify the type of result to create. A
+	little hacky but probably useful.
+
+2006-06-17  Peter Williams  <peter@newton.cx>
+
+	* Core.Native.bundle: New namespace, code dealing with native (eg, CPU
+	binary) code. Currently has result types for native code objects 
+	(shlibs, exes, objects, static libs, and modules), architectures,
+	build/host/target arch targets, native object naming convention support,
+	and cross-compiler tool finding support.
+
+	* ArchCanonicalize.cs: C# implementation of config.sub; support code for
+	Core.Native.
+
+	* ArchDetect.cs: More support for Core.Native. Should implement config.guess,
+	but want to come up with a way to do this that avoids Unix-shell-isms as
+	much as possible.
+
+	* Core.Tools.bundle: Simplify the code a bit. Kill the 'trybind' argument;
+	instead, if the namelist doesn't start with a !, parse it as a unix-style
+	command. This lets the user just override 'names' to override a tool
+	specification.
+
+	* Core.Clr.bundle: Update to new FindTool syntax. Have the string rep
+	of a SystemDll be a bit more helpful.
+
+	* Core.Install.bundle: Add a datadir. Make the MakeCopyInstaller code a
+	bit more generic.
+
+2006-06-03  Peter Williams  <peter@newton.cx>
+
+	* Core.Install.bundle (MakeCopyInstaller): Add virtual Initialize() member to
+	allow subclasses to set properties on the installer object, potentially using
+	information from arguments.
+	(/config/install): Add a datadir ($prefix/share) InstallDirectory.
+
+2005-09-01  Peter Williams  <peter@newton.cx>
+
+	* Core.bundle: Add new DependentFile rule to copy the dependency to
+	$builddir. Useful for some data files when running things from builddir.
+
+	* Core.Clr.bundle: Same, with extra code to infer the original file's
+	kind from its extension. Should just inherit from the above.
+
+2005-08-21  Peter Williams  <peter@newton.cx>
+
+	* Core.Clr.bundle: Add the AssemblyConfigFile result type for foo.dll.config,
+	and a dependency sourcefile rule to create them.
+
+2005-07-22  Peter Williams  <peter@newton.cx>
+
+	* Core.bundle: Add "BinSource" sourcefile rule.
+
+2005-03-04  Peter Williams  <peter@newton.cx>
+
+	* Core.Clr.bundle: Update for better ArgCollector API.
+
+2004-09-29  Peter Williams  <peter@newton.cx>
+
+	* Core.Clr.bundle (GacutilInstaller): Make this an MBDictionary implemented
+	IResultInstaller, as it should have been. Cuts down on a lot of useless
+	code.
+
+2004-09-21  Peter Williams  <peter@newton.cx>
+
+	* Core.Install.bundle: Add MakeExecutableCopyInstaller rule. Use it for bindir_installer.
+
+2004-09-21  Peter Williams  <peter@newton.cx>
+
+	* Core.Subst.bundle: New namespace: Subst rule for doing generic text
+	substitutions: same functionality as foo.in -> foo in autoconf, with a
+	few bells and whistles.
+
+2004-08-30  Peter Williams  <peter@newton.cx>
+
+	* Core.Clr.bundle: Get rid of SystemDllRule and matcher for it.
+
+2004-08-30  Peter Williams  <peter@newton.cx>
+
+	* Core.bundle (Clone): New rule, clones its input.
+
+	* Core.Install.bundle (pkglibdir): Add, similar to automake's underused pkglibdir,
+	but with compat_code munged in.
+	(pkglibdir_installer): Installer for the above.
+

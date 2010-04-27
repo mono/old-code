@@ -1,0 +1,10 @@
+﻿<regex_matcher name="\.snk$">
+        <docs>
+                <summary>To be added.</summary>
+                <remarks>To be added.</remarks>
+        </docs>
+        <regex>\.snk$</regex>
+        <rule>MBuildDynamic.Core.Clr.StrongnameKeypairSourcefileRule</rule>
+</regex_matcher>
+
+

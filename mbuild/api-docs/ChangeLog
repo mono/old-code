@@ -1,0 +1,52 @@
+2006-12-28  Peter Williams  <peter@newton.cx>
+
+	* handbook/html/en/firstlook.xhtml: Shorten a really long line.
+
+2006-06-28  Peter Williams  <peter@newton.cx>
+
+	* handbook/html/en/fspot-migration.xhtml: Some grammar and content
+	updates.
+
+2006-06-25  Peter Williams  <peter@newton.cx>
+
+	* handbook/html/en/fspot-migration.xhtml: Add new document describing the 
+	F-Spot migration process.
+
+	* handbook/html/en/architecture.xhtml: Link to the next section.
+
+	* handbook/html/en/firstlook.xhtml: Tiny formatting fixes.
+
+	* handbook/toc.xml: List it here.
+
+
+2004-09-18  Peter Williams  <peter@newton.cx>
+
+	* Makefile (update): Get rid of references to crap in _build.
+
+2004-08-30  Peter Williams  <peter@newton.cx>
+
+	* mbuild-Mono.Build.sources: Add MonoBuildDictItemAttribute,
+	remove NamedArgument.
+
+	* mbuild-Monkeywrench.sources: Add SimpleLogger, BuildfileParser.
+
+	* *.xml: Run API doc updater.
+
+2004-08-30  Peter Williams  <peter@newton.cx>
+
+	* MBuildDynamic.Core/Core.Config/ConfigBool.xml: Add docs.
+
+	* MBuildDynamic.Core/Core.Config/ConfigDirectory.xml: This too.
+
+	* MBuildDynamic.Core/Core.Config/ConfigString.xml: This too.
+
+	* MBuildDynamic.Core/Core.Config/ConfigInstallDirectory.xml: And this.
+
+2004-08-30  Peter Williams  <peter@newton.cx>
+
+	* Makefile (MBuildDynamic.Core-xhtml/toc.xml): Add a rule to
+	create the -xhtml directory if needed. Need to get MBuild rules
+	to build the docs fast.
+
+	* MBuildDynamic.Core: import initial bundle documentation.
+

@@ -1,0 +1,25 @@
+<?xml version="1.0"?>
+<monodoc>
+  <node label="Mono Build System" name="mbuild" >
+    <node label="MBuild Handbook" name="mbuild-handbook" />
+    <node label="MBuild Extension Guide" name="mbuild-extension" />
+    <node label="MBuild Bundles" name="mbuild-bundles">
+      <node label="Core" name="mbuild-bundle-Core" />
+    </node>
+    <node label="MBuild Class Libraries" name="mbuild-libraries" />
+  </node>
+	
+  <source provider="ecma" basefile="mbuild-Mono.Build" path="mbuild-libraries"/>
+  <source provider="ecma" basefile="mbuild-Monkeywrench" path="mbuild-libraries"/>
+  <source provider="monohb" basefile="mbuild-handbook" path="mbuild-handbook"/>
+  <source provider="monohb" basefile="mbuild-bundle-Core" path="mbuild-bundle-Core"/>
+
+	<!--
+  <source provider="ecma" basefile="mbuild-Mono.Build" path="various"/>
+  <source provider="ecma" basefile="mbuild-Monkeywrench" path="various"/>
+  <source provider="monohb" basefile="mbuild-handbook" path="various"/>
+  <source provider="monohb" basefile="mbuild-extension" path="various"/>
+	-->
+
+</monodoc>
+

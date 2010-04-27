@@ -1,0 +1,120 @@
+<Type Name="Result" FullName="Mono.Build.Result">
+  <TypeSignature Language="C#" Value="public abstract class Result : IFingerprintable, ICloneable" Maintainer="auto" />
+  <AssemblyInfo>
+    <AssemblyName>Mono.Build</AssemblyName>
+    <AssemblyPublicKey>[00 24 00 00 04 80 00 00 94 00 00 00 06 02 00 00 00 24 00 00 52 53 41 31 00 04 00 00 11 00 00 00 F5 C4 9D D0 0C 3C 7B 78 63 91 17 5B 7D F6 FD 4A A9 50 31 82 44 76 CF D8 68 14 88 FD C8 8F 0F 8D 0F FE B2 24 19 8D F2 C1 9F 2F 14 C8 B5 47 12 08 FD A2 C5 F9 60 77 91 22 44 72 9D 61 96 65 EE 38 88 EA 48 A6 D4 66 4A 4A 8A 6A F9 B4 4D 2D 62 51 97 7D F9 0D AD 80 DC EE E9 66 C7 F3 B5 8C 89 27 5E 02 F6 8B 15 67 70 36 ED B7 53 2E 70 B1 98 04 39 2C D6 EE 3C 18 D0 76 4D 66 68 2B D6 A3 AC AB]</AssemblyPublicKey>
+    <AssemblyVersion>0.0.0.0</AssemblyVersion>
+    <AssemblyCulture>neutral</AssemblyCulture>
+    <Attributes />
+  </AssemblyInfo>
+  <ThreadSafetyStatement>Gtk# is thread aware, but not thread safe; See the <link location="node:gtk-sharp/programming/threads">Gtk# Thread Programming</link> for details.</ThreadSafetyStatement>
+  <Docs>
+    <summary>A stateless object that can be consistently converted into binary form.</summary>
+    <remarks>A <see cref="T:Mono.Build.Result" /> is the supertype of all data objects stored in a build tree. It need only have a few properties:
+
+
+<list type="bullet">
+        <item>
+          <term>It has a unique, consistent binary representation.</term>
+        </item>
+        <item>
+          <term>It can be duplicated.</term>
+        </item>
+        <item>
+          <term>You can somehow make an MD5 sum of its value.</term>
+        </item>
+        <item>
+          <term>It can be serialized.</term>
+        </item>
+      </list>
+
+(These are all variations on the same theme, of course.) With enough ingenuity, pretty much any form of data can be represented as a <see cref="T:Mono.Build.Result" />.</remarks>
+  </Docs>
+  <Base>
+    <BaseTypeName>System.Object</BaseTypeName>
+  </Base>
+  <Interfaces>
+    <Interface>
+      <InterfaceName>Mono.Build.IFingerprintable</InterfaceName>
+    </Interface>
+    <Interface>
+      <InterfaceName>System.ICloneable</InterfaceName>
+    </Interface>
+  </Interfaces>
+  <Attributes />
+  <Members>
+    <Member MemberName="Clone">
+      <MemberSignature Language="C#" Value="public virtual object Clone ();" />
+      <MemberType>Method</MemberType>
+      <ReturnValue>
+        <ReturnType>System.Object</ReturnType>
+      </ReturnValue>
+      <Parameters />
+      <Docs>
+        <summary>Duplicate the object.</summary>
+        <returns>A new result identical to the instance whose method is being invoked.</returns>
+        <remarks>To be added</remarks>
+      </Docs>
+    </Member>
+    <Member MemberName="CloneTo">
+      <MemberSignature Language="C#" Value="protected virtual void CloneTo (Mono.Build.Result dest);" />
+      <MemberType>Method</MemberType>
+      <ReturnValue>
+        <ReturnType>System.Void</ReturnType>
+      </ReturnValue>
+      <Parameters>
+        <Parameter Name="dest" Type="Mono.Build.Result" />
+      </Parameters>
+      <Docs>
+        <summary>Should perform a member-by-member clone to the argument. Used to implement <see cref="M:Mono.Build.Result.Clone" />.</summary>
+        <param name="dest">The object whose members should set.</param>
+        <remarks>Probably redundant with <see cref="M:System.Object.MemberwiseClone" />, but I've never used that function and don't quite understand what it's for so I played it safe and added this member. Not often that you see the first person in documentation, huh? And the second person isn't too common, either.</remarks>
+      </Docs>
+    </Member>
+    <Member MemberName=".ctor">
+      <MemberSignature Language="C#" Value="public Result ();" />
+      <MemberType>Constructor</MemberType>
+      <ReturnValue />
+      <Parameters />
+      <Docs>
+        <summary>Constructs a new result object.</summary>
+        <returns>a <see cref="T:Mono.Build.Result" /></returns>
+        <remarks>This function does nothing at the moment.</remarks>
+      </Docs>
+    </Member>
+    <Member MemberName="GetFingerprint">
+      <MemberSignature Language="C#" Value="public virtual Mono.Build.Fingerprint GetFingerprint (Mono.Build.IBuildContext ctxt, Mono.Build.Fingerprint cached);" />
+      <MemberType>Method</MemberType>
+      <ReturnValue>
+        <ReturnType>Mono.Build.Fingerprint</ReturnType>
+      </ReturnValue>
+      <Parameters>
+        <Parameter Name="ctxt" Type="Mono.Build.IBuildContext" />
+        <Parameter Name="cached" Type="Mono.Build.Fingerprint" />
+      </Parameters>
+      <Docs>
+        <summary>Gets a binary fingerprint of the object.</summary>
+        <returns>A digital fingerprint of the result.</returns>
+        <remarks>When subclassing <see cref="T:Mono.Build.Result" />, don't forget to implement this function correctly! When in doubt, convert the members of your class to byte arrays, string them all together, and take the fingerprint of that. It is recommended that you just inherit
+from <see cref="T:Mono.Build.MBDictionary" /> because it will take care of fingerprinting for you.</remarks>
+        <param name="ctxt">A <see cref="T:Mono.Build.IBuildContext" /> used (if necessary) to evaluate the fingerprint. See 
+<see cref="T:Mono.Build.IFingerprintable" /> for more discussion.</param>
+        <param name="cached">A cached <see cref="T:Mono.Build.Fingerprint" /> that may be returned. See 
+<see cref="T:Mono.Build.IFingerprintable" /> for more discussion. </param>
+      </Docs>
+    </Member>
+    <Member MemberName="GetFingerprint">
+      <MemberSignature Language="C#" Value="public Mono.Build.Fingerprint GetFingerprint ();" />
+      <MemberType>Method</MemberType>
+      <ReturnValue>
+        <ReturnType>Mono.Build.Fingerprint</ReturnType>
+      </ReturnValue>
+      <Parameters />
+      <Docs>
+        <summary>To be added</summary>
+        <returns>a <see cref="T:Mono.Build.Fingerprint" /></returns>
+        <remarks>To be added</remarks>
+      </Docs>
+    </Member>
+  </Members>
+</Type>

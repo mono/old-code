@@ -1,0 +1,56 @@
+using [ Core Core.Subst ]
+
+# this isn't right, it's an executable script.
+# temp hack and all.
+
+mbuild = Subst [ 
+	mbuild.in 
+	{ location = /config/install/pkglibdir }
+] with [ 
+	install = /config/install/bindir_installer 
+	default = true
+]
+
+mb-bundlegen = Subst [ 
+	tmpl.in 
+	{ 
+	  location = /config/install/pkglibdir, 
+	  program = "mb-bundlegen.exe", 
+	  subdir = "mb-bundlegen/" 
+	}
+] with [ 
+	install = /config/install/bindir_installer
+	default = true
+]
+
+mb-bundledoc = Subst [ 
+	tmpl.in 
+	{ 
+	  location = /config/install/pkglibdir, 
+	  program = "mb-bundledoc.exe", 
+	  subdir = "mb-bundledoc/" 
+	}
+] with [ 
+	install = /config/install/bindir_installer
+	default = true
+]
+
+mb-gtkconfig = Subst [ 
+	mb-gtkconfig.in 
+	{ location = /config/install/pkglibdir }
+] with [ 
+	install = /config/install/bindir_installer
+	default = true
+]
+
+mb-bd2xhtml = Subst [ 
+	tmpl.in 
+	{ 
+	  location = /config/install/pkglibdir, 
+	  program = "mb-bd2xhtml.exe", 
+	  subdir = "mb-bd2xhtml/" 
+	}
+] with [ 
+	install = /config/install/bindir_installer
+	default = true
+]

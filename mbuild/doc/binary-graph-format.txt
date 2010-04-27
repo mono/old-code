@@ -1,0 +1,232 @@
+This document describes the on-disk format used to store an MBuild
+target graph in binary form. 
+
+
+** Section 1. File structure.
+
+
+I describe the file format as a sequence of logical chunks. The
+annotation is of the form:
+
+	Type (* Count) : Value or meaning
+
+Where Type is 'B' for a single byte, 'I' for a BinaryWriter-written
+Int32, 'R' for a native-endian Int32, 'S' for a BinaryWriter-written
+string, 'O' for a BinaryFormatter serialized object, and 'D' for a
+delimiter. A delimiter is a BinaryWriter-written integer with a
+special value (0x71717171) that is checked by the reading code to
+make sure that we are where we expect to be in the stream. If 'Count'
+is specified, the item is repeated that many times.
+
+A section of the form
+ 
+	{ 
+		Type1 (* Count1) : Value or meaning
+		Type2 (* Count2) : Value or meaning
+		...
+		TypeN (* CountN) : Value or meaning
+	} * Count
+
+indicates a sequential repetition of the interior fields Count times.
+
+We proceed sequentially from the beginning. 
+
+	B : 'M'
+	B : 'B'
+	B : 'G' 
+	B : '1'
+
+This is a file identifier. Four bytes, the ASCII representations of
+the characters 'MBG1'. That is, MBuild Graph version 1.
+
+	R : 0x01B2C3D4
+
+This is an endianness marker. Its value is read and checked to make
+sure that the reading and writing code have the same endianness.
+
+	O : ProjectInfo
+	D : delimiter 0 
+
+A serialized ProjectInfo object, used in the IGraphState interface.
+
+	O : DependentItemInfo[] (dependent files)
+	O : DependentItemInfo[] (dependent bundles)
+	D : delimiter 1
+
+Two serialized DependentItemInfo[] arrays. The first is a list of
+dependent files (files in the build source directory upon which the
+graph depends -- if they change, the graph should be rebuilt) and the
+second is a list of dependent bundles (bundles used to build the graph
+upon which the graph depends).
+
+	I : number of tags Ntags
+	{ 
+		S : tag name
+		I : tag ID
+	} * Ntags
+	D : delimiter 2 
+
+This stores the name-to-ID entries in the global tag table. Any tag
+that is applied to a target is assigned a global ID number, and this
+section records those ID numbers. The use of ID numbers allows for
+more efficient and easy storage of per-target tag information. The ID
+numbers are positive and are sequential starting at 0.
+
+	I : length of dependency data chunk, Ndep
+	R * Ndep : dependency data
+	D : delimiter 3
+
+This large array encodes the entire dependency portion of the
+graph. The format of the dependency data is described in Section 2.
+
+	I : length of target name data chunk, Nname
+	B * Nname : target name data
+	D : delimiter 4
+
+This large array encodes all of the target names. The format of
+the target name data is described in Section 3. Note that 'Ndep' is
+the number of 32-bit integers in the dependency data, while 'Nname'
+is the number of 8-bit bytes in the target name data.
+
+	I : number of providers, Nprov (< 32767)
+	{
+		I : number of targets (< 32768) Ntarg
+		S : basis
+		S : declaration location
+		I : length of this provider's chunk of the dep data, Ldep
+		R * Ntarg : table of offsets into the dep data table, Odep
+		I : length of this provider's chunk of the name data, Lname
+		R * Ntarg : table of offsets into the name data table, Oname
+		R * Ntarg : table of indices into the type table, Irule
+			    (see below)
+	} * Nprov
+	D : delimiter 5
+
+This section encodes information about the providers used in the
+graph. Providers are assigned positive 16-bit ID numbers, starting at
+0 and proceeding sequentially to 0x7FFE (= 32766). The table of
+provider data is stored in the same order.
+
+Within each provider entry, Ntarg is the number of targets that
+are associated with that provider. 'basis' and 'declloc' are strings
+corresponding to the respective properties of the provider. Ldep is
+the total length of the section of the dependency data table that is
+associated with this provider. That section begins at offset
+Odep[0]. The entries associated with the Nth target in the provider
+start at Odep[N] and continue until Odep[N+1] or, if N is Ntarg - 1,
+Odep[0] + Ldep. (That is, the chunk is just an ordered sequence of
+entries per-target, and Odep is a sequence of offsets in that table
+that can be used to determine the length of each individual entry.)
+Similar logic applies to the name table with Lname and Oname. Irule is
+used as an index into a table of Types (see below) which is used to
+store the rule Type associated with each target.
+
+Note that tag information is not stored here, but in the following
+data chunk. This makes the binary format a little simpler and also
+optimizes the common case of finding a set of targets with a given tag.
+	
+	I : length of tag data table, Ltag
+	R * Ltag : tag data table
+	R * Ntags : tag data offset table
+	D : delimiter 6
+
+This chunk encodes information about the tag values that each target
+has. For the format of the tag data table, see Section 4. 
+
+	O : Type [] (type table)
+	D : delimiter 7
+
+An array of serialized Type objects, used as a repository for target
+rule types.
+
+	O : Result [] (constant result table)
+
+An array of serialized Result objects. These Results are referenced
+as constant dependencies in the dependency data table.
+
+
+** Section 2. Dependency Data format.
+
+
+The dependency data is a large single array of 32-bit
+integers. However, it is logically decomposed into a sequence of
+shorter entries associated with every target in the graph:
+
+	[prov 0 targ 0][prov 0 targ 1]...
+	[prov 0 targ n0][prov 1 targ 0] ...
+	[prov 1 targ n1]...
+	[prov Nprov targ 0]...[prov Nprov targ nNprov]
+
+Given a target ID, the chunk of data associated with its provider can
+be found. The lower 16 bits of the target ID can be used to index into
+the dependency offset table to find the location of the beginning
+of the chunk associated with that target, and the table metadata can
+be used to find the length of the chunk. Thus, we can consider the
+format of each individual chunk
+
+	[prov n targ m]
+
+separately.
+
+Each of these chunks is itself decomposed into a list of dependencies
+by rule argument. Logically, the subformat is
+
+	[arg ID 0] {deps assigned to arg 0}
+	[arg ID 1] {deps assigned to arg 1}
+	...
+	[arg ID N] {deps assigned to arg N}
+
+(If the length of the whole chunk is 0, the target has no dependencies
+besides the implicit dependency of its name.)
+
+Each argument ID is encoded as a negative number. Negative one
+corresponds to 'unnamed arguments'; that is, the dependencies are not
+explicitly assigned to any particular argument of the rule, and type
+inference will be used to make the argument assignment
+instead. Negative two corresponds to 'default ordered arguments'; the
+dependencies are assigned to the default ordered argument of the
+rule. Any
+other negative value N corresponds to argument ID (-N) - 3: -3 maps to
+0, -4 to 1, etc.
+
+Each dependency is encoded as a positive integer. Because of this
+fact, the end of each argument section is found by proceeding until a
+negative value is found in the data table. Two consecutive negative
+numbers should not occur (ie, an unused argument ID should be omitted
+from the data chunk).
+
+If the high 16 bits of a dependency are 0x7FFF, the dependency is
+interpreted as a constant (Result) dependency. The low 16 bits of the
+dependency item are used as an index into the constant result table;
+that result is the dependency. Otherwise, the whole 32-bit dependency
+item is treated as a target ID.
+
+
+** Section 3. Name Data format.
+
+
+The name data format works along the same lines as the dependency data
+format. For each target we can find a chunk of bytes with a known
+offset and length in the name data table. This chunk just stores the
+name of the target encoded in UTF8.
+
+
+** Section 4. Tag data format.
+
+
+The tag data table is also made up out of a consecutive sequence of
+entries. There is one entry for each tag ID, and the tag data offset
+table can be used to find the chunk of the data table associated with
+each tag in the same manner used in the dependency and name data
+tables. Each per-tag chunk is composed of a sequence of pairs of
+integers:
+
+	{
+		R : target having tag
+		R : tag value
+	} * (chunk length / 2)
+
+(A chunk with an odd length is invalid and should not happen.) The
+first item in a pair is a 32-bit target ID. The second item encodes a
+target ID or result in the same format as used in the dependency data
+table.

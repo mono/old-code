@@ -1,0 +1,6 @@
+*.mdb
+*.dll
+*.exe
+_build
+BUILD
+make-version.stamp

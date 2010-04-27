@@ -1,0 +1,77 @@
+<provider name="/config/install">
+   <docs>
+      <summary>Common targets used when installing targets.</summary>
+      <remarks>To be added.</remarks>
+   </docs>
+   <target name="bindir_installer" exists_since="0.0.3.1">
+      <docs>
+	 <summary>
+	    A <b>CopyInstaller</b> that installs to the location stored in <b>bindir</b>.
+	 </summary>
+	 <!-- <remarks></remarks> -->
+      </docs>
+      <rule>MBuildDynamic.Core.Install.MakeCopyInstaller</rule>
+   </target>
+   <target name="bindir" exists_since="0.0.3.1">
+      <docs>
+	 <summary>The default directory that system binaries should be installed into.</summary>
+	 <remarks>
+	    <p>The default value of <b>bindir</b> is derived by appending "bin" to <b>prefix_dir</b>.
+	    Note, then, that this value is Unix-platform-centric. This should be fixed.</p>
+	    <p>You should not create subdirectories of <b>bindir</b>. If your program has executables
+	    that shouldn't be available on the command-line, put them in a subdirectory of <b>libdir</b>
+	    or <b>libexecdir</b>.</p>
+	 </remarks>
+      </docs>
+      <rule>MBuildDynamic.Core.Install.MakeInstallSubdirectory</rule>
+   </target>
+   <target name="prefix" exists_since="0.0.3.1">
+      <docs>
+	 <summary>The installation prefix, as a string.</summary>
+	 <remarks>
+	    <p>The default value of <b>prefix</b> is derived from <b>default_prefix</b>,
+	    which is "/usr/local", as with <tt>autoconf</tt>.</p>
+	 </remarks>
+      </docs>
+      <rule>MBuildDynamic.Core.Config.ConfigString</rule>
+   </target>
+   <target name="libdir_installer" exists_since="0.0.3.1">
+      <docs>
+	 <summary>A <b>CopyInstaller</b> that installs to the location stored in <b>libdir</b>.</summary>
+	 <!-- <remarks>To be added.</remarks> -->
+      </docs>
+      <rule>MBuildDynamic.Core.Install.MakeCopyInstaller</rule>
+   </target>
+   <target name="prefix_dir" exists_since="0.0.3.1">
+      <docs>
+	 <summary>The installation prefix, as an <b>InstallDirectory</b>.</summary>
+	 <!-- <remarks>To be added.</remarks> -->
+      </docs>
+      <rule>MBuildDynamic.Core.Install.MakeInstallDirectory</rule>
+   </target>
+   <target name="libdir" exists_since="0.0.3.1">
+      <docs>
+	 <summary>The default directory that system libraries should be installed into.</summary>
+	 <remarks>
+	    <p>The default value of <b>libdir</b> is derived by appending "lib" to <b>prefix_dir</b>.
+	    Note, then, that this value is Unix-platform-centric. This should be fixed.</p>
+	    <p><b>libdir</b> is also traditionally the location that architecture-specific program
+	    support files are installed into. For instance, you might put architecture-specific
+	    support files into "{libdir}/{compat_name}". (See <b>/config/env/compat_name</b>.)
+	    Architecture-specific support executables should go into <b>libexecdir</b>, which hasn't
+	    been implemented yet.
+	    </p>
+	 </remarks>
+      </docs>
+      <rule>MBuildDynamic.Core.Install.MakeInstallSubdirectory</rule>
+   </target>
+   <target name="default_prefix" exists_since="0.0.3.1">
+      <docs>
+	 <summary>The default installation prefix: "/usr/local".</summary>
+	 <!-- <remarks>To be added.</remarks> -->
+      </docs>
+      <rule>Mono.Build.ConstantRule</rule>
+   </target>
+</provider>
+
+

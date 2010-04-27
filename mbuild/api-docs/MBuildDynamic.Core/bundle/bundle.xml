@@ -1,0 +1,50 @@
+﻿<bundle name="Core">
+        <docs>
+                <summary>The core bundle of basic rules and results.</summary>
+
+                <remarks>
+                        <p>This is the core MBuild bundle. It provides the foundation
+		that all other bundles build on top of. You will reference it in virtually
+		all of your MBuild projects.</p>
+                </remarks>
+        </docs>
+
+        <namespace name="Core.Tools" exists_since="0.0.3.1">
+                <docs>
+                        <summary>To be added.</summary>
+                        <remarks>To be added.</remarks>
+                </docs>
+        </namespace>
+        <namespace name="Core.Clr" exists_since="0.0.3.1">
+                <docs>
+                        <summary>To be added.</summary>
+                        <remarks>To be added.</remarks>
+                </docs>
+        </namespace>
+        <namespace name="Core.Xml" exists_since="0.0.3.1">
+                <docs>
+                        <summary>To be added.</summary>
+                        <remarks>To be added.</remarks>
+                </docs>
+        </namespace>
+        <namespace name="Core.Config" exists_since="0.0.3.1">
+                <docs>
+                        <summary>To be added.</summary>
+                        <remarks>To be added.</remarks>
+                </docs>
+        </namespace>
+        <namespace name="Core.Install" exists_since="0.0.3.1">
+                <docs>
+                        <summary>To be added.</summary>
+                        <remarks>To be added.</remarks>
+                </docs>
+        </namespace>
+        <namespace name="Core" exists_since="0.0.3.1">
+                <docs>
+                        <summary>To be added.</summary>
+                        <remarks>To be added.</remarks>
+                </docs>
+        </namespace>
+</bundle>
+
+

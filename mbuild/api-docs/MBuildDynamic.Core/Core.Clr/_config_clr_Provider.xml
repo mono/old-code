@@ -1,0 +1,71 @@
+﻿<provider name="/config/clr">
+        <docs>
+                <summary>To be added.</summary>
+                <remarks>To be added.</remarks>
+        </docs>
+        <target name="gacutil_installer" exists_since="0.0.3.1">
+                <docs>
+                        <summary>To be added.</summary>
+                        <remarks>To be added.</remarks>
+                </docs>
+                <rule>MBuildDynamic.Core.Clr.MakeGacutilInstaller</rule>
+        </target>
+        <target name="sn_binary" exists_since="0.0.3.1">
+                <docs>
+                        <summary>To be added.</summary>
+                        <remarks>To be added.</remarks>
+                </docs>
+                <rule>MBuildDynamic.Core.Tools.FindTool</rule>
+        </target>
+        <target name="gacutil_program" exists_since="0.0.3.1">
+                <docs>
+                        <summary>To be added.</summary>
+                        <remarks>To be added.</remarks>
+                </docs>
+                <rule>MBuildDynamic.Core.Clr.ConfigureGacutilProgram</rule>
+        </target>
+        <target name="runtime" exists_since="0.0.3.1">
+                <docs>
+                        <summary>To be added.</summary>
+                        <remarks>To be added.</remarks>
+                </docs>
+                <rule>MBuildDynamic.Core.Tools.FindTool</rule>
+        </target>
+        <target name="gacutil_names" exists_since="0.0.3.1">
+                <docs>
+                        <summary>To be added.</summary>
+                        <remarks>To be added.</remarks>
+                </docs>
+                <rule>Mono.Build.ConstantRule</rule>
+        </target>
+        <target name="gacutil_binary" exists_since="0.0.3.1">
+                <docs>
+                        <summary>To be added.</summary>
+                        <remarks>To be added.</remarks>
+                </docs>
+                <rule>MBuildDynamic.Core.Tools.FindTool</rule>
+        </target>
+        <target name="runtime_names" exists_since="0.0.3.1">
+                <docs>
+                        <summary>To be added.</summary>
+                        <remarks>To be added.</remarks>
+                </docs>
+                <rule>Mono.Build.ConstantRule</rule>
+        </target>
+        <target name="sn_program" exists_since="0.0.3.1">
+                <docs>
+                        <summary>To be added.</summary>
+                        <remarks>To be added.</remarks>
+                </docs>
+                <rule>MBuildDynamic.Core.Clr.ConfigureStrongnameProgram</rule>
+        </target>
+        <target name="sn_names" exists_since="0.0.3.1">
+                <docs>
+                        <summary>To be added.</summary>
+                        <remarks>To be added.</remarks>
+                </docs>
+                <rule>Mono.Build.ConstantRule</rule>
+        </target>
+</provider>
+
+

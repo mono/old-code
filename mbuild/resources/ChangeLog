@@ -1,0 +1,10 @@
+2006-06-23  Peter Williams  <peter@newton.cx>
+
+	* New directory.
+
+	* intltool-extract.in: Import from FC5 intltool 0.34.2
+
+	* intltool-merge.in: Import from FC5 intltool 0.34.2
+
+	* intltool-update.in: Import from FC5 intltool 0.34.2
+

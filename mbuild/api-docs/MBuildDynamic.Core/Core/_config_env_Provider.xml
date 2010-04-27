@@ -1,0 +1,22 @@
+﻿<provider name="/config/env">
+        <docs>
+                <summary>To be added.</summary>
+                <remarks>To be added.</remarks>
+        </docs>
+        <target name="mbuild_version" exists_since="0.0.3.1">
+                <docs>
+                        <summary>To be added.</summary>
+                        <remarks>To be added.</remarks>
+                </docs>
+                <rule>Mono.Build.ConstantRule</rule>
+        </target>
+        <target name="compat_name" exists_since="0.0.3.1">
+                <docs>
+                        <summary>To be added.</summary>
+                        <remarks>To be added.</remarks>
+                </docs>
+                <rule>MBuildDynamic.Core.MakeCompatName</rule>
+        </target>
+</provider>
+
+

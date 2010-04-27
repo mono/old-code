@@ -1,0 +1,863 @@
+# Crappy C language support 
+
+namespace Languages.CrappyC {
+
+	using default;
+
+	using Core;
+	using Core.Native;
+	using Core.Tools;
+	using Core.Config;
+	using Core.Install;
+
+	using !System;
+	using !System.Text;
+	using !System.IO;
+
+	using !System.Collections;
+
+	parameters {
+		basis Config = /config/lang/crappyc;
+		namespace Core.Native;
+		namespace Core;
+		namespace Core.Install;
+	}
+
+	provider Config {
+		cc_names = "!gcc cc";
+
+		cc_for_build_binary = FindCrossTool (cc_names, Native.Config/build_arch);
+		cc_for_host_binary = FindCrossTool (cc_names, Native.Config/host_arch);
+		cc_for_target_binary = FindCrossTool (cc_names, Native.Config/target_arch);
+
+		cc_for_build = ConfigureCCompiler (cc_for_build_binary);
+		cc_for_host = ConfigureCCompiler (cc_for_host_binary);
+		cc_for_target = ConfigureCCompiler (cc_for_target_binary);
+
+		default_cc_options = MakeDefaultCCOptions (enable_debug);
+
+		prog_installer = MakeCCOutputInstaller (Install.Config/bindir);
+		lib_installer = MakeCCShlibOutputInstaller (Install.Config/libdir);
+
+		enable_debug = ConfigBool (Core.Generic/enable_debug) tags {
+			"prompt" = "Compile C programs with debugging symbols?";
+			"config_group" = "Debugging";
+		};
+	}
+
+	rule ConfigureCCompiler {
+		BinaryInfo binary;
+		string? native_args;
+		Architecture cc_target;
+
+		# TODO: check what compiler we're using,
+		# figure out platform-specific needs.
+
+		build (CCompiler res, ctxt) @{
+			res.Binary = binary;
+			
+			if (native_args != null)
+				res.NativeArgs = native_args;
+			
+			res.TargetNaming = new NativeNamingConfiguration (cc_target);
+			return false;
+		@}
+	} default {
+		cc_target = Native.Config/target_arch;
+	}
+
+	rule MakeCCOptions {
+		CCOptions base_options;
+		bool? debug;
+		default string* native_args; # gross, needed for CompileShlib which adds a string arg
+		MBDictionary? defs;
+
+		# FIXME: add way to change optimizer flags
+
+		build (CCOptions opts, ctxt) @{
+			return CreateOptions (opts, ctxt);
+		@}
+
+		@{
+
+		protected bool CreateOptions (CCOptions opts, IBuildContext ctxt)
+		{
+			base_options.CopyValueTo (opts);
+
+			if (debug != null)
+				opts.Debug = (bool) debug;
+
+			if (native_args.Length > 0) {
+				StringBuilder sb = new StringBuilder ();
+
+				for (int i = 0; i < native_args.Length; i++)
+					sb.AppendFormat (" {0}", native_args[i]);
+
+				if (opts.NativeArgs == null)
+					opts.NativeArgs = "";
+
+				// Append, don't replace.
+				opts.NativeArgs += sb.ToString ();
+			}
+
+			if (defs != null) {
+				foreach (string s in defs.Keys) {
+					Result r = defs[s];
+
+					if (r is MBString)
+						// FIXME: must escape string!
+						opts.AddDefinition (s, ((MBString) r).Value);
+					else if (r is MBBool)
+						opts.AddDefinition (s, ((MBBool) r).Value);
+					else {
+						ctxt.Logger.Error (2050, "Don't know what to do " +
+						 "with C #define table entry", r.ToString ());
+						return true;
+					}
+				}
+			}
+
+			return false;
+		}
+
+		protected CCOptions CreateOptions (IBuildContext ctxt)
+		{
+			CCOptions opts = new CCOptions ();
+
+			if (CreateOptions (opts, ctxt))
+				return null;
+
+			return opts;
+		}
+
+		@}
+	} default {
+		base_options = Config/default_cc_options;
+	}
+
+	# Linker options - need to think about this. C-specific?
+
+	# Actual compiling
+
+	rule CCompile : MakeCCOptions {
+		# Note no incremental compilation (.c -> .o -> .exe)
+		# Supporting that will have to wait on the compiler for
+		# a better Buildfile language.
+
+		CSource+ sources;
+		CHeader* headers;
+
+		# FIXME: this is pretty much a hack
+		NativeLinkableFile* links;
+		# FIXME: this too
+		MBDirectory* includedirs;
+
+		CCompiler cc;
+
+		.target tname;
+
+		@{
+
+		protected virtual bool InitResult (NativeCodeFile ncf)
+		{
+			return false;
+		}
+
+		protected virtual string GetExtraArgs (CCompiler cc, NativeCodeFile res, 
+		                                       IBuildContext ctxt)
+		{
+			return "";
+		}
+ 
+		protected string GetIncludeArgs (CHeader[] headers, MBDirectory[] dirs, 
+		                                 IBuildContext ctxt)
+		{
+			// FIXME: we don't always want to add the header's exact
+			// directory to the include path: eg, we might #include "foo/bar.h"
+			// in the source. Worry about that later for now.
+
+			Hashtable seen = new Hashtable ();
+
+			foreach (CHeader h in headers)
+				seen[ctxt.PathTo (h.Dir)] = "";
+
+			foreach (MBDirectory d in dirs)
+				seen[ctxt.PathTo (d)] = "";
+
+			StringBuilder sb = new StringBuilder ();
+
+			foreach (string dir in seen.Keys)
+				sb.AppendFormat (" -I{0}", Launcher.EscapeForShell (dir));
+
+			return sb.ToString ();
+		}
+
+		@}
+
+		build (NativeCodeFile res, ctxt) @{
+			res.Architecture = cc.TargetArch;
+			res.File = new BinFile ();
+			res.File.Dir = ctxt.WorkingDirectory;
+			res.File.Name = tname;
+
+			if (InitResult (res))
+				return true;
+
+			CCOptions opts = CreateOptions (ctxt);
+
+			StringBuilder sb = new StringBuilder (cc.MakeOutputArg (res.File.GetPath (ctxt)));
+
+			string extra;
+			if ((extra = GetExtraArgs (cc, res, ctxt)) == null)
+				return true;
+
+			sb.AppendFormat (" {0}", extra);
+ 			sb.AppendFormat (" {0}", cc.MakeNativeArgs ());
+			sb.AppendFormat (" {0}", GetIncludeArgs (headers, includedirs, ctxt));
+ 			sb.AppendFormat (" {0}", opts.MakeArguments (cc, ctxt));
+
+			foreach (CSource f in sources)
+				sb.AppendFormat (" {0}", f.GetPath (ctxt));
+
+			// FIXME: still hack				 
+			foreach (NativeLinkableFile f in links) {
+				if (f.Architecture != cc.TargetArch) {
+					ctxt.Logger.Error (3025, "Cannot link to object of wrong architecture kind", f.File.GetPath (ctxt));
+					return true;
+				}
+
+				sb.AppendFormat (" {0}", f.File.GetPath (ctxt));
+			}
+
+			if (cc.Compile (sb.ToString (), ctxt))
+				return true;
+
+			return false;
+		@}
+
+		tags {
+			"default" = true;
+		}
+	} default {
+		cc = Config/cc_for_host;
+	}
+
+	rule CompileProgram : CCompile {
+
+		default restype NativeProgram;
+
+		tags {
+			"install" = Config/prog_installer;
+		}
+	}
+
+	rule CompileShlib : CCompile {
+
+		string? version;
+
+		# FIXME: evil ugly hack. Should
+		# grab rpaths from the libraries we link to -- this is one reason
+		# that libtool uses .la files. We can add an InstallDirectory field
+		# to NativeSharedLibrary.
+
+		InstallDirectory* rpaths; 
+
+		# We should probably wrap libtool. On the other hand, libtool
+		# is a 200k shell script. There's got to be a better way.
+
+		# FIXME: the sonaming is a hack; libtool does all its silly stuff
+		# so that programs can be run inside the builddir and all the linking
+		# works. Without creating all the .so.x.y.z crap in builddir, this
+		# will completely fail for us.
+
+		default restype NativeSharedLibrary;
+
+		@{
+			protected override bool InitResult (NativeCodeFile ncf) {
+				NativeSharedLibrary nsl = (NativeSharedLibrary) ncf;
+				nsl.Version = new NativeShlibVersion ();
+				nsl.Version.SetDefault ();
+
+				return false;
+			}
+
+			protected override string GetExtraArgs (CCompiler cc, NativeCodeFile res,
+			                                        IBuildContext ctxt)
+			{
+				NativeSharedLibrary nsl = (NativeSharedLibrary) res;
+				StringBuilder sb = new StringBuilder ("-shared -fPIC -DPIC");
+
+				if (version != null) {
+					if (nsl.Version.SetFromString (version)) {
+						ctxt.Logger.Error (3024, "Cannot parse string as a shared " +
+						                   "library version", version);
+						return null;
+					}				
+				}
+
+				sb.AppendFormat (" -Wl,-soname -Wl,{0}.{1}", nsl.File.Name, 
+				                 nsl.Version.Major);
+
+				if (rpaths.Length > 0) {
+					for (int i = 0; i < rpaths.Length; i++)
+						sb.AppendFormat (" -Wl,--rpath -Wl,{0}",
+						                 rpaths[i].Value);
+				}
+
+				return sb.ToString ();
+			}
+		@}
+
+		tags {
+			"install" = Config/lib_installer;
+		}
+	}
+
+	# Other utilities
+
+	# as long as we have the checkfunc requirement, can't do this.
+	#dependency regex matcher "lib.*\\.so$" = CSystemLibraryCheck;
+	#dependency regex matcher "\\.dll$" = CSystemLibraryCheck;
+
+	rule CSystemLibraryCheck {
+		.target libname;
+		default string func;
+		CCompiler cc;
+		CCOptions ccopts;
+
+		# we don't actually run the program that we compile, we just
+		# check if it links. Since we actually want to see if the lib
+		# exists on the host system, cc_for_host is the right choice
+		# all the way.
+
+		@{
+
+		public static bool CheckForLibrary (CCompiler cc, CCOptions ccopts, string libbase, 
+		                                    string funcname, IBuildContext ctxt)
+		{
+			string prologue = String.Format (
+@"#ifdef __cplusplus
+extern ""C""
+#endif
+char {0} ();
+", funcname);
+
+			string code = String.Format (
+@"{0} ();
+return 0;", funcname);
+			CSource source = CCompiler.CreateCheckFile (prologue, code, ctxt);
+
+			// Write a SimpleCompile that can do libs?
+
+			NativeProgram dest = new NativeProgram ();
+			cc.InitializeProgramOutput (dest, "c-libcheck-" + libbase, ctxt);
+
+			string cc_args = String.Format ("{0} {1} {2} {3} {4}",
+				cc.MakeNativeArgs (),
+				ccopts.MakeArguments (cc, ctxt),
+				cc.MakeOutputArg (dest.File.GetPath (ctxt)),
+				cc.MakeSyslibArg (libbase),
+				source.GetPath (ctxt));
+
+			bool result = cc.Compile (cc_args, ctxt);
+
+			// Don't bother to preserve the source here; it's not 
+			// going to be the cause of any problems.
+
+			source.Delete (ctxt);
+			dest.File.Delete (ctxt);
+
+			return result;
+		}
+
+		@}
+
+		build (SystemShlib shlib, ctxt) @{
+			string libbase = NativeNamingConfiguration.ImportShlib (libname);
+
+			if (libbase == null) {
+				ctxt.Logger.Error (2049, "Cannot interpret system shared library " +
+				                   "name " + libname + ".", "");
+				return true;
+			}
+
+			if (CheckForLibrary (cc, ccopts, libbase, func, ctxt)) {
+				// FIXME: way for custom error messages (peek in our tags,
+				// even though that is not encouraged at all?)
+				ctxt.Logger.Error (3017, "Your C compiler cannot find the required " +
+					"shared library \"" + libname + "\"", cc.ToString ());
+				return true;
+			}
+
+			shlib.Value = libbase;
+			return false;
+		@}
+
+		tags {
+			"prereq" = true;
+		}
+	} default {
+		cc = Config/cc_for_host;
+		ccopts = Config/default_cc_options;
+	}
+
+	rule CSystemHeaderCheck {
+		default string header;
+		default ordered string* prereq_headers;
+		CCompiler cc;
+		CCOptions ccopts;
+
+		# Also suck in a CCOptions?
+
+		@{
+
+		public static bool CheckForHeaders (CCompiler cc, CCOptions ccopts,
+		                                    string[] headers, IBuildContext ctxt)
+		{
+			StringBuilder sb = new StringBuilder ();
+
+			for (int i = 0; i < headers.Length; i++)
+				sb.AppendFormat ("#include <{0}>\n", headers[i]);
+
+			string code = "return 0;";
+
+			CSource source = CCompiler.CreateCheckFile (sb.ToString (), code, ctxt);
+
+			NativeProgram dest = cc.SimpleCompile (source, ccopts, ctxt);
+
+			source.Delete (ctxt);
+
+			if (dest == null)
+				return true;
+
+			dest.File.Delete (ctxt);
+			return false;
+		}
+
+		@}
+
+		build (MBBool res, ctxt) @{
+			string[] headers = new string[prereq_headers.Length + 1];
+
+			prereq_headers.CopyTo (headers, 0);
+			headers[prereq_headers.Length] = header;
+
+			if (CheckForHeaders (cc, ccopts, headers, ctxt)) {
+				ctxt.Logger.Error (3026, "Your C compiler cannot find the required " +
+					"header file \"" + header + "\"", cc.ToString ());
+				return true;
+			}
+
+			res.Value = true;
+			return false;
+		@}
+
+		tags {
+			"prereq" = true;
+		}
+	} default {
+		cc = Config/cc_for_host;
+		ccopts = Config/default_cc_options;
+	}		
+
+	# now put the above two together ..
+
+	rule CLibraryDevelCheck {
+		.target libname;
+		string func;
+		default string header;
+		default ordered string* prereq_headers;
+		CCompiler cc;
+		CCOptions ccopts;
+
+		build (SystemShlib shlib, ctxt) @{
+			string libbase = NativeNamingConfiguration.ImportShlib (libname);
+
+			if (libbase == null) {
+				ctxt.Logger.Error (2049, "Cannot interpret system shared library " +
+				                   "name " + libname + ".", "");
+				return true;
+			}
+
+			if (CSystemLibraryCheck.CheckForLibrary (cc, ccopts, libbase, func, ctxt)) {
+				ctxt.Logger.Error (3017, "Your C compiler cannot find the required " +
+					"shared library \"" + libname + "\"", cc.ToString ());
+				return true;
+			}
+
+			string[] headers = new string[prereq_headers.Length + 1];
+			prereq_headers.CopyTo (headers, 0);
+			headers[prereq_headers.Length] = header;
+
+			if (CSystemHeaderCheck.CheckForHeaders (cc, ccopts, headers, ctxt)) {
+				string s;
+
+				s = String.Format ("Your C compiler cannot find the required header " +
+					"file \"{0}\", which is needed to develop for the required " +
+					"library {1}", header, libname);
+
+				ctxt.Logger.Error (3026, s, cc.ToString ());
+				return true;
+			}
+
+			shlib.Value = libbase;
+			return false;
+		@}
+
+		tags {
+			"prereq" = true;
+		}
+	} default {
+		cc = Config/cc_for_host;
+		ccopts = Config/default_cc_options;
+	}
+
+	target regex matcher "lib.*\\.so$" = CompileShlib;
+
+	result CCodeFile : TextFile {} 
+	result CSource : CCodeFile {} # will I regret this setup? tune in next time
+	result CHeader : CCodeFile {} # to find out
+
+	dependency regex matcher "\\.c$" = CSourceFileRule;
+	dependency regex matcher "\\.h$" = CHeaderFileRule;
+
+	sourcefile rule CSourceFileRule = CSource;
+	sourcefile rule CHeaderFileRule = CHeader;
+
+	# hypothetical CCOutput, based on CSharpCompilerOutput
+	#
+	#result CCOutput : CompositeResult {
+	#	default NativeCodeFile Output;
+	#}
+
+	# CCOutputInstaller
+
+	result CCOutputInstaller : ExecutableCopyInstaller {
+		@{
+
+		public override Type OtherType { get { return typeof (NativeCodeFile); } }
+
+		public override string DescribeAction (Result other, IBuildContext ctxt)
+		{
+			// We need to override this because ExecutableCopyInstaller expects an
+			// MBFile, whereas we have OtherType as a NativeCodeFile, which is a composite.
+			// It has a default MBFile field, but we get the whole composite since
+			// we ask for it.
+
+			return String.Format ("Copy the object file {0} to {1} and make it executable", 
+					      ((NativeCodeFile) other).File.GetPath (ctxt), DestDir);
+		}
+
+		@}
+	}
+
+	rule MakeCCOutputInstaller : MakeExecutableCopyInstaller {
+		default restype CCOutputInstaller;
+	}
+
+	# CCShlibOutputInstaller
+
+	result CCShlibOutputInstaller : ExecutableCopyInstaller {
+		@{
+
+		public override Type OtherType { get { return typeof (NativeSharedLibrary); } }
+
+		NativeShlibVersion inst_version;
+
+		protected override string GetDestName (MBFile file, MBDirectory dest, IBuildContext ctxt)
+		{
+			return String.Format ("{0}.{1}.{2}.{3}", file.Name, inst_version.Major,
+			                      inst_version.Minor, inst_version.Micro);
+		}
+
+		bool LinkOne (MBFile dest, MBFile vfile, string fmt, bool backwards, IBuildContext ctxt)
+		{
+			try {
+				vfile.Name = String.Format (fmt, inst_version.Major, inst_version.Minor,
+				                            inst_version.Micro);
+
+				if (backwards)
+					vfile.Delete (ctxt);
+				else
+					dest.LinkFromOrCopyTo (vfile, ctxt);
+			} catch (IOException ioex) {
+				string t1;
+
+				if (backwards)
+					t1 = String.Format ("There was an error deleting {0}.", 
+					                    vfile.GetPath (ctxt));
+				else
+					t1 = String.Format ("There was an error linking {0} to {1}.", 
+					                    vfile.GetPath (ctxt), dest.GetPath (ctxt));
+
+				ctxt.Logger.Error (3023, t1, ioex.Message);
+				return true;
+			}
+
+			return false;
+		}
+
+		public override bool InstallResult (Result other, bool backwards, IBuildContext ctxt)
+		{
+			NativeSharedLibrary nsl = (NativeSharedLibrary) other;
+
+			this.inst_version = nsl.Version;
+
+			if (CopyFile (nsl.File, backwards, ctxt))
+				return true;
+
+			// Now create or delete links
+
+			MBFile dest = MakeDestination (nsl.File, ctxt);
+			MBFile vfile = (MBFile) dest.Clone ();
+
+			//if (LinkOne (dest, vfile, nsl.File.Name + ".{0}.{1}", backwards, ctxt))
+			//	return true;
+			if (LinkOne (dest, vfile, nsl.File.Name + ".{0}", backwards, ctxt))
+				return true;
+
+			return false;
+		}
+		
+		public override string DescribeAction (Result other, IBuildContext ctxt)
+		{
+			NativeSharedLibrary nsl = (NativeSharedLibrary) other;
+
+			return String.Format ("Copy the shared library {0} to {1} and install symlinks " +
+			                      "for its version {2}", nsl.File.GetPath (ctxt), DestDir,
+			                      nsl.Version);
+		}
+
+		@}
+	}
+
+	rule MakeCCShlibOutputInstaller : MakeExecutableCopyInstaller {
+		# FIXME: have an InstallDirectory field applied to a composite
+		# shlib result; make an installer that honors that. Then we can
+		# use the installdir to insert rpaths in linking.
+		default restype CCShlibOutputInstaller;
+	}
+
+	# Optimizer flags
+
+	enum result CCOptimizerFlags {
+		default Default,
+		None,
+		CodeSize,
+		Aggressive
+	}
+
+	# CCompiler
+
+	result CCompiler : CompositeResult {
+		BinaryInfo Binary;
+		string NativeArgs;
+		ArchKindResult TargetArch;
+		NativeNamingConfiguration TargetNaming;
+
+		@{
+
+		// All of these are FIXMEs to return the appropriate
+		// arg depending on the compiler we're using. Unsurprisingly,
+		// these are all aimed at GCC.
+
+		public string MakeDebugArg () {
+			return "-g";
+		}
+
+		public string MakeOutputArg (string outfile) {
+			return "-o " + outfile;
+		}
+
+		public string MakeNativeArgs () {
+			if (NativeArgs != null)
+				return NativeArgs;
+			return "";
+		}
+
+		public string MakeSyslibArg (string libbase) {
+			return "-l" + libbase;
+		}
+
+		public string MakeOptimizerArg (CCOptimizerFlags opts) {
+			switch (opts) {
+			case CCOptimizerFlags.Default: return "-O2";
+			case CCOptimizerFlags.None: return "-O0";
+			case CCOptimizerFlags.CodeSize: return "-Os";
+			case CCOptimizerFlags.Aggressive: return "-O3";
+			default: return "";
+			}
+		}
+
+		public bool Compile (string args, IBuildContext ctxt) {
+			return (Launcher.RunTool (Binary, args, ctxt,
+				"C compiler returned an error.") != 0);
+		}
+
+		const string Resource = "c-check-template.c.in";
+
+		public static CSource CreateCheckFile (string prologue, string code, 
+		                                       IBuildContext ctxt)
+		{
+			CSource temp = new CSource ();
+			// GCC uses extension to determine input type
+			temp.SetToInsecureTemporary ("c", ctxt);
+
+			IOSink dsink = new IOSink (temp, ctxt);
+			SubstSink subst = new SubstSink (dsink);
+			subst.AddSubst ("prologue", prologue);
+			subst.AddSubst ("code", code);
+
+			System.Reflection.Assembly myassy = System.Reflection.Assembly.GetExecutingAssembly ();
+			Stream resource = myassy.GetManifestResourceStream (Resource);
+			IOSink.DrainStream (resource, subst);
+
+			return temp;
+		}
+
+		// See discussion in Core.Native.bundle re: basenames
+		
+		public void InitializeProgramOutput (NativeProgram np, string basename, 
+		                                     IBuildContext ctxt)
+		{
+			np.Architecture = TargetArch;
+			np.File = new BinFile ();
+			np.File.Name = TargetNaming.ExportProgram (basename);
+			np.File.Dir = ctxt.WorkingDirectory;
+		}
+
+		public void InitializeShlibOutput (NativeSharedLibrary nsl, string basename, 
+		                                   IBuildContext ctxt)
+		{
+			nsl.Architecture = TargetArch;
+			nsl.File = new BinFile ();
+			nsl.File.Name = TargetNaming.ExportShlib (basename);
+			nsl.File.Dir = ctxt.WorkingDirectory;
+			nsl.Version = new NativeShlibVersion ();
+			nsl.Version.SetDefault ();
+		}
+
+		public void InitializeModuleOutput (NativeModule nm, string basename, 
+		                                   IBuildContext ctxt)
+		{
+			nm.Architecture = TargetArch;
+			nm.File = new BinFile ();
+			nm.File.Name = TargetNaming.ExportModule (basename);
+			nm.File.Dir = ctxt.WorkingDirectory;
+		}
+
+		public NativeProgram SimpleCompile (CSource source, CCOptions opts, 
+		                                       IBuildContext ctxt)
+		{
+			NativeProgram dest = new NativeProgram ();
+			InitializeProgramOutput (dest, 
+			                         Path.GetFileNameWithoutExtension (source.Name),
+			                         ctxt);
+
+			string cc_args = String.Format ("{0} {1} {2}",
+				MakeNativeArgs (),
+				MakeOutputArg (dest.File.GetPath (ctxt)),
+				source.GetPath (ctxt));
+
+			if (opts != null)
+				cc_args = opts.MakeArguments (this, ctxt) + " " + cc_args;
+
+			if (Compile (cc_args, ctxt))
+				return null;
+
+			return dest;
+		}
+
+		@}
+	}
+
+	# CCOptions
+
+	result CCOptions : CompositeResult {
+		bool Debug;
+		string NativeArgs;
+		MBDictionary Definitions;
+		CCOptimizerFlagsResult Optimizations;
+
+		@{
+		
+		public string MakeArguments (CCompiler cc, IBuildContext ctxt)
+		{
+			string res = "";
+
+			if (Debug)
+				res += cc.MakeDebugArg ();
+
+			if (Optimizations != null)
+				res += " " + cc.MakeOptimizerArg (Optimizations.Value);
+			else
+				res += " " + cc.MakeOptimizerArg (CCOptimizerFlags.Default);
+
+			if (NativeArgs != null)
+				res += " " + NativeArgs;
+
+			if (Definitions != null) {
+				foreach (string s in Definitions.Keys) {
+					Result r = Definitions[s];
+
+					if (r is MBString) {
+						string s2 = Launcher.EscapeForShell (((MBString) r).Value);
+						res += String.Format (" -D{0}={1}", s, s2);
+					} else if (r is MBBool) {
+						if (((MBBool) r).Value) 
+							res += " -D" + s;
+					} else {
+						throw new InvalidOperationException ("got a bad defs entry?");
+					}
+				}
+			}
+
+			return res;
+		}
+
+		public void AddNativeArgs (string args)
+		{
+			if (NativeArgs == null)
+				NativeArgs = args;
+			else
+				NativeArgs += " " + args;
+		}
+
+		public void AddDefinition (string name, string value)
+		{
+			if (Definitions == null)
+				Definitions = new MBDictionary ();
+
+			Definitions[name] = new MBString (value);
+		}
+
+		public void AddDefinition (string name, bool value)
+		{
+			if (Definitions == null)
+				Definitions = new MBDictionary ();
+
+			Definitions[name] = new MBBool (value);
+		}
+
+		@}
+	}
+
+	rule MakeDefaultCCOptions {
+		bool debug;
+
+		build (CCOptions opts, ctxt) @{
+			opts.Debug = debug;
+			return false;
+		@}
+	}
+
+	rule SourceDirHack {
+		string subdir;
+
+		build (MBDirectory res, ctxt) @{
+			res.Init (ResultStorageKind.Source, subdir);
+			return false;
+		@}
+	}
+
+}

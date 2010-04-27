@@ -1,0 +1,9 @@
+MBuildDynamic.Core/Core.bundle
+MBuildDynamic.Core/Core.Clr.bundle
+MBuildDynamic.Core/Core.Config.bundle
+MBuildDynamic.Core/Core.Install.bundle
+MBuildDynamic.Core/Core.Native.bundle
+MBuildDynamic.Core/Core.Xml.bundle
+MBuildDynamic.Core/Core.Subst.bundle
+MBuildDynamic.Core/Core.Tools.bundle
+

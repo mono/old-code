@@ -1,0 +1,29 @@
+using [
+	Languages.CSharp
+]
+
+mb-configsub.exe = [
+	mb-configsub.cs
+	../MBuildDynamic.Core.dll
+	../Mono.Build.dll
+	/config/mbuild/Mono.Posix.dll
+	/config/mbuild/System.Xml.dll
+] with [
+	default = /disable-minimal-build
+]
+
+mb-graphstat.exe = [
+	mb-graphstat.cs
+	../Mono.Build.dll
+	../Monkeywrench.dll
+] with [
+	default = /disable-minimal-build
+]
+
+test-canon.exe = [ 
+	test-canon.cs
+	../Mono.Build.dll
+] with [
+	default = /disable-minimal-build
+]
+

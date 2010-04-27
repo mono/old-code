@@ -1,0 +1,629 @@
+# CSharp language support 
+
+namespace Languages.CSharp {
+
+	using default;
+	using Core;
+	using Core.Tools;
+	using Core.Clr;
+	using Core.Config;
+	using Core.Install;
+	using !System.Text;
+	using !System.IO;
+	using !System;
+
+	parameters {
+		basis Config = /config/lang/csharp;
+		basis Project = /project;
+		namespace Core.Install;
+		namespace Core;
+		namespace Core.Clr;
+	}
+
+	provider Config {
+		csc_names = "!mcs csc";
+
+		csc_binary = FindTool (csc_names);
+
+		csc_program = ConfigureCSharpCompiler (csc_binary);
+
+		default_csc_options = MakeDefaultCSharpOptions (enable_debug);
+
+		exe_installer = MakeCSharpCompilerOutputInstaller (Install.Config/bindir);
+		dll_installer = MakeCSharpCompilerOutputInstaller (Install.Config/pkglibdir);
+
+		enable_debug = ConfigBool (Core.Generic/enable_debug) tags {
+			"prompt" = "Compile C# programs with debugging symbols?";
+			"config_group" = "Debugging";
+		};
+	}
+
+	rule CSharpOptions {
+		CSharpCompilerOptions base_options;
+		bool? debug;
+		bool? unsafe;
+		StrongnameKeypairFile? snkfile;
+		default string* native_args;
+		string? nowarn;
+		MBDictionary? defines;
+
+		build (CSharpCompilerOptions opts, ctxt) @{
+			return CreateOptions (opts, ctxt);
+		@}
+
+		@{
+
+		protected bool CreateOptions (CSharpCompilerOptions opts, IBuildContext ctxt)
+		{
+			base_options.CopyValueTo (opts);
+
+			if (debug != null)
+				opts.Debug = (bool) debug;
+
+			if (@unsafe != null)
+				opts.Unsafe = (bool) @unsafe;
+
+			if (snkfile != null)
+				opts.SnkFile = snkfile;
+
+			if (native_args.Length > 0) {
+				StringBuilder sb = new StringBuilder ();
+
+				foreach (string piece in native_args)
+					sb.AppendFormat (" {0}", piece);
+
+				if (opts.NativeArgs == null)
+					opts.NativeArgs = "";
+
+				opts.NativeArgs += sb.ToString ();
+			}
+
+			if (nowarn != null) {
+				if (opts.SuppressedWarnings == null)
+					opts.SuppressedWarnings = nowarn;
+				else
+					opts.SuppressedWarnings += "," + nowarn;
+			}
+
+			if (defines != null) {
+				if (opts.Defines == null)
+					opts.Defines = new MBDictionary ();
+
+				foreach (string s in defines.Keys) {
+					Result r = defines[s];
+
+					if (!(r is MBBool)) {
+						ctxt.Logger.Error (2050, "C# definitions must be boolean values", r.ToString ());
+						return true;
+					}
+
+					opts.Defines[s] = (Result) r.Clone ();
+				}
+			}
+
+			return false;
+		}
+
+		protected CSharpCompilerOptions CreateOptions (IBuildContext ctxt)
+		{
+			CSharpCompilerOptions opts = new CSharpCompilerOptions ();
+
+			if (CreateOptions (opts, ctxt))
+				return null;
+
+			return opts;
+		}
+
+		@}
+	} default {
+		base_options = Config/default_csc_options;
+	}
+
+	# Actual compiling
+
+	rule CSCompile : CSharpOptions {
+		CSSource+ sources;
+		DllAssembly* refs;
+		SystemDll* sysrefs;
+		MBFile* resources;
+		AssemblyConfigFile? config;
+
+		CSharpCompiler csc;
+		StrongnameProgram sn;
+
+		.target tname;
+
+		@{
+			protected virtual string GetExtraArgs (CSharpCompiler csc)
+			{
+				return "";
+			}
+ 
+                	protected virtual AssemblyFile MakeResult () { return null; }
+		@}
+
+		build (CSharpCompilerOutput res, ctxt) @{
+			res.Output = MakeResult ();
+			res.Output.Dir = ctxt.WorkingDirectory;
+			res.Output.Name = tname;
+
+			CSharpCompilerOptions opts = CreateOptions (ctxt);
+
+			if (opts.Debug)
+				res.DebugInfo = csc.MakeDebugInfoFile (res.Output);
+
+			if (config != null) {
+				// What we are doing here is preparing to copy the specified
+				// config file to be in the builddir of the assembly,
+				// so that things can be run out of the builddir.
+
+				res.Config = new AssemblyConfigFile ();
+				res.Config.Dir = ctxt.WorkingDirectory;
+				res.Config.Name = res.Output.Name + ".config";
+			}
+
+			StringBuilder sb = new StringBuilder (csc.MakeOutputArg (res.Output.GetPath (ctxt)));
+
+			sb.AppendFormat (" {0}", GetExtraArgs (csc));
+ 
+			sb.AppendFormat (" {0}", csc.MakeNativeArgs ());
+ 
+			sb.AppendFormat (" {0}", opts.MakeArguments (csc, ctxt));
+
+			foreach (DllAssembly f in refs)
+				sb.AppendFormat (" {0}", csc.MakeReferenceArg (f.GetPath (ctxt)));
+				 
+			foreach (SystemDll dll in sysrefs)
+				sb.AppendFormat (" {0}", csc.MakeReferenceArg (dll.Value));
+				 
+			foreach (MBFile rsrc in resources) {
+				string p = rsrc.GetPath (ctxt);
+				//string b = Path.GetFileName (p);
+
+				sb.AppendFormat (" {0}", csc.MakeResourceArg (p));
+			}
+				 
+			foreach (CSSource f in sources) {
+				sb.Append (" ");
+				sb.Append (f.GetPath (ctxt));
+			}
+
+			if (csc.Compile (sb.ToString (), ctxt))
+				return true;
+
+			if (opts.SnkFile != null) {
+				if (sn.StrongnameAssembly ((AssemblyFile) res.Output, opts.SnkFile, ctxt))
+					return true;
+			}
+
+			if (config != null) {
+				// Actually copy the config, if it is different.
+
+				if (config.Name != res.Config.Name ||
+				    config.Dir.Storage != res.Config.Dir.Storage ||
+				    config.Dir.SubPath != res.Config.Dir.SubPath)
+					config.CopyTo (res.Config, ctxt);
+			}
+
+			return false;
+		@}
+
+		tags {
+			"default" = true;
+		}
+	} default {
+		csc = Config/csc_program;
+		sn = Clr.Config/sn_program;
+	}
+
+	rule CompileDll : CSCompile {
+
+		@{
+			protected override string GetExtraArgs (CSharpCompiler csc)
+			{
+				return csc.MakeDllTargetArg ();
+			}
+ 
+			protected override AssemblyFile MakeResult () {
+				return new DllAssembly ();
+			}
+		@}
+
+		tags {
+			"install" = Config/dll_installer;
+		}
+	}
+
+	rule CompileExe : CSCompile {
+
+		@{
+			protected override string GetExtraArgs (CSharpCompiler csc)
+			{
+				return csc.MakeExeTargetArg ();
+			}
+ 
+			protected override AssemblyFile MakeResult () {
+				return new ExeAssembly ();
+			}
+		@}
+
+		tags {
+			"install" = Config/exe_installer;
+		}
+	}
+
+	rule CSharpSystemDllCheck {
+		.target dllref;
+		CSharpCompiler csc;
+		# Also suck in a CSCOptions?
+
+		build (SystemDll sysdll, ctxt) @{
+			CSSource source = CSharpCompiler.CreateCheckFile ("", "return 0;", ctxt);
+
+			// FIXME: use SimpleExeCompile once CSharpCompilerOptions can store DLL references.
+
+			ExeAssembly dest = new ExeAssembly ();
+			dest.Dir = ctxt.WorkingDirectory;
+			dest.Name = Path.ChangeExtension (source.Name, "exe");
+
+			string cs_args = String.Format ("{0} {1} {2} {3} {4}",
+				csc.MakeNativeArgs (),
+				csc.MakeOutputArg (dest.GetPath (ctxt)),
+				csc.MakeExeTargetArg (),
+				csc.MakeReferenceArg (dllref),
+				source.GetPath (ctxt));
+
+			bool result = csc.Compile (cs_args, ctxt);
+
+			// Don't bother to preserve the source here; it's not 
+			// going to be the cause of any problems.
+
+			source.Delete (ctxt);
+			dest.Delete (ctxt);
+
+			if (result) {
+				// FIXME: way for custom error messages (peek in our tags,
+				// even though that is not encouraged at all?)
+				ctxt.Logger.Error (3017, "Your C# compiler cannot find the required assembly \"" +
+					dllref + "\"", csc.ToString ());
+				return true;
+			}
+
+			sysdll.Value = dllref;
+			return false;
+		@}
+
+		tags {
+			"prereq" = true;
+		}
+	} default {
+		csc = Config/csc_program;
+	}
+
+	rule GenerateAssemblyVersionInfo : OutputFileRule {
+		string version;
+
+		build (CSSource res, ctxt) @{
+			string outname = GetOutputName (ctxt);
+			if (outname == null)
+				return true;
+
+			res.Dir = ctxt.WorkingDirectory;
+			res.Name = outname;
+
+			StreamWriter s = new StreamWriter (res.OpenWrite (ctxt));
+
+			s.WriteLine ("[assembly: System.Reflection.AssemblyVersion(\"{0}\")]", version);
+			s.Close ();
+
+			return false;
+		@}
+	} default {
+		version = Project/version;
+	}
+
+	target regex matcher "\\.dll$" = CompileDll;
+	target regex matcher "\\.exe$" = CompileExe;
+	target regex matcher "GeneratedAssemblyVersionInfo.cs$" = GenerateAssemblyVersionInfo;
+	dependency regex matcher "GeneratedAssemblyVersionInfo.cs$" = GenerateAssemblyVersionInfo;
+	dependency regex matcher "\\.dll$" = CSharpSystemDllCheck;
+
+	result CSSource : TextFile {} 
+
+	dependency regex matcher "\\.cs$" = CSSourcefileRule;
+
+	sourcefile rule CSSourcefileRule = CSSource;
+
+	# CSharpCompilerOutput
+
+	result CSharpCompilerOutput : CompositeResult {
+		default AssemblyFile Output;
+		MBFile DebugInfo;
+		AssemblyConfigFile Config;
+	}
+
+	# CSharpCompilerOutputInstaller
+
+	result CSharpCompilerOutputInstaller : ExecutableCopyInstaller {
+		@{
+
+		public override Type OtherType { get { return typeof (CSharpCompilerOutput); } }
+
+		public override bool InstallResult (Result other, bool backwards, IBuildContext ctxt)
+		{
+			CSharpCompilerOutput output = (CSharpCompilerOutput) other;
+
+			if (CopyFile (output.Output, backwards, ctxt))
+				return true;
+
+			if (output.DebugInfo.Exists (ctxt) && CopyFile (output.DebugInfo, backwards, ctxt))
+				return true;
+
+			if (output.Config != null &&
+			    output.Config.Exists (ctxt) && CopyFile (output.Config, backwards, ctxt))
+				return true;
+
+			return false;
+		}
+
+		public override string DescribeAction (Result other, IBuildContext ctxt) {
+			CSharpCompilerOutput o = (CSharpCompilerOutput) other;
+
+			string s = o.Output.GetPath (ctxt);
+
+			if (o.DebugInfo != null)
+				s += " and " + o.DebugInfo.GetPath (ctxt);
+			if (o.Config != null)
+				s += " and " + o.Config.GetPath (ctxt);
+
+			return String.Format ("Copy {0} to {1}", s, DestDir);
+		}
+
+		@}
+	}
+
+	# MakeCSharpCompilerOutputInstaller (phew!)
+
+	rule MakeCSharpCompilerOutputInstaller : MakeExecutableCopyInstaller {
+		default restype CSharpCompilerOutputInstaller;
+	}
+
+	# CSharpCompiler
+
+	result CSharpCompiler : CompositeResult {
+		BinaryInfo Binary;
+		string NativeArgs;
+		bool McsDebugInfo;
+
+		@{
+
+		public string MakeReferenceArg (string dll) {
+			return "/r:" + dll;
+		}
+
+		public string MakeResourceArg (string file) {
+			string id = Path.GetFileName (file);
+			return MakeResourceArg (file, id);
+		}
+		
+		public string MakeResourceArg (string file, string id) {
+			return "/resource:" + file + "," + id;
+		}
+
+		public string MakeKeyfileArg (string keyfile) {
+			return 	"/keyfile:" + keyfile;
+		}
+
+		public string MakeNoWarnArg (string warn) {
+			return 	"/nowarn:" + warn;
+		}
+
+		public string MakeDefineArg (string def) {
+			return 	"/d:" + def;
+		}
+
+		public string MakeDebugArg (bool debug) {
+			string sign = "-";
+
+			if (debug)
+				sign = "+";
+
+			return 	"/debug" + sign;
+		}
+
+		public string MakeOutputArg (string outfile) {
+			return "/out:" + outfile;
+		}
+
+		public string MakeExeTargetArg () {
+			return "/target:exe";
+		}
+
+		public string MakeDllTargetArg () {
+			return "/target:library";
+		}
+
+		public string MakeNativeArgs () {
+			if (NativeArgs != null)
+				return NativeArgs;
+			return "";
+		}
+
+		public string MakeUnsafeArg () {
+			return "/unsafe";
+		}
+
+		internal MBFile MakeMcsDebugInfoFile (MBFile output) {
+			return new MBFile (output.Dir, output.Name + ".mdb");
+		}
+
+		public MBFile MakeDebugInfoFile (MBFile output) {
+			if (!McsDebugInfo)
+				return null;
+
+			return MakeMcsDebugInfoFile (output);
+		}
+
+		public bool Compile (string args, IBuildContext ctxt) {
+			return (Launcher.RunTool (Binary, args, ctxt,
+				"C# compiler returned an error.") != 0);
+		}
+
+		const string Resource = "csharp-check-template.cs.in";
+
+		public static CSSource CreateCheckFile (string prologue, string code, 
+			IBuildContext ctxt)
+		{
+			CSSource temp = new CSSource ();
+			temp.CreateAsTemporary (ctxt);
+
+			IOSink dsink = new IOSink (temp, ctxt);
+
+			// transform
+
+			SubstSink subst = new SubstSink (dsink);
+			subst.AddSubst ("prologue", prologue);
+			subst.AddSubst ("code", code);
+
+			// do it
+
+			System.Reflection.Assembly myassy = System.Reflection.Assembly.GetExecutingAssembly ();
+			Stream resource = myassy.GetManifestResourceStream (Resource);
+			IOSink.DrainStream (resource, subst);
+
+			return temp;
+		}
+
+		public ExeAssembly SimpleExeCompile (CSSource source, CSharpCompilerOptions opts, IBuildContext ctxt)
+		{
+			ExeAssembly dest = new ExeAssembly ();
+			dest.Dir = ctxt.WorkingDirectory;
+			dest.Name = Path.ChangeExtension (source.Name, "exe");
+
+			string cs_args = String.Format ("{0} {1} {2} {3}",
+				MakeNativeArgs (),
+				MakeOutputArg (dest.GetPath (ctxt)),
+				MakeExeTargetArg (),
+				source.GetPath (ctxt));
+
+			if (opts != null)
+				cs_args = opts.MakeArguments (this, ctxt) + " " + cs_args;
+
+			if (Compile (cs_args, ctxt))
+				return null;
+
+			return dest;
+		}
+
+		@}
+	}
+
+	rule ConfigureCSharpCompiler {
+		BinaryInfo binary;
+		string? native_args;
+
+		# TODO: check what compiler we're using,
+		# figure out platform-specific needs. If they
+		# ever arise -- arg compatiblity with csc was
+		# a *really* good idea.
+
+		build (CSharpCompiler res, ctxt) @{
+			res.Binary = binary;
+			
+			if (native_args != null)
+				res.NativeArgs = native_args;
+
+			if (CheckDebugFormat (res, ctxt))
+				return true;
+
+			return false;
+		@}
+
+		@{
+
+		bool CheckDebugFormat (CSharpCompiler csc, IBuildContext ctxt)
+		{
+			CSharpCompilerOptions opts = new CSharpCompilerOptions ();
+			opts.Debug = true;
+
+			CSSource src = CSharpCompiler.CreateCheckFile ("", "return 0;", ctxt);
+			ExeAssembly output = csc.SimpleExeCompile (src, opts, ctxt);
+
+			if (output == null) {
+				// Preserve the source file for reference
+				return true;
+			}
+
+			MBFile dinfo = csc.MakeMcsDebugInfoFile (output);
+			if (dinfo.Exists (ctxt)) {
+				csc.McsDebugInfo = true;
+				dinfo.Delete (ctxt);
+			}
+
+			src.Delete (ctxt);
+			output.Delete (ctxt);
+			return false;
+		}
+
+		@}
+	}
+
+	# CSharpCompilerOptions
+
+	result CSharpCompilerOptions : CompositeResult {
+		bool Debug;
+		bool Unsafe;
+		StrongnameKeypairFile SnkFile;
+		string NativeArgs;
+		string SuppressedWarnings; # FIXME: kind of hacky
+		MBDictionary Defines; # FIXME: this too
+
+		# FIXME: refs, sysrefs, resources -- arrays in dicts
+
+		@{
+		
+		public string MakeArguments (CSharpCompiler csc, IBuildContext ctxt) {
+			StringBuilder res = new StringBuilder (csc.MakeDebugArg (Debug));
+
+			if (Unsafe)
+				res.AppendFormat (" {0}", csc.MakeUnsafeArg ());
+
+			if (SnkFile != null)
+				res.AppendFormat (" {0}", 
+				                  csc.MakeKeyfileArg (SnkFile.GetPath (ctxt)));
+
+			if (NativeArgs != null)
+				res.AppendFormat (" {0}", NativeArgs);
+
+			if (SuppressedWarnings != null)
+				// FIXME: we assume that the compiler can handle a comma-
+				// separated list of warnings to suppress. Well, 
+				// MakeNoWarnArg could always be tweaked to return a space-
+				// separated "argument" if any compiler violates this rule.
+				res.AppendFormat (" {0}", 
+				                  csc.MakeNoWarnArg (SuppressedWarnings));
+
+			if (Defines != null) {
+				foreach (string s in Defines.Keys) {
+					MBBool v = (MBBool) Defines[s];
+
+					if (v.Value)
+						res.AppendFormat (" {0}", csc.MakeDefineArg (s));
+				}
+			}
+
+			return res.ToString ();
+		}
+
+		@}
+	}
+
+	rule MakeDefaultCSharpOptions {
+		bool debug;
+
+		build (CSharpCompilerOptions opts, ctxt) @{
+			opts.Debug = debug;
+			return false;
+		@}
+	}
+}

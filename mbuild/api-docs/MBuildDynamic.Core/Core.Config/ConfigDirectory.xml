@@ -1,0 +1,29 @@
+﻿<rule name="ConfigDirectory">
+        <docs>
+                <summary>A directory configurable option.</summary>
+                <remarks>
+		   <p>This rule treats the value of <item>default_value</item> as a
+		   system directory name and returns a <b>MBDirectory</b> referencing
+		   that directory when invoked.</p>
+
+		   <p>This rule also tags its target with the "config" tag,
+		   so that the user will be prompted to set the value of the target if
+		   he or she runs a configuration program. You should add a "prompt" tag
+		   to your target that quickly explains what effect the configuration
+		   target has on the build.</p>
+
+		   <p>Authors of configuration programs should remember that <item>default_value</item>
+		   is a string, while the result from this rule is an <b>MBDirectory</b>.</p>
+		</remarks>
+        </docs>
+        <argument name="default_value" exists_since="0.0.3.1">
+                <docs>
+                        <summary>The default value of the configuration option.</summary>
+                        <!-- <remarks>To be added.</remarks> -->
+                </docs>
+                <type>Mono.Build.MBString</type>
+                <flags></flags>
+        </argument>
+</rule>
+
+

@@ -1,0 +1,100 @@
+# Core text substitution support
+
+namespace Core.Subst {
+
+	using default;
+	using !System;
+
+	# foo.in as a text template
+
+	result TextTemplateFile : TextFile {}
+	sourcefile rule TextTemplateSourcefileRule = TextTemplateFile;
+	dependency regex matcher "\\.in$" = TextTemplateSourcefileRule;
+
+	rule Subst : OutputFileRule {
+
+		default TextFile input;
+		MBDictionary substs;
+
+		# If defined, the output is Clone()d from this
+		# argument. This makes the output file have the type
+		# of this input file. Otherwise, the output is
+		# Clone()d from the input, which will usually be
+		# a TextTemplateFile from the dep matcher above.
+
+		TextFile? typeref;
+
+		@{
+
+		protected virtual SubstStyles GetSubstStyle () {
+			return SubstStyles.Autoconf;
+		}
+
+		@}
+
+		restype @{
+			if (typeref != null)
+				return typeref.GetType ();
+			return typeof (TextFile);
+		@}
+
+		build (TextFile output, ctxt) @{
+			string outname = GetOutputName (ctxt);
+			if (outname == null)
+				return true;
+
+			output.Dir = ctxt.WorkingDirectory;
+			output.Name = outname;
+
+			IOSink outsink = new IOSink (output, ctxt);
+			SubstSink subst = new SubstSink (outsink, GetSubstStyle ());
+			subst.AddDictionary (substs, ctxt);
+
+			try {
+				IOSink.DrainStream (input, ctxt, subst);
+			} catch (Exception e) {
+				ctxt.Logger.Error (3018, "Exception while performing text substitution", e.ToString ());
+				return true;
+			}
+
+			return false;
+		@}
+	}
+
+	rule ShellSubst : Subst {
+
+		@{
+
+		protected override SubstStyles GetSubstStyle () {
+			return SubstStyles.AllShell;
+		}
+
+		@}
+
+	}
+
+	rule MakefileSubst : Subst {
+
+		@{
+
+		protected override SubstStyles GetSubstStyle () {
+			return SubstStyles.Makefile;
+		}
+
+		@}
+
+	}
+
+	rule DosSubst : Subst {
+
+		@{
+
+		protected override SubstStyles GetSubstStyle () {
+			return SubstStyles.Dos;
+		}
+
+		@}
+
+	}
+
+}

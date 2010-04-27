@@ -1,0 +1,111 @@
+Error and warning codes
+
+1000 range - internal errors / warnings
+2000 range - build specification errors / warnings
+3000 range - build execution errors / warnings
+4000 range - bundle implementation errors / warnings
+
+=====================================================================
+
+E1000 - Null ArgCollector for rule
+E1001 - Exception while parsing build file
+E1002 - incomplete information for loading provider
+E1003 - unable to get install tag value
+E1004 - unhandled exception during build
+W1005 - unable to recover state file
+W1006 - unable to write state file
+E1007 - Null Rule for target
+E1008 - Child provider is neither public nor persistent
+E1009 - Corrupted build log
+E1010 - Unequal key/val pairs to MakeDictionaryRule
+W1011 - Unequal location push/pops
+E1012 - Error loading graph
+
+E2000 - The target doesn't exist
+E2001 - Don't know how to load provider
+E2002 - Subdirectory item contains invalid path chars
+E2003 - User-defined target names may not start with '.'
+W2004 - Unknown project property.
+E2005 - Build file does not exist
+E2006 - No project[] directive in toplevel buildfile.
+E2007 - Expected boolean tag, got something else
+E2008 - User-defined target name may not contain illegal char
+E2009 - Target already defined
+E2010 - load foo as bar must live in same directory
+E2011 - load foo as bar must be relative basis
+E2012 - CopyInstaller subject is not a file
+E2013 - CopyInstaller: no destination directory
+E2016 - installer tag does not point to installer
+W2017 - Configurable option does not have a prompt tag
+E2018 - Don't know how to configure option
+E2019 - tag "install" = true doesn't make sense
+E2020 - Couldn't load assembly
+E2021 - No assembly provides namespace
+E2022 - Ambiguous type reference in buildfile
+E2023 - type lookup failed
+E2024 - Two assemblies provide requested type
+E2025 - Type lookup gave object of unexpected type
+W2026 - Two matchers return positive matches
+E2027 - could not guess dependency target rule
+E2028 - could not guess rule for target
+E2029 - Specified rule type is not a subclass of rule
+E2030 - Rule needing output file has no name
+E2031 - wrong result type for installer / MonodocFileInstaller needs a MonodocFiles
+E2032 - Provider populated twice
+E2033 - Version requirement mismatch
+E2034 - Value not compatible with any defined arguments
+E2035 - Ambiguous argument
+E2036 - Wrong type in explicitly assigned argument.
+E2037 - Trying to add to default ordered argument, but no default ordered arg defined.
+E2038 - Parse error in build file
+E2039 - Private built assembly reference is not an MBFile
+E2040 - Can't figure out pkgconfig query
+E2041 - no toplevel buildfile
+E2042 - Explicitly assigned argument doesn't exist
+E2043 - Trying to register at existing provider location.
+W2044 - Substituting in relative filename
+E2045 - Can't find input for Subst rule
+E2046 - no filename and targetname doesn't work
+W2047 - Can't guess assembly kind from extension in DependentAssembly
+E2048 - recursion during build
+E2049 - Can't interpret native program/shlib/module name
+E2050 - Invalid dictionary entry type
+E2051 - error in Switch[] arguments
+E2052 - error in BinaryHelper[] arguments
+E2053 - dependent namespace master structure not found
+
+E3000 - External result fails check after build
+E3001 - Evaluation of a dependency failed
+W3002 - Command line too long for Windows
+E3003 - Tool returned error
+W3004 - Tool returned error (nonfatal)
+E3005 - couldn't parse unix-style program specification
+E3006 - couldn't find tool
+E3007 - configured system directory is not an absolute path
+W3008 - cached external result is invalid
+E3009 - Unhandled exception in build function
+W3010 - Tool printed warning
+E3011 - XSL style exception
+E3012 - Unhandled exception in install function
+E3013 - Error saving file
+W3014 - suspicious inputs to Monodoc ECMA assembler
+E3015 - Arg is not optional but has no values
+E3016 - Arg is not multivalued but has multiple values
+E3017 - required DLL not found
+E3018 - exception in substitution processing
+W3019 - XML import structure error
+W3020 - Cannot open init config XML file
+E3021 - Cannot start install client
+E3022 - CopyInstaller: error removing after post-copy error
+E3023 - (CopyInstaller) error copying
+E3024 - Invalid string input
+E3025 - Cannot execute binary aimed at wrong architecture
+E3026 - required header not found
+E3027 - can't find cross-compiler tool
+E3028 - assertion failed
+E3029 - Tool prerequisite not met
+
+E4000 - No ProviderPrefixAttribute on provider
+E4001 - Build failed without error being reported
+W4002 - Invalid [StructureDefaulter] method signature
+E4003 - Two master structure defaults defined for one namespace

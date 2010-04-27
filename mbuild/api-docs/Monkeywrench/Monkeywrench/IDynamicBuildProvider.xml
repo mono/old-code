@@ -1,0 +1,50 @@
+<Type Name="IDynamicBuildProvider" FullName="Monkeywrench.IDynamicBuildProvider">
+  <TypeSignature Language="C#" Value="public abstract interface IDynamicBuildProvider" Maintainer="auto" />
+  <AssemblyInfo>
+    <AssemblyName>Monkeywrench</AssemblyName>
+    <AssemblyPublicKey>
+    </AssemblyPublicKey>
+    <AssemblyVersion>0.0.0.0</AssemblyVersion>
+    <AssemblyCulture>neutral</AssemblyCulture>
+    <Attributes />
+  </AssemblyInfo>
+  <ThreadSafetyStatement>Gtk# is thread aware, but not thread safe; See the <link location="node:gtk-sharp/programming/threads">Gtk# Thread Programming</link> for details.</ThreadSafetyStatement>
+  <Docs>
+    <summary>To be added</summary>
+    <remarks>To be added</remarks>
+  </Docs>
+  <Base />
+  <Interfaces>
+    <Interface>
+      <InterfaceName>Mono.Build.IBuildProvider</InterfaceName>
+    </Interface>
+    <Interface>
+      <InterfaceName>Monkeywrench.ITargetRequestSink</InterfaceName>
+    </Interface>
+  </Interfaces>
+  <Attributes />
+  <Members>
+    <Member MemberName="DoneRequesting">
+      <MemberSignature Language="C#" Value="public virtual bool DoneRequesting (string basis, Mono.Build.Bundling.BundleManager man, Monkeywrench.ITargetRequestSink requests, Mono.Build.IWarningLogger log);" />
+      <MemberType>Method</MemberType>
+      <ReturnValue>
+        <ReturnType>System.Boolean</ReturnType>
+      </ReturnValue>
+      <Parameters>
+        <Parameter Name="basis" Type="System.String" />
+        <Parameter Name="man" Type="Mono.Build.Bundling.BundleManager" />
+        <Parameter Name="requests" Type="Monkeywrench.ITargetRequestSink" />
+        <Parameter Name="log" Type="Mono.Build.IWarningLogger" />
+      </Parameters>
+      <Docs>
+        <summary>To be added</summary>
+        <param name="basis">a <see cref="T:System.String" /></param>
+        <param name="man">a <see cref="T:Mono.Build.Bundling.BundleManager" /></param>
+        <param name="requests">a <see cref="T:Monkeywrench.ITargetRequestSink" /></param>
+        <param name="log">a <see cref="T:Mono.Build.IWarningLogger" /></param>
+        <returns>a <see cref="T:System.Boolean" /></returns>
+        <remarks>To be added</remarks>
+      </Docs>
+    </Member>
+  </Members>
+</Type>

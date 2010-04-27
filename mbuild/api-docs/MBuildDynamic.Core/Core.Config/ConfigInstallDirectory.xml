@@ -1,0 +1,26 @@
+﻿<rule name="ConfigInstallDirectory">
+        <docs>
+                <summary>An "install directory" configurable option.</summary>
+                <remarks>
+		   <p>This rule merely passes on the value of <item>default_value</item>
+		   when invoked. However, it also tags its target with the "config" tag,
+		   so that the user will be prompted to set the value of the target if
+		   he or she runs a configuration program. You should add a "prompt" tag
+		   to your target that quickly explains what effect the configuration
+		   target has on the build.</p>
+
+		   <p>Note that the type <b>InstallDirectory</b> is a subclass of <b>MBString</b>,
+		   not <b>MBDirectory</b>.</p>
+		</remarks>
+        </docs>
+        <argument name="default_value" exists_since="0.0.3.1">
+                <docs>
+                        <summary>The default value of the configuration option.</summary>
+                        <!-- <remarks>To be added.</remarks> -->
+                </docs>
+                <type>MBuildDynamic.Core.Install.InstallDirectory</type>
+                <flags></flags>
+        </argument>
+</rule>
+
+

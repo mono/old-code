@@ -1,0 +1,28 @@
+using [
+	Core
+	Core.Clr
+	Languages.CSharp
+	Tools.PkgConfig
+]
+
+glade-sharp-2.0-pccheck = []
+glade-sharp-2.0-pclibs = [] with [ default = false ]
+
+# Testing
+#adasdasdas-pccheck = []
+
+mb-gtkconfig.glade = TextSource[]
+
+mb-gtkconfig.exe = [
+	@mb-gtkconfig.exe.sources
+	mb-gtkconfig.glade
+
+	../Mono.Build.dll
+	../Monkeywrench.dll
+	/config/mbuild/Mono.GetOptions.dll
+
+	glade-sharp-2.0-pclibs
+] with [
+	default = glade-sharp-2.0-pccheck
+	install = /config/mbuild/exe_installer
+]

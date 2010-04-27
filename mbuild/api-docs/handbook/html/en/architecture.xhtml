@@ -1,0 +1,548 @@
+<?xml version="1.0" encoding="utf-8"?>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:monodoc="http://www.go-mono.org/xml/monodoc">
+<head>
+        <title>The MBuild Architecture</title>
+        <link rel="stylesheet" type="text/css" href="style.css" />
+</head>
+<body>
+ 
+<h2>The MBuild Architecture</h2>
+
+<p>This section is going to be very abstract and deal mostly with
+terminology. Sorry. But please bear with me. This is the section where
+I introduce the language I use to discuss MBuild's internal
+workings. Hopefully, a consistent terminology will mean that the rest
+of the manual will make more sense and be more helpful.</p>
+
+<h2>Targets and Rules</h2>
+
+<p>The basic unit of MBuild is the <em>target</em>. If you're a
+<tt>make</tt> user, you might be used to that just being a synonym for
+"file". In MBuild, the better association to make is "variable". Like
+a variable in a programming language, a target in MBuild has two
+important properties: a name and a value. You choose the name, and
+tell the runtime how its value should be determined. Continuing the
+analogy, MBuild can be thought of as a limited programming language in
+which every statement is a variable assignment. The value that gets
+assigned to a target is the result of running some function, called a
+<em>rule</em>. When you execute your program -- that is, run a build --
+MBuild invokes those rule functions and returns a set of values to you.</p>
+
+<p>In <tt>make</tt> syntax, you declare targets by entering them in a
+special file called <tt>Makefile</tt>. A target declaration looks like
+this: </p>
+
+<pre class="code">target: dependency dependency dependency
+        rule code
+</pre>
+
+<p>In MBuild syntax, you put target declarations in a file called
+<tt>Buildfile</tt>, and they look like this:</p>
+
+<pre class="code">string_target = "a string"
+bool_target = true
+rule_target = RuleName[ dependency_1 dependency_2 dependency_3 ]
+</pre>
+
+<p>The first two examples ought to be self-explanatory: we just told
+MBuild what values we want the targets to have. Nice and simple;
+however, you will not use this form very often. Almost always, you
+will use the third term: the value of <tt>rule_target</tt> is the value
+returned by the rule function <tt>RuleName</tt>. The
+arguments to the rule function are also values, and they are called
+the target's <em>dependencies</em>. A dependency can be one of two
+kinds:</p>
+
+<ul>
+<li><p>A <em>literal value</em>, like we saw above:</p>
+<pre class="code">ruletarget2 = RuleName [ "literal string" true ]
+</pre>
+</li>
+<li><p>A reference to another target:</p>
+<pre class="code">ruletarget3 = RuleName [ deptargetname ]
+</pre>
+<p>In this case, before the <tt>ruletarget3</tt> can be evaluated,
+<tt>deptargetname</tt> must be evaluated. This is because the function
+<tt>RuleName</tt> can only accept values as inputs, so a reference to
+the target <tt>deptargetname</tt> doesn't make sense unless a value
+has been assigned to the target.</p>
+</li>
+</ul>
+
+<p>MBuild's system is built around a simple guarantee: if the
+values of a target's dependencies do not change, the target's
+value -- the output of the rule function -- does not change
+either.</p>
+
+<p>Why is this fact important? Say it takes a long time to calculate
+the value of <tt>ruletarget</tt>, but you need to check its value
+frequently. Let's give MBuild a cache -- when asked to evaluate a
+target, it stores away the output value for future reference. The
+first time you ask for <tt>ruletarget</tt>'s value, MBuild needs to
+evaluate <tt>dependency_1</tt>, <tt>dependency_2</tt>, and
+<tt>dependency_3</tt>, then run the function <tt>RuleName</tt>. The
+next time around, MBuild reevaluates the dependencies. If they haven't
+changed, MBuild can just return the cached value for
+<tt>ruletarget</tt>, instead of having to run the time-consuming
+<tt>RuleName</tt> function all over again.</p>
+
+<p>You probably see where this discussion is heading. Let's make the
+example more concrete:</p>
+
+<pre class="code">myprogram.exe = CompileExe [ main.cs helper.cs ]
+</pre>
+
+<p>Here, <tt>main.cs</tt> and <tt>helper.cs</tt> aren't literal
+values, so they must be targets. They evaluate to a certain kind of
+value that I haven't mentioned before -- a <em>file</em> value, which
+unsurprisingly points to a file on disk. Here, <tt>main.cs</tt> points
+to a source file called <tt>main.cs</tt>. But be careful: there is no
+particular reason that the <em>target</em> called <tt>main.cs</tt> must point to the
+<em>file</em> called <tt>main.cs</tt>. A target's name doesn't affect its value -- the
+value of <tt>main.cs</tt> could just as well be a file called
+<tt>tricked.txt</tt>, or even a boolean. (This is something of an
+overstatement. MBuild provides a large infrastructure for guessing a
+target's value based on its name, so that you don't have to say
+"helper.cs points to a file called helper.cs" for every source file in
+your project. But you can always override this guessing if you need
+to.)</p>
+
+<p>(Also, if you're worried, when I say that "main.cs points to the
+file main.cs", I don't mean that MBuild just encodes a simple
+filename. MBuild has a file abstraction layer that ensures that file
+references are always valid, no matter what the working directory
+is.)</p>
+
+<h2>Values</h2>
+
+<p>Let's discuss values in more depth. To begin with, you might be
+wondering what kinds of values MBuild supports. The answer is that
+there is no builtin list of kinds of values; MBuild merely defines a
+few important characteristics that values must have. (Internally, what
+this means is that each value can be represented as a subclass of a
+.NET type called <tt>Result</tt>.) However, in practice, there are
+only a few fundamental kinds of value that are commonly used in
+MBuild:</p>
+
+<ul>
+<li><p><em>String</em>. Just as in any other programming language, a
+string is a piece of text.</p></li>
+
+<li><p><em>Boolean</em>. Again, a boolean is exactly as you would
+expect. Either true or false.</p></li>
+
+<li><p><em>File</em>. A file value is a stored reference to a file on
+disk. MBuild abstracts this reference so that the same reference will
+be valid no matter what directory you run MBuild from.</p></li>
+
+<li><p><em>Directory</em>. Similar to a file reference, but for
+directories.</p></li>
+
+<li><p><em>Dictionary</em>. Also known as a hashtable. A list of
+associations between names and values, stored in one cohesive
+unit. This type of value can be used to construct more complex pieces
+of data.</p></li>
+</ul>
+
+<p>(You might note that MBuild doesn't have builtin support for
+integers or floats. I haven't needed them yet, and don't
+expect to need them in the future.)</p>
+
+<p>MBuild's file reference system is fairly simple. It basically
+requires that you work with absolute pathnames:
+<tt>/home/peter/src/mbuild/mbuild.exe</tt> instead of just
+<tt>mbuild.exe</tt>. However, absolute pathnames are not necessarily
+relative to the filesystem root; they can also be relative to the
+<tt>source root</tt> or the <tt>build root</tt>. The source root is
+the toplevel directory of the sources being built, and the build root
+is the toplevel directory where built files are stored. (Normally,
+these are the same place, but you can set up a build so that they are
+different. This feature is useful if you want several different
+versions of a build from the same source package -- say, compiling
+binaries for several different processor architectures all from the
+same sources.) This three-rooted system has a few benefits:</p>
+
+<ul>
+<li><p>The meaning of a file reference is more clear: is it a source
+file, a built file, or a system file?</p></li>
+
+<li><p>You can move your build directories without having to rebuild
+everything. This would not be possible with a single-rooted
+system.</p></li>
+</ul>
+
+<p>The first point is particularly important. For instance, when you
+do the MBuild equivalent of a "<tt>make dist</tt>" ("<tt>mbuild
+-d</tt>" ) MBuild finds all the file references below the "source"
+root and copies them into the distribution. No need to manually keep
+track of which files to include in a distribution. And when you do the
+equivalent of a "<tt>make clean</tt>" ("<tt>mbuild -c</tt>")
+MBuild finds all the "built" file references and deletes the files off
+disk. No need to manually keep track of which files to clean,
+either. Cool!</p>
+
+<h2>Names</h2>
+
+<p>As I have said, one of the important features of MBuild is that you
+can use canned build rules instead of writing them from scratch every
+time. This is a good thing, but it presents a new problem: how do we
+name rules? We don't want different sets of rules to conflict with
+each other, but we don't want to have to use long, unwieldy names all
+the time. MBuild uses a classic solution: there is a hierarchichal
+<em>namespace</em> for naming rules. Each rule does have a long,
+unwieldy <em>fully-qualified</em> name: examples include
+"Core.Xml.XslProcess" or "Languages.CSharp.CompileExe". But you can
+tell MBuild to only pay attention to specific prefixes in this
+namespace. This is done in a way that will look familiar to anyone
+who's used the .NET framework before:</p>
+
+<pre class="code"><b>using [ Core.Xml ]</b>
+
+output.xml = XslProcess [ input.xml stylesheet.xsl ]
+</pre>
+
+<p>The <em>using</em> directive tells the MBuild parser to look inside
+a particular section of the namespace when trying to translate an
+unqualified name into a fully-qualified name. (Here, an unqualified
+name is any name not containing a period.) In the example above, the
+complete name of the rule being invoked is
+<tt>Core.Xml.XslProcess</tt>. You can, of course, use more than one
+namespace if you want:</p>
+
+<pre class="code"><b>using [ 
+	Core.Xml 
+	Tools.DocbookPdf
+]</b>
+
+output.xml = XslProcess [ input.xml stylesheet.xsl ]
+
+output.pdf = DocbookToPdf [ output.xml ]
+</pre>
+
+<p>Here, the fully-qualified name of the first rule is
+<tt>Core.Xml.XslProcess</tt>, while the fully-qualified name of the second rule
+is <tt>Tools.DocbookPdf.DocbookToPdf</tt>.</p>
+
+<p>As you may suspect, the fully-qualified name of a rule is actually
+a name in .NET's global type namespace. The name
+<tt>Core.Xml.XslProcess</tt> corresponds to a class whose complete
+name is <tt>MBuildDynamic.Core.Xml.XslProcess</tt>. The
+<tt>MBuildDynamic.</tt> prefix is automatically prepended to the names
+used in MBuild, so that build rules are restricted to a specific
+subset of the type namespace. This allows rule authors to blithely use
+namespaces like "Core" or "Tools" without worrying about a conflict
+with other .NET classes unrelated to MBuild.</p>
+
+<h2>Bundles and Assemblies</h2>
+
+<p>But where does the rule implementation come from? It lives in a
+<em>bundle</em>, which is a specialized .NET <em>assembly</em>. If
+you're not familiar with .NET, an assembly is pretty much like a
+shared library or DLL. But .NET assemblies have some nice features that
+traditional shared libraries don't:
+</p> 
+
+<ul>
+<li><p>Like all .NET components, assemblies are not
+platform-specific. You can distribute them with your project source,
+for instance.</p></li>
+
+<li><p>Assemblies are completely standalone: code, support files and
+metadata are embedded directly into a single file. You can just copy a
+single assembly file around and it will be useful. So you don't need
+to distribute extra files like <tt>mkinstalldirs</tt> or <tt>ltmain.sh</tt>
+separately from the build logic.</p></li>
+
+<li><p>Assemblies have a framework for versioning and digital signing built in,
+so there's already an infrastructure for verifying a set of build
+rules and making sure it doesn't conflict with existing
+rules.</p></li>
+
+<li><p>The Global Assembly Cache, or GAC, provides a central
+repository of assemblies indexed by name and version. It's a core
+element of the .NET framework, so the GAC is <i>the</i> canonical
+place from which assemblies as loaded. This means that there's no
+worrying about what prefix new bundles should be installed in, etc. It
+also provides a robust framework for keeping track of multiple version
+of an assembly. (To be excessively precise, the GAC is also indexed by
+a cryptographic public key embedded into the assembly, but that's not
+really relevant right now.)</p></li> </ul>
+
+<p>A bundle is just an assembly that exports subclasses of certain
+types and has a few special attributes. When we speak of loading
+bundles, accessing bundles, copying bundle files, etc, just remember
+that a bundle is nothing more than an assembly designed to work with
+MBuild.</p>
+
+<p>Each bundle defines a set of rules that can be used in MBuild. To
+actually load them into the MBuild engine, you need to
+<em>reference</em> the bundle assembly. This is done inside the
+<em>project declaration</em> of a Buildfile, which defines global
+parameters for your project. This declaration should only appear in
+the toplevel Buildfile used to describe your project. It looks
+something like this:</p>
+
+<pre class="code">using [ 
+	Core.Xml
+	Tools.DocbookPdf
+]
+
+<b>project [</b>
+	name = "MyProject"
+	version = "0.10.0.0"
+
+	<b>refs [
+		Core.Xml = 0.0.3.1
+		Tools.DocbookPdf = 1.0.7.1
+	]</b>
+<b>]</b>
+
+output.xml = XslProcess [ input.xml stylesheet.xsl ]
+
+output.pdf = DocbookPdf [ output.xml ]
+</pre>
+
+<p>This tells MBuild to ask the GAC to load one bundle assembly called
+"MBuildDynamic.Core.Xml" with version 0.0.3.1, and another called
+"MBuildDynamic.Tools.DocbookPdf" with version 1.0.7.1. This exact
+versioning is not required (just leave off the "= w.x.y.z" bit), but
+it is strongly recommended. That way if someone else tries to build
+your software, you'll be sure that they're using the exact same build
+tools as you.</p>
+
+<p>Now, this might seem a little scary to those of you who have
+experience with the GNU autotools, because it's always a pain in the
+ass to require the user to user <i>exactly</i> the same versions as
+you: <tt>automake</tt> 1.8 and <tt>libtool</tt> 1.5 and
+<tt>gettext</tt> 0.14. But MBuild can include the bundle files
+directly with your source distribution, and because of the platform
+provided by the .NET runtime, you can be guaranteed that they'll work
+correctly on everyone else's computer. (FIXME: feature not
+implemented! But don't worry, it's gonna be really easy to write, I
+swear.)</p>
+
+<p>You might also wonder why it's necessary to first say that you're
+<em>using</em> the namespace Core.Xml and then also say that you're
+<em>referencing</em> the assembly Core.Xml. This confused me when I
+was first learning to program with C#. This two-stage setup is needed
+because any assembly can define types in any namespace; two different
+assemblies can even define types in one shared namespace. (For
+instance, the core assemblies <tt>corlib.dll</tt> and
+<tt>System.dll</tt> both define types in the <tt>System.Text</tt>
+namespace.) You can call an assembly anything you want; it's just
+(good) convention to name it the same thing as the topmost namespace
+it provides. But there's no reason that I can't create an assembly
+called "starfleet.dll" that declares types in the namespaces
+"Frontiers.Final" as well as "System.Xml". Note, then, that the
+"MBuildDynamic." prefix is applied in two cases: to the <em>namespaces</em>
+that are provided by a bundle, and to the <em>names</em> of the
+bundle assemblies.</p>
+
+<h2>Rules and Arguments</h2>
+
+<p>Consider this example:</p>
+
+<pre class="code">myprogram.exe = CompileExe [ myreference.dll mysource.cs ]
+</pre>
+
+<p>As you might hope, this will cause MBuild to execute a command that
+looks something like this:</p>
+
+<pre>csc /out:myprogram.exe /target:exe /r:myreference.dll mysource.cs
+</pre>
+
+<p>Here's a question: how does MBuild know which dependency is the C#
+source file, and which one is a DLL reference? We've learned that
+the name of a target (and, hence, the name of a dependency) has no
+special meaning, and I'll tell you that the order of dependencies
+doesn't matter.</p>
+
+<p>This is a remarkable property. You can just give MBuild a list of
+dependencies, and it will figure out what they <i>mean</i>. If
+"myprogram" depends on "libfoo.so", you must want to link to it. If it
+depends on "mysource.c", you must want to compile it. I think this is
+the most important feature in the whole MBuild system. You tell it a
+dependency, and it determines what information that dependency
+encodes. It determines the meaning of that dependency. No need to
+explicitly say "this is a source file" or "this is a library to link
+in". MBuild <b>just does what you want</b>.</p>
+
+<p>The MBuild engine for determining the meaning of a dependency is
+basically a system for passing arguments to a function. The "function"
+is the rule being invoked. Internally, the rule sends the MBuild
+engine a list of <em>arguments</em> that it accepts. This list is just
+like the list of arguments to a regular old C function: they have
+names and types. Unlike the arguments to a C function, there's no
+particular order to them. The MBuild engine then evaluates the
+target's dependencies, replacing a dependency on some
+abstract <em>target</em> with a reference to some specific
+<em>value</em>. As noted before, each value has a type, and these
+types form a heirarchy similar to the rule name heirarchy. This
+heirarchy is used to match values to arguments -- 
+
+<!-- FIXME: make this intelligible if you don't know the internals of
+how MBuild is implemented. -->
+
+each value is <em>assigned</em> to the rule argument <em>that is its
+closest match in the heirarchy</em>. This is the key -- the heirarchy
+of value types is very large; consequently, many fine shades of
+meaning can be determined by looking at a value's type. For instance,
+the <tt>Languages.CSharp</tt> bundle defines a value class for C#
+source files called <tt>CSSource</tt>. That class is a subclass of
+<tt>TextFile</tt>, which is a subclass of the <tt>MBFile</tt> file
+result class. (The "MB" is to avoid name clashes with the .NET
+framework's type <tt>System.IO.File</tt>. Similarly, the string result
+type is called <tt>MBString</tt> to avoid conflicts with
+<tt>System.String</tt>.)</p>
+
+<p>Can this scheme really capture every nuance to the build system?
+Yes, if you add enough arguments to your rule function, and supply
+your target with enough dependencies. It sounds like this system could
+spiral into insane complexity, and with a naive implementation it very
+easily would. MBuild makes your life easier by letting arguments have
+<em>default values</em>, so that you don't need to specify them if the
+default is good enough. For instance, the <tt>CompileExe</tt> rule has
+a "csc" argument, which is a reference to the C# compiler to invoke. It would
+be a pain to have to add a dependency on "the_csharp_compiler" for
+every executable you compile, so the argument has a default value: it
+points to the probed system C# compiler. If you want to use a special
+compiler, you can override this value; but in the vast majority of use
+cases, you don't have to worry about it.</p>
+
+<!--
+<p>To put things on a very abstract level, running a build in MBuild
+is sort of like writing a program in a functional programming language
+with no side effects. Say we are trying to determine whether a target
+needs to be rebuilt. A rebuild is needed if the value of the target
+might change. The value of a target is the result we get back
+from running its rule function. Because there are no side effects, we
+know that the behavior of the rule function is entirely determined by
+the arguments passed to it. But the arguments to the function are just
+derived from the target's list of dependencies. If the dependencies
+haven't changed, the arguments to the rule function haven't changed,
+and therefore the result of executing the function won't change, and
+therefore no rebuild is needed. This is the (semi) rigorous basis on
+which all build systems are formed; MBuild just tries to actually
+express it in code.</p>
+-->
+
+<!--
+It evaluates
+each dependency and gets a typed <tt>Result</tt> object back. The
+engine builds up a list of these objects in no particular order. It
+then looks at the rule that is to be run. Each rule defines a set of
+arguments, just like the arguments to a C function: each has a name
+and a type. The value of each dependency, a <tt>Result</tt> object, is
+assigned to the argument with the best-matching type: the one that is
+the nearest superclass of the <tt>Result</tt>.
+
+ because it
+knows what its value is do this
+thanks to the fact that a dependency just points to a target values are just .NET objects with type
+information. The enginge guesses the of a dependency by looking at the
+<em>type</em> of its value. For instance, the
+<tt>Languages.CSharp</tt> bundle defines a <tt>Result</tt> class
+called <tt>CSSource</tt>, for C# source files. That class is a
+subclass of <tt>TextFile</tt>, which is a subclass of the
+<tt>MBFile</tt> file result class. (The "MB" is to avoid name clashes
+with the .NET framework's type <tt>System.IO.File</tt>. Similarly, the
+string result type is called <tt>MBString</tt> to avoid conflicts with
+<tt>System.String</tt>.)</p>
+
+<p>What happens is that the code for the rule
+<tt>SpecialProcessor</tt> sends the MBuild engine a list of
+<em>arguments</em> that it accepts. This list is just like the list of
+arguments to a regular old C function: they have names and
+types. Unlike the arguments to a C function, there's no paticular
+order to them. Instead, there are two ways of figuring out the value
+of an argument:
+</p>
+
+<ul>
+<li><p>An argument name can be explicitly specified:</p>
+<pre class="code">docs.txt = SpecialProcessor [ 
+	docs.xml
+	<b>author_name = author</b>
+]
+</pre></li>
+
+<li><p>MBuild can <em>assign</em> a value to an argument by looking at
+its type. In the above example, MBuild evaluates the "author"
+dependency and see that it is of type <tt>MBString</tt>. It then looks at
+the list of arguments that the <tt>SpecialProcessor</tt> rule
+expects. The "author_name" argument is the best match for this value,
+so when the <tt>SpecialProcessor</tt> implementation asks for the
+value of the "author_name" argument, it will get the value of the
+"author" target. This process of linking <em>result values</em> with
+<em>argument names</em> is called <em>assignment</em>.</p></li>
+</ul>
+
+<p>MBuild uses this type information aggressively to save a lot of
+work on the build file author's part. 
+-->
+
+<p>Consider an example from the toplevel <tt>Buildfile</tt> of MBuild
+itself. This rule is used to generate an MBuild bundle using a tool
+called <tt>mb-bundlegen</tt>. This tool uses a simple code processor
+to generate a lot of tedious boilerplate code, then compiles it into a
+.NET assembly. The target definition looks like this:</p>
+
+<pre class="code">MBuildDynamic.Languages.CSharp.dll = BundlegenProcess [
+	Languages.CSharp.bundle
+	MBuildDynamic.Core.dll
+	Mono.Build.dll
+	mbuild.snk
+	our_bundlegen
+] 
+</pre>
+
+<p>Here's the detailed
+analyis:</p>
+
+<ul> <li><p><em>Languages.CSharp.bundle</em> evaluates to a
+value of type <em>BundleSource</em>, which is a source file
+for the <tt>mb-bundlegen</tt> tool. Meanwhile, the
+<tt>BundlegenProcess</tt> rule accepts an argument called "sources" of
+type <em>BundleSource</em>. The values assigned to this argument are
+passed on to the invocation of <tt>mb-bundlegen</tt> as the source
+files to compile. This is a perfect match, so the value of
+<tt>Languages.CSharp.bundle</tt> is assigned to the "sources"
+argument.</p></li>
+
+<li><p><em>MBuildDynamic.Core.dll</em> and <em>Mono.Build.dll</em>
+evaluate to type <em>DllAssembly</em>, so they are assigned to an
+argument called "refs". The assembly being compiled will be linked with
+them.</p></li>
+
+<li><p><em>mbuild.snk</em> evaluates to a value of type
+<em>StrongnameKeypairFile</em>, a crytographic key file used to
+digitally sign assembly files. It is assigned to the "snkfile"
+argument and will be used to digitally sign the output
+assembly.</p></li>
+
+<li><p><em>our_bundlegen</em> evaluates to type <em>BinaryInfo</em>, which is
+a generic <tt>Result</tt> class describing an executable program. So it is
+assigned to the "bundlegen" argument -- it is the program that will be
+invoked to do the processing.</p></li>
+</ul>
+
+<p>MBuild supports <em>optional arguments</em>, which don't always
+have to be given a value. It also supports <em>multiple-valued
+arguments</em>, which can be given more than one value. For instance,
+the C# compilation rule, <tt>CSCompile</tt>, also supports an
+"snkfile" argument. However, it is marked as optional, because you
+don't <i>need</i> to digitally sign assemblies. If the argument is
+given a value, the assembly will be signed; if no value is given, it
+won't. No need for you to explicitly code the logic; MBuild just does
+what you want. (The "snkfile" argument for the BundlegenProcess rule
+is <i>not</i> optional, because an assembly must be signed in order to
+install it into the GAC, and all MBuild bundles are loaded from the GAC.)</p>
+
+<p>Phew! That was long. Let's move on and start putting all this
+theory into practice.</p>
+
+<p><b>Next: <a href="fspot-migration.xhtml">F-Spot Migration Case Study</a></b></p>
+
+</body> 
+</html>
