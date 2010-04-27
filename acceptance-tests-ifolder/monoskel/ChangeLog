@@ -1,0 +1,36 @@
+2005-11-07  Everaldo Canuto  <everaldo@smios.org>
+
+	* configure.ac: Include a warning about superstring-sharp for developers
+	that use monoskel in your own project.
+
+2005-10-19  Everaldo Canuto  <everaldo@smios.org>
+
+	* src/Makefile.am: Fix DISTCLEANFILES to properly execute maintainerclean.
+
+2005-10-08  Everaldo Canuto  <everaldo@smios.org>
+
+	* src/Makefile.am: Fix generated_source_files.
+
+2005-09-16  Everaldo Canuto  <everaldo@smios.org>
+
+	* src/Makefile.am: Replace by "$<" by $(monoskel_build_sources) 
+	in Makefile.am to fix compilation of all sources
+
+2005-09-16  Aaron Bockover  <aaron@aaronbock.net>
+
+	* configure.ac: Bumped version to 0.2
+	* man/Makefile.am: 
+	* resources/Makefile.am:
+	* src/Makefile.am:
+	* Makefile.am: Add DISTCLEANFILES
+	* Makefile.am: Run sed on monoskel.in
+	* script.in, monoskel.in: Moved script.in to monoskel.in
+	* configure.ac: Added UNSTABLE_INSTALL_ASSEMBLIES and INSTALLED_ASSEMBLIES
+	expansion script to work around potential packaging issues with pkg-config
+	being called from make
+	* src/Makefile.am: removed UNSTABLE_INSTALL_ASSEMBLIES and 
+	INSTALLED_ASSEMBLIES, expansion moved to configure.ac
+	* autogen.sh: Much smarter autogen.sh script
+	* configure.in, configure.ac: Renamed configure.in to configure.ac as
+	configure.in convention is deprecated
+

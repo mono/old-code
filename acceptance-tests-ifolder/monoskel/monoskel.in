@@ -1,0 +1,2 @@
+#!/bin/sh
+exec @MONO@ @prefix@/lib/monoskel/monoskel.exe $MONO_EXTRA_ARGS "$@"
