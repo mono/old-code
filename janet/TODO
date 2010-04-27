@@ -1,0 +1,12 @@
+<random order>
+* prioritize? the list
+
+* test/fix build system under windows & linux (both with NAnt & makefiles)
+* setup JCommand test to output to .cs file so we can do automatic tests with NAnt
+* setup NUnit testing?
+* document classes
+* use System.Reflection
+* get Steve's "TODO" list
+* check license
+* check naming convention janet.dll with regards to using namespace & referencing
+* check namespace/assembly/sourcefile convention

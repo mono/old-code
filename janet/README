@@ -1,0 +1,37 @@
+WARNING:
+janet currently does *NOT* compile with MCS yet.
+
+
+------------------------------------------------------------------------------------------------------
+This is the janet CVS module for mono.
+
+The idea we have is to turn janet into a dynamic compiler that could 
+be used to implement the VSA and JScript interfaces exposed by .NET.  
+
+For now development will take place in a seperate module (away from the mcs class libraries).
+The intention is to eventually fold this back into the mcs module (at mcs/class/).
+
+As a result the following directory structure is being used:
+
+janet/ (module - this directory)
+
+janet/janet/ (Assembly topdir)
+janet/janet/janet/ (janet itself)
+janet/janet/Test/ (tests)
+
+janet/Microsoft.JScript/ (Assembly topdir)
+janet/Microsoft.JScript/Microsoft.JScript/ (bridge/compatility classes)
+janet/Microsoft.JScript/Test (tests)
+
+janet/mjs/ (Mono JScript Compiler topdir)
+janet/mjs/Test (tests)
+
+
+Note that all subdirs contain own ChangeLog files (and not in this directory),
+in order to not lose information when migrating this to the mcs module.
+
+
+Documentation links:
+* JScript.NET
+  http://msdn.microsoft.com/library/en-us/jscript7/html/jsoriJScript.asp
+  

@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="iso-8859-1"?>
+
+<!-- NAnt build file for Microsoft.JScript.dll -->
+
+<project name="janet" default="build">
+	<property name="debug" value="false"/>
+
+	<target name="build">
+		<mkdir dir="../../mcs/class/lib"/>
+		<csc target="library" output="../../mcs/class/lib/Microsoft.JScript.dll" debug="${debug}" verbose="true">
+			<arg value="/nowarn:1595"/>
+			<arg value="/unsafe"/>
+			<!--arg value="/noconfig"/-->	<!-- don't reference ms assemblies -->
+			<arg value="/lib:../../mcs/class/lib/"/>
+			
+			<!-- cor compare dies with these currently -->
+			<!--arg value="/nostdlib"/--> 	<!-- don't reference mscorlib -->
+			<!--arg value="/r:corlib.dll"/-->
+			<sources>
+				<includes name="**/*.cs"/> 
+				<excludes name="Test/**"/>
+			</sources>
+		</csc>
+		<copy file="../../mcs/class/lib/Microsoft.JScript.dll" tofile="Test/Microsoft.JScript.dll"/>
+<!-- TODO: missing tests & buildfile
+		<nant basedir="Test" target="build"/>  
+-->
+	</target>
+
+	<target name="test" depends="build">
+		<nant basedir="Test" target="test"/>
+	</target>
+
+	<target name="clean">
+		<nant basedir="Test" target="clean"/>
+		<delete file="../../mcs/class/lib/Microsoft.JScript.dll" failonerror="false"/>
+	</target>
+</project>

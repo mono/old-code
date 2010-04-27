@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="iso-8859-1"?>
+
+<!-- NAnt build file for janet_test -->
+<!-- Target build (default) builds tests -->
+<!-- Target test runs tests -->
+
+<project name="janet_test" default="build">
+	<property name="debug" value="false"/>
+
+	<target name="build">
+		<csc target="exe" output="JCommand.exe" debug="${debug}">
+			<sources>
+				<includes name="JCommand.cs"/>
+			</sources>
+			<references>
+				<includes name="janet.dll"/>
+			</references>
+		</csc>
+
+<!-- doesn't seem to work? -->		
+		<exec program="JCommand.exe" commandline="test.js > test.cs"/>
+		
+		<csc target="exe" output="Test.exe" debug="${debug}">
+			<sources>
+				<includes name="test.cs"/>
+			</sources>
+			<references>
+				<includes name="janet.dll"/>
+			</references>
+		</csc>
+		
+	</target>
+</project>
