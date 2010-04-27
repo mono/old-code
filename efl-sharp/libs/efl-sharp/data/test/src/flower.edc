@@ -1,0 +1,37 @@
+fonts {
+}
+images {
+	image: "flower.jpg" COMP;
+}
+data {
+}
+collections {
+	group {
+		name: "desktop/background";
+		parts {
+			part {
+				name: "background_image";
+				type: IMAGE;
+				mouse_events: 1;
+				description {
+					state: "default" 0.00;
+					visible: 1;
+					max: 2048 1536;
+					rel1 {
+						relative: 0.00 0.00;
+						offset: 0 0;
+					}
+					rel2 {
+						relative: 1.00 1.00;
+						offset: -1 -1;
+					}
+					image {
+						normal: "flower.jpg";
+					}
+				}
+			}
+		}
+		programs {
+		}
+	}
+}

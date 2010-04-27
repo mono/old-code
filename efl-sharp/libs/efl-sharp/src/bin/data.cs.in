@@ -1,0 +1,4 @@
+public class DataConfig
+{
+	public static string DATADIR = "@DATADIR@";
+}

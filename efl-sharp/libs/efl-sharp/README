@@ -1,0 +1,10 @@
+Welcome to EFL-Sharp!
+
+EFL-Sharp (or EFL#) beings the Enlightenment Foundation Libraries (and more)
+to the C# programming language.
+
+EFL# binds almost all the EFL C API and tightly ties it into an object
+oriented representation making C# programmers feel at home with it.
+
+This distribution also includes Eblocks, a widget library (toolkit) that
+follows the GTK# API and makes uses of EFL# for all of its drawing.

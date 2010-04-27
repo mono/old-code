@@ -1,0 +1,15 @@
+//
+// AssemblyInfo.cs.in for project 'efl-sharp'
+//
+// Authors:
+//	Hisham 'CodeWarrior' Mardam Bey <hisham.mardambey@gmail.com>
+//
+using System.Reflection;
+using System.Runtime.CompilerServices;
+
+[assembly: AssemblyVersion("@VERSION@")]
+[assembly: AssemblyTitle ("Project EFL-Sharp")]
+[assembly: AssemblyDescription ("C# bindings for the Enlightenment Foundation Libraries")]
+[assembly: AssemblyCopyright ("Copyright (c) 2005 The Enlightenment Project")]
+[assembly: AssemblyCompany ("The Enlightenment Project")]
+

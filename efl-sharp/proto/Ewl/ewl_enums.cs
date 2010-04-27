@@ -1,0 +1,36 @@
+namespace Ewl {
+	using System;
+	
+	public enum EventType{
+		EXPOSE = 0,
+		REALIZE = 1,
+		UNREALIZE = 2,
+		SHOW = 3,
+		HIDE = 4,
+		DESTROY = 5,
+		DELETE_WINDOW = 6,
+		CONFIGURE = 7,
+		REPARENT = 8,
+		KEY_DOWN = 9,
+		KEY_UP = 10,
+		MOUSE_DOWN = 11,
+		MOUSE_UP = 12,
+		MOUSE_MOVE = 13,
+		MOUSE_WHEEL = 14,
+		FOCUS_IN = 15,
+		FOCUS_OUT = 16,
+		SELECT = 17,
+		DESELECT = 18,
+		CLICKED = 19,
+		DOUBLE_CLICKED = 20,
+		HILITED = 21,
+		VALUE_CHANGED = 22,
+		STATE_CHANGED = 23,
+		APPEARANCE_CHANGED = 24,
+		WIDGET_ENABLE = 25,
+		WIDGET_DISABLE = 26,
+		PASTE = 27,
+		MAX = 28
+	};
+	
+}

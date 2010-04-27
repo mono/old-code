@@ -1,0 +1,12 @@
+2005-09-06  Hisham Mardam Bey <hisham.mardambey@gmail.com>
+
+* Started adding local caching for values to avoid P/Invoke
+
+2005-08-30  Hisham Mardam Bey <hisham.mardambey@gmail.com>
+
+* Added ScrolledWindow, Scrollbar, and Viewport widgets (not done yet)
+
+2005-08-21  Hisham Mardam Bey <hisham.mardambey@gmail.com>
+
+* Added the Scale widget and started working on the Frame and ScrolledWindow.
+* Stared the eblocks_test test suite for all the widgets.

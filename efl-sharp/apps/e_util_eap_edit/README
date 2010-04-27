@@ -1,0 +1,13 @@
+Small demo app that will eventually replace e_util_eap_edit provided
+by e17/apps/e_utils's version.
+
+There are multiple versions. Some use Box widgets, others use Table.
+The same examples are done for both GTK# and Eblocks.
+
+Compile:
+./build.sh
+
+Run:
+mono e_util_eap_edit.exe
+
+(or any other .exe file)

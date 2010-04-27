@@ -1,0 +1,8 @@
+To install, follow the usual:
+
+./autogen --prefix=/usr
+make
+make install
+
+NOTE: We currently have some problems with mono when installing to a
+different prefix. We hope to fix this soon.

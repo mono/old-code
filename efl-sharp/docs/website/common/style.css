@@ -1,0 +1,111 @@
+.Page {
+
+	position: relative;
+	top:10px;
+	left: 10px;
+	
+}
+
+.Header {
+
+	position: relative;
+	top: 0px;
+
+}
+
+.Footer {
+
+	position: relative;
+	top: 150px;
+
+}
+
+.Logo {
+	position: absolute;
+	top: 0px;
+	left: 0px;
+	z-index: 4;
+	filter: alpha(opacity=70);
+	-moz-opacity: 0.70;
+	opacity: 0.70;
+
+}
+
+.Title {
+
+	position: absolute;
+	left: 65px;
+	z-index: 3;
+        
+}
+
+.Menu {
+
+	position: absolute;
+	top: 90px;
+	left: 110px;
+	z-index: 5;
+
+}
+
+.MenuItem {
+
+	font-weight: bold;
+	color: #F0F0F0;
+	text-decoration: none;
+	text-align: center;
+	background-color: #A0A0A0;
+	border-style: solid; 
+	border-width: 1;
+	border-color: #808080;
+	position: absolute;
+	width: 100px;
+	height: 20px;
+
+}
+
+.Content {
+
+	color: #000000;
+	font-family: Arial;
+	font-weight: normal;
+	font-style: normal;
+	font-size: 10pt;
+	text-decoration: none;
+	text-align: left;
+	padding: 10px;
+	background-color: #C0C0C0;
+	border-style: solid; 
+	border-width: 1;
+	border-color: #808080;
+	position: relative;
+	top: 130px;
+	left: 0px;
+	width: 600px;
+
+}
+
+blockquote {
+
+	color: #FFFFFF;
+	font-family: Times;
+	font-weight: normal;
+	font-style: normal;
+	font-size: 10pt;
+	text-decoration: none;
+	text-align: left;
+	padding: 10px;
+	background-color: #a0a0a0;
+	border-style: solid; 
+	border-width: 1;
+	border-color: #808080;
+	width: 500px;
+
+}
+
+a {
+
+	font-weight: bold;
+	color: #000000;
+	text-decoration: none;
+}
