@@ -1,0 +1,41 @@
+
+(Expanding this README is on the TODO list)
+
+This is an implementation of the Ice protocol, developed by ZeroC,
+Inc. (http://www.zeroc.com/), in C# using the .NET Remoting framework.
+It is currently very much in development; however, the following
+things should work:
+
+- Ice operations and return values, including out parameters
+
+- All Ice/slice types, including sequences and dictionaries
+
+- Passing objects by reference (i.e. receiving a Proxy)
+  and by value
+
+- TCP endpoints
+
+There's a much longer list of things that don't work or are not yet
+implemented, including:
+
+- UDP or SSL endpoints
+
+- Exception returns from operations
+
+- Handling and differentiation of different operation types (normal,
+  idempotent, nonmutating)
+
+- Locator support
+
+.. and others.  The above listed will be coming; support for extra Ice
+features, such as Glacier, Freeze, IcePack, etc. will probably never
+happen -- use the C++ runtime if you have need of these features.  (Of
+course, the C# runtime can certainly interoperate with Glacier or
+whatnot, as long as the interface is defined in terms of Ice objects.)
+
+Some samples are in the examples directory; it's a bit of a mess right
+now.
+
+ -- Vladimir Vukicevic
+ -- vladimir@pobox.com
+

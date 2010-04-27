@@ -1,0 +1,33 @@
+
+- Fix our threading situation.  Right now:
+	* Each server creates a listener thread
+	* Each endpoint and open server connection has its own receiver thread
+
+  Ideally:
+	* there would be only one listener thread which would listen to all endpoints
+	* there would be only one receiver thread which would listen on all sockets,
+	  and would then pass over to a worker thread to handle the message.  This would
+	  also solve the problem of ReceiverDispatcher needing to do an async delegate
+	  invoke on _requestHandler, because the receiver would not be blocked.
+
+- Fix exceptions; propagate them correctly back to the client from the server.
+
+- Implement IceMarshallingAttribute usage; first step is to implement hard-coded
+  marshallers and unmarshallers for the Ice protocol structs.  Oops.  Can't use
+  an attribute, since we need to pass in delegates, and we can't "new" the delegate
+  in the constructor.  So perhaps hardcode "Ice_Marshal" and "Ice_Unmarshal" in
+  the class/struct?
+
+- Implement intelligent retries in case of failure, based on OperationMode
+
+- Along with the above, implement failure detection in communication
+
+- Figure out how to serialize classes.  Given the following class chain:
+  A <- B <- C (where C is most-specialized), if A and B are defined in slice,
+  but C is not, the C++ runtime will only transmit A and B slices by value.
+  The C# runtime, however, will transmit C; this is potentially quite bad,
+  since class C might contain values that should not be exported.  A potential
+  solution is to create an attribute with which to flag classes that should be
+  transmitted, and then have slice2cs put this attribute on all generated
+  classes.  Perhaps some sort of global value in Ice.Manager could control
+  whether it's used or not.

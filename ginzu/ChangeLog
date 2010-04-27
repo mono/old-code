@@ -1,0 +1,29 @@
+2003-09-02  Vladimir Vukicevic  <vladimir@pobox.com>
+
+	* IceProtocolReader.cs: keep track of whether we've read any
+	classrefs or not, and if not, don't attempt to read a count
+	at the end of a message.  There is no zero count in the
+	protocol if no classes are to be sent.
+
+	* IceProtocolWriter.cs: same as above; don't write a zero
+	count if there are no classes.
+
+	* IceServerChannel.cs: listen on IPAddress.Any, instead of
+	the endpoint address; the while endpoint scheme requires
+	some rework.
+
+	* samples/ping.cs, samples/ping-server.cs: rework to make
+	compatible with the Ice "latency" demo
+
+2003-08-31  Vladimir Vukicevic  <vladimir@pobox.com>
+
+	* everything: fixed tabification
+
+	* Makefile: fixed build, added samples build
+
+2003-08-29  Vladimir Vukicevic  <vladimir@pobox.com>
+
+	* removed old rule from Makefile
+
+	* initial import
+
