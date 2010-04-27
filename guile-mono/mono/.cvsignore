@@ -1,0 +1,9 @@
+.deps
+.libs
+*.lo
+*.x
+*.la
+guile-mono.c
+guile-mono.h
+guile-mono.html
+guile-mono.scm

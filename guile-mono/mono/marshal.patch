@@ -1,0 +1,160 @@
+? arch/s390/Makefile.in
+? arch/sparc/.deps
+? metadata/monosn
+? metadata/old
+Index: metadata/image.c
+===================================================================
+RCS file: /cvs/public/mono/mono/metadata/image.c,v
+retrieving revision 1.47
+diff -u -u -p -r1.47 image.c
+--- metadata/image.c	14 Nov 2002 13:05:23 -0000	1.47
++++ metadata/image.c	27 Nov 2002 01:40:42 -0000
+@@ -419,6 +419,7 @@ do_mono_image_open (const char *fname, M
+ 				  (GCompareFunc)mono_metadata_signature_equal);
+ 
+ 	image->runtime_invoke_cache = g_hash_table_new (g_direct_hash, g_direct_equal);
++	image->scripting_invoke_cache = g_hash_table_new (g_direct_hash, g_direct_equal);
+ 	image->managed_wrapper_cache = g_hash_table_new (g_direct_hash, g_direct_equal);
+ 	image->native_wrapper_cache = g_hash_table_new (g_direct_hash, g_direct_equal);
+ 	image->remoting_invoke_cache = g_hash_table_new (g_direct_hash, g_direct_equal);
+Index: metadata/image.h
+===================================================================
+RCS file: /cvs/public/mono/mono/metadata/image.h,v
+retrieving revision 1.36
+diff -u -u -p -r1.36 image.h
+--- metadata/image.h	14 Nov 2002 13:05:23 -0000	1.36
++++ metadata/image.h	27 Nov 2002 01:40:42 -0000
+@@ -111,6 +111,7 @@ struct _MonoImage {
+ 	 * indexed by MonoMethod pointers 
+ 	 */
+ 	GHashTable *runtime_invoke_cache;
++	GHashTable *scripting_invoke_cache;
+ 	GHashTable *managed_wrapper_cache;
+ 	GHashTable *native_wrapper_cache;
+ 	GHashTable *remoting_invoke_cache;
+Index: metadata/loader.h
+===================================================================
+RCS file: /cvs/public/mono/mono/metadata/loader.h,v
+retrieving revision 1.40
+diff -u -u -p -r1.40 loader.h
+--- metadata/loader.h	11 Nov 2002 13:23:56 -0000	1.40
++++ metadata/loader.h	27 Nov 2002 01:40:42 -0000
+@@ -13,6 +13,7 @@ typedef enum {
+ 	MONO_WRAPPER_NATIVE_TO_MANAGED,
+ 	MONO_WRAPPER_MANAGED_TO_NATIVE,
+ 	MONO_WRAPPER_REMOTING_INVOKE,
++	MONO_WRAPPER_SCRIPTING_INVOKE,
+ 	MONO_WRAPPER_UNKNOWN
+ } MonoWrapperType;
+ 
+Index: metadata/marshal.c
+===================================================================
+RCS file: /cvs/public/mono/mono/metadata/marshal.c,v
+retrieving revision 1.53
+diff -u -u -p -r1.53 marshal.c
+--- metadata/marshal.c	4 Nov 2002 10:33:13 -0000	1.53
++++ metadata/marshal.c	27 Nov 2002 01:40:45 -0000
+@@ -1315,6 +1315,70 @@ mono_marshal_get_remoting_invoke (MonoMe
+ 	return res;
+ }
+ 
++MonoMethod *
++mono_marshal_get_scripting_invoke (MonoMethod *method, MonoScriptingInvokeFunc func, gpointer data)
++{
++	MonoMethodSignature *sig;
++	static MonoMethodSignature *csig = NULL;
++	MonoMethodBuilder *mb;
++	MonoMethod *res;
++	GHashTable *cache;
++	int params_var;
++
++	g_assert (method);
++
++	if (method->wrapper_type == MONO_WRAPPER_SCRIPTING_INVOKE)
++		return method;
++
++	sig = method->signature;
++
++	/* we cant remote methods without this pointer */
++	if (!sig->hasthis)
++		return method;
++
++	cache = method->klass->image->scripting_invoke_cache;
++	if ((res = (MonoMethod *)g_hash_table_lookup (cache, method)))
++		return res;
++
++	if (!csig) {
++		int sigsize = sizeof (MonoMethodSignature) + 3 * sizeof (MonoType *);
++		csig = g_malloc0 (sigsize);
++
++		/* MonoObject *scripting_wrapper (MonoMethod *method, gpointer data, gpointer params[]) */
++		csig->param_count = 3;
++		csig->ret = &mono_defaults.object_class->byval_arg;
++		csig->params [0] = &mono_defaults.int_class->byval_arg;
++		csig->params [1] = &mono_defaults.int_class->byval_arg;
++		csig->params [2] = &mono_defaults.int_class->byval_arg;
++	}
++
++	mb = mono_mb_new (method->klass, method->name);
++	mb->method->wrapper_type = MONO_WRAPPER_DELEGATE_INVOKE;
++	mb->method->save_lmf = 1;
++
++	params_var = mono_mb_emit_save_args (mb, sig, TRUE);
++
++	mono_mb_emit_byte (mb, MONO_CUSTOM_PREFIX);
++	mono_mb_emit_byte (mb, CEE_MONO_LDPTR);
++	mono_mb_emit_i4 (mb, mono_mb_add_data (mb, method));
++	mono_mb_emit_byte (mb, MONO_CUSTOM_PREFIX);
++	mono_mb_emit_byte (mb, CEE_MONO_LDPTR);
++	mono_mb_emit_i4 (mb, mono_mb_add_data (mb, data));
++	mono_mb_emit_ldloc (mb, params_var);
++	mono_mb_emit_native_call (mb, csig, func);
++	mono_mb_emit_byte (mb, CEE_NOP);
++
++	if (sig->ret->type == MONO_TYPE_VOID)
++		mono_mb_emit_byte (mb, CEE_POP);
++	else
++		mono_mb_emit_restore_result (mb, sig->ret);
++
++	res = mono_mb_create_method (mb, sig, sig->param_count + 16);
++	mono_mb_free (mb);
++	g_hash_table_insert (cache, method, res);
++	return res;
++}
++
+ /*
+  * the returned method invokes all methods in a multicast delegate 
+  */
+Index: metadata/marshal.h
+===================================================================
+RCS file: /cvs/public/mono/mono/metadata/marshal.h,v
+retrieving revision 1.13
+diff -u -u -p -r1.13 marshal.h
+--- metadata/marshal.h	19 Aug 2002 11:22:39 -0000	1.13
++++ metadata/marshal.h	27 Nov 2002 01:40:45 -0000
+@@ -121,6 +121,10 @@ mono_mb_emit_i4 (MonoMethodBuilder *mb, 
+ MonoMethod *
+ mono_marshal_get_remoting_invoke (MonoMethod *method);
+ 
++typedef MonoObject * (*MonoScriptingInvokeFunc) (MonoMethod *method, gpointer data, gpointer params[]);
++MonoMethod *
++mono_marshal_get_scripting_invoke (MonoMethod *method, MonoScriptingInvokeFunc func, gpointer data);
++
+ MonoMethod *
+ mono_marshal_get_delegate_begin_invoke (MonoMethod *method);
+ 
+Index: metadata/reflection.c
+===================================================================
+RCS file: /cvs/public/mono/mono/metadata/reflection.c,v
+retrieving revision 1.119
+diff -u -u -p -r1.119 reflection.c
+--- metadata/reflection.c	18 Nov 2002 15:39:31 -0000	1.119
++++ metadata/reflection.c	27 Nov 2002 01:40:50 -0000
+@@ -2443,6 +2443,7 @@ mono_image_basic_init (MonoReflectionAss
+ 				  (GCompareFunc)mono_metadata_signature_equal);
+ 
+ 	image->runtime_invoke_cache = g_hash_table_new (g_direct_hash, g_direct_equal);
++	image->scripting_invoke_cache = g_hash_table_new (g_direct_hash, g_direct_equal);
+ 	image->managed_wrapper_cache = g_hash_table_new (g_direct_hash, g_direct_equal);
+ 	image->native_wrapper_cache = g_hash_table_new (g_direct_hash, g_direct_equal);
+ 	image->remoting_invoke_cache = g_hash_table_new (g_direct_hash, g_direct_equal);

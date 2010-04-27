@@ -1,0 +1,501 @@
+;;; -*-scheme-*-
+
+(define-module (g-wrap gw-mono-spec)
+  :use-module (g-wrap)
+  :use-module (g-wrap simple-type)
+  :use-module (g-wrap gw-wct-spec)
+  :use-module (g-wrap gw-standard-spec)
+  :use-module (oop goops))
+
+(let ((ws (gw:new-wrapset "guile-mono")))
+
+  (gw:wrapset-depends-on ws "gw-standard")
+  (gw:wrapset-depends-on ws "gw-wct")
+
+  (gw:wrapset-set-guile-module! ws '(guile-mono))
+
+  (gw:wrapset-add-cs-declarations!
+   ws
+   (lambda (wrapset client-wrapset)
+     (if (eq? client-wrapset wrapset)
+         '()
+         (list
+          "#include <guile-mono-module.h>\n"))))
+
+  (gw:wrap-function
+   ws
+   '%init-mono-module
+   '<gw:void> "scm_init_mono_module" '()
+   "Initialize the mono module.")
+
+  (gw:wrap-as-wct ws '<gw:mono:domain> "MonoDomain *" "const MonoDomain *")
+  (gw:wrap-as-wct ws '<gw:mono:assembly> "MonoAssembly *" "const MonoAssembly *")
+  (gw:wrap-as-wct ws '<gw:mono:image> "MonoImage *" "const MonoImage *")
+  (gw:wrap-as-wct ws '<gw:mono:class> "MonoClass *" "const MonoClass *")
+  (gw:wrap-as-wct ws '<gw:mono:type> "MonoType *" "const MonoType *")
+  (gw:wrap-as-wct ws '<gw:mono:method> "MonoMethod *" "const MonoMethod *")
+  (gw:wrap-as-wct ws '<gw:mono:method-signature> "MonoMethodSignature *" "const MonoMethodSignature *")
+  (gw:wrap-as-wct ws '<gw:mono:property> "MonoProperty *" "const MonoProperty *")
+
+  (gw:wrap-function
+   ws
+   'mono-jit-init
+   '<gw:mono:domain> "mono_jit_init"
+   '(((<gw:mchars> caller-owned const) filename))
+   "")
+
+  (gw:wrap-function
+   ws
+   'mono-domain-get
+   '<gw:mono:domain> "mono_domain_get" '()
+   "")
+
+  (gw:wrap-function
+   ws
+   'mono-domain-assembly-open
+   '<gw:mono:assembly> "mono_domain_assembly_open"
+   '((<gw:mono:domain> domain)
+     ((<gw:mchars> caller-owned const) filename))
+   "")
+
+  (gw:wrap-function
+   ws
+   'mono-assembly-get-image
+   '<gw:mono:image> "scm_mono_assembly_get_image"
+   '((<gw:mono:assembly> assembly))
+   "")
+
+  (gw:wrap-function
+   ws
+   'mono-assembly-find-class
+   '<gw:mono:class> "scm_mono_assembly_find_class"
+   '((<gw:mono:assembly> assembly)
+     ((<gw:mchars> caller-owned const) name-space)
+     ((<gw:mchars> caller-owned const) name))
+   "")
+
+  (gw:wrap-function
+   ws
+   'mono-class-from-name
+   '<gw:mono:class> "mono_class_from_name"
+   '((<gw:mono:image> image)
+     ((<gw:mchars> caller-owned const) name-space)
+     ((<gw:mchars> caller-owned const) name))
+   "")
+
+  (gw:wrap-function
+   ws
+   '%mono-class-num-methods
+   '<gw:int> "scm_mono_class_num_methods"
+   '((<gw:mono:class> klass))
+   "")
+
+  (gw:wrap-function
+   ws
+   '%mono-class-get-method
+   '<gw:mono:method> "scm_mono_class_get_method"
+   '((<gw:mono:class> klass) (<gw:int> idx))
+   "")
+
+  (gw:wrap-function
+   ws
+   '%mono-class-num-properties
+   '<gw:int> "scm_mono_class_num_properties"
+   '((<gw:mono:class> klass))
+   "")
+
+  (gw:wrap-function
+   ws
+   '%mono-class-get-property
+   '<gw:mono:property> "scm_mono_class_get_property"
+   '((<gw:mono:class> klass) (<gw:int> idx))
+   "")
+
+  (gw:wrap-function
+   ws
+   '%mono-property-get-getter
+   '<gw:mono:method> "scm_mono_property_get_getter"
+   '((<gw:mono:property> property))
+   "")
+
+  (gw:wrap-function
+   ws
+   '%mono-property-get-setter
+   '<gw:mono:method> "scm_mono_property_get_setter"
+   '((<gw:mono:property> property))
+   "")
+
+  (gw:wrap-function
+   ws
+   '%mono-property-get-name
+   '(<gw:mchars> callee-owned const) "scm_mono_property_get_name"
+   '((<gw:mono:property> property))
+   "")
+
+  (gw:wrap-function
+   ws
+   '%mono-class-get-name
+   '(<gw:mchars> callee-owned const) "scm_mono_class_name"
+   '((<gw:mono:class> klass))
+   "")
+
+  (gw:wrap-function
+   ws
+   '%mono-class-get-type
+   '<gw:mono:type> "scm_mono_class_get_type"
+   '((<gw:mono:class> klass))
+   "")
+
+  (gw:wrap-function
+   ws
+   '%mono-class-get-parent
+   '<gw:mono:class> "scm_mono_class_get_parent"
+   '((<gw:mono:class> class))
+   "")
+
+  (gw:wrap-function
+   ws
+   '%mono-class-type-get-class
+   '<gw:mono:class> "scm_mono_class_type_get_class"
+   '((<gw:mono:type> type))
+   "")
+
+  (gw:wrap-function
+   ws
+   '%mono-object-get-class
+   '<gw:mono:class> "scm_mono_object_get_class"
+   '((<gw:scm> object))
+   "")
+
+  (gw:wrap-function
+   ws
+   '%mono-object-get-domain
+   '<gw:mono:domain> "scm_mono_object_get_domain"
+   '((<gw:scm> object))
+   "")
+
+  (gw:wrap-function
+   ws
+   '%mono-method-get-name
+   '(<gw:mchars> callee-owned const) "scm_mono_method_name"
+   '((<gw:mono:method> method))
+   "")
+
+  (gw:wrap-function
+   ws
+   '%mono-method-get-class
+   '<gw:mono:class> "scm_mono_method_get_class"
+   '((<gw:mono:method> method))
+   "")
+
+  (gw:wrap-function
+   ws
+   '%mono-method-is-static?
+   '<gw:bool> "scm_mono_method_is_static"
+   '((<gw:mono:method> method))
+   "")
+
+  (gw:wrap-function
+   ws
+   '%mono-method-can-invoke?
+   '<gw:bool> "scm_mono_method_can_invoke"
+   '((<gw:mono:method> method) (<gw:bool> allow_accessor))
+   "")
+
+  (gw:wrap-function
+   ws
+   '%mono-property-can-invoke?
+   '<gw:bool> "scm_mono_property_can_invoke"
+   '((<gw:mono:property> property))
+   "")
+
+  (gw:wrap-function
+   ws
+   '%mono-method-get-signature
+   '<gw:mono:method-signature> "scm_mono_method_get_signature"
+   '((<gw:mono:method> method))
+   "")
+
+  (gw:wrap-function
+   ws
+   '%mono-method-signature-get-return-type
+   '<gw:mono:type> "scm_mono_method_signature_get_return_type"
+   '((<gw:mono:method-signature> signature))
+   "")
+
+  (gw:wrap-function
+   ws
+   '%mono-method-signature-has-this?
+   '<gw:bool> "scm_mono_method_signature_has_this"
+   '((<gw:mono:method-signature> signature))
+   "")
+
+  (gw:wrap-function
+   ws
+   '%mono-method-signature-param-count
+   '<gw:int> "scm_mono_method_signature_param_count"
+   '((<gw:mono:method-signature> signature))
+   "")
+
+  (gw:wrap-function
+   ws
+   '%mono-method-signature-get-param
+   '<gw:mono:type> "scm_mono_method_signature_get_param"
+   '((<gw:mono:method-signature> signature) (<gw:int> idx))
+   "")
+
+  (gw:wrap-function
+   ws
+   '%mono-type-get-name
+   '(<gw:mchars> callee-owned const) "mono_type_get_name"
+   '((<gw:mono:type> type))
+   "")
+
+  (gw:wrap-function
+   ws
+   '%mono-type-get-kind
+   '<gw:int> "scm_mono_type_get_kind"
+   '((<gw:mono:type> type))
+   "")
+
+  (gw:wrap-function
+   ws
+   '%mono-get-boxed-boolean
+   '<gw:scm> "scm_mono_get_boxed_boolean"
+   '((<gw:mono:domain> domain) (<gw:bool> value))
+   "")
+
+  (gw:wrap-function
+   ws
+   '%mono-get-boxed-char
+   '<gw:scm> "scm_mono_get_boxed_char"
+   '((<gw:mono:domain> domain) (<gw:char> value))
+   "")
+
+  (gw:wrap-function
+   ws
+   '%mono-get-boxed-uint16
+   '<gw:scm> "scm_mono_get_boxed_int8"
+   '((<gw:mono:domain> domain) (<gw:scm> value))
+   "")
+
+  (gw:wrap-function
+   ws
+   '%mono-get-boxed-uint16
+   '<gw:scm> "scm_mono_get_boxed_uint8"
+   '((<gw:mono:domain> domain) (<gw:scm> value))
+   "")
+
+  (gw:wrap-function
+   ws
+   '%mono-get-boxed-uint16
+   '<gw:scm> "scm_mono_get_boxed_int16"
+   '((<gw:mono:domain> domain) (<gw:scm> value))
+   "")
+
+  (gw:wrap-function
+   ws
+   '%mono-get-boxed-uint16
+   '<gw:scm> "scm_mono_get_boxed_uint16"
+   '((<gw:mono:domain> domain) (<gw:scm> value))
+   "")
+
+  (gw:wrap-function
+   ws
+   '%mono-get-boxed-int32
+   '<gw:scm> "scm_mono_get_boxed_int32"
+   '((<gw:mono:domain> domain) (<gw:scm> value))
+   "")
+
+  (gw:wrap-function
+   ws
+   '%mono-get-boxed-uint32
+   '<gw:scm> "scm_mono_get_boxed_uint32"
+   '((<gw:mono:domain> domain) (<gw:scm> value))
+   "")
+
+  (gw:wrap-function
+   ws
+   '%mono-get-boxed-int64
+   '<gw:scm> "scm_mono_get_boxed_int64"
+   '((<gw:mono:domain> domain) (<gw:scm> value))
+   "")
+
+  (gw:wrap-function
+   ws
+   '%mono-get-boxed-uint64
+   '<gw:scm> "scm_mono_get_boxed_uint64"
+   '((<gw:mono:domain> domain) (<gw:scm> value))
+   "")
+
+  (gw:wrap-function
+   ws
+   '%mono-get-boxed-float
+   '<gw:scm> "scm_mono_get_boxed_float"
+   '((<gw:mono:domain> domain) (<gw:float> value))
+   "")
+
+  (gw:wrap-function
+   ws
+   '%mono-get-boxed-double
+   '<gw:scm> "scm_mono_get_boxed_double"
+   '((<gw:mono:domain> domain) (<gw:double> value))
+   "")
+
+  (gw:wrap-function
+   ws
+   '%mono-runtime-invoke
+   '<gw:scm> "scm_mono_runtime_invoke"
+   '((<gw:mono:method> method) (<gw:scm> instance) (<gw:scm> vector))
+   "")
+
+  (gw:wrap-function
+   ws
+   '%mono-defaults-boolean-class
+   '<gw:mono:class> "scm_mono_defaults_boolean_class"
+   '()
+   "")
+
+  (gw:wrap-function
+   ws
+   '%mono-defaults-char-class
+   '<gw:mono:class> "scm_mono_defaults_char_class"
+   '()
+   "")
+
+  (gw:wrap-function
+   ws
+   '%mono-defaults-int8-class
+   '<gw:mono:class> "scm_mono_defaults_int8_class"
+   '()
+   "")
+
+  (gw:wrap-function
+   ws
+   '%mono-defaults-uint8-class
+   '<gw:mono:class> "scm_mono_defaults_uint8_class"
+   '()
+   "")
+
+  (gw:wrap-function
+   ws
+   '%mono-defaults-int16-class
+   '<gw:mono:class> "scm_mono_defaults_int16_class"
+   '()
+   "")
+
+  (gw:wrap-function
+   ws
+   '%mono-defaults-uint16-class
+   '<gw:mono:class> "scm_mono_defaults_uint16_class"
+   '()
+   "")
+
+  (gw:wrap-function
+   ws
+   '%mono-defaults-int32-class
+   '<gw:mono:class> "scm_mono_defaults_int32_class"
+   '()
+   "")
+
+  (gw:wrap-function
+   ws
+   '%mono-defaults-uint32-class
+   '<gw:mono:class> "scm_mono_defaults_uint32_class"
+   '()
+   "")
+
+  (gw:wrap-function
+   ws
+   '%mono-defaults-int64-class
+   '<gw:mono:class> "scm_mono_defaults_int64_class"
+   '()
+   "")
+
+  (gw:wrap-function
+   ws
+   '%mono-defaults-uint64-class
+   '<gw:mono:class> "scm_mono_defaults_uint64_class"
+   '()
+   "")
+
+  (gw:wrap-function
+   ws
+   '%mono-defaults-object-class
+   '<gw:mono:class> "scm_mono_defaults_object_class"
+   '()
+   "")
+
+  (gw:wrap-function
+   ws
+   '%mono-defaults-single-class
+   '<gw:mono:class> "scm_mono_defaults_single_class"
+   '()
+   "")
+
+  (gw:wrap-function
+   ws
+   '%mono-defaults-double-class
+   '<gw:mono:class> "scm_mono_defaults_double_class"
+   '()
+   "")
+
+  (gw:wrap-function
+   ws
+   '%mono-defaults-string-class
+   '<gw:mono:class> "scm_mono_defaults_string_class"
+   '()
+   "")
+
+  (gw:wrap-function
+   ws
+   '%mono-defaults-multicast-delegate-class
+   '<gw:mono:class> "scm_mono_defaults_multicast_delegate_class"
+   '()
+   "")
+
+  (gw:wrap-function
+   ws
+   '%mono-string-get-chars
+   '(<gw:mchars> callee-owned const) "scm_mono_string_get_chars"
+   '((<gw:scm> string))
+   "")
+
+  (gw:wrap-function
+   ws
+   '%mono-object-unbox
+   '<gw:scm> "scm_mono_object_unbox"
+   '((<gw:scm> object))
+   "")
+
+  (gw:wrap-function
+   ws
+   '%mono-delegate-create
+   '<gw:scm> "scm_mono_create_delegate"
+   '((<gw:mono:domain> domain) (<gw:mono:type> type) (<gw:scm> target) (<gw:scm> func) (<gw:scm> closure))
+   "")
+
+  (gw:wrap-function
+   ws
+   '%mono-delegate-invoke
+   '<gw:scm> "scm_mono_invoke_delegate"
+   '((<gw:scm> delegate) (<gw:scm> vector))
+   "")
+
+  (gw:wrap-function
+   ws
+   '%mono-get-delegate-invoke
+   '<gw:mono:method> "mono_get_delegate_invoke"
+   '((<gw:mono:class> klass))
+   "")
+
+  (gw:wrap-function
+   ws
+   '%boot-mono
+   '<gw:mono:assembly> "scm_boot_mono"
+   '(((<gw:mchars> caller-owned const) filename))
+   "")
+
+  ws)
+
+(gw:generate-wrapset "guile-mono")
