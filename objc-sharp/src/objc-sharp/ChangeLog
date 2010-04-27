@@ -1,0 +1,12 @@
+2006-05-30  Geoff Norton  <gnorton@customerdna.com>
+	
+	* Bridge.cs: Dont box the return values that are already boxed.
+
+2006-05-17  Geoff Norton  <gnorton@customerdna.com>
+
+	* Bridge.cs:
+	  Mach.cs:  Work around a mcs compiler bug (#78422)
+
+2005-10-25  Geoff Norton  <gnorton@customerdna.com>
+
+	* Initial import

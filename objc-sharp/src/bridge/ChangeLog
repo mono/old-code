@@ -1,0 +1,7 @@
+2006-05-21  Eric Butler <eric@extremeboredom.net>
+
+	* src/bridge/ObjCSharpBridge.m: Assign "kls" to the exception's class
+
+2005-10-25  Geoff Norton  <gnorton@customerdna.com>
+
+	* Initial import
