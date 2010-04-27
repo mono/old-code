@@ -1,0 +1,44 @@
+Wahid - A Spreadsheet engine
+----------------------------
+
+	This is spreadsheet engine, initially without a GUI.
+
+	Ideally a number of user interfaces can be built on top of the
+	spreadsheet engine: 
+
+	    * Silverlight (like Google's spreadsheets)
+
+	    * gui.cs (the most powerful and awesome RIA in the world)
+
+	    * command-line, to compute, and convert data.
+
+	    * Gnome (worth doing?)
+
+OOXML
+-----
+
+	Am drawing inspiration form the OOXML specification on how to
+	structure the internals of this engine, but the idea is to
+	have multiple importers and expoters.
+
+	Currently the code does not even unzip archives, it expects a
+	directory called "test" to contain an unzipped OOXML file (I
+	used the gnumeric test files for this).
+
+	The Zip support is split from the loader as in Silverlight we
+	would want to use the Downloader class to unzip the files for
+	us, while on the desktop we can use SharpZipLib. 
+
+Models and Views
+----------------
+
+	The engine will communicate with the views through events that
+	the views connect to.  
+
+	In addition to the usual support for views for multiple
+	spreadsheets, this will be useful to have views and
+	controllers that can be connected on the backend to a server.
+	This would allow multiple users to edit the spreadsheet
+	simultaneously. 
+
+	
