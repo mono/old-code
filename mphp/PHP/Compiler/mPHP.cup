@@ -1,0 +1,907 @@
+using TUVienna.CS_CUP.Runtime;
+using System;
+using System.Collections;
+using PHP;
+using PHP.Compiler;
+
+/* Preliminaries to set up and use the scanner.  */
+parser code {:
+	public override void syntax_error(Symbol currentSymbol) {
+	}
+	public override void unrecovered_syntax_error(Symbol currentSymbol) {
+		Token currentToken = (Token)currentSymbol;
+		Report.Error(200, currentToken.Text(), currentToken.Line(), currentToken.Column());
+	}
+:}
+scan with {:
+	Token t = (Token)getScanner().next_token();
+	// Ignore irrelevant tokens as these won't be translated
+	switch (t.TokenName()) {
+		case "T_OPEN_TAG":
+		case "T_OPEN_TAG_WITH_ECHO":
+		case "T_CLOSE_TAG":
+		case "T_COMMENT":
+		case "T_DOC_COMMENT":
+		case "T_WHITESPACE":
+		case "T_INLINE_HTML": return scan();
+		default: return t;
+	}
+:}
+
+
+/* Additional terminals due to rewriting from Bison to C#Cup */
+terminal string				SEMICOLON, SQUARE_BRACE_CLOSE, BRACE_OPEN, BRACE_CLOSE, DOLLAR, CURLY_BRACE_OPEN, CURLY_BRACE_CLOSE, DOUBLE_QUOTES, BACK_QUOTE, SINGLE_QUOTE;
+/* Terminals (tokens returned by the scanner). */
+terminal string				T_USING, T_INCLUDE, T_INCLUDE_ONCE, T_EVAL, T_REQUIRE, T_REQUIRE_ONCE;
+terminal string				COMMA;
+terminal string				T_LOGICAL_OR;
+terminal string				T_LOGICAL_XOR;
+terminal string				T_LOGICAL_AND;
+terminal string				T_PRINT;
+terminal string				EQUALS, T_PLUS_EQUAL, T_MINUS_EQUAL, T_MUL_EQUAL, T_DIV_EQUAL, T_CONCAT_EQUAL, T_MOD_EQUAL, T_AND_EQUAL, T_OR_EQUAL, T_XOR_EQUAL, T_SL_EQUAL, T_SR_EQUAL;
+terminal string				QUESTION, COLON;
+terminal string				T_BOOLEAN_OR;
+terminal string				T_BOOLEAN_AND;
+terminal string				OR;
+terminal string				XOR;
+terminal string				AND;
+terminal string				T_IS_EQUAL, T_IS_NOT_EQUAL, T_IS_IDENTICAL, T_IS_NOT_IDENTICAL;
+terminal string				LOWER, T_IS_LOWER_OR_EQUAL, GREATER, T_IS_GREATER_OR_EQUAL;
+terminal string				T_SL, T_SR;
+terminal string				PLUS, MINUS, CONCAT;
+terminal string				TIMES, DIV, MOD;
+terminal string				BOOLEAN_NOT;
+terminal string				T_INSTANCEOF;
+terminal string				NOT, T_INC, T_DEC, T_INT_CAST, T_DOUBLE_CAST, T_STRING_CAST, T_ARRAY_CAST, T_OBJECT_CAST, T_BOOL_CAST, T_UNSET_CAST, AT;
+terminal string				SQUARE_BRACE_OPEN;
+terminal string				T_NEW, T_CLONE;
+terminal string				T_EXIT;
+terminal string				T_IF;
+terminal string				T_ELSEIF;
+terminal string				T_ELSE;
+terminal string				T_ENDIF;
+terminal string				T_LNUMBER;
+terminal string				T_DNUMBER;
+terminal string				T_STRING;
+terminal string				T_STRING_VARNAME;
+terminal string				T_VARIABLE;
+terminal string				T_NUM_STRING;
+terminal string				T_INLINE_HTML;
+terminal string				T_CHARACTER;
+terminal string				T_BAD_CHARACTER;
+terminal string				T_ENCAPSED_AND_WHITESPACE;
+terminal string				T_CONSTANT_ENCAPSED_STRING;
+terminal string				T_ECHO;
+terminal string				T_DO;
+terminal string				T_WHILE;
+terminal string				T_ENDWHILE;
+terminal string				T_FOR;
+terminal string				T_ENDFOR;
+terminal string				T_FOREACH;
+terminal string				T_ENDFOREACH;
+terminal string				T_DECLARE;
+terminal string				T_ENDDECLARE;
+terminal string				T_AS;
+terminal string				T_SWITCH;
+terminal string				T_ENDSWITCH;
+terminal string				T_CASE;
+terminal string				T_DEFAULT;
+terminal string				T_BREAK;
+terminal string				T_CONTINUE;
+terminal string				T_FUNCTION;
+terminal string				T_CONST;
+terminal string				T_RETURN;
+terminal string				T_TRY;
+terminal string				T_CATCH;
+terminal string				T_THROW;
+terminal string				T_USE;
+terminal string				T_GLOBAL;
+terminal string				T_STATIC, T_ABSTRACT, T_FINAL, T_PRIVATE, T_PROTECTED, T_PUBLIC;
+terminal string				T_VAR;
+terminal string				T_UNSET;
+terminal string				T_ISSET;
+terminal string				T_EMPTY;
+terminal string				T_CLASS;
+terminal string				T_INTERFACE;
+terminal string				T_EXTENDS;
+terminal string				T_IMPLEMENTS;
+terminal string				T_OBJECT_OPERATOR;
+terminal string				T_DOUBLE_ARROW;
+terminal string				T_LIST;
+terminal string				T_ARRAY;
+terminal string				T_CLASS_C;
+terminal string				T_METHOD_C;
+terminal string				T_FUNC_C;
+terminal string				T_LINE;
+terminal string				T_FILE;
+terminal string				T_COMMENT;
+terminal string				T_DOC_COMMENT;
+terminal string				T_OPEN_TAG;
+terminal string				T_OPEN_TAG_WITH_ECHO;
+terminal string				T_CLOSE_TAG;
+terminal string				T_WHITESPACE;
+terminal string				T_START_HEREDOC;
+terminal string				T_END_HEREDOC;
+terminal string				T_DOLLAR_OPEN_CURLY_BRACES;
+terminal string				T_CURLY_OPEN;
+terminal string				T_PAAMAYIM_NEKUDOTAYIM;
+
+
+/* Nonterminals */
+nonterminal AST				begin;
+nonterminal Statement		top_statement, using_statement, inner_statement, statement, unticked_statement, function_declaration_statement, 
+							class_declaration_statement, unticked_function_declaration_statement, unticked_class_declaration_statement, 
+							for_statement, foreach_statement, while_statement, else_single, new_else_single, 
+							class_statement, class_variable_declaration, class_constant_declaration;
+nonterminal Expression		unset_variable, foreach_optional_arg, foreach_variable, global_var, expr_without_variable, function_call, 
+							exit_expr, common_scalar, static_scalar, static_class_constant, scalar, expr, r_variable, w_variable, 
+							rw_variable, variable, variable_property, variable_without_objects, static_member, 
+							base_variable_with_function_calls, base_variable, reference_variable, compound_variable, dim_offset, 
+							object_property, object_dim_list, variable_name, encaps_var, encaps_var_offset, class_constant;
+nonterminal StatementList	top_statement_list, inner_statement_list, class_statement_list, method_body;
+nonterminal ExpressionList	unset_variables, function_call_parameter_list, 
+							non_empty_function_call_parameter_list, global_var_list, static_var_list, echo_expr_list, 
+							for_expr, non_empty_for_expr, ctor_arguments, variable_properties, method_or_not;
+nonterminal ArrayList		additional_catches, non_empty_additional_catches, interface_extends_list, implements_list, interface_list, 
+							switch_case_list, case_list, elseif_list, new_elseif_list, parameter_list, non_empty_parameter_list, 
+							variable_modifiers, method_modifiers, non_empty_member_modifiers, static_array_pair_list, 
+							non_empty_static_array_pair_list, array_pair_list, non_empty_array_pair_list, encaps_list;
+nonterminal string			name_space, extends_from, optional_class_type, fully_qualified_class_name, class_name_reference;
+nonterminal	object			additional_catch, is_reference, class_entry_type, interface_entry, case_separator, member_modifier, possible_comma;
+
+nonterminal					use_filename, declare_statement, declare_list, dynamic_class_name_reference, dynamic_class_name_variable_properties, 
+							dynamic_class_name_variable_property, simple_indirect_reference, assignment_list, assignment_list_element, 
+							internal_functions_in_yacc, isset_variables;
+							
+
+/* Precedences */
+precedence left T_USING, T_INCLUDE, T_INCLUDE_ONCE, T_EVAL, T_REQUIRE, T_REQUIRE_ONCE;
+precedence left COMMA;
+precedence left T_LOGICAL_OR;
+precedence left T_LOGICAL_XOR;
+precedence left T_LOGICAL_AND;
+precedence right T_PRINT;
+precedence left EQUALS, T_PLUS_EQUAL, T_MINUS_EQUAL, T_MUL_EQUAL, T_DIV_EQUAL, T_CONCAT_EQUAL, T_MOD_EQUAL, T_AND_EQUAL, T_OR_EQUAL, T_XOR_EQUAL, T_SL_EQUAL, T_SR_EQUAL;
+precedence left QUESTION, COLON;
+precedence left T_BOOLEAN_OR;
+precedence left T_BOOLEAN_AND;
+precedence left OR;
+precedence left XOR;
+precedence left AND;
+precedence nonassoc T_IS_EQUAL, T_IS_NOT_EQUAL, T_IS_IDENTICAL, T_IS_NOT_IDENTICAL;
+precedence nonassoc LOWER, T_IS_LOWER_OR_EQUAL, GREATER, T_IS_GREATER_OR_EQUAL;
+precedence left T_SL, T_SR;
+precedence left PLUS, MINUS, CONCAT;
+precedence left TIMES, DIV, MOD;
+precedence right BOOLEAN_NOT;
+precedence nonassoc T_INSTANCEOF;
+precedence right NOT, T_INC, T_DEC, T_INT_CAST, T_DOUBLE_CAST, T_STRING_CAST, T_ARRAY_CAST, T_OBJECT_CAST, T_BOOL_CAST, T_UNSET_CAST, AT;
+precedence right SQUARE_BRACE_OPEN;
+precedence nonassoc T_NEW, T_CLONE;
+precedence left T_ELSEIF;
+precedence left T_ELSE;
+precedence left T_ENDIF;
+precedence right T_STATIC, T_ABSTRACT, T_FINAL, T_PRIVATE, T_PROTECTED, T_PUBLIC;
+
+
+/* The grammar */
+begin ::=
+		top_statement_list:tsl {: RESULT = new AST(tsl); :}
+;
+
+top_statement_list ::=
+		top_statement_list:tsl top_statement:ts {: tsl.Add(ts); RESULT = tsl; :}
+	|	/* empty */ {: RESULT = new StatementList(); :}
+;
+
+top_statement ::=
+		statement:s {: RESULT = s; :}
+	|	function_declaration_statement:fds {: RESULT = fds; :}
+	|	class_declaration_statement:cds {: RESULT = cds; :}
+	|	using_statement:us {: RESULT = us; :}  // not in original PHP
+;
+
+using_statement ::=  // not in original PHP
+		T_USING:t fully_qualified_class_name:fqcn SEMICOLON {: RESULT = new USING(fqcn, null, tleft, tright); :}
+	|	T_USING:t T_STRING:s EQUALS fully_qualified_class_name:fqcn SEMICOLON {: RESULT = new USING(fqcn, s, tleft, tright); :}
+;
+
+inner_statement_list ::=
+		inner_statement_list:istl inner_statement:ist {: istl.Add(ist); RESULT = istl; :}
+	|	/* empty */ {: RESULT = new StatementList(); :}
+;
+
+inner_statement ::=
+		statement:s {: RESULT = s; :}
+	|	function_declaration_statement:fds {: RESULT = fds; :}
+	|	class_declaration_statement:cds {: RESULT = cds; :}
+;
+
+statement ::=
+		unticked_statement:us {: RESULT = us; :}
+;
+
+unticked_statement ::=
+		CURLY_BRACE_OPEN:c
+			inner_statement_list:istl
+		CURLY_BRACE_CLOSE {: RESULT = new BLOCK(istl, cleft, cright); :}
+	|	T_IF:t BRACE_OPEN expr:e BRACE_CLOSE
+			statement:st
+		elseif_list:el
+		else_single:es {: RESULT = new IF(e, st, el, es, tleft, tright); :}
+	|	T_IF:t BRACE_OPEN expr:e BRACE_CLOSE COLON
+			inner_statement_list:istl
+		new_elseif_list:nel
+		new_else_single:nes
+		T_ENDIF SEMICOLON {: RESULT = new IF(e, istl, nel, nes, tleft, tright); :}
+	|	T_WHILE:t BRACE_OPEN expr:e BRACE_CLOSE
+			while_statement:wst {: RESULT = new WHILE(e, wst, tleft, tright); :}
+	|	T_DO:t
+			statement:s
+		T_WHILE BRACE_OPEN expr:e BRACE_CLOSE {: RESULT = new DO(s, e, tleft, tright); :}
+	|	T_FOR:t BRACE_OPEN for_expr:fe1 SEMICOLON for_expr:fe2 SEMICOLON for_expr:fe3 BRACE_CLOSE
+			for_statement:fs {: RESULT = new FOR(fe1, fe2, fe3, fs, tleft, tright); :}
+	|	T_SWITCH:t BRACE_OPEN expr:e BRACE_CLOSE
+			switch_case_list:scl {: RESULT = new SWITCH(e, scl, tleft, tright); :}
+	|	T_BREAK:t SEMICOLON {: RESULT = new BREAK(null, tleft, tright); :}
+	|	T_BREAK:t expr:e SEMICOLON {: RESULT = new BREAK(e, tleft, tright); :}
+	|	T_CONTINUE:t SEMICOLON {: RESULT = new CONTINUE(null, tleft, tright); :}
+	|	T_CONTINUE:t expr:e SEMICOLON {: RESULT = new CONTINUE(e, tleft, tright); :}
+	|	T_RETURN:t SEMICOLON {: RESULT = new RETURN(null, tleft, tright); :}
+	|	T_RETURN:t expr_without_variable:ewv SEMICOLON {: RESULT = new RETURN(ewv, tleft, tright); :}
+	|	T_RETURN:t variable:v SEMICOLON {: RESULT = new RETURN(v, tleft, tright); :}
+	|	T_GLOBAL:t global_var_list:gvl SEMICOLON {: RESULT = new GLOBAL(gvl, tleft, tright); :}
+	|	T_STATIC:t static_var_list:svl SEMICOLON {: RESULT = new STATIC_DECLARATION((ExpressionList)svl, tleft, tright); :}
+	|	T_ECHO:t echo_expr_list:eel SEMICOLON {: RESULT = new ECHO(eel, tleft, tright); :}
+	|	T_INLINE_HTML {: /* This case will never be entered as HTML code is filtered by the parser */ :}
+	|	expr:e SEMICOLON {: RESULT = new EXPRESSION_AS_STATEMENT(e, eleft, eright); :}
+	|	T_USE:e use_filename SEMICOLON {: Report.Error(900, e); :}
+	|	T_UNSET:t BRACE_OPEN unset_variables:uvs BRACE_CLOSE SEMICOLON {: RESULT = new UNSET(uvs, tleft, tright); :}
+	|	T_FOREACH:t BRACE_OPEN variable:v T_AS foreach_variable:fv foreach_optional_arg:foa BRACE_CLOSE
+			foreach_statement:fst
+		{: Expression array = v; Expression key = (foa == null) ? null : fv; Expression value = (foa == null) ? fv : foa; RESULT = new FOREACH(array, key, value, fst, tleft, tright); :}
+	|	T_FOREACH:t BRACE_OPEN expr_without_variable:ewv T_AS w_variable:wv foreach_optional_arg:foa BRACE_CLOSE
+			foreach_statement:fst
+		{: Expression array = ewv; Expression key = (foa == null) ? null : wv; Expression value = (foa == null) ? wv : foa; RESULT = new FOREACH(array, key, value, fst, tleft, tright); :}
+	|	T_DECLARE:e BRACE_OPEN declare_list BRACE_CLOSE declare_statement {: Report.Error(900, e); :}
+	|	SEMICOLON {: RESULT = null; :} /* empty statement */
+	|	T_TRY:t1 CURLY_BRACE_OPEN
+			inner_statement_list:istl1
+		CURLY_BRACE_CLOSE
+		T_CATCH:t2 BRACE_OPEN fully_qualified_class_name:fqcn T_VARIABLE:v BRACE_CLOSE CURLY_BRACE_OPEN
+			inner_statement_list:istl2
+		CURLY_BRACE_CLOSE
+		additional_catches:ac {: ac.Add(new CATCH(fqcn, v, istl2, t2left, t2right)); RESULT = new TRY(istl1, ac, t1left, t1right); :}
+	|	T_THROW:t expr:e SEMICOLON {: RESULT = new THROW(e, tleft, tright); :}
+;
+
+additional_catches ::=
+		non_empty_additional_catches:neac {: RESULT = neac; :}
+	|	/* empty */ {: RESULT = new ArrayList(); :}
+;
+
+non_empty_additional_catches ::=
+		additional_catch:ac {: ArrayList al = new ArrayList(); al.Add(ac); RESULT = al; :}
+	|	non_empty_additional_catches:neac additional_catch:ac {: neac.Add(ac); RESULT = neac; :}
+;
+		
+additional_catch ::=
+		T_CATCH:t BRACE_OPEN fully_qualified_class_name:fqcn T_VARIABLE:v BRACE_CLOSE CURLY_BRACE_OPEN
+			inner_statement_list:istl
+		CURLY_BRACE_CLOSE {: RESULT = new CATCH(fqcn, v, istl, tleft, tright); :}
+;
+
+unset_variables ::=
+		unset_variable:uv {: RESULT = new ExpressionList(uv); :}
+	|	unset_variables:uvs COMMA unset_variable:uv {: uvs.Add(uv); RESULT = uvs; :}
+;
+
+unset_variable ::=
+		variable:v {: RESULT = v; :}
+;
+
+use_filename ::=
+		T_CONSTANT_ENCAPSED_STRING
+	|	BRACE_OPEN T_CONSTANT_ENCAPSED_STRING BRACE_CLOSE
+;
+
+function_declaration_statement ::=
+		unticked_function_declaration_statement:ufds {: RESULT = ufds; :}
+;
+
+class_declaration_statement ::=
+		unticked_class_declaration_statement:ucds {: RESULT = ucds; :}
+;
+
+is_reference ::=
+		/* empty */ {: RESULT = false; :}
+	|	AND {: RESULT = true; :}
+;
+
+unticked_function_declaration_statement ::=
+		T_FUNCTION:t is_reference:ir T_STRING:s BRACE_OPEN parameter_list:pl BRACE_CLOSE CURLY_BRACE_OPEN
+			inner_statement_list:istl
+		CURLY_BRACE_CLOSE {: RESULT = new FUNCTION_DECLARATION(new ArrayList(), (bool)ir, s, pl, istl, tleft, tright); :}
+;
+
+unticked_class_declaration_statement ::=
+		class_entry_type:cet T_STRING:s extends_from:ef implements_list:il CURLY_BRACE_OPEN
+			class_statement_list:cstl
+		CURLY_BRACE_CLOSE
+		{: RESULT = new CLASS_DECLARATION((int)cet, s, ef, il, cstl, cetleft, cetright); :}
+	|	interface_entry:ie T_STRING:s interface_extends_list:iel CURLY_BRACE_OPEN
+			class_statement_list:cstl
+		CURLY_BRACE_CLOSE
+		{: RESULT = new INTERFACE_DECLARATION(s, iel, cstl, ieleft, ieright); :}
+;
+
+class_entry_type ::=
+		T_CLASS {: RESULT = PHP.Compiler.Modifiers.PUBLIC; :}
+	|	T_ABSTRACT T_CLASS {: RESULT = PHP.Compiler.Modifiers.ABSTRACT; :}
+	|	T_FINAL T_CLASS {: RESULT = PHP.Compiler.Modifiers.FINAL; :}
+;
+
+extends_from ::=
+		/* empty */ {: RESULT = null; :}
+	|	T_EXTENDS fully_qualified_class_name:fqcn {: RESULT = fqcn; :}
+;
+
+interface_entry ::=
+		T_INTERFACE
+;
+
+interface_extends_list ::=
+		/* empty */ {: RESULT = new ArrayList(); :}
+	|	T_EXTENDS interface_list:il {: RESULT = il; :}
+;
+
+implements_list ::=
+		/* empty */ {: RESULT = new ArrayList(); :}
+	|	T_IMPLEMENTS interface_list:il {: RESULT = il; :}
+;
+
+interface_list ::=
+		fully_qualified_class_name:fqcn {: ArrayList il = new ArrayList(); il.Add(fqcn); RESULT = il; :}
+	|	interface_list:il COMMA fully_qualified_class_name:fqcn {: il.Add(fqcn); RESULT = il; :}
+;
+
+foreach_optional_arg ::=
+		/* empty */ {: RESULT = null; :}
+	|	T_DOUBLE_ARROW foreach_variable:fv {: RESULT = fv; :}
+;
+
+foreach_variable ::=
+		w_variable:wv {: RESULT = wv; :}
+	|	AND:t w_variable:wv {: RESULT = new REFERENCE(wv, tleft, tright); :}
+;
+
+for_statement ::=
+		statement:st {: RESULT = st; :}
+	|	COLON inner_statement_list:istl T_ENDFOR SEMICOLON {: RESULT = istl; :}
+;
+
+foreach_statement ::=
+		statement:st {: RESULT = st; :}
+	|	COLON inner_statement_list:istl T_ENDFOREACH SEMICOLON {: RESULT = istl; :}
+;
+
+declare_statement ::=
+		statement
+	|	COLON inner_statement_list T_ENDDECLARE SEMICOLON
+;
+
+declare_list ::=
+		T_STRING EQUALS static_scalar
+	|	declare_list COMMA T_STRING EQUALS static_scalar
+;
+
+switch_case_list ::=
+		CURLY_BRACE_OPEN case_list:cs CURLY_BRACE_CLOSE {: RESULT = cs; :}
+	|	CURLY_BRACE_OPEN SEMICOLON case_list:cs CURLY_BRACE_CLOSE {: RESULT = cs; :}
+	|	COLON case_list:cs T_ENDSWITCH SEMICOLON {: RESULT = cs; :}
+	|	COLON SEMICOLON case_list:cs T_ENDSWITCH SEMICOLON {: RESULT = cs; :}
+;
+
+case_list ::=
+		/* empty */ {: RESULT = new ArrayList(); :}
+	|	case_list:cl T_CASE:t expr:e case_separator:cs inner_statement_list:istl {: cl.Add(new CASE(e, istl, tleft, tright)); RESULT = cl; :}
+	|	case_list:cl T_DEFAULT:t case_separator:cs inner_statement_list:istl {: cl.Add(new DEFAULT(istl, tleft, tright)); RESULT = cl; :}
+;
+
+case_separator ::=
+		COLON
+	|	SEMICOLON
+;
+
+while_statement ::=
+		statement:s {: RESULT = s; :}
+	|	COLON inner_statement_list:istl T_ENDWHILE SEMICOLON {: RESULT = istl; :}
+;
+
+elseif_list ::=
+		/* empty */ {: RESULT = new ArrayList(); :}
+	|	elseif_list:el T_ELSEIF:t BRACE_OPEN expr:e BRACE_CLOSE statement:st {: el.Add(new ELSEIF(e, st, tleft, tright)); RESULT = el; :}
+;
+
+new_elseif_list ::=
+		/* empty */  {: RESULT = new ArrayList(); :}
+	|	new_elseif_list:nel T_ELSEIF:t BRACE_OPEN expr:e BRACE_CLOSE COLON inner_statement_list:istl {: nel.Add(new ELSEIF(e, istl, tleft, tright)); RESULT = nel; :}
+;
+
+else_single ::=
+		/* empty */ {: RESULT = null; :}
+	|	T_ELSE statement:st {: RESULT = st; :}
+;
+
+new_else_single ::=
+		/* empty */ {: RESULT = null; :}
+	|	T_ELSE COLON inner_statement_list:istl {: RESULT = istl; :}
+;
+
+parameter_list ::=
+		non_empty_parameter_list:nepl {: RESULT = nepl; :}
+	|	/* empty */ {: RESULT = new ArrayList(); :}
+;
+
+non_empty_parameter_list ::=
+		optional_class_type:oct T_VARIABLE:v {: ArrayList nepl = new ArrayList(); nepl.Add(new PARAMETER_DECLARATION(oct, false, v, null, octleft, octright)); RESULT = nepl; :}
+	|	optional_class_type:oct AND T_VARIABLE:v {: ArrayList nepl = new ArrayList(); nepl.Add(new PARAMETER_DECLARATION(oct, true, v, null, octleft, octright)); RESULT = nepl; :}
+	|	optional_class_type:oct AND T_VARIABLE:v EQUALS static_scalar:ss {: ArrayList nepl = new ArrayList(); nepl.Add(new PARAMETER_DECLARATION(oct, true, v, ss, octleft, octright)); RESULT = nepl; :}
+	|	optional_class_type:oct T_VARIABLE:v EQUALS static_scalar:ss {: ArrayList nepl = new ArrayList(); nepl.Add(new PARAMETER_DECLARATION(oct, false, v, ss, octleft, octright)); RESULT = nepl; :}
+	|	non_empty_parameter_list:nepl COMMA optional_class_type:oct T_VARIABLE:v {: nepl.Add(new PARAMETER_DECLARATION(oct, false, v, null, octleft, octright)); RESULT = nepl; :}
+	|	non_empty_parameter_list:nepl COMMA optional_class_type:oct AND T_VARIABLE:v {: nepl.Add(new PARAMETER_DECLARATION(oct, true, v, null, octleft, octright)); RESULT = nepl; :}
+	|	non_empty_parameter_list:nepl COMMA optional_class_type:oct AND T_VARIABLE:v EQUALS static_scalar:ss {: nepl.Add(new PARAMETER_DECLARATION(oct, true, v, ss, octleft, octright)); RESULT = nepl; :}
+	|	non_empty_parameter_list:nepl COMMA optional_class_type:oct T_VARIABLE:v EQUALS static_scalar:ss {: nepl.Add(new PARAMETER_DECLARATION(oct, false, v, ss, octleft, octright)); RESULT = nepl; :}
+;
+
+optional_class_type ::=
+		/* empty */ {: RESULT = null; :}
+	|	T_STRING:s {: RESULT = s; :}
+;
+
+function_call_parameter_list ::=
+		non_empty_function_call_parameter_list:nefcpl {: RESULT = nefcpl; :}
+	|	/* empty */ {: RESULT = new ExpressionList(); :}
+;
+
+non_empty_function_call_parameter_list ::=
+		expr_without_variable:ewv {: RESULT = new ExpressionList(ewv); :}
+	|	variable:v {: RESULT = new ExpressionList(v); :}
+	|	AND:t w_variable:wv {: RESULT = new ExpressionList(new REFERENCE(wv, tleft, tright)); :}
+	|	non_empty_function_call_parameter_list:nefcpl COMMA expr_without_variable:ewv {: nefcpl.Add(ewv); RESULT = nefcpl; :}
+	|	non_empty_function_call_parameter_list:nefcpl COMMA variable:v {: nefcpl.Add(v); RESULT = nefcpl; :}
+	|	non_empty_function_call_parameter_list:nefcpl COMMA AND:t w_variable:wv {: nefcpl.Add(new REFERENCE(wv, tleft, tright)); RESULT = nefcpl; :}
+;
+
+global_var_list ::=
+		global_var_list:gvl COMMA global_var:gv {: gvl.Add(gv); RESULT = gvl; :}
+	|	global_var:gv {: RESULT = new ExpressionList(gv); :}
+;
+
+global_var ::=
+		T_VARIABLE:v {: RESULT = new VARIABLE(v, vleft, vright); :}
+	|	DOLLAR r_variable:rv {: RESULT = (VARIABLE)rv; :}
+	|	DOLLAR CURLY_BRACE_OPEN expr CURLY_BRACE_CLOSE {: Report.Error(900, "variable variables"); :}
+;
+
+static_var_list ::=
+		static_var_list:svl COMMA T_VARIABLE:v {: svl.Add(new VARIABLE(v, vleft, vright)); RESULT = svl; :}
+	|	static_var_list:svl COMMA T_VARIABLE:v EQUALS static_scalar:ss {: svl.Add(new EQUALS(new VARIABLE(v, vleft, vright), ss, vleft, vright)); RESULT = svl; :}
+	|	T_VARIABLE:v {: RESULT = new ExpressionList(new VARIABLE(v, vleft, vright)); :}
+	|	T_VARIABLE:v EQUALS static_scalar:ss {: RESULT = new ExpressionList(new EQUALS(new VARIABLE(v, vleft, vright), ss, vleft, vright)); :}
+;
+
+class_statement_list ::=
+		class_statement_list:cstl class_statement:cst {: cstl.Add(cst); RESULT = cstl; :}
+	|	/* empty */ {: RESULT = new StatementList(); :}
+;
+
+class_statement ::=
+		variable_modifiers:vm class_variable_declaration:cvd SEMICOLON {: ((CLASS_VARIABLE_DECLARATION)cvd).Modifiers = vm; RESULT = cvd; :}
+	|	class_constant_declaration:ccd SEMICOLON {: RESULT = ccd; :}
+	|	method_modifiers:mm T_FUNCTION:f is_reference:ir T_STRING:s BRACE_OPEN parameter_list:pl BRACE_CLOSE
+		method_body:mb {: RESULT = new FUNCTION_DECLARATION(mm, (bool)ir, s, pl, mb, (mmleft == 1) ? fleft : mmleft, (mmright == 1) ? fright : mmright); :}
+;
+
+method_body ::=
+		SEMICOLON /* abstract method */ {: RESULT = null; :}
+	|	CURLY_BRACE_OPEN inner_statement_list:istl CURLY_BRACE_CLOSE {: RESULT = istl; :}
+;
+
+variable_modifiers ::=
+		non_empty_member_modifiers:nemm {: RESULT = nemm; :}
+	|	T_VAR {: ArrayList vm = new ArrayList(); vm.Add(6); RESULT = vm; :}
+;
+
+method_modifiers ::=
+		/* empty */ {: RESULT = new ArrayList(); :}
+	|	non_empty_member_modifiers:nemm {: RESULT = nemm; :}
+;
+
+non_empty_member_modifiers ::=
+		member_modifier:mm {: ArrayList nemm = new ArrayList(); nemm.Add(mm); RESULT = nemm; :}
+	|	non_empty_member_modifiers:nemm member_modifier:mm {: nemm.Add(mm); RESULT = nemm; :}
+;
+
+member_modifier ::=
+		T_PUBLIC {: RESULT = PHP.Compiler.Modifiers.PUBLIC; :}
+	|	T_PROTECTED {: RESULT = PHP.Compiler.Modifiers.PROTECTED; :}
+	|	T_PRIVATE {: RESULT = PHP.Compiler.Modifiers.PRIVATE; :}
+	|	T_STATIC {: RESULT = PHP.Compiler.Modifiers.STATIC; :}
+	|	T_ABSTRACT:e {: RESULT = PHP.Compiler.Modifiers.ABSTRACT; :}
+	|	T_FINAL {: RESULT = PHP.Compiler.Modifiers.FINAL; :}
+;
+
+class_variable_declaration ::=
+		class_variable_declaration:cvd COMMA T_VARIABLE:v {: ((CLASS_VARIABLE_DECLARATION)cvd).Names.Add(v); ((CLASS_VARIABLE_DECLARATION)cvd).Values.Add(null); RESULT = cvd; :}
+	|	class_variable_declaration:cvd COMMA T_VARIABLE:v EQUALS static_scalar:ss {: ((CLASS_VARIABLE_DECLARATION)cvd).Names.Add(v); ((CLASS_VARIABLE_DECLARATION)cvd).Values.Add(ss); RESULT = cvd; :}
+	|	T_VARIABLE:v {: ArrayList names = new ArrayList(); names.Add(v); RESULT = new CLASS_VARIABLE_DECLARATION(new ArrayList(), names, new ExpressionList(null), vleft, vright); :}
+	|	T_VARIABLE:v EQUALS static_scalar:ss {: ArrayList names = new ArrayList(); names.Add(v); RESULT = new CLASS_VARIABLE_DECLARATION(new ArrayList(), names, new ExpressionList(ss), vleft, vright); :}
+;
+
+class_constant_declaration ::=
+		class_constant_declaration:ccd COMMA T_STRING:s EQUALS static_scalar:ss {: ((CLASS_VARIABLE_DECLARATION)ccd).Names.Add(s); ((CLASS_VARIABLE_DECLARATION)ccd).Values.Add(ss); RESULT = ccd; :}
+	|	T_CONST:t T_STRING:s EQUALS static_scalar:ss {: ArrayList modifiers = new ArrayList(); modifiers.Add(Modifiers.CONST); ArrayList names = new ArrayList(); names.Add(s); RESULT = new CLASS_VARIABLE_DECLARATION(modifiers, names, new ExpressionList(ss), tleft, tright); :}
+;
+
+echo_expr_list ::=
+		echo_expr_list:eel COMMA expr:e {: eel.Add(e); RESULT = eel; :}
+	|	expr:e  {: ExpressionList eel = new ExpressionList(); eel.Add(e); RESULT = eel; :}
+;
+
+for_expr ::=
+		/* empty */ {: RESULT = new ExpressionList(); :}
+	|	non_empty_for_expr:nefe {: RESULT = nefe; :}
+;
+
+non_empty_for_expr ::=
+		non_empty_for_expr:nefe COMMA expr:e {: nefe.Add(e); RESULT = nefe; :}
+	|	expr:e {: ExpressionList nefe = new ExpressionList(); nefe.Add(e); RESULT = nefe; :}
+;
+
+expr_without_variable ::=
+		T_LIST:e BRACE_OPEN assignment_list BRACE_CLOSE EQUALS expr {: Report.Error(900, e); :}
+	|	variable:v EQUALS expr:e {: RESULT = new EQUALS(v, e, vleft, vright); :}
+	|	variable:v1 EQUALS AND variable:v2 {: RESULT = new EQUALS(v1, new REFERENCE(v2, v1left, v1right), v1left, v1right); :}
+	|	variable:v EQUALS AND T_NEW:t class_name_reference:cnr ctor_arguments:ca {: Report.Warn(303); RESULT = new EQUALS(v, new NEW(cnr, ca, tleft, tright), vleft, vright); :}
+	|	T_NEW:t class_name_reference:cnr ctor_arguments:ca {: RESULT = new NEW(cnr, ca, tleft, tright); :}
+	|	T_CLONE:t expr:e {: RESULT = new CLONE(e, tleft, tright); :}
+	|	variable:v T_PLUS_EQUAL expr:e {: RESULT = new PLUS_EQUAL(v, e, vleft, vright); :}
+	|	variable:v T_MINUS_EQUAL expr:e {: RESULT = new MINUS_EQUAL(v, e, vleft, vright); :}
+	|	variable:v T_MUL_EQUAL expr:e {: RESULT = new MUL_EQUAL(v, e, vleft, vright); :}
+	|	variable:v T_DIV_EQUAL expr:e {: RESULT = new DIV_EQUAL(v, e, vleft, vright); :}
+	|	variable:v T_CONCAT_EQUAL expr:e {: RESULT = new CONCAT_EQUAL(v, e, vleft, vright); :}
+	|	variable:v T_MOD_EQUAL expr:e {: RESULT = new MOD_EQUAL(v, e, vleft, vright); :}
+	|	variable:v T_AND_EQUAL expr:e {: RESULT = new AND_EQUAL(v, e, vleft, vright); :}
+	|	variable:v T_OR_EQUAL expr:e {: RESULT = new OR_EQUAL(v, e, vleft, vright); :}
+	|	variable:v T_XOR_EQUAL expr:e {: RESULT = new XOR_EQUAL(v, e, vleft, vright); :}
+	|	variable:v T_SL_EQUAL expr:e {: RESULT = new SL_EQUAL(v, e, vleft, vright); :}
+	|	variable:v T_SR_EQUAL expr:e {: RESULT = new SR_EQUAL(v, e, vleft, vright); :}
+	|	rw_variable:rw T_INC {: RESULT = new INC(rw, 1, rwleft, rwright); :}
+	|	T_INC:t rw_variable:rw {: RESULT = new INC(rw, 0, tleft, tright); :}
+	|	rw_variable:rw T_DEC {: RESULT = new DEC(rw, 1, rwleft, rwright); :}
+	|	T_DEC:t rw_variable:rw {: RESULT = new DEC(rw, 0, tleft, tright); :}
+	|	expr:e1 T_BOOLEAN_OR expr:e2 {: RESULT = new BOOLEAN_OR(e1, e2, e1left, e1right); :}
+	|	expr:e1 T_BOOLEAN_AND expr:e2 {: RESULT = new BOOLEAN_AND(e1, e2, e1left, e1right); :}
+	|	expr:e1 T_LOGICAL_OR expr:e2 {: RESULT = new LOGICAL_OR(e1, e2, e1left, e1right); :}
+	|	expr:e1 T_LOGICAL_AND expr:e2 {: RESULT = new LOGICAL_AND(e1, e2, e1left, e1right); :}
+	|	expr:e1 T_LOGICAL_XOR expr:e2 {: RESULT = new LOGICAL_XOR(e1, e2, e1left, e1right); :}
+	|	expr:e1 OR expr:e2 {: RESULT = new OR(e1, e2, e1left, e1right); :}
+	|	expr:e1 AND expr:e2 {: RESULT = new AND(e1, e2, e1left, e1right); :}
+	|	expr:e1 XOR expr:e2 {: RESULT = new XOR(e1, e2, e1left, e1right); :}
+	|	expr:e1 CONCAT expr:e2 {: RESULT = new CONCAT(e1, e2, e1left, e1right); :}
+	|	expr:e1 PLUS expr:e2 {: RESULT = new PLUS(e1, e2, e1left, e1right); :}
+	|	expr:e1 MINUS expr:e2 {: RESULT = new MINUS(e1, e2, e1left, e1right); :}
+	|	expr:e1 TIMES expr:e2 {: RESULT = new TIMES(e1, e2, e1left, e1right); :}
+	|	expr:e1 DIV expr:e2 {: RESULT = new DIV(e1, e2, e1left, e1right); :}
+	|	expr:e1 MOD expr:e2 {: RESULT = new MOD(e1, e2, e1left, e1right); :}
+	| 	expr:e1 T_SL expr:e2 {: RESULT = new SL(e1, e2, e1left, e1right); :}
+	|	expr:e1 T_SR expr:e2 {: RESULT = new SR(e1, e2, e1left, e1right); :}
+	|	PLUS:t expr:e {: RESULT = new PLUS(new LNUMBER_SCALAR(0, tleft, tright), e, tleft, tright); :}
+	|	MINUS:t expr:e {: RESULT = new MINUS(new LNUMBER_SCALAR(0, tleft, tright), e, tleft, tright); :}
+	|	BOOLEAN_NOT:t expr:e {: RESULT = new BOOLEAN_NOT(e, tleft, tright); :}
+	|	NOT:t expr:e {: RESULT = new NOT(e, tleft, tright); :}
+	|	expr:e1 T_IS_IDENTICAL expr:e2 {: RESULT = new IS_IDENTICAL(e1, e2, e1left, e1right); :}
+	|	expr:e1 T_IS_NOT_IDENTICAL expr:e2 {: RESULT = new IS_NOT_IDENTICAL(e1, e2, e1left, e1right); :}
+	|	expr:e1 T_IS_EQUAL expr:e2 {: RESULT = new IS_EQUAL(e1, e2, e1left, e1right); :}
+	|	expr:e1 T_IS_NOT_EQUAL expr:e2 {: RESULT = new IS_NOT_EQUAL(e1, e2, e1left, e1right); :}
+	|	expr:e1 LOWER expr:e2 {: RESULT = new LOWER(e1, e2, e1left, e1right); :}
+	|	expr:e1 T_IS_LOWER_OR_EQUAL expr:e2 {: RESULT = new IS_LOWER_OR_EQUAL(e1, e2, e1left, e1right); :}
+	|	expr:e1 GREATER expr:e2 {: RESULT = new GREATER(e1, e2, e1left, e1right); :}
+	|	expr:e1 T_IS_GREATER_OR_EQUAL expr:e2 {: RESULT = new IS_GREATER_OR_EQUAL(e1, e2, e1left, e1right); :}
+	|	expr:e T_INSTANCEOF class_name_reference:cnr {: RESULT = new INSTANCEOF(e, cnr, eleft, eright); :}
+	|	BRACE_OPEN expr:e BRACE_CLOSE {: RESULT = e; :}
+	|	expr:e1 QUESTION expr:e2 COLON expr:e3 {: RESULT = new IF_EXPR(e1, e2, e3, e1left, e1right); :}
+	|	internal_functions_in_yacc
+	|	T_INT_CAST:t expr:e {: RESULT = new INT_CAST(e, tleft, tright); :}
+	|	T_DOUBLE_CAST:t expr:e {: RESULT = new DOUBLE_CAST(e, tleft, tright); :}
+	|	T_STRING_CAST:t expr:e {: RESULT = new STRING_CAST(e, tleft, tright); :}
+	|	T_ARRAY_CAST:t expr:e {: RESULT = new ARRAY_CAST(e, tleft, tright); :}
+	|	T_OBJECT_CAST:t expr:e {: RESULT = new OBJECT_CAST(e, tleft, tright); :}
+	|	T_BOOL_CAST:t expr:e {: RESULT = new BOOL_CAST(e, tleft, tright); :}
+	|	T_UNSET_CAST:e expr {: Report.Error(900, e); :}
+	|	T_EXIT:t exit_expr:ee {: RESULT = new EXIT(ee, tleft, tright); :}
+	|	AT:e expr {: Report.Error(900, e); :}
+	|	scalar:s {: RESULT = s; :}
+	|	T_ARRAY:t BRACE_OPEN array_pair_list:apl BRACE_CLOSE {: RESULT = new ARRAY(apl, tleft, tright); :}
+	|	BACK_QUOTE:e encaps_list BACK_QUOTE {: Report.Error(900, e); :}
+	|	T_PRINT:t expr:e {: RESULT = new PRINT(e, tleft, tright); :}
+;
+
+function_call ::=
+		T_STRING:s BRACE_OPEN function_call_parameter_list:fcpl BRACE_CLOSE {: RESULT = new FUNCTION_CALL(s, fcpl, sleft, sright); :}
+	|	fully_qualified_class_name:fqcn T_PAAMAYIM_NEKUDOTAYIM T_STRING:s BRACE_OPEN function_call_parameter_list:fcpl BRACE_CLOSE {: RESULT = new PAAMAYIM_NEKUDOTAYIM(fqcn, new FUNCTION_CALL(s, fcpl, fqcnleft, fqcnright), fqcnleft, fqcnright); :}
+	|	fully_qualified_class_name T_PAAMAYIM_NEKUDOTAYIM:e variable_without_objects BRACE_OPEN function_call_parameter_list BRACE_CLOSE {: Report.Error(900, "variable functions"); :}
+	|	variable_without_objects:vwo BRACE_OPEN function_call_parameter_list:fcpl BRACE_CLOSE {: Report.Error(900, "variable functions"); :}
+;
+
+fully_qualified_class_name ::=
+		T_STRING:s {: RESULT = s; :}
+	|	fully_qualified_class_name:fqcn T_PAAMAYIM_NEKUDOTAYIM T_STRING:s {: RESULT = fqcn + "::" + s; :}  // not in original PHP
+;
+
+class_name_reference ::=
+		/* T_STRING:s {: RESULT = s; :}
+	|	*/  fully_qualified_class_name:fqcn {: RESULT = fqcn; :}  // not in original PHP
+	|	dynamic_class_name_reference {: Report.Error(900, "dynamic class name references"); :}
+;
+
+dynamic_class_name_reference ::=
+		base_variable T_OBJECT_OPERATOR object_property dynamic_class_name_variable_properties
+	|	base_variable
+;
+
+dynamic_class_name_variable_properties ::=
+		dynamic_class_name_variable_properties dynamic_class_name_variable_property
+	|	/* empty */
+;
+
+dynamic_class_name_variable_property ::=
+		T_OBJECT_OPERATOR object_property
+;
+
+exit_expr ::=
+		/* empty */ {: RESULT = null; :}
+	|	BRACE_OPEN BRACE_CLOSE {: RESULT = null; :}
+	|	BRACE_OPEN expr:e BRACE_CLOSE {: RESULT = e; :}
+;
+
+ctor_arguments ::=
+		/* empty */ {: RESULT = new ExpressionList(); :}
+	|	BRACE_OPEN function_call_parameter_list:fcpl BRACE_CLOSE {: RESULT = fcpl; :}
+;
+
+common_scalar ::=
+		T_LNUMBER:l {: RESULT = new LNUMBER_SCALAR(System.Convert.ToInt32(l), lleft, lright); :}
+	|	T_DNUMBER:d {: RESULT = new DNUMBER_SCALAR(System.Convert.ToDouble(d), dleft, dright); :}
+	|	T_CONSTANT_ENCAPSED_STRING:ces {: RESULT = new STRING_SCALAR(ces, cesleft, cesright); :}
+	|	T_LINE:t {: RESULT = new MAGIC_CONSTANT(MAGIC_CONSTANT.LINE, tleft, tright); :}
+	|	T_FILE:t {: RESULT = new MAGIC_CONSTANT(MAGIC_CONSTANT.FILE, tleft, tright); :}
+	|	T_CLASS_C:t {: RESULT = new MAGIC_CONSTANT(MAGIC_CONSTANT.CLASS, tleft, tright); :}
+	|	T_METHOD_C:t {: RESULT = new MAGIC_CONSTANT(MAGIC_CONSTANT.METHOD, tleft, tright); :}
+	|	T_FUNC_C:t {: RESULT = new MAGIC_CONSTANT(MAGIC_CONSTANT.FUNCTION, tleft, tright); :}
+;
+
+static_scalar ::= /* compile-time evaluated scalars */
+		common_scalar:cs {: RESULT = cs; :}
+	|	T_STRING:s {: if (s == "true".ToLower() || s == "false".ToLower()) RESULT = new STRING_SCALAR(s, sleft, sright); else RESULT = new CONSTANT(s, sleft, sright); :}
+	|	PLUS:t static_scalar:ss {: RESULT = new PLUS(new LNUMBER_SCALAR(0, tleft, tright), ss, tleft, tright); :}
+	|	MINUS:t static_scalar:ss {: RESULT = new MINUS(new LNUMBER_SCALAR(0, tleft, tright), ss, tleft, tright); :}
+	|	T_ARRAY:t BRACE_OPEN static_array_pair_list:sapl BRACE_CLOSE {: RESULT = new ARRAY(sapl, tleft, tright); :}
+	|	static_class_constant:scc {: RESULT = scc; :}
+;
+
+static_class_constant ::=
+		T_STRING:s1 T_PAAMAYIM_NEKUDOTAYIM T_STRING:s2 {: RESULT = new PAAMAYIM_NEKUDOTAYIM(s1, new VARIABLE(s2, s1left, s1right), s1left, s1right); :}
+;
+
+scalar ::=
+		T_STRING:s {: if (s == "true".ToLower() || s == "false".ToLower()) RESULT = new STRING_SCALAR(s, sleft, sright); else RESULT = new CONSTANT(s, sleft, sright); :}
+	|	T_STRING_VARNAME:sv {: RESULT = new VARIABLE(sv, svleft, svright); :}
+	|	class_constant:cc {: RESULT = cc; :}
+	|	common_scalar:cs {: RESULT = cs; :}
+	|	DOUBLE_QUOTES:t encaps_list:el DOUBLE_QUOTES {: RESULT = new DOUBLE_QUOTES(el, tleft, tright); :}
+	|	SINGLE_QUOTE:t encaps_list:el SINGLE_QUOTE {: RESULT = new SINGLE_QUOTES(el, tleft, tright); :}
+	|	T_START_HEREDOC:t encaps_list:el T_END_HEREDOC {: RESULT = new HEREDOC(el, tleft, tright); :}
+;
+
+static_array_pair_list ::=
+		/* empty */ {: RESULT = new ArrayList(); :}
+	|	non_empty_static_array_pair_list:nesapl {: RESULT = nesapl; :}
+;
+
+possible_comma ::=
+		/* empty */
+	|	COMMA
+;
+
+non_empty_static_array_pair_list ::=
+		non_empty_static_array_pair_list:nesapl COMMA static_scalar:ss1 T_DOUBLE_ARROW static_scalar:ss2 {: nesapl.Add(new ARRAY_PAIR(ss1, ss2, ss1left, ss1right)); RESULT = nesapl; :}
+	|	non_empty_static_array_pair_list:nesapl COMMA static_scalar:ss {: nesapl.Add(new ARRAY_PAIR(null, ss, ssleft, ssright)); RESULT = nesapl; :}
+	|	static_scalar:ss1 T_DOUBLE_ARROW static_scalar:ss2 {: ArrayList nesapl = new ArrayList(); nesapl.Add(new ARRAY_PAIR(ss1, ss2, ss1left, ss1right)); RESULT = nesapl; :}
+	|	static_scalar:ss {: ArrayList nesapl = new ArrayList(); nesapl.Add(new ARRAY_PAIR(null, ss, ssleft, ssright)); RESULT = nesapl; :}
+;
+
+expr ::=
+		r_variable:r {: RESULT = r; :}
+	|	expr_without_variable:ewv {: RESULT = ewv; :}
+;
+
+r_variable ::=
+		variable:v {: RESULT = v; :}
+;
+
+w_variable ::=
+		variable:v {: RESULT = v; :}
+;
+
+rw_variable ::=
+		variable:v {: RESULT = v; :}
+;
+
+variable ::=
+		base_variable_with_function_calls:bvwfc T_OBJECT_OPERATOR object_property:op method_or_not:mon variable_properties:vps
+		{: Expression expr;
+		   if (mon == null) expr = (VARIABLE)op; else expr = new FUNCTION_CALL(((VARIABLE)op).Name, mon, opleft, opright);
+		   if (vps.Count() == 0) { RESULT = new OBJECT_OPERATOR(bvwfc, expr, bvwfcleft, bvwfcright); }
+		   else { for (int i = vps.Count() - 1; i > 0; i--) {
+		              OBJECT_OPERATOR curr = (OBJECT_OPERATOR)vps.Get(i);
+		              OBJECT_OPERATOR prev = (OBJECT_OPERATOR)vps.Get(i-1);
+		              curr.Expr1 = prev.Expr2;
+		              prev.Expr2 = curr;
+		          }
+		          ((OBJECT_OPERATOR)vps.Get(0)).Expr1 = expr;
+		          RESULT = new OBJECT_OPERATOR(bvwfc, vps.Get(0), bvwfcleft, bvwfcright); }
+		:}
+	|	base_variable_with_function_calls:bvwfc {: RESULT = bvwfc; :}
+;
+
+variable_properties ::=
+		variable_properties:vps variable_property:vp{: vps.Add(vp); RESULT = vps; :}
+	|	/* empty */ {: RESULT = new ExpressionList(); :}
+;
+
+variable_property ::=
+		T_OBJECT_OPERATOR:t object_property:op method_or_not:mon
+		{: Expression expr2; if (mon == null) expr2 = (VARIABLE)op; else expr2 = new FUNCTION_CALL(((VARIABLE)op).Name, mon, opleft, opright);
+		   RESULT = new OBJECT_OPERATOR(null, expr2, tleft, tright); :}
+;
+
+method_or_not ::=
+		BRACE_OPEN function_call_parameter_list:fcpl BRACE_CLOSE {: RESULT = fcpl; :}
+	|	/* empty */ {: RESULT = null; :}
+;
+
+variable_without_objects ::=
+		reference_variable:rv {: RESULT = rv; :}
+	|	simple_indirect_reference reference_variable {: Report.Error(900, "variable variables"); :}
+;
+
+static_member ::=
+		fully_qualified_class_name:fqcn T_PAAMAYIM_NEKUDOTAYIM variable_without_objects:vwo {: RESULT = new PAAMAYIM_NEKUDOTAYIM(fqcn, vwo, fqcnleft, fqcnright); :}
+;
+
+base_variable_with_function_calls ::=
+		base_variable:bv {: RESULT = bv; :}
+	|	function_call:fc {: RESULT = fc; :}
+;
+
+base_variable ::=
+		reference_variable:rv {: RESULT = rv; :}
+	|	simple_indirect_reference reference_variable {: Report.Error(900, "variable variables"); :}
+	|	static_member:sm {: RESULT = sm; :}
+;
+	
+reference_variable ::=
+		reference_variable:rv SQUARE_BRACE_OPEN:t dim_offset:dof SQUARE_BRACE_CLOSE {: ((VARIABLE)rv).Offset = new OFFSET(OFFSET.SQUARE, dof, tleft, tright); RESULT = rv; :}
+	|	reference_variable CURLY_BRACE_OPEN expr CURLY_BRACE_CLOSE {: Report.Error(900, "offset"); :}
+	|	compound_variable:cv {: RESULT = cv; :}
+;
+	
+compound_variable ::=
+		T_VARIABLE:v {: RESULT = new VARIABLE(v, vleft, vright); :}
+	|	DOLLAR CURLY_BRACE_OPEN expr CURLY_BRACE_CLOSE {: Report.Error(900, "variable variables"); :}
+;
+
+dim_offset ::=
+		/* empty */ {: RESULT = null; :}
+	|	expr:e {: RESULT = e; :}
+;
+
+object_property ::=
+		object_dim_list:odl {: RESULT = odl; :}
+	|	variable_without_objects:wvo {: RESULT = wvo; :}
+;
+
+object_dim_list ::=
+		object_dim_list:odl SQUARE_BRACE_OPEN:t dim_offset:dos SQUARE_BRACE_CLOSE {: ((VARIABLE)odl).Offset = new OFFSET(OFFSET.SQUARE, dos, tleft, tright); RESULT = odl; :}
+	|	object_dim_list CURLY_BRACE_OPEN expr CURLY_BRACE_CLOSE {: Report.Error(900, "offset"); :}
+	|	variable_name:vn {: RESULT = vn; :}
+;
+
+variable_name ::=
+		T_STRING:s {: RESULT = new VARIABLE(s, sleft, sright); :}
+	|	CURLY_BRACE_OPEN expr CURLY_BRACE_CLOSE {: Report.Error(900, "variable variables"); :}
+;
+
+simple_indirect_reference ::=
+		DOLLAR
+	|	simple_indirect_reference DOLLAR
+;
+
+assignment_list ::=
+		assignment_list COMMA assignment_list_element
+	|	assignment_list_element
+;
+
+assignment_list_element ::=
+		variable
+	|	T_LIST BRACE_OPEN assignment_list BRACE_CLOSE
+	|	/* empty */
+;
+
+array_pair_list ::=
+		/* empty */ {: RESULT = new ArrayList(); :}
+	|	non_empty_array_pair_list:neapl possible_comma {: RESULT = neapl; :}
+;
+
+non_empty_array_pair_list ::=
+		non_empty_array_pair_list:neapl COMMA expr:e1 T_DOUBLE_ARROW expr:e2 {: neapl.Add(new ARRAY_PAIR(e1, e2, e1left, e1right)); RESULT = neapl; :}
+	|	non_empty_array_pair_list:neapl COMMA expr:e {: neapl.Add(new ARRAY_PAIR(null, e, eleft, eright)); RESULT = neapl; :}
+	|	expr:e1 T_DOUBLE_ARROW expr:e2 {: ArrayList neapl = new ArrayList(); neapl.Add(new ARRAY_PAIR(e1, e2, e1left, e1right)); RESULT = neapl; :}
+	|	expr:e {: ArrayList neapl = new ArrayList(); neapl.Add(new ARRAY_PAIR(null, e, eleft, eright)); RESULT = neapl; :}
+	|	non_empty_array_pair_list:neapl COMMA expr:e T_DOUBLE_ARROW AND:t w_variable:wv {: neapl.Add(new ARRAY_PAIR(e, new REFERENCE(wv, tleft, tright), eleft, eright)); RESULT = neapl; :}
+	|	non_empty_array_pair_list:neapl COMMA AND:t w_variable:wv {: neapl.Add(new ARRAY_PAIR(null, new REFERENCE(wv, tleft, tright), tleft, tright)); RESULT = neapl; :}
+	|	expr:e T_DOUBLE_ARROW AND:t w_variable:wv {: ArrayList neapl = new ArrayList(); neapl.Add(new ARRAY_PAIR(e, new REFERENCE(wv, tleft, tright), eleft, eright)); RESULT = neapl; :}
+	|	AND:t w_variable:wv {: ArrayList neapl = new ArrayList(); neapl.Add(new ARRAY_PAIR(null, new REFERENCE(wv, tleft, tright), tleft, tright)); RESULT = neapl; :}
+;
+
+encaps_list ::=
+		encaps_list:el encaps_var:ev {: el.Add(ev); RESULT = el; :}
+	|	encaps_list:el T_STRING:s {: el.Add(s); RESULT = el; :}
+	|	encaps_list:el T_NUM_STRING:ns {: el.Add(ns); RESULT = el; :}
+	|	encaps_list:el T_ENCAPSED_AND_WHITESPACE:eaw {: el.Add(eaw); RESULT = el; :}
+	|	encaps_list:el T_CHARACTER:c {: el.Add(c); RESULT = el; :}
+	|	encaps_list:el T_BAD_CHARACTER:bc {: el.Add(bc); RESULT = el; :}
+	|	encaps_list:el SQUARE_BRACE_OPEN:sbo {: el.Add(sbo); RESULT = el; :}
+	|	encaps_list:el SQUARE_BRACE_CLOSE:sbc {: el.Add(sbc); RESULT = el; :}
+	|	encaps_list:el CURLY_BRACE_OPEN:cbo {: el.Add(cbo); RESULT = el; :}
+	|	encaps_list:el CURLY_BRACE_CLOSE:cbc {: el.Add(cbc); RESULT = el; :}
+	|	encaps_list:el T_OBJECT_OPERATOR:oo {: el.Add(oo); RESULT = el; :}
+	|	/* empty */ {: RESULT = new ArrayList(); :}
+
+;
+
+encaps_var ::=
+		T_VARIABLE:v {: RESULT = new VARIABLE(v, vleft, vright); :}
+	|	T_VARIABLE:v SQUARE_BRACE_OPEN:t encaps_var_offset:evo SQUARE_BRACE_CLOSE {: RESULT = new VARIABLE(v, new OFFSET(OFFSET.SQUARE, evo, tleft, tright), vleft, vright); :}
+	|	T_VARIABLE:v T_OBJECT_OPERATOR T_STRING:s {: RESULT = new OBJECT_OPERATOR(new VARIABLE(v, vleft, vright), new VARIABLE(s, sleft, sright), vleft, vright); :}
+	|	T_DOLLAR_OPEN_CURLY_BRACES expr CURLY_BRACE_CLOSE {: Report.Error(900, "variable variables"); :}
+	|	T_DOLLAR_OPEN_CURLY_BRACES T_STRING_VARNAME SQUARE_BRACE_OPEN expr SQUARE_BRACE_CLOSE CURLY_BRACE_CLOSE {: Report.Error(900, "variable variables"); :}
+	|	T_CURLY_OPEN variable CURLY_BRACE_CLOSE {: Report.Error(900, "variable variables"); :}
+;
+
+encaps_var_offset ::=
+		T_STRING:s {: RESULT = new STRING_SCALAR(s, sleft, sright); :}
+	|	T_NUM_STRING:ns {: RESULT = new STRING_SCALAR(ns, nsleft, nsright); :}
+	|	T_VARIABLE:v {: RESULT = new VARIABLE(v, vleft, vright); :}
+;
+
+internal_functions_in_yacc ::=
+		T_ISSET:e BRACE_OPEN isset_variables BRACE_CLOSE {: Report.Error(900, e); :}
+	|	T_EMPTY:e BRACE_OPEN variable BRACE_CLOSE {: Report.Error(900, e); :}
+	|	T_INCLUDE:e expr {: Report.Error(900, e); :}
+	|	T_INCLUDE_ONCE:e expr {: Report.Error(900, e); :}
+	|	T_EVAL:e BRACE_OPEN expr BRACE_CLOSE {: Report.Error(900, e); :}
+	|	T_REQUIRE:e expr {: Report.Error(900, e); :}
+	|	T_REQUIRE_ONCE:e expr {: Report.Error(900, e); :}
+;
+
+isset_variables ::=
+		variable
+	|	isset_variables COMMA variable
+;	
+
+class_constant ::=
+		fully_qualified_class_name:fqcn T_PAAMAYIM_NEKUDOTAYIM T_STRING:s {: RESULT = new PAAMAYIM_NEKUDOTAYIM(fqcn, new VARIABLE(s, sleft, sright), fqcnleft, fqcnright); :}
+;
