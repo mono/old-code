@@ -1,0 +1,382 @@
+<HTML><HEAD><TITLE>Linux PR: Mono Weekly News 10 Dec 2002
+</TITLE></HEAD>
+<body bgcolor="White" link="Blue" text="Black" VLINK="#551A8B" ALINK="Red">
+<center>
+<TABLE BORDER=0><TR><TD>
+<!-- 468x60 ad tag--> 
+<IFRAME SRC="http://ad.doubleclick.net/adi/N3029.Int/B1116933.3;sz=728x90;ord=1271270854?" WIDTH=730 HEIGHT=92 MARGINWIDTH=0 MARGINHEIGHT=0 HSPACE=0 VSPACE=0 FRAMEBORDER=0 SCROLLING=no BORDERCOLOR='#000000'>
+<SCRIPT language='JavaScript1.1' SRC="http://ad.doubleclick.net/adj/N3029.Int/B1116933.3;abr=!ie;sz=728x90;ord=1271270854?">
+</SCRIPT>
+<NOSCRIPT>
+<A HREF="http://ad.doubleclick.net/jump/N3029.Int/B1116933.3;abr=!ie4;abr=!ie5;sz=728x90;ord=1271270854?">
+<IMG SRC="http://ad.doubleclick.net/ad/N3029.Int/B1116933.3;abr=!ie4;abr=!ie5;sz=728x90;ord=1271270854?" BORDER=0 WIDTH=728 HEIGHT=90 ALT="Click Here">Click Here</A>
+</NOSCRIPT>
+</IFRAME><IMG SRC="http://linuxpr.com/RealMedia/ads/adstream_lx.cgi/intm/linux/www.linuxpr.com/1271270854/468x60-1/Veritas_Back_1c/RON.html/64396438636331313365316636613530?_RM_EMPTY_" WIDTH=1 HEIGHT=1>
+<!-- /468x60 ad tag -->
+ 
+</TD></TR></TABLE>
+<table border=0>
+<TR>
+    <TD>
+<img src="/pics/linuxpr_header.gif"  ALT="Linux PR Menu" USEMAP="#Map1" alt="" border="0">
+<MAP NAME="Map1">
+<AREA SHAPE="RECT" COORDS="0,00,240,40" HREF="/">
+<AREA SHAPE="RECT" COORDS="250,00,310,40" HREF="/join/">
+<AREA SHAPE="RECT" COORDS="325,00,400,40" HREF="/members/">
+<AREA SHAPE="RECT" COORDS="415,00,465,40" HREF="/faq/">
+<AREA SHAPE="RECT" COORDS="480,00,575,40" HREF="/search/">
+</MAP>
+    </TD>
+<TD>&nbsp;&nbsp;</TD>
+    <TD> <CENTER><B>Affiliate site of</B> <BR><A HREF="http://linuxtoday.com"><img src="http://linuxtoday.com/pics/lt.gif" border="0" width="90" height="53"></A></CENTER></TD>
+</TR>
+
+</tABLE>
+</center>
+<CENTER><HR WIDTH=50%></CENTER>
+<P> <TABLE BORDER=0 CELLPADDING=10> <TR><TD VALIGN=TOP WIDTH=500>
+<TABLE CELLSPACING="0" CELLPADDING="2" WIDTH="97%" BORDER="0" BGCOLOR="#000000"><TR><TD COLSPAN=2>
+<TABLE CELLSPACING="0" CELLPADDING="10" WIDTH="100%" BORDER="0" BGCOLOR="#FFFFFF">
+<TR><TD>
+<FONT SIZE="+3"><STRONG>
+Mono Weekly News 10 Dec 2002
+
+
+</FONT></STRONG><BR>
+
+&nbsp;<FONT COLOR=""><I>
+Dec 12th, 19:54 UTC
+</FONT></I><P>
+The Mono Project has grown a lot since its beginning, so much that it deserves to have its own weekly news letter and this is the first one.
+<P>
+  <p>
+  <b>Table of contents</b>
+  </p>
+  <p>
+    <ul><b>
+      <li>
+	  1.- Headlines
+	  <ul>
+	  <li>1.1. Mono 0.17 has been released.</li>
+  	  <li>1.2. Gtk# 0.6 has been released.</li>
+  	  <li>1.3. Visual Basic.NET doing WinForms and Gtk#.</li>
+  	  <li>1.4. Daniel Morgan's Oracle provider now in the CVS.</li>
+	 </ul>
+      </li>
+      <li>
+	2.- CVS Activity.
+      </li>
+      <li>
+      3.- Mailing List activity.
+      </li>
+    </b></ul>
+  </p>
+
+  <p>
+	<b>1. Headlines</b>
+  </p>
+  <p>
+	<b>1.1. Mono 0.17 has been released.</b>
+  </p>
+  <p>The Mono community has entered this week with a new realease of Mono 
+  available, that is the 0.17!. There are a lot of improvements and bugfixes. 
+  The compiler has increased it's speed, s390 work has been integrated, there 
+  are many new System.Date providers (the new ODBC, MS SQL Server and Sybase 
+  data providers can retrieve data via a data reader, fill a DataTable in a 
+  DataSet via a data adapter, etc...) and System.Web (ASP.NET) is really 
+  mature now, as a matter of fact it can be hosted in any webserver (a test 
+  server called xsp comes with Mono for first time).
+  </p>
+
+  <p>
+  For more information please read the 
+  <a href="http://www.go-mono.org/archive/mono-0.17">release notes</a> and 
+  visit the <a href="http://www.go-mono.org/download">download</a> page.
+  </p>
+
+  <p>
+  <b>1.2. Gtk# 0.6 has been released.</b>
+  </p>
+
+  <p>
+  GtkSharpers are in luck too!. As is being usual, the 
+  <a href="http://gtk-sharp.sourceforge.net">Gtk#</a> people have 
+  published a new version of their toolkit. The binding is fairly complete, 
+  but it is still largely unproven and not recommended for production work.  
+  The mayor changes have been the new NET-style struct null handlers, UTF8 
+  conversion of source files, the Gstreamer support and all the improvements 
+  and bugfixes amongst others. Here there are the 
+  <a href="http://lists.ximian.com/archives/public/gtk-sharp-list/2002-December/000651.html">release notes</a>.
+  </p>
+
+  <p>
+  <b>1.3. Visual Basic.NET doing WinForms and Gtk#.</b>
+
+  <p>
+  This week we have started to see how the we can run WinForms applications 
+  using Mono  Basic (Visual Basic.NET) or run Mono Basic (Visual 
+  Basic.NET) Gtk# applications. The Mono Basic compiler is up to 
+  speed and now it supports classes, modules, object creation and much more 
+  using the work already made for the Mono C# Compiler.
+  </p>
+
+  <p>
+  <b>1.4. Daniel Morgan's Oracle provider now in the CVS.</b>
+  </p>
+
+  <p>Finally, during the past weekend Daniel Morgan has commited this Oracle 
+  Provider to the CVS. So now we can build and run it in both Linux and Windows. 
+  It can connect to an oracle 8i database and do simple DML SQL, like, INSERT a 
+  row into a table... There are actually two parts to the oracle provider: the 
+  .NET assembly System.Data.OracleClient.dll and the unmanaged native c library. 
+  In order to use the provider, the user needs to have the Oracle client 
+  software installed that includes the OCI headers and libraries.
+  </p>
+
+  <p>
+  <b>2.- CVS Activity.</b>
+  </p>
+
+  <p>
+  Our mono hackers have been very bussy this days. Here are the statistics of the CVS.
+  </p>
+  
+  <p>
+  Authors: Total 32
+  </p>
+
+  <p>
+  Alejandro Sanchez, Alp Toker, Alyson Cogan, Atsushi Enomoto, 
+  Cesar Octavio Lopez Nataren, Daniel Morgan, Dennis Hayes, Dick Porter, 
+  Dietmar Maurer, Duncan Mak, Eduardo Garcia, Gaurav Vaish, Gonzalo Paniagua, 
+  Igho Nikoro, Jackson Harper, Jaime Anguiano, Jonathan Pryor, Martin Baulig, 
+  Martin Willemoes Hansen, Miguel de Icaza, Mike Kestner, Nick Drochak, 
+  Paolo Molaro, Rachel Hestilow, Radek Doulik, Ravi Pratap, Sebastien Pouliot, 
+  Tim Coleman, Tim Haynes, Vicky Lefevre Tames, and Ville Palo.
+  </p>
+
+  <p>
+  <table border=0 width="100%">
+    <tr>
+      <td>
+      <b>Developer</b>
+      </td>
+      <td>
+      <b>Commits</b>
+      </td>
+     </tr>
+     </tr>
+      <td>
+      Daniel Morgan
+      </td>
+      <td>
+      18
+      </td>
+    </tr>
+    <tr>
+     <td>
+      Dennis Hayes
+     </td>
+     <td>
+     17
+     </td>
+    </tr>
+    <tr>
+     <td>
+     Duncan Mak
+     </td>
+     <td>
+     15
+     </td>
+   </tr>
+   <tr>
+     <td>
+     Gonzalo Paniagua
+     </td>
+     <td>
+     39
+     </td>
+   </tr>
+   <tr>
+     <td>
+     Jackson Harper
+     </td>
+     <td>
+     20
+     </td>
+   </tr>
+   <tr>
+     <td>
+     Martin Baulig
+     </td>
+     <td>
+     40
+     </td>
+   </tr>
+   <tr>
+     <td>
+     Miguel de Icaza
+     </td>
+     <td>
+     53
+     </td>
+   </tr>
+   <tr>
+     <td>
+     Rachel Hestilow
+     </td>
+     <td>
+     15
+     </td>
+   </tr>
+   <tr>
+     <td>
+      Tim Coleman
+     </td>
+     <td>
+     15
+     </td>
+   </tr>
+  </table>
+  </p>
+
+  <p>
+  <table border=0 width="100%">
+  <tr>
+    <td><b>Modules</b></td>
+    <td><b>Commits</b></td>
+  </tr>
+  <tr>  
+    <td>mcs (all the references without the class dir and subdirs)</td>
+    <td>52</td>
+  </tr>
+  <tr>
+    <td>System.Data</td>
+    <td>49</td>
+  </tr>
+  <tr>
+    <td>debugger</td>
+    <td>40</td>
+  </tr>
+  <tr>
+    <td>System.Windows.Forms</td>
+    <td>26</td>
+  </tr>
+  <tr>
+    <td>corlib</td>
+    <td>26</td>
+  </tr>
+  <tr>
+    <td>Test</td>
+    <td>23</td>
+  </tr>
+  <tr>
+    <td>Xml (all spaces containing the Xml string)</td>
+    <td>8</td>
+  </tr>
+  <tr>
+    <td>Oracle</td>
+    <td>8</td>
+  </tr>
+  <tr>
+    <td>System.Runtime</td>
+    <td>7</td>
+  </tr>
+  <tr>
+    <td>Sql (all spaces containing theSql string)</td>
+    <td>7</td>
+  </tr>
+  <tr>
+    <td>xsp</td>
+    <td>7</td>
+  </tr>
+  <tr>
+    <td>System.Web</td>
+    <td>6</td>
+  </tr>
+  <tr>
+    <td>runtime</td>
+    <td>4</td>
+  </tr>
+  <tr>
+    <td>monotalk</td>
+    <td>4</td>
+  </tr>
+ </table>
+ </p>
+
+ <p>
+ <b>3.- Mailing List Activity.</b>
+ </p>
+
+ <p>
+ There has been a lot of traffic during the past days likely due to the proximity 
+ of the new mono realease (hackers have had some extra homework). Some highlights:
+ </p>
+
+ <p>
+ As the development of the System.XML namespaces is moving fast to completion, 
+ it seems that the Microsoft's specifications has some strange tricks as having 
+ unexpected access levels for some classes and method, etc. All the bugs reported 
+ were fixed.
+ </p>
+
+ <p>
+ Dennis Hayes also sent this wonderful 
+ <a href="http://lists.ximian.com/archives/public/mono-list/2002-December/003800.html">post</a>. 
+ Now we have a couple of dozens of WinForms controls more and we can now create 
+ and run little windows in Mono using Windows.Forms. 
+ </p>
+
+ <p>A crazy guy asked what he needed to for his new OS to get Mono on it, the answer 
+ was clear: <i>make your OS POSIX-compliant, port to it GLib and libgc, provide a 
+ compatible pthread library (or alternatively provide the win32 API).</i>
+ </p>
+
+ <p>
+ Some people discussed how can be the compiler called from c# code and they found 
+ that Microsoft.CSharp.Compiler.Compile() is the right method for getting that 
+ easily done.
+ </p>
+
+ <p>
+ And that's been the core development this week in the Mono world. Have a nice 
+ time and don't forget to visit us at: 
+ <a href="http://www.go-mono.org">http://www.go-mono.org</a> 
+ </p>
+<br></br>
+
+
+<hr>
+(Submitted by <A HREF="mailto:jaime@gnome.org">Jaime Anguiano Olarra</A> of <A HREF="http://www.go-mono.org">The Mono Project</A>)
+
+</TD></TR></TABLE>
+</TD></TR></TABLE>
+
+<P><A HREF="/">Return to today's headlines</A>.</TD><TD VALIGN=TOP WIDTH=140>
+<TABLE CELLSPACING="1" CELLPADDING="4" BORDER=0 width="100%">
+  <tr>
+  <td valign="middle" align="center" ><B><a href="http://linuxtoday.com">Linux Today</a></B></td></tr>
+<tr><td>
+<center>
+<p><a href="http://linuxtoday.com"><img src="http://linuxtoday.com/pics/ltnet.png" alt="Linux Today" border="0"
+></a></center><p>
+&#149;<a href="http://linuxtoday.com/news_story.php3?ltsn=2003-01-30-011-26-IN-BZ-DV">Linux Magazine: Linux&#39;s Proprietary Booster</a><BR>
+&#149;<a href="http://linuxtoday.com/news_story.php3?ltsn=2003-01-30-010-26-RV-MD-SW">DistroWatch: Mandrake Linux 9.1--The Beauty and the Beast</a><BR>
+&#149;<a href="http://linuxtoday.com/news_story.php3?ltsn=2003-01-30-009-26-NW-CY-DP">Linux Journal: Greenpeace Southeast Asia Moves to Free Software</a><BR>
+&#149;<a href="http://linuxtoday.com/news_story.php3?ltsn=2003-01-30-008-26-OS-BZ-DP">Computerworld: Retailers Explore Java POS Systems</a><BR>
+&#149;<a href="http://linuxtoday.com/news_story.php3?ltsn=2003-01-30-007-26-NW-BZ">Asia Computer Weekly: HP Opens Linux Centre in Shanghai</a><BR>
+<form method="get" action="http://linuxtoday.com/search.php3">
+Search Linux Today:<BR> 
+<input type="text" name="query"><BR>
+<input type="submit" value="Search">
+</form>
+</td>
+</TR>
+</TABLE>
+
+</TD></TR></TABLE>
+<HR>
+<FONT SIZE="-1">All times are recorded in UTC.<BR>Linux PR is an affiliate of the Linux Today network.<br>Copyright &copy;1999 by Linux Today (<A HREF="mailto:webmaster@linuxpr.com">webmaster@linuxpr.com</A>)<BR>Linux is a trademark of Linus Torvalds.<BR>Powered by Linux and Apache </FONT>
+</BODY>
+</HTML>

@@ -1,0 +1,454 @@
+<html>
+<head>
+<title>Mono Weekly News. Jan 10th, 2003</title>
+</head>
+
+<h1>Mono Weekly News (Jan 10th, 2003)</h1>
+
+
+<p><b>Overview</b></p>
+<p>
+  Welcome to the third MWN letter. We have a lot of news for you!. 
+</p>
+
+<p>
+  <b>Table of contents
+  <ul>
+    <li>1. Headlines.
+       <ul>
+	   <li>1.1 Switch support has landed in Mono CVS.</li>
+	   <li>1.2 Glade# use attributes and implicit names.</li>
+	   <li>1.3 Mono debugger now has support for multi-thread debugging.</li>
+	   <li>1.4 Mono and Mono ASP.NET as an Apache module.</li>
+	   <li>1.5 Zoltan has published his Code Coverage analysis tool for Mono.</li>
+	   <li>1.6 Paolo added a memory profiler to Mono.</li>
+	   <li>1.7 Steve Newman contributed his Javascript interpreter to Mono.</li>
+	   <li>1.8 Jonathan Pryor has published his type-reflector.</li>
+	</ul>
+    <li>2. Meet the team. This week </li>
+    <li>3. The Mono Spell.</li>
+    <li>4. Mono Socials: Duncan does Tokyo.</li>
+    <li>5. CVS Activity.</li>
+    <li>6. Mailing List Activity.</li>
+   </ul>
+   </b>
+</p>
+<p>  <h3>1.1 Switch support has landed in Mono CVS.</h3></p>
+<p>  At the beginning of the week Jonathan Pryor sent this 
+     <a href="http://lists.ximian.com/archives/public/mono-list/2002-December/004281.html">amazing email</a>.
+     Mono supports now the 'switches' as described in MSDN docs: "a way to get 
+     flags/control information into your program so they can be used". They're 
+     primarily used with code instrumentation. More info in the email!.
+</p>
+
+<p>  <h3>1.2 Glade# use attributes and implicit names.</h3></p>
+<p>  Rachel has made Glade# use attributes so binding C# widgets to the 
+     designed widgets is now easier than ever. Alp has improved this to 
+     use implicit names as well. This means, before you had to do:
+     <pre class="programlisting">
+     Gtk.Window main_window = (Gtk.Window) gxml["main_window"];
+     </pre>
+     but now you can just use the attribute:
+     <pre class="programlisting">
+     [GladeWidget("main_window")]
+	Gtk.Window main_window;
+     </pre>
+</p>
+
+<p>  <h3>1.3 Mono debugger now has support for multi-thread debugging.</h3></p>
+
+<p>  Martin's Mono debugger now has support for multi-thread debugging that makes 
+     possible to have the new special feature of having breakpoints that can be 
+     defined in a per-thread basis now.
+</p>
+
+<p>  <h3>1.4 Mono and Mono ASP.NET as an Apache module.</h3></p>
+
+<p>  Daniel Lopez has checked in his Apache module to integrate Mono and Mono's 
+     ASP.NET support as an Apache module. Gonzalo has folded his new Mono hosting 
+     classes into this module (they are now shared between XSP and mod_mono). 
+     You can get the mod_apache from CVS (module name: mod_mono). 
+</p>
+
+<p>  <h3>1.5 Zoltan has published his Code Coverage analysis tool for Mono.</h3></p>
+
+<p>  Zoltan's Code Coverage Analyzer snapshots are now on his web. You can get them
+     <a href="http://www.nexus.hu/vargaz2/">here</a>
+</p>
+
+
+<p>  <h3>1.6 Paolo added a memory profiler to Mono.</h3></p>
+         
+<p>  This memory profiler gives a report of where memory was allocated in a program 
+     the number of allocation, the types of the objects and the total memory 
+     allocated it's used to identify what codepaths are the most involved in wasting 
+     GC memory.
+</p>
+
+<p>  <h3>1.7 Steve Newman contributed his Javascript interpreter to Mono.</h3></p>
+
+<p>  Steve is the author of <a href="janet-js.sourceforge.net">Janet</a>: an ECMA 
+     compliant JScript engine, and a new group of developers is stepping up to 
+     continue his work on the interpreter and turn it into a full compiler for 
+     Mono and .NET. If you are interested in joining, join the 
+     <a href="http://lists.ximian.com/mailman/listinfo/mono-list">mono-list</a>.
+</p>
+
+<p>  <h3>1.8 Jonathan Pryor has published his type-reflector.</h3></p>
+
+<p>  Type-reflector is a program similar in spirit to the .NET ``TypeFinder'' 
+     SDK Sample. It allows a regular expression (as understood by 
+     System.Text.RegularExpressions) to be used for finding types and a lot of
+     more interesting options for making your life easier. You can find the 
+     code at mcs/tools/type-reflector
+</p>
+
+<p> <h3>2. Meet the team. This week Daniel Morgan.</h3></p>
+    The Mono team is integrated by contributors all over the world that are
+    working really hard to get this project going further. In this section
+    we will be meeting this people so we can know more about them and what
+    they are doing. 
+</p>
+
+<p>
+    This week we have been talking to Daniel Morgan in the IRC. Daniel 
+    is the developer who has worked out most of the SQL providers in 
+    Mono. He is from South Carolina, USA and before joining the Mono Team
+    he was an active hacker in the GNOME Database Project 
+    (<a href="http://www.gnome-db.org">http://www.gnome-db.org</a>) and 
+    prior to that he was a database driven insurance applications developer.
+    He enjoys programming on Mono, riding his motorcycle and reading and
+    watching science-fiction. Let's see what he told us.
+</p>
+
+
+<h4>Interview with Daniel Morgan</h4>
+
+<table border=1 width="100%">
+<tr><td>
+<b>MWN: So you are the Mono expert on DataBase Providers, don't you?, can 
+you tell us what can be done using the code you contributed?
+</b></td></tr>
+<tr><td>
+<b>Daniel Morgan:</b> I'm no expert, just a willing contributor to System.Data 
+in Mono. Currently you can create database driven applications with GTK# or ASP.NET 
+depending on your requirements, you have to various DBMS backends, including 
+MySQL, PostgreSQL, Microsoft SQL Server, Sybase, and SQL Lite. If you need access 
+to a database not listed, you can get access via the ODBC or OLE DB providers.
+Both ASP.NET and GTK# have become useful for creating real world applications...  
+along with System.Data, you could start creating programs like SQL#, financial, 
+accouting, or other business applications. I know the Microsoft SQL Server is 
+probably the most stable provider there is... simply because its pure C#... it does 
+not use any client libraries because there are no client libraries, it has no 
+dependencies other than Mono and access to a SQL Server database...
+</td></tr>
+<tr><td>
+<b>MWN: As you are involved in the GNOME-DB Project how do you see the ADO.NET model 
+for the new application development?. Do you feel like having Mono's ADO.NET 
+implementation will make Linux DB Access applications much easier to develop?</b>
+</td></tr>
+<tr><td>
+<b>Daniel Morgan:</b>
+Yes, I am involved in the GNOME-DB project. GNOME-DB was designed to provide an ADO 
+or OLE-DB like data access model for Linux and UNIX.  So, ADO.NET seems the natural 
+way to go. Mono's ADO.NET will definitely make application development much easier; 
+however, this isn't the main reason for using it.  It allows the programmer to concentrate 
+more on implementing the business requirements instead of spending more time on the 
+details of the language.
+</td></tr>
+<tr><td>
+<b>MWN: did you find any mistakes in the design, do you think there are some classes 
+or assemblies that might be changed in the SPEC?
+</b>
+</td></tr>
+<tr><td>
+<b>Daniel Morgan:</b>
+There are a few mistakes in the design... as with the first version of any 
+complex design...  such as, all data providers should have inherited from the same 
+database exception class. Creating generic connections and adapters are difficult, but 
+this has been helped by Brian Ritchie's ProviderFactory. Every database vendor has 
+their own API for accessing their database. ADO.NET provides an abstract way to access 
+these databases via interfaces which must be implemented by a data provider: IDbConnection 
+for connecting to a database; IDbCommand for executing SQL commands; IDataReader for 
+reading data from a result set, IDbDataAdapter for filling a DataSet or DataTable, 
+IDataParameter for parameters
+</td></tr>
+<tr><td><b>
+MWN: Could you give some advice for the Mono users about the Providers and their use?. 
+If you were to write a new application that uses databases through Mono, which classes 
+would you use?, what would be your general method to achive that?.
+</b></td></tr>
+<tr><td>
+<b>Daniel Morgan:</b>
+System.Data isn't all about databases; it can be used for non-database data too... you 
+could create a data provider which does not even connect to database for instance, a 
+DataSet and XmlDataDocument can read and write XML. Ville Palo has been working on the 
+DataSet and XmlDataDocument and understands it better. Most database application 
+programmers are used to developing in a relational manner... tables having rows and 
+columns...while XML application programmers are used to developing in a hierarchical 
+tree manner...XmlDataDocument and DataSet bridge that gap.
+</td></tr>
+<tr><td><b>
+MWN: For the people interested in contributing, which classes and tasks do you think 
+need more help?
+</b></td></tr>
+<tr><td>
+<b>Daniel Morgan:</b>
+All the classes need loving :) especially any that throw NotImplementedExceptions or 
+has MonoTODO's DataSet needs work; Reggie Burnet, the developer of a 100% C# provider 
+for MySQL is interested in including his provider in Mono... last I've heard, it works 
+with the lastest cvs Mono basically, just like all the other areas of Mono, System.Data 
+needs lots of testing it actually works better on Linux.
+</td></tr>
+<tr><td><b>
+MWN: Is there anything left you would like to say to the world and the Mono Community in 
+special?
+</b></td></tr>
+<tr><td>
+<b>Daniel Morgan:</b>
+Yes, even though Mono has a PostgreSQL and MySQL provider; they both use a native client 
+library which has its drawbacks. These drawbacks includes, depenedency problems, slower 
+performance compared to a 100% pure .NET provider, sometimes failure, such as, PostgreSQL 
+does not work in SQL# For GTK# on Windows. Npgsql is a 100% C# provider for PostgreSQL and 
+works on Mono. The Npgsql developers have already approved it to be included in Mono and 
+under X11.
+</td></tr>
+<tr><td>
+<b>MWN:</b> Thanks Daniel for your time and your work. Best wishes for the new year.
+</td></tr>
+</table>
+
+<p> Daniel also provided us with a nice example of how to add database access
+to your programs using Mono. Here is the code:
+</p>
+
+<b>
+Mono MySQL Hello World Example
+</b>
+<pre class="programlisting">
+
+Log on to the MySQL client tool mysql:
+
+DanielMorgan@DANPC ~
+$ mysql
+Welcome to the MySQL monitor.  Commands end with ; or \g.
+Your MySQL connection id is 7 to server version: 3.23.51-nt
+
+Type 'help;' or '\h' for help. Type '\c' to clear the buffer.
+
+Change to a database:
+
+mysql> use test
+Database changed
+
+Create a database table named hello_world_test with the columns hello_id and
+hello_desc.
+hello_id is the id to this table and hello_desc is an attribute that is a
+description.
+
+mysql> create table hello_world_test (
+    -> hello_id varchar(2),
+    -> hello_desc text);
+Query OK, 0 rows affected (0.01 sec)
+
+Insert a row into the new table named hello_world_test
+with hello_id set to 'HW'
+and hello_desc set to 'Hello World'.
+
+mysql> insert into hello_world_test (hello_id, hello_desc) values
+('HW','Hello W
+orld');
+Query OK, 1 row affected (0.00 sec)
+
+Verify the data in the table.
+
+mysql> select * from hello_world_test;
++----------+-------------+
+| hello_id | hello_desc  |
++----------+-------------+
+| HW       | Hello World |
++----------+-------------+
+1 row in set (0.02 sec)
+
+Now, create the SQL statement you will use in your C# program.
+
+mysql> select hello_desc from hello_world_test where hello_id = 'HW';
++-------------+
+| hello_desc  |
++-------------+
+| Hello World |
++-------------+
+1 row in set (0.02 sec)
+
+// MySqlHelloWorld.cs
+//
+// On Windows, compile like:
+//     mono C:/cygwin/home/MyHome/mono/install/bin/mcs.exe
+MySqlHelloWorld.cs \
+//          -lib:C:/cygwin/home/MyHome/mono/install/lib \
+//          -r System.Data.dll -r Mono.Data.MySql.dll
+// On Linux, compile like:
+//    mcs MySqlHelloWorld.cs -r System.Data -r Mono.Data.MySql
+//
+//DanielMorgan@DANPC ~/mono/20021223/mcs/class/Mono.Data.MySql/Test
+//$ mono f:/cygwin/home/DanielMorgan/mono/install/bin/mcs.exe
+MySqlHelloWorld.cs
+//    -r System.Data.dll -r Mono.Data.MySql.dll
+// Compilation succeeded
+//
+//DanielMorgan@DANPC ~/mono/20021223/mcs/class/Mono.Data.MySql/Test
+//$ mono MySqlHelloWorld.exe
+//Result: Hello World
+//
+using System;
+using System.Data;
+using Mono.Data.MySql;
+
+class MySqlHelloWorld {
+        static void Main(string[] args) {
+                string connectionString = "Database=test";
+                string sql =
+                        "SELECT hello_desc " +
+                        "FROM hello_world_test " +
+                        "WHERE hello_id = 'HW'";
+
+                // connect
+                IDbConnection dbcon = new MySqlConnection();
+                // set the connection string
+                dbcon.ConnectionString = connectionString;
+                // open a connection to the database
+                dbcon.Open();
+                // create command
+                IDbCommand dbcmd = dbcon.CreateCommand();
+                // set the command's SQL
+                dbcmd.CommandText = sql;
+                // execute the SQL
+                IDataReader reader = dbcmd.ExecuteReader();
+                // read the first row in the result
+                if(reader.Read()) {
+                        // display the result
+                        Console.WriteLine("Result: " + reader["hello_desc"]);
+                }
+                else {
+                        // display message row not found
+                        Console.WriteLine("Row not found.");
+                }
+
+                // clean up
+                reader.Close();
+                reader = null;
+                dbcmd.Dispose();
+                dbcmd = null;
+                dbcon.Close();
+                dbcon = null;
+        }
+}
+</pre>
+
+
+<p> <h3>3. The Mono Spell.</h3></p>
+<p>
+<i>dietmar ignores papers comparing java with .net</i> Dietmar Maurer.</p><p>
+<i>If God meant us to use unicode, He would have put 16 bits in a byte.</i> Marcus Urban.</p>
+
+<p>  <h3>4. Mono Socials: Duncan does Tokyo.</h3></p>
+
+<p>  The always_minded_to_help and Ximian Mono hacker Duncan spent some of 
+     his hollydays visiting the monkeys at Tokyo, as Atsushi Enomoto who is
+     the maintainer of System.XML and Nick Drochak known mostly for his tests
+     although he contributes in lots of places. You can see the gallery 
+     <a href="http://primates.ximian.com/~duncan/gallery/Duncan-in-Tokyo">here</a>
+</p>
+
+<p> <h3>5. CVS Activity.</h3></p>
+	
+<p>  This has been a bussy week. Here are the results.
+     (*) Actually I am using the number of commits as measure, I will try to 
+     get more accurate aproximations in the future. (Starting Jan 01th,
+     till Jan 08th)
+</p>	
+
+<p>  Authors: Total 23</p>
+
+<p><table border=1>
+     <tr><td><b>Author</b></td><td><b>Commits</b></td></tr>
+     <tr><td>Alp Toker</td><td>4</td></tr>
+     <tr><td>Atsushi Enomoto</td><td>6</td></tr>
+     <tr><td>Daniel Lopez</td><td>9</td></tr>
+     <tr><td>Dennis Hayes</td><td>1</td></tr>
+     <tr><td>Dick Porter</td><td>2</td></tr>
+     <tr><td>Dietmar Maurer</td><td>6</td></tr>
+     <tr><td>Duncan Mak</td><td>17</td></tr>
+     <tr><td>Gaurav Vaish</td><td>10</td></tr>
+     <tr><td>Gonzalo Paniagua</td><td>47</td></tr>
+     <tr><td>Jackson Harper</td><td>2</td></tr>
+     <tr><td>Jaime Anguiano</td><td>5</td></tr>
+     <tr><td>Jeroen Janssen</td><td>4</td></tr>
+     <tr><td>Johannes Roith</td><td>51</td></tr>
+     <tr><td>Jonathan Pryor</td><td>1</td></tr>
+     <tr><td>Marco Ridoni</td><td>5</td></tr>
+     <tr><td>Martin Baulig</td><td>210</td></tr>
+     <tr><td>Martin Willemoes Hansen</td><td>9</td></tr>
+     <tr><td>Miguel de Icaza</td><td>20</td></tr>
+     <tr><td>Paolo Molaro</td><td>14</td></tr>
+     <tr><td>Piers Haken</td><td>2</td></tr>
+     <tr><td>Rachel Hestilow</td><td>4</td></tr>
+     <tr><td>Sebastien Pouliot</td><td>7</td></tr>
+     <tr><td>Ville Palo</td><td>7</td></tr>
+  </table>
+</p>
+
+<p> 
+  <table border=1>
+  <tr><td><b>Modules</b></td><td><b>Commits</b></td></tr>
+  <tr><td>mono</td><td>32</td></tr>
+  <tr><td>mono/jit</td><td>14</td></tr>
+  <tr><td>mcs/mcs</td><td>7</td></tr>
+  <tr><td>mcs/class</td><td>84</td></tr>
+  <tr><td>mcs/class/corlib</td><td>23</tr>
+  <tr><td>mcs/class/System.Web</td><td>35</td></tr>
+  <tr><td>debugger</td><td>199</td></tr>
+  <tr><td>Windows.Forms</td><td>1</td></tr>
+  <tr><td>gtk-sharp</td><td>27</td></tr>
+  <tr><td>mbas</td><td>5</td></tr>
+  <tr><td>monodoc</td><td>12</td></tr>
+  <tr><td>mod_mono</td><td>9</td></tr>
+  </table>
+</p>
+
+<p> <h3>6. Mailing List Activity.</h3></p>
+
+<p> A bad ass week for the mono-list but as a matter of fact most
+    of the mails have gone around buggy setups and about what is
+    Mono going to do with JScript.
+</p>
+
+<p>The Mono and Javascript thread has been really interesting. 
+   The main points:
+   <ul>
+     <li>About using the code Rhys Weatherley is doing, Mr.Weatherley 
+     said "the answers to the two obvious questions are "GPL plus 
+     linking exception, not X11" and "hosted in a neutral CVS, not Mono or 
+     pnet".
+     </li>
+     <li>By the moment using Janet CVS works for Mono.</li>
+     <li>The language that Microsoft has implemented is "almost" a strict 
+     superset of ECMAScript 3, i.e. they've implemented ECMAScript 3 except 
+     for a few corner cases.
+     </li>
+     <li>The plan is: have a Reflection.Emit backend, make the 
+     compiler and make the JScript compiler embeddable class.
+     </li>
+     <li>The following mail is a good summary: 
+     <a href="http://lists.ximian.com/archives/public/mono-list/2003-January/004693.html">http://lists.ximian.com/archives/public/mono-list/2003-January/004693.html</a>
+     </li>
+     <li>Steve Newman said that Janet will be licensed under the X11 so it
+     can be used in Mono. Janet is a Javascript interpreter that Steve has
+     developed and it will be the base for the Mono's Javascript compiler.
+     </li>
+     </ul>
+</p>
+<p> Please visit us at the homepage of the Mono Project:
+<a href="http://www.go-mono.org">http://www.go-mono.org</a></p>
+
+</html>

@@ -1,0 +1,357 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html>
+
+<head>
+<title>Mono Weekly News. Mar 6th, 2003</title>
+<link rel="stylesheet" href="mwn.css" type="text/css">  
+<meta http-equiv="content-type" content="text/html; charset=ISO-8859-1">
+</head>
+<body>
+
+<table cellpadding="2" cellspacing="2" border="0" width="800" bgcolor="black" align="Center">
+    <tr>
+      <td valign="Top" align="Center" bgcolor="White">
+      <table align="Center" width="530" border="0" cellspacing="0" cellpadding="0">
+
+<table width="100%" border="0" cellspacing="0" cellpadding="0">
+                            <tr>         
+			   
+                            <td width="16">&nbsp;</td>
+
+                            <td width="373"> 
+<!-- Main titles section -->
+
+<table>
+<tr><td>
+<td valign="Center" bgcolor="white"><img src="logo.png"></td>
+<td><table bgcolor="#a8a1a1" cellspacing="2" cellpadding="2"><tr>
+<td bgcolor="#777746"><h1>Mono Weekly News. Mar 6th, 2003</h1></td>
+</tr></table>
+<td><img src="squares.png"></td>
+<td align="Right"><a href="http://www.go-mono.org"><h2>http://www.go-mono.org</h2></a></td></tr>
+</table>
+<br>
+<cite>
+<q>
+  The voice of the Mono Community. 
+</q>
+</cite>
+
+<!-- Table of contents -->
+
+<br><br>
+  <b>Table of contents
+  <ul>
+    <li>1. Headlines
+       <ul>
+       <li>1.1 Mono 0.21 and 0.22 released</li>
+       <li>1.2 New Apache module released</li>
+       <li>1.3 New mailing list for developers</li>
+       <li>1.4 Test progress and call for volunteers</li>
+       <li>1.5 SMTP status page</li>
+       <li>1.6 Monodoc 0.2 released</li>
+       <li>1.7 Zoltan Varga in the Mono Hall of Fame</li>
+        </ul>
+    <li>2. Mailing List Activity</li>
+    <li>3. CVS Activity</li>
+       </ul>
+   </b>
+
+<h3>1.1 Mono 0.21 released</h3>
+
+<p>  Mono 0.21 has been released. It is only a bug fix release.
+     You can read the release notes <a
+     href="http://www.go-mono.com/archive/mono-0.21">here</a>.
+     You can get the <a
+     href="http://www.go-mono.com/archive/mono-0.21-win32-1.exe">Windows
+     binaries</a>
+     This week we have also seen the another bug fix release, the <a
+     href="http://www.go-mono.com/archive/mono-0.22">0.22</a>
+</p>
+
+
+<h3>1.2 New Apache module released</h3>
+
+<p>  Daniel has released a new version of his Mono Apache module that
+     handles ASP.NET. The code is available at <a
+     href="http://apacheworld.org/modmono/">modmono</a>
+</p>
+
+<h3>1.3 New mailing list for developers</h3>
+
+<p>  A new mailing list for Mono Development has been created. Feel
+     free to post or subscribe to it at the following <a
+     href="http://lists.ximian.com/mailman/listinfo/mono-devel-list">page</a>
+</p>
+
+<h3>1.4 Test progress and call for volunteers</h3>
+
+<p>  Nick has posted an update on the progress on our regression
+     tests. We are looking for more tests, and more volunteers to
+     write them.
+</p>
+
+<h3>1.5 SMTP status page</h3>
+
+<p>  Per Arneng has started a SMTP status page: <a
+     href="http://p.rsn.bth.se/smtp">http://p.rsn.bth.se/smtp</a> 
+     To show how his implementation of the SMTP support for Mono
+     goes. Even it's in an early stage, it works!. You should be
+     able to do things as handling attachments!.</a>
+</p>
+
+<h3>1.6 Monodoc 0.2 released</h3>
+
+<p>  Monodoc 0.2, "the new moment of Zen" for those who want a new
+     version of the monodoc browser has arrived. The new version
+     includes vastly improved rendering and namespace rendering,
+     which will be very useful for those of you who want to document,
+     as it is easy to spot what is missing. You can read the
+     <a
+     href="http://lists.ximian.com/archives/public/mono-list/2003-March/012727.html">release
+     notes</a> to learn more.
+</p>
+
+<h3>1.7 Zoltan Varga in the Mono Hall of Fame</h3>
+
+<p>  The <a href="http://www.go-mono.com/hackers.html">Mono Hackers
+     Hall Of Fame</a> continues to show our appreciation to the
+     excellent contributors that make mono:: a successful free
+     software project. <b>Zoltan</b> has contributed significantly to Mono,
+     with bug reports and bug fixes as well as pushing the envelope of
+     the things that can be done in and with the mono runtime: the
+     gcc-based ngen compiler, code coverage and more recently his work
+     with Reflection.Emit that got mono to the point of running the
+     IKVM Java virtual machine.
+</p>
+     
+<h3>2. Mailing List Activity</h3>
+
+   As you can read in the headers, there is a new mailing list for
+   development discussions that can be found at the Mono site's
+   <a href="http://www.go-mono.com/maling-lists.html">mailing
+   lists</a> page. The main points this week were:
+   <ul>
+   <li>Jason Perkins found some time to work on the Bitmap class,
+   and have implemented:
+     <ul>
+       <li>Bitmap(Stream)</li>
+       <li>Width, Height</li>
+       <li>PixelFormat</li>
+       <li>LockBits (partially - doesn't work on subsections yet)</li>
+       <li>UnlockBits</li>
+       </ul>
+   </li>
+   <li>Gonzalo wrote a little recipe for those who need to call
+   methods in managed mode from unmanaged code:
+     <ul>
+       <li>Create an instance of a CrossAppDomainDelegate in the
+          application host domain.</li>
+       <li>Add a C function to the delegate. The C function does the invoke
+          on the application host.</li>
+       <li>Invoke domain.DoCallBack with the delegate (domain is the
+          default domain).</li>
+       <li>The C callback will be called from the appropriate
+          thread/appdomain.</li>
+     </ul>
+  </li>
+  <li>Rafael Teixeira explained why they didn't include the VB6
+   support in Mono in a very interesting <a
+   href="http://lists.ximian.com/archives/public/mono-list/2003-February/012636.html">email</a>.
+  </li>
+  <li>Marting announced a new version of his Mono Debugger. Go and
+   test it!. <a href="http://lists.ximian.com/archives/public/mono-list/2003-March/012748.html">Here</a> you can get more information.
+  </li>
+  <li>Paolo Molaro remind us the <a
+   href="http://lists.ximian.com/archives/public/mono-list/2002-November/009751.html">thread</a>
+   about how to write a daemon with Mono in a reply. It's a nice point
+   to remember that focus the list attention sometime ago.
+   </li>  
+  </ul>
+  
+    
+<h3>3. CVS Activity</h3>
+	
+This issue we are taking statistics for the nearly two weeks
+MWN wasn't published. Here are the results.
+Starting Feb 21st, till Feb 28th.
+<br><br>	
+
+  Authors: Total 33  Total commits: 417
+
+<table border=0 >
+<tr><td valign="Top">
+ <table border=1  bgcolor="#a8a1a1">
+     <tr><td><b>Author</b></td><td><b>Commits</b></td></tr>
+     <tr><td>Alan Tam</td><td>7</td></tr>
+  <!--  <tr><td>Alvaro del Castillo</td><td>2</td></tr>  -->
+     <tr><td>Aleksey Damakov</td><td>2</td></tr>
+  <!--   <tr><td>Ajay Kumar Dwivedi</td><td>1</td></tr> -->
+  <!--   <tr><td>Alejandro Sanchez</td><td>4</td></tr> -->
+  <!--   <tr><td>Alp Toker</td><td>5</td></tr> -->
+     <tr><td>Atsushi Enomoto</td><td>1</td></tr>
+     <tr><td>Christopher Bockner</td><td>1</td></tr>
+  <!--   <tr><td>Mark Crichton</td><td>1</td></tr> --> 
+      <tr><td>Dave Bettin</td><td>7</td></tr>
+       <tr><td>Daniel Lopez</td><td>5</td></tr> 
+<!--     <tr><td>Daniel Morgan</td><td>23</td></tr> -->
+<!--     <tr><td>Dennis Hayes</td><td>9</td></tr> -->
+     <tr><td>Dick Porter</td><td>2</td></tr>
+     <tr><td>Dietmar Maurer</td><td>6</td></tr>
+     <tr><td>Duncan Mak</td><td>32</td></tr>
+     <tr><td>Gaurav Vaish</td><td>3</td></tr> 
+     <tr><td>Gonzalo Paniagua</td><td>22</td></tr>
+     <tr><td>Jackson Harper</td><td>9</td></tr>
+     <tr><td>Jaime Anguiano</td><td>1</td></tr>
+<!--     <tr><td>Jeroen Janssen</td><td>5</td></tr> -->
+<!--     <tr><td>Johannes Roith</td><td>12</td></tr> -->
+<!--     <tr><td>Jonathan Pryor</td><td>4</td></tr> -->
+     <tr><td>Lluis Sanchez</td><td>1</td></tr> 
+<!--     <tr><td>Marco Ridoni</td><td>1</td></tr> -->
+     <tr><td>Martin Baulig</td><td>125</td></tr>
+     <tr><td>Martin Willemoes Hansen</td><td>9</td></tr>
+     <tr><td>Miguel de Icaza</td><td>53</td></tr>
+     <tr><td>Mike Kestner</td><td>26</td></tr> 
+     <tr><td>Nick Drochak</td><td>3</td></tr>
+     <tr><td>Paolo Molaro</td><td>2</td></tr>
+<!--     <tr><td>Pedro Martinez</td><td>3</td></tr> -->
+<!--     <tr><td>Patrik Torstensson</td><td>27</td></tr> -->
+     <tr><td>Peter Williams</td><td>2</td></tr>
+     <tr><td>Per Arneng</td><td>20</td></tr>
+     <tr><td>Petr Danecek</td><td>2</td></tr>
+<!--     <tr><td>Piers Haken</td><td>14</td></tr> -->
+     <tr><td>Alexandre Pigolkine</td><td>1</td></tr>
+<!--     <tr><td>Rachel Hestilow</td><td>4</td</tr> -->
+     <tr><td>Radek Doulik</td><td>8</td></tr> 
+     <tr><td>Rafael Teixeira</td><td>24</td></tr>
+<!--     <tr><td>Rodrigo Moya</td><td>6</td></tr> -->
+<!--     <tr><td>Sebastien Pouliot</td><td>29</td></tr> -->
+     <tr><td>Tim Coleman</td><td>8</td></tr>
+     <tr><td>Ville Palo</td><td>2</td></tr>
+     <tr><td>Zoltan Varga</td><td>9</td></tr>
+  </table>
+ </td><td valign="Top">
+  <table border=1  bgcolor="#a8a1a1">
+  <tr><td><b>Modules</b></td><td><b>Commits</b></td></tr>
+  <tr><td>mono</td><td>63</td></tr>
+  <tr><td>mono/mono</td><td>18</td></tr>
+  <tr><td>mono/doc</td><td>7</td></tr>
+<!--  <tr><td>mono/jit</td><td>5</td></tr> -->
+  <tr><td>mcs/mcs</td><td>19</td></tr>
+  <tr><td>mcs/class</td><td>110</td></tr>
+  <tr><td>mcs/class/corlib</td><td>83</td></tr>
+<!--  <tr><td>mcs/class/System.Web</td><td>10</td></tr>
+  <tr><td>debugger</td><td>69</td></tr>
+  <tr><td>Windows.Forms</td><td>10</td></tr> 
+  <tr><td>gtk-sharp</td><td>39</td></tr>
+  <tr><td>mbas</td><td>2</td></tr> -->
+<!--  <tr><td>monodoc</td><td></td></tr> 
+  <tr><td>mod_mono</td><td>3</td></tr> -->
+<!--  <tr><td>xsp</td><td>6</td></tr> -->
+<!--  <tr><td>Remoting</td><td>23</td></tr> -->
+<!--  <tr><td>janet<td><td></td></tr> -->
+  </table>
+  </td></tr>
+</table>
+<p>
+  Starting March 1st, Ends March 5th.
+</p>
+<p>
+  Authors: Total 21  Total commits: 226
+</p>
+<table border=0 >
+<tr><td valign="Top">
+ <table border=1  bgcolor="#a8a1a1">
+     <tr><td><b>Author</b></td><td><b>Commits</b></td></tr>
+<!--     <tr><td>Alan Tam</td><td>7</td></tr> -->
+  <!--  <tr><td>Alvaro del Castillo</td><td>2</td></tr>  -->
+<!--     <tr><td>Aleksey Damakov</td><td>2</td></tr> -->
+  <!--   <tr><td>Ajay Kumar Dwivedi</td><td>1</td></tr> -->
+  <!--   <tr><td>Alejandro Sanchez</td><td>4</td></tr> -->
+  <!--   <tr><td>Alp Toker</td><td>5</td></tr> -->
+     <tr><td>Atsushi Enomoto</td><td>1</td></tr>
+<!--     <tr><td>Christopher Bockner</td><td>1</td></tr> -->
+   <tr><td>Mark Crichton</td><td>16</td></tr>  
+<!--      <tr><td>Dave Bettin</td><td>7</td></tr>
+       <tr><td>Daniel Lopez</td><td>5</td></tr> -->
+<!--     <tr><td>Daniel Morgan</td><td>23</td></tr> -->
+<!--     <tr><td>Dennis Hayes</td><td>9</td></tr> -->
+     <tr><td>Dick Porter</td><td>6</td></tr>
+     <tr><td>Dietmar Maurer</td><td>1</td></tr>
+     <tr><td>Duncan Mak</td><td>2</td></tr>
+<!--     <tr><td>Gaurav Vaish</td><td>3</td></tr> -->
+     <tr><td>Gonzalo Paniagua</td><td>34</td></tr>
+     <tr><td>Jackson Harper</td><td>6</td></tr>
+<!--     <tr><td>Jaime Anguiano</td><td>1</td></tr> -->
+     <tr><td>Jean-Marc Andre</td><td>2</td></tr>
+     <tr><td>Lee Mallabone</td><td>4</td></tr>
+<!--     <tr><td>Jeroen Janssen</td><td>5</td></tr> -->
+<!--     <tr><td>Johannes Roith</td><td>12</td></tr> -->
+<!--     <tr><td>Jonathan Pryor</td><td>4</td></tr> -->
+     <tr><td>Lluis Sanchez</td><td>14</td></tr> 
+<!--     <tr><td>Marco Ridoni</td><td>1</td></tr> -->
+     <tr><td>Martin Baulig</td><td>58</td></tr>
+<!--     <tr><td>Martin Willemoes Hansen</td><td>9</td></tr> -->
+     <tr><td>Miguel de Icaza</td><td>19</td></tr>
+     <tr><td>Mike Kestner</td><td>3</td></tr> 
+     <tr><td>Nick Drochak</td><td>3</td></tr>
+     <tr><td>Paolo Molaro</td><td>7</td></tr>
+     <tr><td>Pedro Martinez</td><td>3</td></tr> 
+<!--     <tr><td>Patrik Torstensson</td><td>27</td></tr> -->
+     <tr><td>Peter Williams</td><td>5</td></tr>
+<!--     <tr><td>Per Arneng</td><td>20</td></tr>
+     <tr><td>Petr Danecek</td><td>2</td></tr> -->
+<!--     <tr><td>Piers Haken</td><td>14</td></tr> -->
+     <tr><td>Alexandre Pigolkine</td><td>5</td></tr>
+<!--     <tr><td>Rachel Hestilow</td><td>4</td</tr> -->
+<!--     <tr><td>Radek Doulik</td><td>8</td></tr> --> 
+     <tr><td>Rafael Teixeira</td><td>4</td></tr>
+<!--     <tr><td>Rodrigo Moya</td><td>6</td></tr> -->
+     <tr><td>Sebastien Pouliot</td><td>13</td></tr> 
+     <tr><td>Tim Coleman</td><td>8</td></tr>
+<!--     <tr><td>Ville Palo</td><td>2</td></tr>
+     <tr><td>Zoltan Varga</td><td>9</td></tr> -->
+  </table>
+ </td><td valign="Top">
+  <table border=1  bgcolor="#a8a1a1">
+  <tr><td><b>Modules</b></td><td><b>Commits</b></td></tr>
+  <tr><td>mono</td><td>31</td></tr>
+  <tr><td>mono/mono</td><td>12</td></tr>
+  <tr><td>mono/doc</td><td>20</td></tr>
+  <tr><td>mono/jit</td><td>3</td></tr>
+  <tr><td>mcs/mcs</td><td>93</td></tr>
+  <tr><td>mcs/class</td><td>88</td></tr>
+  <tr><td>mcs/class/corlib</td><td>37</td></tr>
+  <tr><td>mcs/class/System.Web</td><td>5</td></tr>
+  <tr><td>debugger</td><td>57</td></tr>
+  <tr><td>Windows.Forms</td><td>4</td></tr> 
+   <tr><td>gtk-sharp</td><td>21</td></tr> 
+  <tr><td>mbas</td><td>4</td></tr>
+   <tr><td>monodoc</td><td>3</td></tr> 
+<!--   <tr><td>mod_mono</td><td>10</td></tr>
+  <tr><td>xsp</td><td>6</td></tr> -->
+  <tr><td>Remoting</td><td>9</td></tr> 
+<!--  <tr><td>janet<td><td></td></tr> -->
+  </table>
+  </td></tr>
+</table>
+
+
+Contributors to this issue:
+<br>
+Miguel de Icaza, bug fixing, news contributor, style.
+<br><br>
+ Please visit us at the homepage of the Mono Project:
+<a href="http://www.go-mono.org">http://www.go-mono.org</a>
+
+If you want to consult old issues of the MWN. You can find
+the archives <a
+href="http://monoevo.sf.net/mwn/archives.html">here</a>.
+An Spanish translation is also available at the Mono Hispano
+<a href="http://mono.es.gnome.org">site</a>.
+
+</table>
+</table>
+</table>
+
+</html>

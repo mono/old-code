@@ -1,0 +1,483 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html>
+
+<head>
+<title>Mono Weekly News. Feb 10th, 2003</title>
+<link rel="stylesheet" href="mwn.css" type="text/css">  
+<meta http-equiv="content-type" content="text/html; charset=ISO-8859-1">
+</head>
+<body>
+
+<table cellpadding="2" cellspacing="2" border="0" width="800" bgcolor="black" align="Center">
+    <tr>
+      <td valign="Top" align="Center" bgcolor="White">
+      <table align="Center" width="530" border="0" cellspacing="0" cellpadding="0">
+
+<table width="100%" border="0" cellspacing="0" cellpadding="0">
+                            <tr>         
+			   
+                            <td width="16">&nbsp;</td>
+
+                            <td width="373"> 
+<!-- Main titles section -->
+
+<table>
+<tr><td>
+<td valign="Center" bgcolor="white"><img src="logo.png"></td>
+<td><table bgcolor="#a8a1a1" cellspacing="2" cellpadding="2"><tr>
+<td bgcolor="#777746"><h1>Mono Weekly News. Feb 10th, 2003</h1></td>
+</tr></table>
+<td><img src="squares.png"></td>
+<td align="Right"><a href="http://www.go-mono.org"><h2>http://www.go-mono.org</h2></a></td></tr>
+</table>
+<br>
+<cite>
+<q>
+  The voice of the Mono Community. 
+</q>
+</cite>
+
+<!-- Table of contents -->
+
+<br><br>
+  <b>Table of contents
+  <ul>
+    <li>1. Headlines
+       <ul>
+       <li>1.1 Jabber/XMPP library for IM</li>
+       <li>1.2 SharpDevelop 0.94 is now released</li>
+       <li>1.3 The PostgreSQL Native Net Provider for Mono Npsql</li>
+       <li>1.4 Monodoc 0.1 out!</li>
+       <li>1.5 Remoting: Communication between AppDomains</li>
+       <li>1.6 Lots of improvements in the Visual Basic.NET
+  implementation</li>
+  <li>1.7 MonoGLo: Other OpenGL binding</li>
+  <li>1.8 Wx.Net</li>
+  <li>1.9 libgnomeprint bindings started</li>
+  <li>1.10 PHP and Mono integrated</li>
+  <li>1.11 gtkhtml3 binaries for monodoc</li>
+  <li>1.12 Late Breaking news!. Jackson does Gtk# with IL</li> 
+        </ul>
+	<li>2. Meet the team. This week Tim Coleman</li>
+<!--    <li>3. Mono Socials: </li> -->
+    <li>3. Mailing List Activity</li>
+    <li>4. CVS Activity</li>
+       </ul>
+   </b>
+<h3>1.1 Jabber/XMPP library for IM</h3>
+
+We are pleased to announce the first official release of our SoapBox
+Framework for Mono.  The SoapBox Framework is a Jabber/XMPP library for
+instant messaging and collaboration that focuses on ease of use and a
+clearly defined object model.  The Framework also comes with enhanced
+XML based trace support and excellent documentation, including a
+detailed User's Guide, and unparalleled customer support. Get more
+info at <a href="http://www.winfessor.com">winfessor</a>.
+
+
+<h3>1.2 SharpDevelop 0.94 is now released</h3>
+
+SharpDevelop 0.94 is now released. You can read about the changes under:
+<a href="http://www.icsharpcode.net/OpenSource/SD/Forum/topic.asp?TOPIC_ID=1403">http://www.icsharpcode.net/OpenSource/SD/Forum/topic.asp?TOPIC_ID=1403</a>.
+An nother point is, that there existing now a Mailinglist for porting 
+SharpDevelop to Mono. You can reach this list under
+<a href="http://lists.ximian.com/mailman/listinfo/sd-mono-port">sd-mono-port</a>.
+
+<h3>1.3 The PostgreSQL Native Net Provider for Mono Npsql</h3>
+
+Dave Page added this news about Npgsql on Mono Class Library cvs at
+www.postgresql.com news. You can see his post at <a href="http://www.postgresql.com/news.php?NewsID=124">http://www.postgresql.com/news.php?NewsID=124</a>.
+
+
+<h3>1.4 Monodoc 0.1 out!</h3>
+
+A preliminary release of the Mono Documentation Browser is now
+availble. You can read the <a
+href="http://lists.ximian.com/archives/public/mono-list/2003-February/011935.html">release
+notes</a>. Go and <a href="http://www.go-mono.com/archive/monodoc-0.1.tar.gz">test it!</a>
+
+<h3>1.5 Remoting: Communication between AppDomains</h3>
+
+Now Patrick and Lluis are working in new remoting improvements like the
+communication between AppDomains. With this and all the work that is
+making soon we'll can communicate with AppDomains and activate objects
+remotelly with the implementation of singletons and singlecalls that is
+working currently Lluis Valles.
+
+<h3>1.6 Lots of improvements in the Visual Basic.NET implementation</h3>
+
+Marco Ridoni and Daniel Campos have done a lot of work in the VB.NET
+implementation. The list of things that work now is really big:
+type declaration, classes and modules can be declared, classes can
+inherit from other classes or interfaces, attributes, structures,
+operators, namespaces, local variables, try/catch and exceptions,
+methods, properties, events, fields, they all work. Methods support
+ByRef and Optional parameters, properties support parameters,
+accessors, etc. Constructors work and are correctly called. And the
+AddHandler as the cast functions (CType, CStr, CBool, CInt, etc.) they
+all work too! That's an excellent work Marco and Daniel!
+
+<h3>1.7 MonoGLo: Other OpenGL binding</h3>
+
+Sebastien Dedieu has wrote a C# binding for OpenGL (GL, GLU and glut)
+based on Mono / Linux. You can get more info about it at the project
+<a href="http://sourceforge.net/projects/monoglo">site at sourceforge</a>.
+Or you can visit it's <a
+href="http://csgl.sourceforge.net/index.html">website</a>
+
+<h3>1.8 Wx.NET</h3>
+
+wx.NET is now on SourceForge. wx.NET is a .NET wrapper for wxWindows.
+It is composed of two parts: wx-c is a C++ library which exposes the
+wxWindows API as a collection of C# friendly C functions. wx.NET is a
+.NET assembly written in C# which parallels the wxWindows class
+hierarchy. You can find it <a
+href="http://wxnet.sourceforge.net">here</a>. The developers have
+added new event code, and Bryan Bulten has started working on a port
+of the "Controls" sample.
+
+<h3>1.9 libgnomeprint bindings started</h3>
+
+Alejandro Sánchez has commited to CVS the firt code of the 
+libgnomeprint binding for Mono. Still there is a lot of work to make to generate all the
+metadata stuff and gets a nice XML file but now others members of the
+Mono project can contribute to libgnomeprint. We expect to get
+gnomeprint soon in Mono working.
+
+<h3>1.10 PHP and Mono integrated</h3>
+
+Sterling Hughes announced that PHP and Mono are now integrated! This
+means you can access .NET assemblies from PHP. For more information
+please see <a
+href="http://www.php.net/~sterling/mono/">http://www.php.net/~sterling/mono/</a>.
+So now you can do things as: 
+<pre>
+&lt;?php
+$Console = new Mono('System.Console');
+$Console->WriteLine('Welcome to the .NET World');
+?>
+</pre>
+
+<h3>1.11 gtkhtml3 binaries for monodoc</h3>
+
+Alp has made a CVS snapshot of libgtkhtml3 packaged for Debian at
+<a href="http://www.atoker.com/mono/">http://www.atoker.com/mono/</a>
+so people don't have to build it out of GNOME CVS themselves if they
+want to try the doc browser
+
+<h3>1.12 Late breaking news!</h3>
+
+Jackson's produced the first Gtk# hello world application written in
+IL with the Mono IL assembler. Take a look at <a href="http://www.leahandjackson.com/hello_world.png">it</a>.
+
+<h3>2. Meet the team. This week Tim Coleman</h3>
+
+	<p>The Mono team is integrated by contributors all over the world
+	that are working really hard to get this project going
+	further. In this section we will be meeting this people so we
+	can know more about them and what they are doing.</p>	
+
+	<p>This week we are proud to present Tim Coleman. Tim is a
+	Canadian hacker who lives in Kitchener, Ontario (Canada) and
+	works in Waterloo for <a href="http://www.opentext.com">Open
+	Text</a> (one of the fist companies to index the web). He
+	studied Computer Science and Combinatorics & Optimization
+	at the University of Waterloo. He is involved with <a
+	href="http://www.gnome-db.org">gnome-db</a> after he got
+	started with Mono. He started out in Mono with some of the
+	System.Xml namespaces. And he has been developing with
+	databases ever since
+	he started as a professional. Then his friends <a
+	href="http://monoevo.sourceforge.net/mwn/archives/01102003.html">Daniel
+	Morgan</a>, Rodrigo Moya and Gonzalo Paniagua convinced him to
+	help them out. As he was the only one to successfully install
+	oracle on Linux, he was the first to start working on a libgda
+	oracle provider. He gets a life by writing custom code for
+	lots of different clients as well as creating modules to do
+	whatever you want to do with them. Some time ago he also
+	develop code for WindowMaker but stopped working on it.  In
+	his spare time he enjoys submiting patches for code if he
+	finds useful, reading, doing puzzles, crosswords, a lot of
+	mental stuff. "<i>I write code as a hobby too.  That's lots of fun.</i>"
+
+	
+<h4>Interview with Tim Coleman</h4>
+
+This week we had a chance to meet Tim at #mono, let's see what he
+told us.
+
+        <p class="question"><span class="person">MWN:</span> You told us that
+        some friends of you that form part of the Mono Team convinced
+	you to come to Mono, is there any other reason?</p>
+	
+	<p class="answer"><span class="person">Tim Coleman:</span> The
+	reason I came to Mono was that I was interested in learning
+	more about web services. When I found that Mono didn't have
+	that, I thought I would help in any way possible to bring Mono
+	up-to-speed and then I just stayed around for the ride.</p>
+	
+        <p class="question"><span class="person">MWN:</span> You have
+	been a free software developer for a long time, what do you
+	think about the impact Mono will have in the free software
+	community?</p>
+
+	<p class="answer"><span class="person">Tim Coleman:</span>
+	Well, I don't really know that it will have a huge impact on
+	the free software community.  A lot of free software folks
+	have a very negative view of Microsoft, and many of those
+	people will wonder why they should use Mono instead of Java,
+	which is not from Microsoft. I think it could lead to broader
+	usage of more open operating systems, such as Linux or BSD,
+	because software written for .NET will be able to run on those
+	systems too.  I think that some managers will see the
+	potential impact on their bottom line and at least look into
+	using free software on their servers, more than they already
+	do. The real impact will be on people outside of the free
+	software community who aren't as anti-establishment as the
+	hard-core open source advocates.</p>
+
+	<p class="question"><span class="person">MWN:</span>  But
+	some core developers will be bringing that open technologies
+	to the UN*X environments, don't you think that will make those
+	anti-establishment people to finally accept the tools Mono is
+	providing?, that their position is more due to a lack of
+	information about what Mono is? and so when they will get in
+	touch with it they will accept it? In deed it's a community
+	effort and not a Microsoft product.</p>
+
+	<p class="answer"><span class="person">Tim Coleman</span> No,
+	I don't really think that bringing the tool to other platforms
+	will necessarily change people's opinions. At least, not over
+	night. :-) A lot of people are very hesitant given Microsoft's
+	track record, and they will always have doubts. I think that
+	Mono will be associated with Microsoft for quite a while. You
+	don't have to go any farther than Slashdot to discover that. I
+	think that over time, people will start to use Mono on Linux
+	and elsewhere, I just think that the motivation will come from
+	outside of the free software community. And don't look for it
+	to take the world by storm.</p>
+
+	<p class="question"><span class="person">MWN:</span> Looking
+	back in time we see that Mono has had a great development
+	since it's beginning in a very short period. Which are the
+	areas you have been contributing to this quick evolve since
+	you joined the project and in which are you involved now?</p>
+
+	<p class="answer"><span class="person">Tim Coleman:</span> All
+	of my time in Mono has been spent in the class libraries. I
+	started out, as I mentioned, interested in learning more about
+	Web Services in .NET. I have quite a bit of experience in XML,
+	so when I realized that there was no Web Services code in
+	Mono, I started working on some of the System.Xml namespaces.
+	That was last spring.  Then, I left Mono for a couple of
+	months to work on an Oracle database provider for libgda. When
+	I came back to Mono, I decided that it was time to start
+	developing some of the Web Services namespaces. I had some
+	help in there, and it was good for a while.  Along the way, I
+	worked on some of the System.Xml.Serialization classes,
+	because those are used by System.Web.Services. Then, I hit an
+	impasse and I wasn't able to get around it. The great thing
+	about Mono so far is that there is so much to do that when you
+	hit a wall, you can just change your focus to an other area
+	and come back. That's what I did -- I started working on the
+	Mono SQL Server client provider, along with some help from
+	Daniel Morgan, Gonzalo Paniagua and Rodrigo Moya. Just before
+	Christmas I got very busy at work, so I have been away from
+	Mono since then. I'm trying to get back into it. Just the
+	other day I started working on some of the Oracle code that
+	Daniel was working on, and I got it to compile on Linux. I
+	think for the next little while I will be working on making
+	that more complete. I will probably also be paying more
+	attention to bugs that people email me about in the SQL
+	Server/Sybase providers.</p>
+
+	<p class="question"><span class="person">MWN:</span> How
+	complete is the ADO.NET implementation then?</p>
+
+        <p class="answer"><span class="person">Tim Coleman</span>
+	Well, that's really hard to say.  At this point, I wouldn't
+	even consider it for production use. I could make up a number,
+	like 50%, and say it, but I don't think that would be very
+	useful. Much of it is there and works. There are still lots of
+	bugs to be found if you're looking for them, and that's what
+	we really need right now. We need people with software that
+	works on .NET to tell us what doesn't work on Mono. .NET isn't
+	being accepted very quickly though, so I don't really think
+	there is a large volume of code out there, and the number of
+	people that have heard of Mono is relatively small, so we
+	probably won't get that very soon. Of course, if you asked me,
+	I would say to use the providers that I worked on, because
+	they must be the best :-), but really, none of them are
+	perfect, and none of them are ready for production use anyway,
+	so use what you want and let us know about the bugs!</p>
+
+	<p class="question"><span class="person">MWN:</span> Can you
+	give us any advice then (despite that of using your
+	providers ;-))?</p>
+
+	<p class="answer"><span class="person">Tim Coleman:</span> I
+	think if people choose what database to use based on which
+	provider they think is most bug-free, then they are not making
+	an appropriate decision.</p>
+
+	<p class="question"><span class="person">MWN:</span> Could you
+	say the final words of the interview?</p>
+
+	<p class="answer"><span class="person">Tim Coleman:</span> I
+	think that Mono is a truly exceptional project. I don't think
+	I've talked to anyone on the team that wasn't friendly, or
+	that wasn't interested in making Mono better. If we all work
+	together, then we can all enjoy the fruits of our labour. We
+	wouldn't be able to make this happen without each other.</p>
+
+
+
+<!-- <h3>3. Mono Socials: </h3> -->
+
+
+<h3>3. Mailing List Activity</h3>
+
+We have more mailing lists! Take a look at: <a
+href="http://lists.ximian.com/mailman/listinfo/">http://lists.ximian.com/mailman/listinfo/</a>.
+Visit the <a href="http://www.go-mono.org/mailing-lists.html">list</a>
+of available ones.
+
+   The main points:
+   <ul>
+     <li>Sterling Hughes sent an small patch which defines
+   mono_load_image to mono_image_open as mono_load_image is
+   no longer present within the mono library.</li>
+     <li>Alejandro Sánchez Acosta started on some GnomePrint#
+     bindings in gtk#. Cesar Octavio Lopez Nataren is helping
+     with that too. Daniel Morgan said "once GnomePrint# can
+     work, I wonder if we could get it to work with the
+     System.Drawing.Printing namespace - especially
+     PrintDocument", in reply to a guy that was asking for
+     printing libraries in Mono.</li>
+     <li>Sebastien Poulliot sent this: "I just commited a first
+     version of Mono.Security.Win32 assembly in CVS. As it's name
+     indicates this assembly is for Win32 only. It's goal is to
+     permit the use of CryptoAPI under Windows for enhanced
+     compatibility (like keypair persistance) and performance
+     (like using a crypto accelerator - HSM). A more complete
+     description is available at
+     <a href="http://www.go-mono.org/crypto.html">http://www.go-mono.org/crypto.html</a>.
+     Just a remainder: This assembly is NOT meant to be linked directly
+     with any application. It's usage should be transparent
+     to application that use (directly or not) the CryptoConfig class
+     to create the cryptographic algorithms. So far the following
+     CryptoAPI algorithm are supported:
+      <ul><li>random number generator (selectable using CspParameters)</li>
+          <li>hash algorithms (MD2, MD4, MD5 and SHA1);</li>
+      </ul>
+     </li>
+     <li>Rodrigo Moya: <i>"gnome-db is obsolete. Make sure to not
+     install it :-) libgda/libgnomedb/mergeant replace it."</i>
+     </li>
+     
+     </ul>
+
+
+    
+<h3>4. CVS Activity</h3>
+	
+A quiet week in the Mono CVS. Do we all have exams these days?
+Here are the results. Starting Feb 1st, till Feb 07th.
+<br><br>	
+
+  Authors: Total 32  Total commits: 312
+
+<table border=0 >
+<tr><td valign="Top">
+ <table border=1  bgcolor="#a8a1a1">
+     <tr><td><b>Author</b></td><td><b>Commits</b></td></tr>
+     <tr><td>Alvaro del Castillo</td><td>2</td></tr>
+  <!--   <tr><td>Ajay Kumar Dwivedi</td><td>1</td></tr> -->
+     <tr><td>Alejandro Sanchez</td><td>3</td></tr> 
+  <!--   <tr><td>Alp Toker</td><td>5</td></tr> -->
+     <tr><td>Atsushi Enomoto</td><td>2</td></tr>
+ <!--    <tr><td>Christopher Bockner</td><td>4</td></tr>
+     <tr><td>Mark Crichton</td><td>1</td></tr> -->
+     <tr><td>Daniel Lopez</td><td>8</td></tr> 
+     <tr><td>Daniel Morgan</td><td>23</td></tr>
+     <tr><td>Dennis Hayes</td><td>4</td></tr>
+     <tr><td>Dick Porter</td><td>1</td></tr>
+     <tr><td>Dietmar Maurer</td><td>9</td></tr>
+     <tr><td>Duncan Mak</td><td>6</td></tr>
+<!--     <tr><td>Gaurav Vaish</td><td>31</td></tr> -->
+     <tr><td>Gonzalo Paniagua</td><td>47</td></tr>
+     <tr><td>Jackson Harper</td><td>20</td></tr>
+     <tr><td>Jaime Anguiano</td><td>3</td></tr>
+<!--     <tr><td>Jeroen Janssen</td><td>5</td></tr> -->
+     <tr><td>Johannes Roith</td><td>9</td></tr>
+     <tr><td>Jonathan Pryor</td><td>4</td></tr>
+     <tr><td>Lluis Sanchez</td><td>14</td></tr>
+     <tr><td>Marco Ridoni</td><td>1</td></tr>
+     <tr><td>Martin Baulig</td><td>76</td></tr>
+     <tr><td>Martin Willemoes Hansen</td><td>8</td></tr>
+     <tr><td>Miguel de Icaza</td><td>17</td></tr>
+     <tr><td>Mike Kestner</td><td>2</td></tr>
+     <tr><td>Nick Drochak</td><td>3</td></tr>
+     <tr><td>Paolo Molaro</td><td>2</td></tr>
+     <tr><td>Patrik Torstensson</td><td>27</td></tr>
+     <tr><td>Peter Williams</td><td>7</td></tr>
+     <tr><td>Piers Haken</td><td>3</td></tr>
+     <tr><td>Rachel Hestilow</td><td>4</td</tr>
+<!--     <tr><td>Radek Doulik</td><td>20</td></tr> -->
+     <tr><td>Rafael Teixeira</td><td>2</td></tr>
+     <tr><td>Rodrigo Moya</td><td>3</td></tr>
+     <tr><td>Sebastien Pouliot</td><td>21</td></tr>
+     <tr><td>Ville Palo</td><td>6</td></tr>
+     <tr><td>Zoltan Varga</td><td>2</td></tr>
+  </table>
+ </td><td valign="Top">
+  <table border=1  bgcolor="#a8a1a1">
+  <tr><td><b>Modules</b></td><td><b>Commits</b></td></tr>
+  <tr><td>mono</td><td>42</td></tr>
+  <tr><td>mono/doc</td><td>4</td></tr>
+  <tr><td>mono/jit</td><td>5</td></tr>
+  <tr><td>mcs/mcs</td><td>8</td></tr>
+  <tr><td>mcs/class</td><td>114</td></tr>
+  <tr><td>mcs/class/corlib</td><td>60</td></tr>
+  <tr><td>mcs/class/System.Web</td><td>8</td></tr>
+  <tr><td>debugger</td><td>54</td></tr>
+  <tr><td>Windows.Forms</td><td>7</td></tr> 
+  <tr><td>gtk-sharp</td><td>22</td></tr>
+  <tr><td>mbas</td><td>3</td></tr>
+  <tr><td>monodoc</td><td>3</td></tr>
+  <tr><td>mod_mono</td><td>10</td></tr>
+  <tr><td>xsp</td><td>6</td></tr>
+<!--  <tr><td>janet<td><td></td></tr> -->
+  </table>
+  </td></tr>
+</table>
+
+
+Contributors to this issue:
+<br>
+Sterling Hughes sent the PHP note.
+<br>
+Alejandro Sanchez Acosta provided lots of news.
+<br>
+Miguel de Icaza, bug fixing, news contributor, style.
+<br>
+Gonzalo Paniagua, bug fixes.
+<br>
+Daniel Morgan, bug fixes.
+<br>
+Alp Toker, bug fixes and the gtkhtml point.
+<br><br>
+ Please visit us at the homepage of the Mono Project:
+<a href="http://www.go-mono.org">http://www.go-mono.org</a>
+
+If you want to consult old issues of the MWN. You can find
+the archives <a
+href="http://monoevo.sf.net/mwn/archives.html">here</a>.
+An spanish translation is also available at the Mono Hispano
+<a href="http://mono.es.gnome.org">site</a>.
+
+</table>
+</table>
+</table>
+
+</html>

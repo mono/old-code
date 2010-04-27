@@ -1,0 +1,50 @@
+////////////////////////////////////////////////////////
+/ Information for MWN contributors and MWN Tools users /
+////////////////////////////////////////////////////////
+
+** Tools
+
+ *  contributor.exe		Console tool for contributing MWN in 
+				the proper format.
+
+ *  guicontributor.exe		Gtk# tool for contributing MWN in the 
+				proper format.
+
+ *  monocvsspy.exe		Program that generates CVS statistics 
+				by downloading the mono-cvs mailing 
+				list monthly digest and parsing it.
+
+ *  ripper.exe			Console tool for editing MWN issues 
+				using contributed news items.
+
+ *  archiver.exe		Console tool for generating the MWN 
+				archive page.
+
+////////////////////////////////////////////////
+/ FAQ for MWN editors and MWN Tools developers /
+////////////////////////////////////////////////
+
+0. How to edit entries while using the ripper?
+1. How do I create a modules.list file for MonoCvsSpy?
+
+**** 0. How to edit entries while using the ripper?
+
+You can't edit entries from the ripper itself. This might sound very 
+strange but it was a design decission (we can change it if we have 
+good reasons to do it, as we want to and we have the time to do it ;-)).
+Instead of that, we preffer you to edit the news item (.mwnitem file) 
+and reload the entries. This is proved to be much less error prone.
+
+**** 1. How do I create a modules.list file for MonoCvsSpy?
+
+In order to generate the modules list, enter the following command in the mcs/class directory:
+
+for i in `ls`; do echo $i | grep -v README | grep -v PEAPI | grep -v LICENSE | grep -v CVS | grep -v ChangeLog | grep -v lib | grep -v Makefile | grep -v notes; done > modules.list
+
+Then you should add '/' to the end of each line that appears several times.
+In particular, add it to 'System' and 'doc'.
+
+The modules.list file should be moved to the directory where 
+the monocvsspy.exe file is. 
+
+

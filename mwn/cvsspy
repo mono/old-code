@@ -1,0 +1,43 @@
+#!/bin/bash
+
+# Silly program to help me getting the cvs
+# statistics. 
+#
+# TODO: add wget support to retrieve the mailing-lists archives.
+#       Optimize and so many other things...
+
+# Thanks to Miguel and Gonzalo for their help.
+# Jaime Anguiano Olarra (jaime@gnome.org)
+
+if ["$1" = "clean"]; then
+    rm st_*;
+fi
+
+egrep '^(From:|Subject:)' $1 > log
+
+grep From: log | grep mono-cvs | sort | uniq -c > thisweekauthors
+
+# for submodules 
+monolist="mono doc jit"; export monolist
+mcslist="mcs mbas class"; export mcslist
+
+for i in $monolist
+do
+	grep Subject log | sed  's/Subject://' | grep mono/$i | nl > st_mono_$i 
+done
+
+for i in $mcslist
+do
+	grep Subject log | sed  's/Subject://' | grep mcs/$i | nl > st_mcs_$i 
+done
+
+# the rest of the modules
+# mono is there to get the total of commits to the mono module.
+othermonos="gtk-sharp mono System.Web corlib xsp mod_mono janet monodoc debugger Remoting LOGO Forms"; export othermonos
+for i in $othermonos
+do
+	grep Subject log | sed  's/Subject://' | grep $i | nl > st_$i
+done
+
+# total of commits
+grep Subject log | sed 's/Subject://' | nl > total

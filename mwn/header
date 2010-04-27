@@ -1,0 +1,59 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html>
+
+<head>
+<title>Mono News</title>
+<link rel="stylesheet" href="mwn.css" type="text/css">
+<meta http-equiv="content-type" content="text/html; charset=ISO-8859-1">
+</head>
+
+<body>
+<center>
+<table cellpadding="2" cellspacing="2" border="0">
+  <tr>
+    <td>
+	<a href="http://www.go-mono.org"><img src="pixmaps/mwn.png" border="0"></a>
+    </td>
+  </tr>
+  <tr>
+    <td>
+      <a href="contributing.html">Contributing</a> <a href="about.html">About MWN</a>
+      <a href="issue.txt">Printer friendly version</a>
+    </td>
+  </tr>
+  <tr>
+   <td><center>
+    <table cellpadding="2" cellspacing="2" bgcolor="#ffffff"
+    width="600" height="80%" align="Left" valing="Center" border="1">
+    <tr>
+      <td>
+        <table>
+          <tr>
+	    <td>
+	      <img src="pixmaps/contents.png">
+            </td>
+            <td width="40%">
+             <h3>
+		Date:
+	     </h3>
+	   </td>
+	   <td>
+		 <table cellpadding="2" cellspacing="2" border="0">
+       <tr>
+         <td>
+           <a href="mwn.rss"><img src="pixmaps/xml.gif" border="0"></a>
+	   <b>Use the link of the image to add RSS feed to your <a
+	      href="http://www.ximian.com/products/evolution">Evolution</a> summary!<b>
+	   <br></br>Looking for past issues?. Visit the <a href="archives.html">archives</a>
+	 </td>
+       </tr>
+      </table>
+   
+	   </td>
+	 </tr>
+      </table>
+      </td>
+    </tr>
+    <tr>
+      <td>
+	

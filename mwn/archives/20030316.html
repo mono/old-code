@@ -1,0 +1,501 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html>
+
+<head>
+<title>Mono Weekly News. Mar 16th, 2003</title>
+<link rel="stylesheet" href="mwn.css" type="text/css">  
+<meta http-equiv="content-type" content="text/html; charset=ISO-8859-1">
+</head>
+<body>
+
+<table cellpadding="2" cellspacing="2" border="0" width="800" bgcolor="black" align="Center">
+    <tr>
+      <td valign="Top" align="Center" bgcolor="White">
+      <table align="Center" width="530" border="0" cellspacing="0" cellpadding="0">
+
+<table width="100%" border="0" cellspacing="0" cellpadding="0">
+                            <tr>         
+			   
+                            <td width="16">&nbsp;</td>
+
+                            <td width="373"> 
+<!-- Main titles section -->
+
+<table>
+<tr><td>
+<td valign="Center" bgcolor="white"><img src="logo.png"></td>
+<td><table bgcolor="#a8a1a1" cellspacing="2" cellpadding="2"><tr>
+<td bgcolor="#777746"><h1>Mono Weekly News. Mar 16th, 2003</h1></td>
+</tr></table>
+<td><img src="squares.png"></td>
+<td align="Right"><a href="http://www.go-mono.org"><h2>http://www.go-mono.org</h2></a></td></tr>
+</table>
+<br>
+<cite>
+<q>
+  The voice of the Mono Community. 
+</q>
+</cite>
+
+<!-- Table of contents -->
+
+<br><br>
+  <b>Table of contents
+  <ul>
+    <li>1. Headlines
+       <ul>
+          <li>1.1 Mono 0.23 released!</li>
+	  <li>1.2 System.Web.Mail + UUEncoding</li>
+	  <li>1.3 XML Deserialization now in the CVS</li>
+	  <li>1.4 CORBA support is closer</li>
+        </ul>
+    <li>2. Meet the team. This week Alp Toker</li>
+    <li>3. Mailing List Activity</li>
+    <li>4. CVS Activity</li>
+       </ul>
+   </b>
+
+<h3>1.1 Mono 0.23 released</h3>
+
+<p>  Mono 0.23 has been released. It is only a bug fix release.
+     You can read the release notes <a
+     href="http://www.go-mono.com/archive/mono-0.23">here</a>.
+</p>
+
+<h3>1.2 System.Web.Mail + UUEnconding</h3>
+
+<p> Per Arneng added UUEncoding to System.Web.Mail for attachment
+    encoding. So now both of the encoding techniques work for
+    attachments UUEncode, Base64. Soon the mail API will be totally
+    completed since there are only some minor parts left to fix. 
+</p>
+
+<h3>1.3 XML Deserialization now in the CVS</h3>
+
+<p> Miguel has applied Elan Feingold's XML Deserialization support
+    patch to the CVS. Now objects serialized using XML format can
+    be deserialized back. 
+</p>
+
+<h3>1.4 CORBA support is closer</h3>
+
+<p> Kristopher Johnson has <a
+    href="http://kristopherjohnson.net/kj/RemotingDotCorba">published</a>
+    his code for CORBA support. As you can read at his website:
+    "<i>Remoting.Corba is a personal project that aims to integrate
+    CORBA/IIOP support into the .NET Remoting architecture. The goal
+    is to allow .NET programmers to easily develop systems that
+    interoperate with CORBA systems</i>".
+</p>
+
+<h3>2. Meet the team. This week Alp Toker</h3>
+
+	<p>The Mono team is integrated by contributors all around the world
+	that are working really hard to get this project going
+	further. In this section we will be meeting this people so we
+	can know more about them and what they are doing.</p>	
+
+	<p><a href="http://www.atoker.com">Alp Toker</a> is a 6th
+	former based in Highgate, North London, studying Maths,
+	Physics and German. He has been working with Free Software
+	in his spare time for several years, and got involved with
+	development on Linux a few years ago when he wrote gPal, a
+	small Gtk+ frontend for the PayPal online payment service.
+	After releasing the first version, there were many requests
+	for packages and thus began his involvement with Debian and
+	GNOME. He is editor of the popular <a
+	href="http://www.debianplanet.org">DebianPlanet</a> site,
+	and one of his projects today is the packaging of <a
+	href="http://www.debianplanet.org/mono/">Mono for Debian</a>.
+	For I while, He was part of the <a
+	href="http://www.gnomemeeting.org">GnomeMeeting</a> developer
+	team. This is where he learnt the dynamics of working with
+	larger code bases and a distributed development team. At the
+	FOSDEM 2002 conference, he had a lengthy discussion with
+	Miguel de Icaza on the merits of Mono, after which he decided
+	this was a project which could benefit him and vice versa.
+	<i>"My main desire was to have a truly free alternative to Java
+	by the time he reached university. Mono, based on ECMA
+	standards, promised to fulfil that goal. Now, a year on, it
+	seems well on course to do so"</i>, Alp states.</p>
+
+	<p>Most of his time is shared between studies, reading books
+	with unfeasibly long titles and hacking code. At other times,
+	you're likely to find him down at the local, or if it's a
+	Saturday night, trekking through the City with mates. He
+	craves trance music right now, though he'd be hard-pressed to
+	name favourites; <i>"any tune that doesn't involve "blastin' holes
+	in gangstas" is fair game, really"</i>, says. Sometimes, he tries his
+	hand at cooking, often with limited success. Having pretty much
+	conquered elementary Chinese dishes like lemon chicken, egg
+	fried rice and eggdrop soup, he's now looking towards Japanese
+	and Turkish cuisine. <i>"They say cooking impresses the girls,
+	but I'm not sure mine would"</i>.
+	</p>
+	
+<h4>Interview with Alp</h4>
+
+This week we had a chance to meet Alp at #mono, let's see what he
+told us.
+
+        <p class="question"><span class="person">MWN:</span> You are
+	the developer of maybe two of the best and very first mono
+	based applications, <a
+	href="http://www.atoker.com/acacia/">Acacia</a>
+	(the new name for <a
+	href="http://www.atoker.com/gsirc/">gsIRC</a>)
+	and <a href="http://www.atoker.com/platano/">Platano</a>.
+	Can you tell us a little bit about them? What moved you
+	towards their development? </p>
+	
+	<p class="answer"><span class="person">Alp Toker:</span>
+	That's very flattering of you; I'd say they're definitely both
+	works in progress at the moment. <a
+	href="http://www.atoker.com/platano/">Platano media player</a>
+	is a fairly simple affair based on the GStreamer multimedia
+	framework, now part of the GNOME platform. It was intended as
+	a proof of concept for Gst#, the CLI binding for GStreamer,
+	and still only plays simple video files. The development of
+	Gst# wasn't as challenging as it might at first sound, be use
+	it's mostly auto-generated by the fantastic Gtk# GAPI code
+	parser and generator, which only needed a few modifications
+	to cope with the new code-base. However, it's received a very
+	positive response from the community, and it's interesting to
+	note that a simple video hack (complete with cutesy banana
+	logo) can woo people who wouldn't understand or be interested
+	in a fantastic new optimisation in the runtime, or a complete
+	Remoting implementation. <b>It's all about reaching different
+	target audiences</b>. Acacia (formerly gsirc), an IRC client, is
+	a slightly more complex application. Its development has been
+	a rewarding experience as there's a lot of interest in
+	Gtk+/GNOME 2 IRC clients, meaning there are always users eager
+	to find bugs and provide suggestions as well as developers to
+	provide patches. I'm getting the chance to do things the way I
+	think they should be in an IRC client, and the ease of C# code
+	means I can afford to spend more time in the "sugar" like
+	custom widgets that make for a more complete user experience.
+	Once again, it makes extensive use of existing technologies:
+	<b>Acacia uses Thresher, an excellent IRC library for .NET. It's
+	interesting to note that the author released his (X11
+	licensed) code only with Microsoft's .NET implementation in
+	mind, yet it runs today on Mono without modification</b>. My
+	main motivation in writing these programs was to test Mono and
+	Gtk# with real-world applications. The most important form of
+	testing by far is provided by unit tests, and Mono has a very
+	comprehensive test suite, but sometimes  bugs can slip past
+	it and only trigger problems in real situations. Best of all,
+	I've had the opportunity to get quite intimate with the inner
+	workings of Gtk#, which I'm now doing API beautification for.
+	Most recently, I committed a patch to the GAPI generator that
+	eliminates the need for length parameters for strings, a piece
+	of legacy from the C world that C# doesn't need to carry.</p>
+
+	<p class="question"><span class="person">MWN:</span> And how
+	do you feel about Mono as an experienced Linux developer? Do
+	you think Gtk# can become a serious competitor to the classic
+	GTK+/Gtk--?</p>
+
+	<p class="answer"><span class="person">Alp Toker:</span>
+	<i>Miguel once said, "<b>There is a point in your life when you
+	realize that you have written enough destructors, and have
+	spent enough time tracking down a memory leak, and you have
+	spend enough time tracking down memory corruption, and you
+	have spent enough time using low-level insecure functions,
+	and you have implemented way too many linked lists</b>"</i>. This
+	pretty much echoes my sentiments. I've worked with  commercial
+	and Free Software code for data analysis, kernel sources and
+	Web applications, so I recognise that the diversity of
+	programming languages is vital to the developer community. I
+	still have love for the arcane delights of Perl and the
+	structured, clean form of Python, <i>but to me C# is a step-up
+	for large desktop and Web applications. Whether Gtk# will hit
+	it off with wider (read Windows) developer community is
+	anyone's guess, but the Gtk# team is working hard to provide
+	an API that is consistent and compatible with best practice
+	on the .NET platform. Even certain core Gtk+ developers
+	believe that C is not suitable for applications programming,
+	but rather for lower-level systems and libraries, so there
+	is definitely a market for higher-level languages and
+	platforms that make life easier for developers and us.
+	</p>
+
+	<p class="question"><span class="person">MWN:</span> You said
+	you beautifying Gtk# at the API. Taking in consideration that
+	GTK+ was quite hard to use for primer and medium C programmers,
+	how faithful will you be to GTK+. Do you think it could be
+	better not to respect the GTK+ API and instead make something
+	closer to Swing or Windows.Forms?</p>
+
+	<p class="answer"><span class="person">Alp Toker:</span> Swing
+	and System.Windows.Forms both have their merits. Swing
+	represents the culmination of much research and effort into
+	providing an API that integrates with the Java object model.
+	Similarly, SWF integrates tightly with the Windows
+	environment, providing users as well as developers with an
+	instantly recognisable interface. Gtk+ comes from a different
+	heritage, mostly derived from older UNIX toolkits like Motif.
+	That's not to say that the Gtk+ way of doing things is any
+	less valid than the others, but it does sometimes need a
+	different frame of thought that comes more easily to X11
+	developers. That said, <b>the tweaks being done on Gtk# should
+	make the API feel more familiar to Forms developers without
+	alienating long-time Gtk+ developers. Gtk# is definitely
+	progressive, but perhaps more evolutionary than
+	revolutionary</b>.
+
+	<p class="question"><span class="person">MWN:</span> One of
+	the core points of implementing .NET is that we have a bunch
+	of documentation provided by Microsoft and all the editorials
+	that have focused their attention in .NET. But as Gtk# is
+	not a .NET element what are the plans about it's
+	documentation? Is it going to be Monodoc based or we can
+	expect more training facilities?</p>
+
+	<p class="question"><span class="person">Alp Toker:</span>
+	There are two issues at hand here. First is the systematic
+	documentation of Gtk# interfaces -- there's currently a
+	massive effort under way to document the API from scratch, in
+	the style of other .NET documentation. <b>The idea is to leave
+	behind any trace of legacy C terminology in favour of a fresh
+	new set of documentation</b>. The response has been so great
+	that even undocumented areas of Gtk+ are now having their Gtk#
+	counterparts documented. As API beautification continues, a
+	new set of independent documentation for Gtk# will become
+	ever more important. The other issue is tutorial-style
+	documentation for newcomers. <i>The <a
+	href="http://www.go-mono.org/tutorial/">Mono Handbook</a>,
+	spearheaded by Johannes Roith and Martin Willemoes Hansen not
+	only provides introductions to the various technologies that
+	comprise Mono, but also has a breathtaking compendium of
+	carefully commented code snippets, categorised by namespace,
+	that teach by example</i>. More tutorials will undoubtedly start
+	to appear on third party sites as Mono becomes more
+	widely-distributed. Right now, Gtk+ 2 doesn't integrate into
+	the Windows environment as well as it should. The Windows port
+	of Gtk+ has a shallow look and feel that can leave a bad
+	impression with Windows users. However, commercial
+	applications from the likes of Macromedia and Adobe, as well
+	as Mozilla have proved that it is possible to have a
+	non-native toolkit that is sturdy and consistent with the
+	Windows UI. Work is being done to provide a native-widget
+	rendering theme engine for Gtk+. More customisations may be
+	needed to provide even smaller tweaks, like ensuring that
+	the contents of a scrolled widget are attached full-bleed to
+	their respective scrollbar widgets. This is one of the tasks
+	that I believe will get a lot of attention once the code Gtk#
+	API has settled down. <i>The Gtk+ approach still makes more sense
+	for cross-platform development than often-discussed lowest
+	common denominator approaches, when a toolkit provides only
+	the functionality that's available on both platforms</i>. With
+	that addressed, there will be little technical reason not to
+	go with Gtk# for cross-platform development. The stigma
+	associated with using an API outside the bounds of the System
+	namespace for fundamental UI functionality may be more
+	difficult to overcome.</p>
+
+	<p class="question"><span class="person">MWN:</span> Do you
+	know if people at ICSharpCode is planning Gtk# support for
+	CSharpDevelop?</p>
+
+	<p class="answer"><span class="person">Alp Toker:</span> I
+	don't know much about what the SharpDevelop people are up
+	to, except that they have an experimental Java-to-C# port
+	of SWT used by the Eclipse IDE. This would provide a user
+	interface based on Gtk+ when run on Linux, although if I
+	understand correctly, it would be independent of Gtk#. I
+	haven't heard of any plans to introduce a Gtk# UI designer
+	for SharpDevelop.</p>
+
+	<p class="question"><span class="person">MWN:</span> Is there
+	anything else you want to say to the Mono community that will
+	be reading this?</p>
+
+	<p class="answer"><span class="person">Alp Toker:</span> <i>One
+	of the most fascinating things about the Mono project is that
+	it operates in a kind of common ground of platforms, acting
+	as a hub for users and developers coming from vastly differing
+	backgrounds and occupations</i>. It might be a matter of
+	discussing the merits of Mono with people who start an abusive
+	thread on the mailing list out of spite or misinformation.
+	At other times, it's as simple as not putting down someone
+	who accidentally commits MS-DOS style linefeeds to CVS with
+	their first commit. I couldn't have anticipated the maturity
+	of the developer team in handling the varying opinions and
+	approaches, which these people bring. Thanks also for your
+	great work with Mono Weekly News, Jaime.</p>
+
+     
+<h3>2. Mailing List Activity</h3>
+
+  These days the mailing list has been quiet and despite some
+  'suspicious' drops, there were no trolls in the scene.
+  Let's see the most important points discussed.
+
+  <ul>
+    <li>
+      Rafael D Teixeira posted a bunch of interesting links
+      to articles on .NET Remoting and Security issues.
+      Copying from directly from his mail:
+
+      <table border=1>
+        <tr>
+	  <td>
+	    <a
+	    href="http://msdn.microsoft.com/library/default.asp?url=/library/en-us/dndotnet/html/remsspi.asp">.NET
+	    Remoting Security Solution, Part 1: Microsoft.Samples.Security.SSPI Assembly</a>
+	  </td>
+	  <td>
+	    <a
+	    href="http://msdn.microsoft.com/library/default.asp?url=/library/en-us/dndotnet/html/remsec.asp">.NET
+	    Remoting Security Solution, Part 2:
+	    Microsoft.Samples.Runtime.Remoting.Security Assembly</a>
+	  </td>
+	</tr>
+      </table>
+    </li>
+    <li>
+      Paolo Molaro pointed out these facts in his reply to an email
+      about benchmarks between Mono and MS .NET SDK. About the
+      JITers: <i>mcs inserts useless additional variables with the pre/post
+      increment/decrement operators, and that makes the jit produce
+      somewhat worse code, there is already a bug filed for that.</i>
+      And about the index_string_test points: <i>We already discussed in
+      the past about storing the calculated hashvalue for strings:
+      that may help somewhat. Serge measured our Hashtable implementation
+      using the MS runtime and the speed was comparable to their
+      implementation. The other issue is memory allocation: in the
+      tests a lot of boxing operations take place, I have a simple
+      patch that speeds up both index_test and index_string_test by
+      about 10%, though it can be improved</i>.
+    </li>
+    <li>
+      Daniel Morgan wrote a wonderful summary about how to choose the
+      best database for your application. If you plan to develop Mono
+      based applications using databases, read <a
+      href="http://lists.ximian.com/archives/public/mono-list/2003-March/012867.html">this</a>
+       and then go ahead!.
+    </li>
+    <li>
+      Fegus Henderson wrote a nice reply for the <i>lies and
+      micro benchmarks</i>. What he states is something to keep on mind
+      and to think about when taking the speed at runtime the only
+      parameter to measure how powerful a language (and the framework
+      behind it) is.
+    </li>
+    <li>
+      CORBA support is closer as we can read in this 
+      <a
+      href="http://lists.ximian.com/archives/public/mono-list/2003-March/012974.html">email</a>.
+      We are very happy of seeing this, specially all of us that have
+      dig into how to get that done and that want to have Mono fully
+      integrated with <a href="http://www.gnome.org">GNOME Desktop</a> 
+    </li>
+  </ul>
+
+    
+<h3>3. CVS Activity</h3>
+
+  CVS Statistics from March 7th to March 13th (both days included).	
+
+<br><br>	
+
+  Authors: Total 30  Total commits: 305
+
+<table border=0 >
+<tr><td valign="Top">
+ <table border=1  bgcolor="#a8a1a1">
+     <tr><td><b>Author</b></td><td><b>Commits</b></td></tr>
+     <tr><td>Alan Tam</td><td>5</td></tr>
+  <!--  <tr><td>Alvaro del Castillo</td><td>2</td></tr>  -->
+  <!--   <tr><td>Aleksey Damakov</td><td>2</td></tr> -->
+  <!--   <tr><td>Ajay Kumar Dwivedi</td><td>1</td></tr> -->
+  <!--   <tr><td>Alejandro Sanchez</td><td>4</td></tr> -->
+     <tr><td>Alp Toker</td><td>2</td></tr>
+     <tr><td>Cesar Octavio Lopez Nataren</td><td>8</td></tr>
+<!--     <tr><td>Atsushi Enomoto</td><td>1</td></tr> -->
+<!--     <tr><td>Christopher Bockner</td><td>1</td></tr> -->
+      <tr><td>Mark Crichton</td><td>11</td></tr> 
+<!--      <tr><td>Dave Bettin</td><td>7</td></tr> -->
+     <tr><td>Daniel Lopez</td><td>3</td></tr> 
+     <tr><td>Daniel Morgan</td><td>3</td></tr> 
+<!--     <tr><td>Dennis Hayes</td><td>9</td></tr> -->
+     <tr><td>Dick Porter</td><td>2</td></tr>
+<!--     <tr><td>Dietmar Maurer</td><td>6</td></tr> -->
+     <tr><td>Duncan Mak</td><td>12</td></tr>
+     <tr><td>Gaurav Vaish</td><td>2</td></tr> 
+     <tr><td>Gonzalo Paniagua</td><td>10</td></tr>
+     <tr><td>Jackson Harper</td><td>30</td></tr>
+     <tr><td>Jaime Anguiano</td><td>2</td></tr>
+     <tr><td>Jean-Marc Andre</td><td>2</td></tr>
+     <tr><td>Joel Basson</td><td>5</td></tr>
+<!--     <tr><td>Jeroen Janssen</td><td>5</td></tr> -->
+     <tr><td>Johannes Roith</td><td>4</td></tr>
+<!--     <tr><td>Jonathan Pryor</td><td>4</td></tr> -->
+     <tr><td>Lee Mallabone</td><td>10</td></tr>
+<!--     <tr><td>Lluis Sanchez</td><td>1</td></tr> -->
+<!--     <tr><td>Marco Ridoni</td><td>1</td></tr> -->
+     <tr><td>Martin Baulig</td><td>52</td></tr>
+     <tr><td>Martin Willemoes Hansen</td><td>19</td></tr>
+     <tr><td>Miguel de Icaza</td><td>38</td></tr>
+     <tr><td>Mike Kestner</td><td>2</td></tr> 
+     <tr><td>Nick Drochak</td><td>1</td></tr>
+     <tr><td>Paolo Molaro</td><td>8</td></tr>
+<!--     <tr><td>Pedro Martinez</td><td>3</td></tr> -->
+<!--     <tr><td>Patrik Torstensson</td><td>27</td></tr> -->
+<!--     <tr><td>Peter Williams</td><td>2</td></tr> -->
+     <tr><td>Per Arneng</td><td>7</td></tr>
+     <tr><td>Petr Danecek</td><td>1</td></tr>
+<!--     <tr><td>Piers Haken</td><td>14</td></tr> -->
+     <tr><td>Alexandre Pigolkine</td><td>2</td></tr>
+<!--     <tr><td>Rachel Hestilow</td><td>4</td</tr> -->
+<!--     <tr><td>Radek Doulik</td><td>8</td></tr> --> 
+     <tr><td>Rafael Teixeira</td><td>2</td></tr>
+<!--     <tr><td>Rodrigo Moya</td><td>6</td></tr> -->
+     <tr><td>Sebastien Pouliot</td><td>16</td></tr> 
+     <tr><td>Tim Coleman</td><td>3</td></tr>
+<!--     <tr><td>Ville Palo</td><td>2</td></tr> -->
+     <tr><td>Zoltan Varga</td><td>2</td></tr>
+  </table>
+ </td><td valign="Top">
+  <table border=1  bgcolor="#a8a1a1">
+  <tr><td><b>Modules</b></td><td><b>Commits</b></td></tr>
+  <tr><td>mono</td><td>24</td></tr>
+  <tr><td>mono/mono</td><td>6</td></tr>
+  <tr><td>mono/doc</td><td>7</td></tr>
+<!--  <tr><td>mono/jit</td><td></td></tr> -->
+  <tr><td>mcs/mcs</td><td>3</td></tr>
+  <tr><td>mcs/class</td><td>81</td></tr>
+  <tr><td>mcs/class/corlib</td><td>7</td></tr>
+<!--  <tr><td>mcs/class/System.Web</td><td>12</td></tr>
+  <tr><td>debugger</td><td>56</td></tr>
+  <tr><td>Windows.Forms</td><td>8</td></tr> 
+  <tr><td>gtk-sharp</td><td>36</td></tr>
+  <tr><td>mbas</td><td>3</td></tr> -->
+<!--  <tr><td>monodoc</td><td>1</td></tr> 
+  <tr><td>mod_mono</td><td>4</td></tr> -->
+<!--  <tr><td>xsp</td><td>6</td></tr> -->
+  <tr><td>Remoting</td><td>2</td></tr> 
+<!--  <tr><td>janet<td><td></td></tr> -->
+  </table>
+  </td></tr>
+</table>
+
+
+Contributors to this issue:
+<br>
+Miguel de Icaza, bug fixing, news contributor, style.
+<br><br>
+ Please visit us at the homepage of the Mono Project:
+<a href="http://www.go-mono.org">http://www.go-mono.org</a>
+
+If you want to consult old issues of the MWN. You can find
+the archives <a
+href="http://monoevo.sf.net/mwn/archives.html">here</a>.
+An Spanish translation is also available at the Mono Hispano
+<a href="http://mono.es.gnome.org">site</a>.
+
+</table>
+</table>
+</table>
+
+</html>
