@@ -1,0 +1,5 @@
+print 2+3*4^5
+(PRINT (((2+3) * 4) ^ 5) 2+3*4^5)
+print (sum 1 2 + 3 * 4 sum 4 5)
+print sum 1 2
+print 1 / 2 / 4

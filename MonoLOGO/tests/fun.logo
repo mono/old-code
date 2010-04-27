@@ -1,0 +1,10 @@
+to foo :a
+	bar :a print "ok
+end
+
+to bar :a :b
+	print :a
+end
+
+foo 37
+bye

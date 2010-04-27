@@ -1,0 +1,4 @@
+MAKE "a "|hello world|
+PRINT THING "a
+PRINT THING "A
+PRINT :A

@@ -1,0 +1,15 @@
+to frob :list1 :list2
+	print :list1
+	print ButFirst :list1
+	print ButFirst :list2
+end
+
+to bar :list1
+	print First :list1
+	frob :list1 [4 5 6]
+end
+
+print "hi
+
+make "list [1 2 3]
+bar :list

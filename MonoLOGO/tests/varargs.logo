@@ -1,0 +1,6 @@
+to TestAgain :a :b :c
+	output (sum :a :b :c)
+end
+
+print (sum 1 2 3)
+print TestAgain 4 5 6 

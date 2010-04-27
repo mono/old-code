@@ -1,0 +1,15 @@
+make "a 2
+make "b 3
+print :a + :b
+print :a - :b
+print :a * :b
+print :a / :b
+print :a = :b
+print :a < :b
+print :a > :b
+print -:a + :b
+print -3
+;print iseq 3.0 7.0
+;print iseq 7 3
+;print rseq 3 5 9
+;print rseq 3 5 5

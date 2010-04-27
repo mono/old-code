@@ -1,0 +1,204 @@
+2004-01-21  Rachel Hestilow  <rachel@nullenvoid.com>
+
+	* Mono.Languages.Logo.Runtime/LogoBinder.cs (Distance):
+	Check the interfaces implemented for each base type
+	as well, as Mono no longer includes inherited interfaces
+	in GetInterfaces ()
+
+	* Mono.Languages.Logo/test/*.cs: Update tests to compile.
+
+	* tests/run.logo: Add a second version of the statement that
+	does not go through Run, for comparison purposes.
+ 
+2003-05-15  Rachel Hestilow  <rachel@nullenvoid.com>
+
+	* Mono.Langauges.Logo.Compiler/ElementType.cs: Add new
+	QuestionMark type.
+	* Mono.Languages.Logo.Compiler/Interpreter.cs: New
+	form of Execute that operates on runlists.
+	* Mono.Languages.Logo.Compiler/Parser.cs: Add new
+	AllowQuestionMark property and runlist ctor
+	which wrap around the Tokenizer equivalents. Add
+	support for QuestionMark tokens.
+	* Mono.Languages.Logo.Compiler/TokenType.cs: Add new
+	QuestionMark type.
+	* Mono.Languages.Logo.Compiler/Tokenizer.cs: Add
+	new AllowQuestionMark property and runlist ctor.
+	(TokenForChar): If AllowQuestionMark is set to true,
+	parse ? as a QuestionMark token.
+
+	* Mono.Languages.Logo.Runtime/Funcs.cs: Make ListToString
+	an internal method, as it is useful in Interpreter. Add
+	new function Run.
+	
+	* tests/run.logo: Added.
+
+2003-05-11  Rachel Hestilow  <rachel@nullenvoid.com>
+
+	* Mono.Languages.Logo/Makefile: Updated. 
+
+	* Mono.Languages.Logo.Compiler/CSharpCompiler.cs: Added.
+	* Mono.Languages.Logo.Compiler/Compiler.cs: Added.
+	* Mono.Languages.Logo.Compiler/IndentingWriter.cs: Added.
+	* Mono.Languages.Logo.Compiler/Interpreter.cs: Update
+	for new SendMessage semantics.
+
+	* Mono.Languages.Logo.RunTime/ITypedMessageStore.cs: Added.
+	* Mono.Languages.Logo.RunTime/TypedMessageArgument.cs: Added.
+	* Mono.Languages.Logo.RunTime/TypedMessageInfo.cs: Added.
+	* Mono.Languages.Logo.Runtime/CTSMessageTarget.cs: Update
+	for new SendMessage semantics. Implement ITypedMessageStore.
+	Add a new construct-time argument to not automatically
+	wrap objects in CTSMessageTargets.
+	* Mono.Languages.Logo.Runtime/IMessageStoreCollection.cs: Update
+	for new SendMessage semantics. Implement ITypedMessageStore.
+	* Mono.Languages.Logo.Runtime/IMessageTarget.cs: Change
+	SendMessage to return the result instead of using a byref
+	argument.
+	* Mono.Languages.Logo.Runtime/LogoMessageTarget.cs: Update
+	for new SendMessage semantics.
+
+	* mlogo/main.cs: Add new /compile option.
+
+2003-05-08  Rachel Hestilow  <rachel@nullenvoid.com>
+
+	* COPYING: Update copyright.
+	
+	* Mono.Languages.Logo.Compiler/Function.cs:
+	(Describe): Do not count the collector argument towards
+	the min_argc.
+	(Invoke): Support collector aruments. Set result to
+	the value returned by Interpreter.Execute.
+	* Mono.Languages.Logo.Compiler/Interpreter.cs:
+	(Execute): If the "output" statement is called, return
+	with the value passed to it.
+	* Mono.Languages.Logo.Compiler/Parser.cs: Remove
+	commented-out cruft.
+
+	* Mono.Languages.Logo.Runtime/Funcs.cs: New method
+	Output.
+	* Mono.Languages.Logo.Runtime/LogoContext.cs: New
+	properties StopExecution and OutputValue. New method
+	Output.
+	* Mono.Languages.Logo.Runtime/LogoMessageTarget.cs:
+	Make funcs a case-insensitive hash table.
+
+	* tests/function2.logo: Print out all arguments to foo,
+	and add an actual call to foo.
+
+2003-05-07  Rachel Hestilow  <rachel@nullenvoid.com>
+
+	User-defined functions work! There has been far too long
+	a gap in development to write a proper ChangeLog entry.
+
+2002-12-22  Rachel Hestilow  <rachel@nullenvoid.com>
+
+	* Makefile: Add clean target. Bomb out on subdir errors.
+	
+	* Mono.Languages.Logo.Compiler/ElementType.cs: Add new Variable
+	type. This allows the interpreter/compiler to optimize certain
+	static-string variable accesses.
+	* Mono.Languages.Logo.Compiler/Interpreter.cs: Maintain a root
+	LogoContext.
+	(CollectArgs, Execute): Handle ElementType.Variable.
+	(ExecuteStatement): Pass context to SendMessage.
+	* Mono.Languages.Logo.Compiler/Parser.cs (ParseInfix): Handle
+	unary minus as a special case.
+	(ParseBackwards): Handle unary minus as a statement for now.
+	Handle variable accesses as ElementType.Variable.
+	
+	* Mono.Languages.Logo.Runtime/PassContextAttribute.cs: Added. 
+	* Mono.Languages.Logo.Runtime/IMessageTarget (SendMessage):
+	Require a LogoContext.
+	* Mono.Languages.Logo.Runtime/LogoBinder.cs: Accept a LogoContext
+	in ctor, and add a Context property. Support PassContextAttribute.
+	(BindToMethod): Allow null in object arguments (assume "object" type).
+	Fix a bug in min_vararg_count value (was always being set to 1).
+	* Mono.Languages.Logo.Runtime/CTSMessageTarget.cs:
+	(SendMessage): Remove dead signature code. Set context on binder.
+	(ListMessages): Support PassContextAttribute.
+	* Mono.Languages.Logo.Runtime/Funcs.cs: New functions Minus, Make,
+	LocalMake, Local, and Thing.
+	* Mono.Languages.Logo.Runtime/LogoContext.cs: Add a RootContext
+	property. Add a static "NullVariable" property to be used
+	when allocating variable slots.
+	* Mono.Languages.Logo/Makefile: Add PassContextAttribute.cs.
+
+	* Mono.Languages.Logo/test/test-cts.cs: Pass in a LogoContext
+	to SendMessage.
+	* Mono.Languages.Logo/test/test-tokenizer.cs: Tokenize the specified
+	file, not a hardcoded string.
+	
+	* tests/math.logo: Fix a typo in unary minus. This works now,
+	except for the unimplemented *seq functions -- comment those out. 
+	* tests/sum.logo: Make this print the results out.
+	
+2002-12-13  Rachel Hestilow  <rachel@nullenvoid.com>
+
+	* Mono.Languages.Logo.Runtime/DefaultArgumentCountAttribute.cs,
+	Funcs.cs, LogoBinder.cs, LogoContext.cs: Added.
+	* Mono.Languages.Logo/test/test-binder.cs: Added.
+	* Mono.Languages.Logo/Makefile, test/Makefile: Update sources.
+	* Mono.Lnaguages.Logo.Runtime/CTSMessageTarget.cs: Update to use
+	the new custom Binder. Move most of the logic (varargs, etc)
+	there.
+	* Mono.Languages.Logo.Runtime/IMessageStoreCollection.cs:
+	(SendMessage): Fix whitespace typo.
+	* Mono.Languages.Logo.Runtime/MessageNotSupportedException.cs:
+	Make the error string something meaningful.
+	
+	* mlogo/: Added.
+	* Makefile: Add mlogo to SUBDIRS.
+	
+	* tests/word.logo: Added.
+
+2002-12-09  Rachel Hestilow  <rachel@nullenvoid.com>
+
+	* Mono.Languages.Logo.Compiler/Interpreter.cs (ConstructList):
+	Make this work recursively for sublist elements.
+	* Mono.Languages.Logo.Compiler/Parser.cs (ParseInfix): Fix the
+	algorithm to order consecutive operations properly.
+	* Mono.Languages.Logo/test/test-interp.cs: Implement some
+	basic LOGO functions. Fix print to use type (so lists, etc
+	get printed properly).
+
+	* tests/infix.logo: Test the order of divisions -- 1/2/4 should
+	become (1/2)/4, not 1/(2/4).
+
+2002-12-08  Rachel Hestilow  <rachel@nullenvoid.com>
+
+	* Mono.Languages.Logo.Compiler/Interpreter.cs: Added.
+	* Mono.Languages.Logo.Runtime/CTSMessageTarget.cs:
+	(SendMessage): Fold in varargs arguments. Pass in null for
+	static methods.
+	(SupportsMessage): Catch AmbiguousMatchException, consider
+	it to mean the method exists.
+	* Mono.Languages.Logo.Runtime/IMessageStoreCollection.cs:
+	Implement IMessageTarget.
+	* Mono.Languages.Logo/test/test-interp.cs: Added.
+	* Mono.Languages.Logo/test/Makefile: Build test-interp.
+	* Mono.Languages.Logo/Makefile: Move "test" subdir building
+	to a seperate target.
+
+	* tests/infix.logo: Add a simple sum test.
+
+2002-12-07  Rachel Hestilow  <rachel@nullenvoid.com>
+
+	* Mono.Languages.Logo.Compiler/Parser.cs:
+	(Parse): Do infix preprocessing (to convert into prefix).
+	(ParseBackwards): Handle infixes as prefixes with a set number of
+	args.
+	* Mono.Languages.Logo.Compiler/TokenList.cs:
+	(Extend): Change parameter type to ICollection.
+	(Reverse): Added.
+	* Mono.Languages.Logo.Runtime/CTSMessageTarget.cs (ListMessages):
+	Set max_argc to -1 if the method has a varargs prototype.
+	* Mono.Languages.Logo/test/test-parser.cs (Funcs): Change print
+	to be a varargs function.
+
+	* tests/infix.logo: Added.
+
+2002-11-28  Rachel Hestilow  <rachel@nullenvoid.com>
+
+	* Rewrite. Massive changes.
+

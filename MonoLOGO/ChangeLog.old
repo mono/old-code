@@ -1,0 +1,266 @@
+2002-06-10  Rachel Hestilow  <hestilow@ximian.com>
+
+	* block.cs: Add line length accessor, and a flush method.
+
+	* dispatch.cs: Break up LOGO lib funcs into different
+	categories.
+
+	* element.cs: Add "eval" method.
+
+	* *.cs: Implement Eval in all subclasses.
+
+	* logo-list.cs, list-element.cs: Change to new namespace.
+	Also, remove methods and add generic logo functions
+	that work on all IEnumerables.
+
+	* logo-funcs.cs: Broken up into lib-*.cs.
+	* lib-*.cs: Added.
+
+	* instruction-list.cs: Added; beginning of lambda support.
+
+	* optimizer.cs: Added.
+	
+	* makefile: Move most sources into logolib (since we
+	have to parse things at runtime too)
+
+	* main.cs: Add --compile flag, compile to bytecode and run immediately
+	by default. This does not work yet. Optimize and write the
+	.exe file if --compile.
+
+	* tokenizer.cs, parser.cs: Add support for question mark parsing
+	in lambdas.
+
+	* console: New interactive console.
+	
+2002-05-22  Rachel Hestilow  <hestilow@ximian.com>
+	
+	* block.cs: Add manipulator functions for body.
+
+	* dispatch.cs: Hack around incomplete attribute support in mono.
+	Change Delegate to instance method -- mono doesn't seem to like
+	that either.
+	
+	* util.cs: Add GetMethod/GetConstructor/etc, move all code to use
+	this. 
+
+	* list-element.cs: Get array type in a different way.
+
+	* logo-array.cs, logo-funcs.cs, logo-list.cs, logo-sequence.cs:
+	Change Array to object[].
+
+	* main-block.cs: Define a default constructor on our own,
+	so that we know about it.
+
+	* parser.cs, token.cs: New parser added.
+	
+	* main.cs: Use the new parser.
+
+	* makefile: Use mcs by default, remove jay parser, add
+	new parser.
+
+	* tests/gtk.logo: New test.
+
+	* method.cs: Check Body != null. Use Ldsfld instead of Ldfld.
+
+	* output-element.cs: Add new default constructor, use block
+	semantics for body.
+
+2002-05-03  Rachel Hestilow  <hestilow@ximian.com>
+
+	* dispatch.cs (Invoke): Only adjust length if method is
+	instance, not static.
+	(ProcessWithReturn): Do not overwrite stack; instead modify existing one.
+	
+	* logo-funcs.cs: Add basic math functions.
+
+	* logo-parser.jay: Parse infix and unary operators.
+
+	* logo-tokenizer.cs: Return proper tokens for infix and unary operators.
+	Also, respect ()[] as word boundaries.
+
+	* makefile: Add infix-operator.cs.
+
+	* statement.cs, varargs-statement.cs: Add protected empty constructors.
+
+	* infix-operator.cs, tests/math.logo: Added.
+
+2002-05-01  Rachel Hestilow  <hestilow@ximian.com>
+
+	 * dispatch.cs: Rewrite vararg/stack/etc indexing to be more
+	 accurate in all cases. Also, give more priority to overloaded functions
+	 with more arguments (ie Run (void) < Run (Form) ).
+
+	 * logo-funcs.cs: Add function "New".
+
+	 * logo-parser.jay: Fix counting on embedded varargs statements.
+
+	 * logo-stack.cs: Add functions AddAssembly & LookupType.
+	 (ctor): Add default namespaces.
+	 
+	 * logo-tokenizer.cs: Support "." as part of an identifier.
+
+	 * main-block.cs: Load assemblies into root stack.
+	 
+	 * main.cs: Add "/r" option for assemblies.
+
+	 * util.cs: Load assemblies here too.
+
+	 * varargs-statement: Make argc a property "Count".
+	
+	 * tests/winforms.logo: Added.
+	
+	 * makefile: compile winforms example
+	 
+2002-04-29  Rachel Hestilow  <hestilow@ximian.com>
+
+	* block.cs: Move stack emission into scope.cs.
+	
+	* dispatch.cs: Support variable argument collection.
+	
+	* element.cs: Store some common stack ops/types in protected fields.
+
+	* logo-funcs.cs (Use, Sum): New functions.
+
+	* logo-parser.jay, logo-tokenizer.cs: Parse varargs expressions and
+	output statements. Also fix quote parsing problem.
+
+	* logo-stack.cs: Store namespaces.
+
+	* makefile: Add varargs-statement, output-element, scope. Alphabetize.
+
+	* method.cs: Inherit from Scope, not Block. Export return of System.Object
+	if there is an output statement.
+
+	* scope.cs, varargs-statement.cs, output-element.cs: Added.
+	
+	* statement.cs: Clean up.
+
+	* tests/hello.logo: Add test for the quote-breaking problem.
+	
+	* tests/varargs.logo, tests/output.logo: Added.
+	
+2002-03-12  Rachel Hestilow  <hestilow@ximian.com>
+
+	* logo-parser.jay: Remove all the "nointerps" and "unquoted" stuff,
+	rewrite in favor of a simple LIST_ELEMENT token.
+
+	* logo-tokenizer.cs (xToken): If within a list, lazily evaluate anything
+	other than numeric and list literals.
+
+2002-03-11  Rachel Hestilow  <hestilow@ximian.com>
+
+	* logo-parser.jay: Add function parsing.
+	
+	* logo-tokenizer.cs (xToken): Check for tokens "TO" and "END".
+
+	* logo-stack.cs: Add field/property class_type (used for dynamic
+	dispatch within a class).
+
+	* emit-context.cs: Add "global_stack". (needed because a field
+	is handled differently than a local).
+	
+	* main-block.cs (AddFunction): Added.
+	(Emit): Emit functions, and define a global stack field.
+
+	* method.cs: Load arguments into stack's variable dictionary.
+
+	* dispatch.cs (Invoke): Check within the stack's class space for methods
+	as well.
+
+	* tests/function.logo: Added. Functions work now!
+
+2002-03-10  Rachel Hestilow  <hestilow@ximian.com>
+
+	* emit-context.cs, method.cs: Added.
+
+	* main-block.cs: Derive from Method.
+
+	* element.cs (Emit): Change to simply use EmitContext.
+
+	* *.cs: Update for EmitContext.
+
+	* main.cs: Allow MainBlock to generate most of the module/etc stuff.
+
+	* dispatch.cs (CollectArgs): If there are multiple method overloads,
+	try to attach to the one with the least type distance.
+
+	* logo-funcs.cs (Print): Add list overload in preparation for
+	the big LogoList->System.Array conversion.
+	
+2002-03-10  Rachel Hestilow  <hestilow@ximian.com>
+
+	* dispatch.cs (Invoke, Filter): Allow option for lazily binding
+	(used for a 2-stage dispatch)
+	(Process): Convert to a 2-stage lazy-strong binding process.
+	
+2002-03-09  Rachel Hestilow  <hestilow@ximian.com>
+
+	* logo-stack.cs, logo-uses-stack-attribute.cs: Added.
+	
+	* element.cs (Emit): Add argument use_stack, instead of just passing
+	in a null stack.
+
+	* dispatch.cs: Rewrite for semi-correct scheduling.
+
+	* logo-funcs.cs (Make, Thing): Use the stack.
+	
+	* docs/*.txt: Added.
+	
+2002-03-02  Rachel Hestilow  <hestilow@ximian.com>
+	
+	* block.cs: Remove commented-out code.
+
+	* variable-reference.cs: Added (equivalent to THING "name).
+
+	* logo-parser.jay: Generate a VariableReference for :identifer.
+
+	* logo-tokenizer.cs (xToken): Return Token.COLON_REFERENCE for ":".
+
+	* makefile (SOURCES): Add variable-reference.cs
+
+	* tests/variables.logo: Also check alternative syntax.
+
+2002-03-02  Rachel Hestilow  <hestilow@ximian.com>
+
+	* dispatch.cs: Add alternate Invoke which returns values rather
+	than pushing them on the stack.
+
+	* logo-funcs.cs: Add functions Map and Foreach.
+
+	* logo-parser.jay: Adjust list_block to not interpret tokens.
+	
+	* logo-tokenizer.cs: Return Token.QUOTE on ".
+
+	* statement.cs (invoke): Fully qualify method signature to lookup.
+	
+2002-03-02  Rachel Hestilow  <hestilow@ximian.com>
+
+	* logo-funcs.cs: Add functions _Dict, Make, and Thing (preliminary
+	variable support).
+
+	* dispatch.cs (Invoke, Filter): Make lookups case-insensitive.
+	
+2002-02-26  Rachel Hestilow  <hestilow@ximian.com>
+
+	* element.cs: Make class public.
+	(return_type): Initialize to null.
+	(CollectArgs): Remove.
+	(Emit): Add stack argument.
+	(PushResult): Added.
+	
+	* list-element.cs:
+	* literal-element.cs: 
+	* statement.cs: Update to element changes.
+
+	* dispatch.cs: Added, dynamic dispatch utilities.
+
+	* block.cs, main-block.cs: Added.
+
+	* logo-parser.jay: Add "newline" token. Insert elements in correct
+	stacking order based on newlines. Make main tree be a MainBlock.
+	
+	* logo-tokenizer.cs: Check for newline.
+
+	* makefile: Reorganize.
+	
+	* main.cs: Most code moved into block.cs. 

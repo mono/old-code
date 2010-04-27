@@ -1,0 +1,5 @@
+to MyFirst :list
+	output First :list
+end
+
+print MyFirst [4 5 6]

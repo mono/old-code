@@ -1,0 +1,31 @@
+all logo is case-insensitive.
+
+in-line quoting:
+	|a thing with whitespace which otherwise would be parsed|
+	|it
+		even crosess newline boundaries|
+
+strings:
+	"string_with_no_whitespace
+	"|string with whitespace|
+	Note the lack of a terminating quote.
+
+list literals:
+	[ first_element second_element ...]
+	Note, the elements within a list literal are NOT executed or parsed.
+	Inline quoting IS honored, however.
+	
+explicit variable reference:
+	:myvar
+	(equivalent to THING "myvar. Must be registered via MAKE.)
+	
+function invocation:
+	myfunc a b c
+	otherfunc
+
+method invocation:
+	ToString obj
+	GetType obj
+	Console.WriteLine "hi
+
+

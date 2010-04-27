@@ -1,0 +1,8 @@
+use "Gtk
+
+Application.Init
+make "win (new "Window "|Hello world from LOGO|)
+make "button (new "Button "Button)
+EmitAdd :win :button
+ShowAll :win 
+Application.Run

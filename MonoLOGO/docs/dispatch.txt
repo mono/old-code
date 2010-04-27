@@ -1,0 +1,61 @@
+The dispatching in MonoLOGO works like so:
+
+Every block creates its own LogoStack. A LogoStack is essentially a normal
+stack, but with some additional state:
+	* It knows what its parent is.
+	* It has a dictionary of variables associated with it.
+	* It knows whether it is in class or global scope.
+	
+A function may tag itself with the "LogoUsesStack" attribute to request
+that the dispatcher automatically pass in the stack as the first argument.
+This is used primarily for the MAKE and THING functions.
+
+A line of code in LOGO corresponds to filling the stack with the associated
+elements, and then calling Dispatch.Process. This then examines the stack
+and scans it for Dispatch objects. Each Dispatch object is first
+(partly) resolved via CollectArgs. This may locate several possible methods,
+as we do not yet know the full object type for dynamic dispatch. However,
+it is guaranteed that all overloaded functions have the same return type,
+and this is what we are interested in. If the return type of the resolved
+dispatch is void, the dispatcher will attempt to reschedule the dispatch as if
+it were on a seperate line, as opposed to an argument.
+
+Once the dispatches have been scheduled, the dispatcher can begin execution.
+For each toplevel dispatch, it first crawls the stack building the argument
+list. Before each execution, the dispatch object is fully resolved[1] to its 
+actual method based on the returned objects now available.
+
+Finally, after each void dispatch, the stack is cleared.
+
+an example program:
+
+LOGO source code				 	CLI (roughly)
+----------------					--------------
+PRINT "a 							ldloc block_stack
+										ldstr "a"
+										call Stack.Push
+										ldloc block_stack 
+										ldstr "PRINT"
+										newobj Dispatch
+										call Stack.Push
+										ldloc block_stack
+										call LogoStack.Process
+
+Before the call to Process the stack looks like this:
+	{ Dispatch("PRINT"), "a" }
+and afterwards it is empty.
+
+
+[1] The order of precedence for an unqualified method name (eg "print") is
+as follows:
+	* Global functions (either defined in the main program or in
+	  				        Mono.LOGO.Lib.Funcs)
+	* If in class scope, the class's own methods
+	* Non-static Methods (based on the first argument -- see syntax.txt)
+	
+This means that if one calls "REVERSE" on an array, they can be assured
+that the built-in logo function "REVERSE" will be called and not the array
+method. If one wished to use the array method they would have to qualify
+it with Array.Reverse.
+	
+
