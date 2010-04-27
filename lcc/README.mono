@@ -1,0 +1,17 @@
+This is a first pass at getting LCC to emit CIL.
+
+To build LCC, read doc/install.html.  Soon, we will have a clcc executable, 
+but for now, you will have to edit the LCCDIR variable in etc/linux.c (or set
+the LCCDIR variable in your environment).
+
+To use the compiler *now*, you'll want to use the following command:
+
+lcc --lccdir=/whereever/the/parts/are -Wf-target=cil -S yourfile.c
+
+Which will put the compiled code into yourfile.s.  Right now, the cil backend
+does not emit CIL, but the internal LCC codes.
+
+Please note: read the LCC license (in CPYRIGHT)!
+
+Mark Crichton
+crichton@gimp.org

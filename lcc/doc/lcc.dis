@@ -1,0 +1,85 @@
+.assembly extern mscorlib
+{
+  .ver 1:0:3300:0
+}
+.assembly 'lcc'
+{
+  .hash algorithm 0x00008004
+  .ver  0:0:0:0 
+}
+  .class private auto ansi beforefieldinit TestApp
+  	extends [mscorlib]System.Object
+  {
+
+    // method line 1
+    .method public hidebysig  specialname  rtspecialname 
+           instance default void .ctor()  cil managed 
+    {
+        // Method begins at RVA 0x2050
+	// Code size 7 (0x7)
+	.maxstack 2
+	IL_0000: ldarg.0 
+	IL_0001: call instance void System.Object::.ctor()
+	IL_0006: ret 
+    }
+
+    // method line 2
+    .method privatestatic  hidebysig  pinvokeimpl (user32.dll as MessageBoxA ansi winapi )
+           default int32 MessageBoxA(int32 hWnd, string msg, string caption, int32 type)  cil managed preservesig 
+    {
+        // Method begins at RVA 0x0
+    }
+
+    // method line 3
+    .method public static 
+           default void Main()  cil managed 
+    {
+        // Method begins at RVA 0x2064
+	.entrypoint
+	// Code size 100 (0x64)
+	.maxstack 4
+	.locals init (
+		int32	V_0,
+		class [corlib]System.Random	V_1,
+		float64	V_2,
+		float32	V_3)
+	IL_0000: newobj instance void System.Random::.ctor()
+	IL_0005: stloc.1 
+	IL_0006: ldloc.1 
+	IL_0007: callvirt instance int32 System.Random::Next()
+	IL_000c: stloc.0 
+	IL_000d: ldc.r4 4.3232
+	IL_0012: stloc.3 
+	IL_0013: ldc.r8 54.423
+	IL_001c: stloc.2 
+	IL_001d: ldloc.0 
+	IL_001e: conv.r4 
+	IL_001f: ldloc.3 
+	IL_0020: mul 
+	IL_0021: stloc.3 
+	IL_0022: ldloc.0 
+	IL_0023: conv.r8 
+	IL_0024: ldloc.2 
+	IL_0025: mul 
+	IL_0026: stloc.2 
+	IL_0027: ldstr "y: {0:G}"
+	IL_002c: ldloc.3 
+	IL_002d: box [mscorlib]System.Single
+	IL_0032: call void System.Console::WriteLine(string, object)
+	IL_0037: ldstr "x: {0:G}"
+	IL_003c: ldloc.2 
+	IL_003d: box [mscorlib]System.Double
+	IL_0042: call void System.Console::WriteLine(string, object)
+	IL_0047: ldstr "Hi"
+	IL_004c: call void System.Console::WriteLine(string)
+	IL_0051: ldc.i4.0 
+	IL_0052: ldstr "Hello World!"
+	IL_0057: ldstr "I was called from a C# app!"
+	IL_005c: ldc.i4.0 
+	IL_005d: call int32 .TestApp::MessageBoxA(int32, string, string, int32)
+	IL_0062: pop 
+	IL_0063: ret 
+    }
+
+  }
+

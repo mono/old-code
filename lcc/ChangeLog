@@ -1,0 +1,20 @@
+2002-03-10  Mark Crichton  <crichton@gimp.org>
+
+	* ChangeLog: Fixed spelling.
+	* Added lcc.cs and lcc.dis.  lcc.dis is disassembled output from mcs
+	so I can get a sense of how floats, doubles, and PInvoke work w.r.t.
+	CIL.  Both are in doc/
+
+2002-03-09  Mark Crichton  <crichton@gimp.org>
+
+	* src/bind.c: Doh.  Forgot to add CIL backend to listing.
+	* etc/linux: Chnaged cpp to cpp0
+	* README.mono: Changed instructions
+
+2002-03-09  Mark Crichton  <crichton@gimp.org>
+
+	* Initial import of LCC 4.1 tree into CVS.
+	* Added cil.c backend stubs by Miguel and incorporated into the
+	build
+	* README.mono added for how to use the compiler (for now)
+
