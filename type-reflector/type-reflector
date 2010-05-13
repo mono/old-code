@@ -1,0 +1,17 @@
+#!/bin/sh
+# Starts a CIL program whose name is patterned after the filename of this
+# script.  The CIL program executed is "$0".exe.
+
+file="$0"
+
+# If file is a symlink, find where it's pointing to
+if [ -L "$file" ] ; then
+  if ! (readlink -f "$file") > /dev/null 2>&1; then
+    echo `basename "$0"` ": missing required program readlink!"
+    exit -1
+  fi
+  file=`readlink -f "$file"`
+fi
+
+exec mono "$file.exe" "$@"
+

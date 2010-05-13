@@ -1,0 +1,422 @@
+2005-04-12  Jonathan Pryor <jonpryor@vt.edu>
+	* type-reflector.exe.config: Change fully-qualified name of the Gtk# type
+	  displayer (namespace had to change).
+	* TypeFactory.cs: protect against a null entry (if no suck key exists).
+
+2005-02-09
+
+	* type-reflector.in: Added; used so the installed script knows which
+	  type-reflector program to launch.
+	* Makefile: Rewrite install/uninstall to be a better Linux citizen.  
+	  We shouldn't install type-reflector.exe into $prefix/bin; that's evil.
+	  Instead, install it into $prefix/share/type-reflector/, and install a
+	  script $prefix/bin/type-reflector which invokes the .exe.
+
+2004-09-18  Jonathan Pryor <jonpryor@vt.edu>
+	+ Summary: Add new command-line argument, -r, which takes assembly partial
+	  names instead of assembly file names.  This allows us to load assembly "by
+	  name" from the GAC, such as mscorlib, Mono.Posix, and gtk-sharp, without
+	  needing to load *everything* (via --load-default-assemblies), or knowing
+	  the actual path to the GAC (to explicity load the assemblies).
+	* Makefile: Update TARGETS so that it references the correct temporary
+	  files.  This allows ``make clean'' to actually clean up the appropriate
+	  files, permitting proper rebuilds.
+	* TypeLoader.cs: Add assembly references collection, and use
+	  Assembly.LoadWithPartialName() to load referenced assemblies.  Change
+	  internal collection type from IList<string> to IList<Assembly>.
+	* TypeReflectorApp.cs: Add handling of referenced assemby information.
+	* TypeReflectorOptions.cs: Add referenceAssembies argument, and change
+	  showInheritedMembers option so referenceAssemblies can use -r.  This
+	  provides a command-line parameter more similar to mcs, etc.
+	* displayers/gtk/GtkTypeDisplayer.cs: Don't store uints in the TreeStore,
+	  just ints.  This removes a number of Gtk-WARNING messages.
+	* type-reflector: Permit spaces to be in the script filename.
+
+2004-06-02  Jonathan Pryor <jonpryor@vt.edu>
+	* Makefile: Update GUI_GTK_LIBS variable for new mcs syntax (-pkg:...).
+
+2004-03-07  Jonathan Pryor <jonpryor@vt.edu>
+	* Makefile: The "gui" target needs to use the "gtkui" and "swfui" sub-target
+	  names; the gtk and swf targets no longer exist.
+
+2003-11-30  Jonathan Pryor <jonpryor@vt.edu>
+	* Makefile: change names of gtk & swf targets.  Prior versions of
+	  type-reflector didn't have a `dispayers' directory, but had
+	  `displayers/gtk', etc., as top-level dirs.
+	  Since these files are touched during the build process, this creates a CVS
+	  update conflict (CVS expects a `gtk' directory, but a `gtk' file may
+	  exist).
+	  Change the names of the files generated (hence, the target names) to avoid
+	  this conflict.
+
+2003-11-23  Jonathan Pryor <jonpryor@vt.edu>
+	* Makefile: Add rule to create TestTypes.dll, used in testing.
+
+2003-10-25  Jonathan Pryor <jonpryor@vt.edu>
+	* Makefile: Add displayers/gtk/AppWindowManager.cs to build.
+
+2003-??-??	Jonathan Pryor <jonpryor@vt.edu>
+	* Makefile: Merged contents of Makefile & makefile.gnu & makefile.core.
+	  This simplifies building (only 1 Makefile), and makes it easier to be a
+	  part of mono-tools.  Also added new targets, such as "dist", "distdir".
+	* makefile.core: removed
+	* makefile.gnu: removed
+
+2003-09-28  Jonathan Pryor <jonpryor@vt.edu>
+	* TypeReflectorApp.cs: Update Version, Cope with ITypeDisplayer changes.
+	* makefile.core: add artwork resources
+	* type-reflector.exe.config: add Gtk# Displayer trace switch
+
+2003-08-10  Jonathan Pryor <jonpryor@vt.edu>
+	* TypeReflectorApp.cs: Update Version, more debugging information.
+
+2003-07-05  Jonathan Pryor <jonpryor@vt.edu>
+	* TypeReflectorApp.cs: Ensure that TraceListeners are flushed before program
+	  exit.  This ensures that any TraceListeners added in the .config file will
+	  get everything they should.
+	* TypeReflectorOptions.cs: Remove "Experimental" wording, and make sure that
+	  the right information is displayed.
+	* type-reflector.exe.config: Add additional examples (use of <assert/>).
+
+2003-07-03  Jonathan Pryor <jonpryor@vt.edu>
+	* IPolicy.cs: New File.  Root interface for all "policies" -- things that can
+	  change, such as INodeFinder, and INodeFormatter.
+	* Policy.cs: Default implementation of IPolicy interface.
+	* README: updated documentation
+	* TODO: Updated TODO list
+	* TypeFactory.cs: I don't want the Gtk# GUI displaying "short names" for
+	  finders, formatters, etc.  For example, to get C# formatting, you'd
+	  normally pass `--formatter=csharp'.  I don't want Gtk# showing "csharp," I
+	  want it to show "C#".  Furthermore, I don't want to update the GUI
+	  whenever I add a new language.  The solution is to add extra information
+	  to the type-reflector.exe.config file.  Now, instead of having the "key"
+	  contain the actual factory key, it includes both the key and the
+	  description, in the format "key:description," so the C# formatter can be
+	  described as "csharp:C#".  This could have been done with the "value"
+	  instead of the "key", but ':' could be special in assembly names.
+	  - Introduce TypeFactoryEntry, which contains the factory Key (everything
+	    before the ':'), the Description (everything after the ':'), and the Type
+	    (the value of the .config-file entry).
+	  - TypeFactory is now a map from string -> TypeFactoryEntry (instead of
+	    string -> Type).
+	* TypeLoader.cs: Allow directories to be specified.  This requires expanding
+	  directories into a list of .dll's and .exe's to open.  Alternatively, we
+	  could just open *all* files in the directory, but this seems safer for
+	  now.  Also, it's *not* recursive.  This could change in the future.
+	* TypeReflectorApp.cs: Update version number, update for TypeFactory
+	  changes, make '.' the default Type search character (instead of requiring
+	  it as a parameter), ITypeDisplayer changes
+	* TypeReflectorOptions.cs: More far-reaching changes.  It didn't make sense
+	  to default to opening all assemblies -- this took forever --  and not 
+	  provide a default type search, so now it's flipped -- there are no default 
+	  assemblies (one must be provided, through -a), but the default Type search 
+	  is '.', which is the only sensible default.  Update documentation.
+	* makefile.core: Cope with new files, install type-reflector script.
+	* type-reflector: shell script for Unix-like systems so that typing
+	  type-reflector.exe isn't necessary.  Script idea initially proposed on
+	  mono-list, IIRC.
+	* type-reflector.exe.config: Add descriptions for various policies
+	  (displayers and formatters).
+
+2003-06-26  Jonathan Pryor <jonpryor@vt.edu>
+	* TypeFactory.cs: Make a Factory look like a Dictionary.  Useful for
+	  enumerating over factory contents (e.g. debugging)
+	* TypeLoader.cs: Print the regex out before constructing the Regex.  Useful
+	  when the Regex constructor throws an exception.
+	* TypeReflectorApp.cs: Misc. Changes:
+		- Added static Version propery, which is used in the Gtk# About dialog
+		- Add/Remove some diagnostics messages
+		- Provide overloads for CreateFinder & CreateFormatter.  These are used in
+		  the Gtk# front-end to permit dynamic language selection.
+	* makefile.core: simplify the resource name for the Gtk# .glade file, add
+	  the gnome-sharp.dll library for Gtk#.
+
+2003-02-19  Jonathan Pryor <jonpryor@vt.edu>
+	* TestTypes.cs: Added test cases.
+	* makefile.core: Re-enabled debugging as default
+
+2003-01-16  Jonathan Pryor <jonpryor@vt.edu>
+	* makefile.core: Fix the multiple-build problem.  Again.  Hopefully it'll
+	  stay fixed this time...
+
+2003-01-14  Jonathan Pryor <jonpryor@vt.edu>
+	- General: massive file movement.  I felt it would be cleaner if related
+	  files were in the same directory, instead of (nearly) everything
+	  cluttering up the root directory.  Since the current architecture seems
+	  pretty final (I don't see any major changes; it works) I split things up
+	  among namespace boundaries.
+	* ConsoleTypeDisplayer.cs: moved to displayers/
+	* ITypeDisplayer.cs: moved to displayers/
+	* TypeDisplayer.cs: moved to displayers/
+	* IndentingTextWriter.cs: moved to displayers/
+	* gtk/: moved to displayers/
+	* swf/: moved to displayers/
+	* ExplicitNodeFinder.cs: moved to finders/
+	* GroupingNodeFinder.cs: moved to finders/
+	* INodeFinder.cs: moved to finders/
+	* NodeFinder.cs: moved to finders/
+	* ReflectionNodeFinder.cs: moved to finders/
+	* INodeFormatter.cs: moved to formatters/
+	* NodeFormatter.cs: moved to formatters/
+	* DefaultNodeFormatter.cs: moved to formatters/
+	* CSharpNodeFormatter.cs: moved to formatters/
+	* VBNodeFormatter.cs: moved to formatters/
+	* makefile.core: update for new file locations.
+
+2003-01-12  Jonathan Pryor <jonpryor@vt.edu>
+	* makefile.core: Add dependencies to `gui' target so it doesn't rebuild when
+	  it doesn't need to.  Reported by gonzalo.
+
+2003-01-10  Jonathan Pryor <jonpryor@vt.edu>
+	* CSharpNodeFormatter.cs: New properties required by LanguageNodeFormatter
+	* LanguageNodeFormatter.cs: Allow more declarative control over generation
+	  of Property members.
+	* ReflectionNodeFinder.cs: Make sure the instance is appropriate.  This
+	  allows us to view static property values when using the
+	  ReflectionNodeFinder.
+	* VBNodeFormatter.cs: New properties required by LanguageNodeFormatter
+
+2003-01-10  Jonathan Pryor <jonpryor@vt.edu>
+	- General: Specify the order of displayers to use in the .config file.  This
+	  allows us to have "intelligent" defaults, so that (by default) GUI
+	  front-ends are preferred to console output.  If no GUI is supported, then
+	  fallback to console output.
+	* README: Updates
+	* TypeReflectorApp.cs: Follow the "displayer-order" when finding the default
+	  displayer.
+	* TypeReflectorOptions.cs: Change default Displayer to "" so that we know if
+	  the user has specified a preferred displayer.
+	* type-reflector.exe.config: Specify the default displayer ordering.
+
+2003-01-10  Jonathan Pryor <jonpryor@vt.edu>
+	* TypeReflectorApp.cs: Don't always require that types be specified on the
+	  command line.  This isn't necessary for the GUI front-ends, as the user
+		can just open an assembly from within the app after it's running.
+	* IndentingTextWriter.cs: Move to Mono.TypeReflector.Displayers.
+
+2003-01-10  Jonathan Pryor <jonpryor@vt.edu>
+	- General: Namespace partitioning.  It was getting annoying (when using
+	  type-reflector to display itself) to have ~70 classes in a single
+	  namespace.  So I split up the classes into namespace according to
+	  function.  For example, Finders (ExplicitNodeFinder, ReflectionNodeFinder) 
+	  went into Mono.TypeReflector.Finders.
+	* CSharpNodeFormatter.cs: Moved into Mono.TypeReflector.Formatters.
+	* ConsoleTypeDisplayer.cs: Moved into Mono.TypeReflector.Displayers.
+	* DefaultNodeFormatter.cs: Moved into Mono.TypeReflector.Formatters.
+	* ExplicitNodeFormatter.cs: Moved into Mono.TypeReflector.Formatters.
+	* Factories.cs: Reference the appropriate namespaces.
+	* GroupingNodeFinder.cs: Moved into Mono.TypeReflector.Finders.
+	* INodeFinder.cs: Moved into Mono.TypeReflector.Finders.
+	* INodeFormatter.cs: Moved into Mono.TypeReflector.Formatters.
+	* ITypeDisplayer.cs: Moved into Mono.TypeReflector.Displayers.
+	* LanguageNodeFormatter.cs: Moved into Mono.TypeReflector.Formatters.
+	* Node.cs: Reference the appropriate namespaces.
+	* NodeFinder.cs: Moved into Mono.TypeReflector.Finders.
+	* NodeFormatter.cs: Moved into Mono.TypeReflector.Formatters.
+	* NodeGrouper.cs: Moved into Mono.TypeReflector.Finders.
+	* ReflectionNodeFinder.cs: Moved into Mono.TypeReflector.Finders.
+	* TypeDisplayer.cs: Moved into Mono.TypeReflector.Displayers.
+	* TypeReflectorApp.cs: Reference the appropriate namespaces.
+	* VBNodeFormatter.cs: Moved into Mono.TypeReflector.Formatters.
+	* type-refelctor.exe.config: Update type names.
+
+2003-01-09  Jonathan Pryor <jonpryor@vt.edu>
+  - General: Do the most hackish thing I've ever thought of.  OK, perhaps not
+    the *most*, but it must be up there...
+  - Problem: type-reflector supports multiple GUI toolkits.  However, I don't
+    want to require the existance of any one of them to compile.  Because of
+    this, the default has been to support only console output.  Nothing else
+    was supported by the default build.
+  - Solution: Try to build everything.  Literally.  Due to the wonders of the
+    shell's || operator, if one build fails we can provide another build as a
+    backup.  This boils down to doing the following:
+
+      make gui-all || make gtk || make swf || make console
+
+    The "make console" is to ensure that, at the very least, console-support
+    is built-in.  If no GUI toolkit is available, we'll at least have
+    something.
+  - Good news: this works, and will support as many toolkits as the build
+    platform supports.
+  - Bad news: It may invoke several compilations.  For example, my Windows box
+    doesn't have Gtk# support, so "gui-all" and "gtk" both fail before "swf"
+    successfully compiles.  That's two failed compilation efforts, resulting
+    in additional overhead.
+  * Makefile: provide a MAKEFILE variable so that makefile.core can invoke the
+    correct top-level makefile for its sub-makes (see description above)
+  * makefile.core:
+    - "all" invokes the "gui" target, not "console".  "gui", in turn, 
+      carries out the process described above.  It isn't pretty.
+    - removed support for "linux" target.  This hasn't been used for awhile.
+  * makefile.gnu: provide a MAKEFILE variable so that makefile.core can invoke 
+    the correct top-level makefile for its sub-makes (see description above)
+
+2003-01-09  Jonathan Pryor <jonpryor@vt.edu>
+	* TypeReflectorApp.cs: Remove hard-coded factory initialization and #ifdef
+	  preprocessor use.  Factory information is located in
+	  type-reflector.exe.config now.  This removes dependence on the
+	  preprocessor, simplifies addition of new formatters/etc.  (For example, if
+	  you want to add a new formatter, you can just edit
+	  type-reflector.exe.config with the appropriate type.)
+	* makefile.core: 
+	  - Remove -d:SYMBOL compiler arguments for GUI support
+	  - Due to above, we can simplify GUI targets to use $(CSC_INVOKE).  (I
+	    would have done this before, but bug 36410 prevented this from working.)
+	* type-reflector.exe.config: Provide new sections to specify the displayers,
+	  finders, and formatters that can be used.
+
+2003-01-08  Jonathan Pryor <jonpryor@vt.edu>
+	* AssemblyInfo.cs: New; Assembly Information (version, etc.)
+	* DefaultNodeFormatter.cs: Use AddMethodReturnValue to invoke methods
+	* ITypeDisplayer.cs: Provide a way to display error messages
+	* LanguageNodeFormatter.cs: Use AddMethodReturnValue to invoke methods
+	* Makefile: Since I need to use csc.exe to compile System.Windows.Forms
+	  support, I need a way to use directory separators in a (reasonably)
+		portable fashion.  Hennce the DS (Directory Separator) variable, which
+		holds the directory separator of the current platform.  Set it to
+		backslash for Windows.
+	* NodeFormatter.cs: 
+	  - Provide an option to enable/disable invoking methods.  See README for a 
+	    short discussion of why this is needed.  (Search for [1].)
+	  - Minor formatting changes.
+	  - Add AddMethodReturnValue() function.  This is used by derived classes,
+	    instead of directly invoking a method, if invocation is permitted.
+	* README: Updates.
+	* TypeDisplayer.cs: 
+	  - Check for a null namespace.  This apparently can happen under .NET.  
+	    I'm not sure why, but handle it.
+	  - Provide default implementation of ITypeDisplayer.ShowError().
+	* TypeFactory.cs: Remove Console messages, clean formatting.
+	* TypeReflectorApp.cs: 
+	  - There's > 1 factory now.  Change names so it makes more sense.
+	  - Add "swf" displayer. 
+	  - Use ITypeDisplayer.ShowError() for errors
+	  - Handle new program options for formatter objects
+	* TypeReflectorOptions.cs: Add option to enable method invocation.  Clean up
+	  formatting.
+	* makefile.core:
+	  - Add "swf" target for System.Windows.Forms display:
+	  - csc.exe wants ".dll" appended to referenced assemblies.  Add this.
+	  - csc.exe wants a colon, not a space, after -r.  Fix.
+	  - Add new files (AssemblyInfo.cs, swf/*.cs)
+	  - Use $(DS) where appropriate.
+	* makefile.gnu: Add $(DS) variable
+	* type-reflector.exe.config: Comment out default listeners, enable
+	  type-factory messages by default.
+
+2003-01-02  Jonathan Pryor <jonpryor@vt.edu>
+	* NodeFormatter.cs: Change formatting of error message.
+	* NodeInfo.cs: Nested types are MemberTypes.NestedType; set as
+	  NodeTypes.Type so we don't get error messages under .NET.
+
+2002-12-31  Jonathan Pryor <jonpryor@vt.edu>
+	* ConsoleTypeDisplayer.cs: New; Display reflection information to the console
+	* CSharpNodeFormatter.cs: Most formatting information was moved to
+	  LanguageNodeFormatter.cs (to permit sharing with the VBNodeFormatter)
+	* ExplicitNodeFinder.cs: Updates due to NodeFinder changes.
+	* Factories.cs: Add new "Displayer" factory, remove "Factory" from name of
+	  factory objects; the fact they're in a "Factories" class should be
+		sufficient.
+	* IndentingTextWriter.cs: Ensure that if a string sent to Write or WriteLine
+	  contains embedded newlines, that we indent the text after the newlines
+		appropriately.
+	* ITypeDisplayer.cs: New; Abstraction for displaying reflection information
+	* LanguageNodeFormatter.cs: Massive cleanup & Consolidation of features.
+	  Now works as a control class for generating Language-like output,
+		simplifying C# and VB.NET language formatting.
+	* Makefile: Most contents moved to `makefile.core'; just sets variables and
+	  forwards operation to `makefile.core'.
+	* Node.cs: Debugging ToString() implementation
+	* NodeFinder.cs: Change virtual Get* methods to Add* methods, as
+	  they're supposed to Add stuff to the Collection object passed as the first
+		paramter, not actually return ("get") anything; Removed `maxDepth', as
+		it's not used in the NodeFinder.
+	* NodeFormatter.cs: Move language-like attribute formatting to
+	  LanguageNodeFormatter; check that base type isn't null before accessing
+		its name; recent CVS snapshots have the base object of interfaces as the
+		null object (before it was System.Object); this may be a mono bug.
+	* NodeInfo.cs: Debugging ToString() implementation
+	* ProgramOptions.cs: Make classes public, not internal
+	* README: Updates
+	* ReflectionNodeFinder.cs: Updates due to NodeFinder changes.
+	* TestTypes.cs: More tests
+	* TypeDisplayer.cs: New; Helper implementation for ITypeDisplayer
+	* TypeFactory.cs: Trace/log the exception generated when creating a new
+	  object
+	* TypeLoader.cs: Take a list of types to search for, not just a single type.
+	  This simplifies looking for types, as we can do a single search for all
+		types, instead of separate searches for each type.  Also improves
+		performance.
+	* TypeReflectorApp.cs: New; Formerly ConsoleOutput.cs; sets things in motion
+	* TypeReflectorOptions.cs: Make public; Add --displayer argument
+	* VBNodeFormatter.cs: New; Displayer reflection information in VB.NET
+	* gtk: new directory for Gtk# front-end
+	* makefile.core: New; Common makefile rules shared between Makefile,
+	  makefile.gnu
+	* makefile.gnu: New; makefile used on Linux, used by tools/makefile.gnu for
+	  recursive makes.
+	* type-reflector.exe.config: Add new switch, sample listener
+
+2002-12-21  Jonathan Pryor <jonpryor@vt.edu>
+	* ConsoleOutput.cs: Use a Switch for trace messages.
+	* ExplicitNodeFinder.cs: Use a Switch for trace messages.
+	* GroupingNodeFinder.cs: Use a Switch for trace messages.
+	* IndentingTextWriter.cs: Use a Switch for trace messages; remove copyright
+	  statement.
+	* NodeFinder.cs: Use a Switch for trace messages.
+	* TypeLoader.cs: Use a Switch for trace messages; remove copyright
+	  statement.
+	* type-reflector.exe.config: default .config file (disable all trace
+	  messages)
+
+2002-12-10  Jonathan Pryor <jonpryor@vt.edu>
+	* TestTypes.cs: Use a different attribute type for [return:] attribute on 
+		TestClass.PublicMethod, as mcs doesn't support [return:] attributes yet
+		and it was generating an error for the two "MyAttribute" attributes.
+
+2002-12-08  Jonathan Pryor <jonpryor@vt.edu>
+	* DESIGN: Read this to understand the new design that was implemented.
+	* ConsoleOutput.cs: Deal with "new world order" of Node objects
+	* Makefile: minor cleanup
+	* TestTypes.cs: additional tests
+	* TypeReflectorOptions.cs: new options
+	* CSharpTypeDisplayer.cs: removed
+	* ExplicitTypeDisplayer.cs: removed
+	* IndentingTypeDisplayer.cs: removed
+	* ReflectionTypeDisplayer.cs: removed
+	* TypeDisplayer.cs: removed
+	* TypeDisplayerFactory.cs: removed
+	* CSharpNodeFormatter.cs: new file
+	* DefaultNodeFormatter.cs: new file
+	* ExplicitNodeFinder.cs: new file
+	* Factories.cs: new file
+	* GroupingNodeFinder.cs: new file
+	* INodeFinder.cs: new file
+	* INodeFormatter.cs: new file
+	* LICENSE: new file
+	* LanguageNodeFormatter.cs: new file
+	* Node.cs: new file
+	* NodeFinder.cs: new file
+	* NodeFormatter.cs: new file
+	* NodeGrouper.cs: new file
+	* NodeInfo.cs: new file
+	* NodeTypes.cs: new file
+	* ReflectionNodeFinder.cs: new file
+	* TypeFactory.cs: new file
+
+2002-09-04  Jonathan Pryor <jonpryor@vt.edu>
+	* CSharpTypeDisplayer.cs: Better attribute output
+	* TestTypes.cs: Improve test cases
+
+2002-09-03  Jonathan Pryor <jonpryor@vt.edu>
+	* ChangeLog: Added
+	* ConsoleOutput.cs: s/parse/display; makes more sense
+	* ExplicitTypeDisplayer.cs: Add additional output
+	* IndentingTextWriter.cs: Allow indenting to be specified
+	* ProgramOptions.cs: Allow more space for program options in output
+	* ReflectionTypeDisplayer.cs: Formatting changes
+	* TypeDisplayer.cs: Trivial formatting changes
+	* TypeReflectorOptions.cs: Re-enable program option, formatting changes
+
+# vim: noexpandtab
+

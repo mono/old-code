@@ -1,0 +1,5 @@
+#!/bin/sh
+
+PREFIX=@PREFIX@
+exec mono "$PREFIX/share/type-reflector/type-reflector.exe" "$@"
+

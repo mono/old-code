@@ -1,0 +1,8 @@
+2003-07-03  Jonathan Pryor <jonpryor@vt.edu>
+	* ChangeLog: New File.
+	* GroupingNodeFinder.cs: Cope with INodeFinder changes
+	* INodeFinder.cs: It's now a "policy" interface now.  BindingFlags and
+	  FindMemberTypes are now public properties (instead of public properties of
+	  NodeFinder).
+	* NodeFinder.cs: NodeFinder.cs: Cope with INodeFinder changes
+

@@ -1,0 +1,129 @@
+2005-04-12  Jonathan Pryor <jonpryor@vt.edu>
+	* GtkTypeDisplayer.cs, AppWindowManager: Change namespace to `...gtk' 
+	  from `...Gtk' (note: it's now fully lowercase).  Why?  To work around C# 
+	  "issue" where it prefers names from the current (nested) namespace over 
+	  the global namespace.  So it would look for 
+	  Mono.TypeReflector.Displayers.Gtk.Window instead of using Gtk.Window 
+	  --> BAD.  The name change fixes this.
+	  Thanks to Alexmipego for noticing this.
+	* AppWindowManager.cs: Directly set the MenuItem child text instead of
+	  iterating over children.  The loop shouldn't be necessary.
+	* GtkTypeDisplayer.cs: Destroy the main window when closing.
+
+2004-10-09  Jonathan Pryor <jonpryor@vt.edu>
+	* GtkTypeDisplayer.cs: Add file drag-and-drop support.  You can now DnD
+	  files from nautilus onto Type Reflector to open & inspect assemblies.
+
+2004-06-02  Jonathan Pryor <jonpryor@vt.edu>
+	* AppWindowManager.cs: Update to Gtk# Beta 2 API
+
+2004-03-07  Jonathan Pryor <jonpryor@vt.edu>
+	* AppWindowManager.cs: Update to gtk-sharp 0.17 API
+	* GtkTypeDisplayer.cs: Update to gtk-sharp 0.17 API
+
+2003-11-27  Jonathan Pryor <jonpryor@vt.edu>
+	* GtkTypeDisplayer.cs: Turn on icon display by default.  Change "options"
+	  TreeView so that we better organize the options, between binding & members.
+
+2003-11-23  Jonathan Pryor <jonpryor@vt.edu>
+	* GtkTypeDisplayer.cs: Compilation fix for Gtk# 0.14.
+
+2003-10-25  Jonathan Pryor <jonpryor@vt.edu>
+	* AppWindowManager.cs: New class; "manages" application top-level windows.
+	  More accuratey, it manages the "Window" menu, so that it's in sync across
+	  all of the created windows.
+	* GtkTypeDisplayer.cs: Factor out the window management code into
+	  AppWindowManager.cs.
+
+2003-10-12  Jonathan Pryor <jonpryor@vt.edu>
+	* GtkTypeDisplayer.cs: Gtk# works now, so we can make use of it...
+	  - Make the "Reflector" menu bold
+	  - Make the "Window" menu update properly, complete with window title names
+	  - CVS Gtk# compilation fixes
+	  - Some cleanup
+	* type-reflector.gade: I read parts of the Mac OS X HIG; some updates
+	  - Preferences should be Ctrl+,
+	  - The "short" app name should be referred to in menu items, About, etc.
+	  - Add shortcut for Help (F1)
+
+2003-09-28  Jonathan Pryor <jonpryor@vt.edu>
+	* GtkTypeDisplayer.cs:  Lots of changes
+	  - Initial attempt at adding icons to the TreeView; currently disabled
+	    due to runtime error message (needs more debugging); see SHOW_ICONS
+	  - Menu layout: We're going Mac OS X style!
+	  - More functionality: we can create empty windows, show all windows, 
+	    hide windows, etc...
+	  - Replace Console.WriteLine with Trace.WriteLineIf.
+	  - Rename Glade callback functions so that they're not so tied to the
+	    menu name.  Instead of "on_file_quit_activate", it's "app_quit".
+	* type-reflector.glade: Layout changes:
+	  - Use Mac OS X style menu bar
+	  - Get rid of stupid spacing on left; it didn't look good or consistent
+
+2003-09-09  Jonathan Pryor <jonpryor@vt.edu>
+	* GtkTypeDisplayer.cs: Compilation fix.  Gtk.Window conflicts with
+	  Gnome.Window.
+
+2003-08-10  Jonathan Pryor <jonpryor@vt.edu>
+	* GtkTypeDisplayer.cs: Allow Formatters menu to track updates in Formatters
+	  treeview, and vice versa.
+
+2003-07-03  Jonathan Pryor <jonpryor@vt.edu>
+	* GtkTypeDisplayer.cs: Lots more updates.  It's for lots of prototyping...
+	  - Prepare for the future of selecting multiple files at once
+	  - Complete GUI revamp (new side bar for Formatters, general Finder
+	    options, showing/hiding of GUI pieces, name changes, AddType progress...
+	    Try it, you'll like it.  If the TreeView would ever deal with lots of
+	    Reflection, that is.  Otherwise, it's horribly broken.  But it has been
+	    since June 26, so it isn't any worse...
+	* type-reflector.glade: name changes, new widgets, new layout...
+
+2003-06-26  Jonathan Pryor <jonpryor@vt.edu>
+	* GtkTypeDisplayer.cs: Lots 'o' Updates
+		- Clean up OpenFileSelection.
+		- Use the new Managed TreeView functionality.
+		- Allow dynamnic language selection (the View->Formatter menu works now!).
+		- Provide GUI error messages (still needs some work, though).
+		- Fix the Help->About dialog.
+	* type-reflector.glade: Fix the View->Formatter menu, add Accelerator for
+	  Help->About, remove unused AboutWindow.
+
+2003-04-14  Jonathan Pryor <jonpryor@vt.edu>
+	* GtkTypeDisplayer.cs: Minor build fixes for latest Gtk#.
+
+2003-02-19  Jonathan Pryor <jonpryor@vt.edu>
+	* GtkTypeDisplayer.cs: Add support for dynamic node expansion, as seen in
+	  displayers/swf.  For example, if you run "type-displayer -A
+	  type-displayer.exe -Sv ." (run Type Displayer on itself, showing
+	  everything verbosely), you can keep expanding rows to view detailed
+	  parameter information of methods.
+
+2003-01-14  Jonathan Pryor <jonpryor@vt.edu>
+	* GtkTypeDisplayer.cs: This was moved into /displayers/gtk, so the glade
+	  file paths need to be updated.
+
+2003-01-10  Jonathan Pryor <jonpryor@vt.edu>
+	* GtkTypeDisplayer.cs:
+	  - If the current window isn't displaying an assembly, open the assembly 
+	    within the current window.
+	  - Use [GladeWidget] attributes to get items from the .glade file.
+
+2003-01-10  Jonathan Pryor <jonpryor@vt.edu>
+	* GtkTypeDisplayer.cs: Moved to Mono.TypeReflector.Displayers.Gtk.
+
+2003-01-09  Jonathan Pryor <jonpryor@vt.edu>
+	* GtkTypeDisplayer.cs: Change name of OpenFileDialog class to
+	  OpenFileSelection.  OpenFileDialog is a System.Windows.Forms class, so
+	  this was causing compiler errors when attempting to compile both Gtk# and
+	  System.Windows.Forms support.
+
+2002-12-31  Jonathan Pryor <jonpryor@vt.edu>
+  * GtkTypeDisplayer.cs: Remove some debugging messages.
+
+2002-12-31  Jonathan Pryor <jonpryor@vt.edu>
+	* ChangeLog: Added
+	* GtkTypeDisplayer.cs: Gtk# front-end for reflection information
+	* type-reflector.glade: Glade description for Gtk# front-end
+	* type-reflector.gladep: Glade Project file
+
+# vim: noexpandtab

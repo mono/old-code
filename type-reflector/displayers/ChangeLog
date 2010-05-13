@@ -1,0 +1,24 @@
+2003-09-28  Jonathan Pryor <jonpryor@vt.edu>
+	* ITypeDisplayer.cs: Add InitializeInterface() method.  This is used to
+	  split up Type Displayer execution into five phases:
+	  - Create the displayer
+	  - Set the Properties (Formatter, Finder, etc.)
+	  - Initialize the interface
+	  - Add Types
+	  - Run
+	  The primary reason for adding the initialization step was so that GUI
+	  code could assume that the properties had been set and were valid
+	  before making use of them, which the Gtk# front-end needed to do.
+	* TypeDisplayer.cs: Default implementation of InitializeInterface(); add a
+	  Clear() function which is useful for creating new, empty, windows.
+
+2003-06-03  Jonathan Pryor <jonpryor@vt.edu>
+	* ChangeLog: New file.  I can't believe I haven't needed it yet...
+	* ConsoleTypeDisplayer.cs: Cope with changes in ITypeDisplayer
+	* ITypeDisplayer.cs: Assemblies are required now, not types.  It's more
+	  sensible this way.  AddType() now has `curType' and `totalTypes'
+	  parameters, which allows GUI displayers to display progress bars.
+	* TypeDisplayer.cs: Cope with changes in ITypeDisplayer
+
+# vim: noexpandtab
+

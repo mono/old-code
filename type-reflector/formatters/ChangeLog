@@ -1,0 +1,20 @@
+2003-07-03	Jonathan Pryor <jonpryor@vt.edu>
+	* INodeFormatter.cs: It's a Policy now.
+	* NodeFormatter.cs: Cope with changes.
+
+2003-02-19	Jonathan Pryor <jonpryor@vt.edu>
+	* ChangeLog: Created this file
+	* CSharpNodeFormatter.cs: Added new qualifier property
+	* LanguageNodeFormatter.cs: Added new qualifier property for "family or
+	  assembly"
+	* VBNodeFormatter.cs: Added new qualifier property
+
+2003-01-14	Jonathan Pryor <jonpryor@vt.edu>
+	* Moved the follwing files from the parent directory (part of project re-org)
+		- CSharpNodeFormatter.cs
+		- DefaultNodeFormatter.cs
+		- INodeFormatter.cs
+		- LanguageFormatter.cs
+		- NodeFormatter.cs
+		- VBNodeFormatter.cs
+

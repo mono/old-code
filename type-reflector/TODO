@@ -1,0 +1,16 @@
+A better way of displaying Custom Attributes needs to be used, so that the
+actual properties/field values of the custom attribute is displayed.
+
+A better way of specifying Assemblies on the command line.  It would be useful
+to say ``-a foo.dll -a bar.dll -a baz.dll'' instead of 
+``-a foo.dll:bar.dll:baz.dll''.  The framework for such parsing is described
+in ``ProgramOptions.cs''.
+
+Any of the TODO items listed in ``ProgramOptions.cs''.
+
+For Gtk#:
+  - Make View->Formatter be synchronized with the Formatter sidebar.  Requires
+    some way of getting information about the selected item.  (There doesn't
+    appear to be a simple way to find the Menu Item Label text from a
+    RadioMenuItem. :-(
+
